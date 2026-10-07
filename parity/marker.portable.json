@@ -1,0 +1,9 @@
+{
+  "name": "Marker",
+  "namespace": "user",
+  "func": "marker",
+  "starter": true,
+  "passes": [
+    { "name": "main", "program": "marker", "inputs": {}, "outputs": { "fragColor": "outputTex" } }
+  ]
+}

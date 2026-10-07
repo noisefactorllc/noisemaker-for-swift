@@ -16,7 +16,7 @@ with tempfile.TemporaryDirectory(prefix='noisemaker-consumer-') as temporary:
     package = workspace / 'Noisemaker'
     package.mkdir()
     shutil.copy2(root / 'Package.swift', package / 'Package.swift')
-    shutil.copytree(root / 'Sources/Noisemaker', package / 'Sources/Noisemaker')
+    shutil.copytree(root / 'Sources', package / 'Sources')
     # Preserve the manifest test target without carrying authority exports or sibling sources.
     (package / 'Tests/NoisemakerTests').mkdir(parents=True)
     (package / 'Tests/NoisemakerTests/ConsumerFixture.swift').write_text('import Noisemaker\n')

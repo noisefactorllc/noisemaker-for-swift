@@ -1,0 +1,16 @@
+{
+  "name": "Surface Sampler Probe",
+  "namespace": "user",
+  "func": "samplerProbe",
+  "starter": true,
+  "textures": {
+    "patternTex": { "width": "screen", "height": "screen", "format": "rgba8unorm" }
+  },
+  "passes": [
+    { "name": "pattern", "program": "pattern", "inputs": {},
+      "outputs": { "fragColor": "patternTex" } },
+    { "name": "sample", "program": "sample",
+      "inputs": { "inputTex": "patternTex" },
+      "outputs": { "fragColor": "outputTex" } }
+  ]
+}

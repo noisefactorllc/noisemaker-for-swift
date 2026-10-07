@@ -1,0 +1,17 @@
+{
+  "name": "MRT Attachment Probe",
+  "namespace": "user",
+  "func": "mrtProbe",
+  "starter": true,
+  "textures": {
+    "firstTarget": { "width": "screen", "height": "screen", "format": "rgba8unorm" },
+    "secondTarget": { "width": "screen", "height": "screen", "format": "rgba8unorm" }
+  },
+  "passes": [
+    { "name": "split", "program": "split", "drawBuffers": 2, "inputs": {},
+      "outputs": { "first": "firstTarget", "second": "secondTarget" } },
+    { "name": "combine", "program": "combine",
+      "inputs": { "firstTex": "firstTarget", "secondTex": "secondTarget" },
+      "outputs": { "fragColor": "outputTex" } }
+  ]
+}

@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+
+: "${NM_REFERENCE_ROOT:?NM_REFERENCE_ROOT must point to the pinned upstream checkout with browser dependencies}"
+out_dir="${NM_GRAPH_PARITY_OUT:-$PWD/.build/parity-graph-probes}"
+render_bin="${NM_RENDER_BIN:-$PWD/.build/debug/nm-render}"
+if [ ! -x "$render_bin" ]; then
+  printf 'graph renderer missing or not executable: %s\n' "$render_bin" >&2
+  exit 2
+fi
+if [ "$#" -eq 0 ]; then
+  set -- multipassBlur computeFilter mrtProbe samplerProbe
+fi
+for graph_case in "$@"; do
+  case "$graph_case" in
+    multipassBlur|computeFilter|mrtProbe|mrtNoise3d|repeatFeedback|samplerProbe) ;;
+    *) printf 'unsupported source graph probe: %s\n' "$graph_case" >&2; exit 2 ;;
+  esac
+done
+mkdir -p "$out_dir"
+node tools/export-reference.mjs "$PWD/.build/reference"
+for graph_case in "$@"; do
+  graph="$PWD/.build/reference/cases/$graph_case.json"
+  node parity/marker-golden.mjs "$graph" "$out_dir/$graph_case.golden.png" "$out_dir/$graph_case.golden.json"
+  "$render_bin" --graph "$graph" --out "$out_dir/$graph_case.candidate.png" --width 257 --height 129 --time 0.25 --frames 8
+  python3 parity/grade-image.py "$graph_case" "$out_dir/$graph_case.golden.png" "$out_dir/$graph_case.candidate.png" "$out_dir/$graph_case.result.json"
+done

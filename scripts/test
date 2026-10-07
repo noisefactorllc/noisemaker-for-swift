@@ -2,7 +2,12 @@
 set -eu
 cd "$(dirname "$0")/.."
 node tools/export-reference.mjs
-node --test tools/export-reference.test.mjs
+node tools/export-surfaces.mjs
+node tools/export-uniforms.mjs
+node tools/export-lexer.mjs
+node tools/export-parser.mjs
+node --test tools/export-reference.test.mjs parity/marker-golden.test.mjs
 python3 -m unittest discover -s tools -p "test_*.py"
+python3 -m unittest discover -s parity -p "test_*.py"
 python3 tools/build-tint.py
-swift test --skip TranslatorGPUTests
+swift test --skip 'GPUTests'

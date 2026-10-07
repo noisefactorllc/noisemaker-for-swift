@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+
+: "${NM_REFERENCE_ROOT:?NM_REFERENCE_ROOT must point to the pinned upstream checkout with browser dependencies}"
+out_dir="${NM_MARKER_OUT:-$PWD/.build/parity-marker}"
+render_bin="${NM_RENDER_BIN:-$PWD/.build/debug/nm-render}"
+if [ ! -x "$render_bin" ]; then
+  printf 'marker renderer missing or not executable: %s\n' "$render_bin" >&2
+  exit 2
+fi
+mkdir -p "$out_dir"
+node tools/export-reference.mjs "$PWD/.build/reference"
+node parity/marker-golden.mjs "$PWD/.build/reference/cases/marker.json" "$out_dir/golden.png" "$out_dir/golden.json"
+"$render_bin" --graph "$PWD/.build/reference/cases/marker.json" --out "$out_dir/candidate.png" --width 257 --height 129 --time 0.25 --frames 8
+python3 parity/grade-marker.py "$out_dir/golden.png" "$out_dir/candidate.png" "$out_dir/result.json"

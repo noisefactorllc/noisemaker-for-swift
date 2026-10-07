@@ -2,7 +2,7 @@
 
 ## 1. Goal and execution boundary
 
-Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). Implementation has begun at task 1 under operator authorization. The source exporter, translator and initial native shader/ABI probes exist; later compiler/runtime paths and APIs remain planned. Task-1 distribution and physical iOS qualification remain incomplete.
+Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). Implementation has begun at task 1 under operator authorization. The source exporter, translator, initial graph executor, native lexer/parser and lifetime checks exist; remaining compiler/runtime paths and complete catalog qualification are in progress. Task-1 distribution and physical iOS qualification remain incomplete.
 
 Write a failing behavior/ABI fixture, verify that failure, implement the smallest coherent change, and run the relevant regression set for each task. Review evidence before increasing scope. Use the existing default-branch checkout; remote publication and automation setup are separate decisions.
 
@@ -42,11 +42,13 @@ Write a failing behavior/ABI fixture, verify that failure, implement the smalles
 
 **Interface:** renderer initialization accepts `MTLDevice`, graph and size; shader compiler produces Metal functions plus tested resource/layout metadata; golden minting renders the same case on upstream WebGPU with the backend asserted in the page and grades the presented surface.
 
-- [ ] Make comparison reject wrong colors, a flipped 257×129 marker, incorrect dimensions, missing output and invalid alpha, and report a pass on a structureless golden as uninformative.
-- [ ] Render upstream-exported solid through Tint, Metal library creation and a floating-point texture on the actual GPU as a smoke test.
+- [x] Make comparison reject wrong colors, a flipped 257×129 marker, incorrect dimensions, missing output and invalid alpha, and report a pass on a structureless golden as uninformative.
+- [x] Render upstream-exported solid through Tint, Metal library creation and a floating-point texture on the actual GPU as a smoke test.
 - [ ] Add GPU echo tests for scalar, vec3, array, matrix, bool and mixed-field layout; compare against upstream uniform interpretation.
 - [ ] Read back through a completion-synchronized staging path and compare final and intermediate outputs separately.
-- [ ] Implement `swift run nm-render --graph parity/fixtures/marker.graph.json --out parity/out/marker.png`; grade it against a WebGPU golden minted in the same run.
+- [x] Implement `swift run nm-render --graph .build/reference/cases/marker.json --out .build/parity-marker/candidate.png`; grade it against a WebGPU golden minted in the same run.
+
+Current evidence: the presented marker passes with maximum channel error 0 and SSIM 1.0 on Apple M4. Mixed scalar/vector/matrix/array numeric ABI echo passes on Metal; broader upstream uniform-interpretation coverage remains open. Golden capture records both raw backing and post-presentation surfaces.
 
 **Acceptance:** matching marker/coordinate/ABI fixtures on informative goldens and deliberate negative tests; the solid smoke test is not parity evidence; no claim from pipeline creation alone.
 
@@ -64,6 +66,8 @@ Write a failing behavior/ABI fixture, verify that failure, implement the smalles
 - [ ] Test wrong-device command buffers, uncommitted/out-of-order encode requests, injected allocation errors, resize during in-flight work and failed graph replacement.
 - [ ] Run `swift test --filter RuntimeGPU` and `swift test --filter LifetimeGPU` with Metal validation enabled on a capable native host.
 
+Current evidence: blur, compute-buffer conversion, isolated MRT and fractional-coordinate sampling have same-run presented-output comparisons and GPU tests of intermediate textures. Borrowed and convenience submission paths have native lifetime regressions, including three in-flight slots, delayed consumers, abandoned commands, cross-queue rejection and unretained references after partial failures. Surface binding transactions match 16 locked-upstream two-frame traces; GPU feedback integration remains unfinished.
+
 **Acceptance:** pass/resource semantics and completion behavior agree with fixture contracts; no CPU frame-loop wait or readback is required.
 
 ### Task 4. Port the native Swift frontend
@@ -73,11 +77,13 @@ Write a failing behavior/ABI fixture, verify that failure, implement the smalles
 **Interface:** `NoisemakerCompiler.compile(source:) throws -> RenderGraph`; ordered typed diagnostics preserve upstream stage/source information.
 
 - [ ] Specify tagged values, missing/null behavior, ordered objects and exact step indexing with failing fixtures.
-- [ ] Test UTF-16 code-unit lines, columns and offsets, and `hashSource` (signed 32-bit, base 36) on ASCII and non-ASCII source.
+- [x] Test UTF-16 code-unit lines, columns and offsets, and `hashSource` (signed 32-bit, base 36) on ASCII and non-ASCII source.
 - [ ] Port lexer, parser, validator, expander and allocation in order; compare each stage with independent upstream dumps before the next.
 - [ ] Cover enums, aliases, defaults, expressions, defines, nested chains, surfaces, uniform aliases, scoped parameters and `mediaSteps`.
 - [ ] Test reference-supported input, malformed input, and reference refusals as distinct classes; unsupported claimed features fail completeness.
 - [ ] Add `swift test --filter CompilerTests` and `node tools/check-stages.mjs` (against the locked authority) to `scripts/test`; render native-produced graphs with task 3's GPU suite.
+
+Current evidence: native lexer/parser tests compare 26 lexical cases and 69 parser cases with independently executed locked upstream stages, including diagnostics and strict/default subchain behavior. Validation, expansion, allocation and native graph generation are not implemented.
 
 **Acceptance:** stage equivalence and identical graph behavior with no JavaScript runtime in the shipping package.
 

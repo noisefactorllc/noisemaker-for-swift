@@ -9,11 +9,24 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const REPOSITORY = 'https://github.com/noisefactorllc/noisemaker'
-const CASES = {
+export const CASES = {
   solid: 'search synth\nsolid(color: [0.2, 0.6, 0.9]).write(o0)\nrender(o0)\n',
   resourceHeavy: 'search synth, render\nsolid().pointsEmit(stateSize: 128, seed: 1).pointsBillboardRender().write(o0)\nrender(o0)\n',
   compute: 'search synth, filter\nnoise(seed: 1).grain().write(o0)\nrender(o0)\n',
-  numericDefineOutsideChoices: 'search synth\nnoise(type: 12, seed: 1).write(o0)\nrender(o0)\n'
+  numericDefineOutsideChoices: 'search synth\nnoise(type: 12, seed: 1).write(o0)\nrender(o0)\n',
+  builtinEnum: 'search synth\nnoise(scaleX: osc(type: oscKind.sine, min: 1, max: 8), seed: 1).write(o0)\nrender(o0)\n',
+  multipassBlur: 'search synth, filter\nnoise(seed: 1).blur(radiusX: 4, radiusY: 3).write(o0)\nrender(o0)\n',
+  computeFilter: 'search synth, filter\nnoise(seed: 1).ridge(level: 0.4).write(o0)\nrender(o0)\n',
+  mrtNoise3d: 'search synth3d, render\nnoise3d(volumeSize: x16, octaves: 1, speed: 0, seed: 1).render3d().write(o0)\nrender(o0)\n',
+  repeatFeedback: 'search synth\nreactionDiffusion(zoom: x16, iterations: 2, seed: 1).write(o0)\nrender(o0)\n',
+  marker: readFileSync(join(ROOT, 'parity/marker.dsl'), 'utf8'),
+  mrtProbe: readFileSync(join(ROOT, 'parity/mrt.dsl'), 'utf8'),
+  samplerProbe: readFileSync(join(ROOT, 'parity/sampler.dsl'), 'utf8')
+}
+const PORTABLE_CASES = {
+  marker: { definition: 'marker.portable.json', shaders: { marker: 'marker.marker.wgsl' } },
+  mrtProbe: { definition: 'mrt.portable.json', shaders: { split: 'mrt.split.wgsl', combine: 'mrt.combine.wgsl' } },
+  samplerProbe: { definition: 'sampler.portable.json', shaders: { pattern: 'sampler.pattern.wgsl', sample: 'sampler.sample.wgsl' } }
 }
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
@@ -25,6 +38,7 @@ export function encode(value, active = new Set()) {
   if (value === undefined) return { $type: 'undefined' }
   if (typeof value === 'function') return { $type: 'function', source: Function.prototype.toString.call(value) }
   if (typeof value === 'bigint') return { $type: 'bigint', value: value.toString() }
+  if (typeof value === 'number' && Object.is(value, -0)) return { $type: 'number', value: '-0' }
   if (typeof value === 'number' && !Number.isFinite(value)) return { $type: 'number', value: String(value) }
   if (value === null || typeof value !== 'object') return value
   if (active.has(value)) throw new Error('cyclic authority value cannot be exported')
@@ -39,6 +53,12 @@ export function encode(value, active = new Set()) {
   else out = { $type: 'object', entries: Object.keys(value).map(key => [key, encode(value[key], active)]) }
   active.delete(value)
   return out
+}
+
+// Token.position is intentionally nonenumerable upstream. Expose it only in
+// the lexical oracle without changing the generic graph value encoder.
+export function fullTokenView(tokens) {
+  return tokens.map(token => encode({ ...token, position: token.position }))
 }
 
 export function countDefineVariants(def) {
@@ -72,8 +92,8 @@ export function countDefineVariants(def) {
 
 export function captureProtocols() {
   const cases = Object.fromEntries(Object.entries(CASES).map(([name, source]) => [name, {
-    dslSha256: sha256(source), seed: name === 'solid' ? null : 1,
-    externalInputs: [], inputAssets: [], size: [256, 256],
+    dslSha256: sha256(source), seed: ['resourceHeavy', 'compute', 'numericDefineOutsideChoices', 'builtinEnum', 'multipassBlur', 'computeFilter', 'mrtNoise3d', 'repeatFeedback'].includes(name) ? 1 : null,
+    externalInputs: [], inputAssets: [], size: PORTABLE_CASES[name] || ['multipassBlur', 'computeFilter', 'repeatFeedback', 'mrtNoise3d'].includes(name) ? [257, 129] : [256, 256],
     normalizedTime: 0.25, deltaTime: 0, frames: 8, resetState: 'clear pipeline writes; preserve host inputs; reset surfaces, frameIndex, lastTime and globals',
     sample: 'presented surface after frame 8', orientation: 'top-down RGBA8 PNG'
   }]))
@@ -96,20 +116,37 @@ function filesUnder(dir, suffix) {
   }).sort()
 }
 
-export function sourceIdentity(ref, lock, verifiedArchive = false) {
-  if (verifiedArchive) return lock.commit
-  const head = execFileSync('git', ['-C', ref, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()
-  if (head !== lock.commit) throw new Error(`authority commit mismatch: expected ${lock.commit}, found ${head}`)
-  const dirty = execFileSync('git', ['-C', ref, 'status', '--porcelain', '--untracked-files=all', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders/lib'], { encoding: 'utf8' }).trim()
-  if (dirty) throw new Error('authority shader source has local modifications or untracked files')
-  const tracked = new Set(execFileSync('git', ['-C', ref, 'ls-files', '-z', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders/lib'])
-    .toString('utf8').split('\0').filter(Boolean))
-  const inputs = [join(ref, 'package.json'), join(ref, 'share/palettes.json'), join(ref, 'shaders/effects/manifest.json'),
+function authorityInputs(ref) {
+  return [join(ref, 'package.json'), join(ref, 'share/palettes.json'),
+    ...filesUnder(join(ref, 'demo/shaders'), ''),
+    ...filesUnder(join(ref, 'vendor/shade-mcp/harness'), '.js'),
     ...filesUnder(join(ref, 'shaders/src'), '.js'),
     ...filesUnder(join(ref, 'shaders/effects'), '.js'),
     ...filesUnder(join(ref, 'shaders/effects'), '.wgsl'),
-    ...filesUnder(join(ref, 'demo/shaders/lib'), '.js')]
-  for (const path of inputs) {
+    join(ref, 'shaders/effects/manifest.json')]
+}
+
+function sourceManifest(ref, lock) {
+  const files = authorityInputs(ref).map(p => sourceEntry(ref, p))
+  const contentSha256 = sha256(files.map(s => `${s.path}\0${s.sha256}\n`).join(''))
+  return { repository: lock.repository, commit: lock.commit, files, contentSha256 }
+}
+
+export function sourceIdentity(ref, lock, verifiedArchive = false) {
+  if (verifiedArchive) return lock.commit
+  if (!existsSync(join(ref, '.git'))) {
+    if (!lock.sourceManifestSha256) throw new Error('archive authority requires a pinned source manifest hash')
+    const found = sourceManifest(ref, lock).contentSha256
+    if (found !== lock.sourceManifestSha256) throw new Error(`archive authority source hash mismatch: ${found}`)
+    return lock.commit
+  }
+  const head = execFileSync('git', ['-C', ref, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()
+  if (head !== lock.commit) throw new Error(`authority commit mismatch: expected ${lock.commit}, found ${head}`)
+  const dirty = execFileSync('git', ['-C', ref, 'status', '--porcelain', '--untracked-files=all', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'], { encoding: 'utf8' }).trim()
+  if (dirty) throw new Error('authority shader source has local modifications or untracked files')
+  const tracked = new Set(execFileSync('git', ['-C', ref, 'ls-files', '-z', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'])
+    .toString('utf8').split('\0').filter(Boolean))
+  for (const path of authorityInputs(ref)) {
     if (!tracked.has(relative(ref, path).replaceAll('\\', '/'))) throw new Error(`authority contains an untracked or ignored source: ${relative(ref, path)}`)
   }
   return head
@@ -122,7 +159,7 @@ export function fetchVerifiedArchive(lock, fetchUrl = REPOSITORY) {
   const temporary = mkdtempSync(join(tmpdir(), 'nm-swift-authority-'))
   const bare = join(temporary, 'objects.git')
   const root = join(temporary, 'source')
-  const paths = ['package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders/lib']
+  const paths = ['package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness']
   try {
     execFileSync('git', ['init', '--bare', bare], { stdio: 'ignore' })
     execFileSync('git', ['--git-dir', bare, 'fetch', '--depth=1', fetchUrl, lock.commit], { stdio: 'pipe', maxBuffer: 1 << 20 })
@@ -164,21 +201,15 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
   sourceIdentity(ref, lock, verifiedArchive)
   const idx = await import(pathToFileURL(join(ref, 'shaders/src/index.js')).href)
   const { compileGraph, lex, parse, validate, expand, allocateResources, registerEffect,
-    registerOp, registerStarterOps, mergeIntoEnums, stdEnums, sanitizeEnumName } = idx
+    registerOp, registerStarterOps, mergeIntoEnums, sanitizeEnumName } = idx
+  const { stdEnums } = await import(pathToFileURL(join(ref, 'shaders/src/lang/std_enums.js')).href)
   await mergeIntoEnums(stdEnums)
   registerStarterOps()
   const effectDir = join(ref, 'shaders/effects')
   const paths = filesUnder(effectDir, 'definition.js')
-  const sourcePaths = [
-    join(ref, 'package.json'),
-    join(ref, 'share/palettes.json'),
-    ...filesUnder(join(ref, 'demo/shaders/lib'), '.js'),
-    ...filesUnder(join(ref, 'shaders/src'), '.js'),
-    ...filesUnder(effectDir, '.js'),
-    ...filesUnder(effectDir, '.wgsl'),
-    join(effectDir, 'manifest.json')
-  ]
-  const sources = sourcePaths.map(p => sourceEntry(ref, p))
+  const manifestSource = sourceManifest(ref, lock)
+  const sources = manifestSource.files
+  if (lock.sourceManifestSha256 && manifestSource.contentSha256 !== lock.sourceManifestSha256) throw new Error('pinned authority source manifest hash mismatch')
   const inventory = []
   const allChoices = {}
   const starterNames = []
@@ -237,6 +268,17 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
   }
   if (starterNames.length) registerStarterOps(starterNames)
   if (Object.keys(allChoices).length) await mergeIntoEnums(allChoices)
+  const portable = {}
+  const portableRenderer = new idx.CanvasRenderer()
+  for (const [name, spec] of Object.entries(PORTABLE_CASES)) {
+    const definitionBytes = readFileSync(join(ROOT, 'parity', spec.definition))
+    const shaderBytes = Object.values(spec.shaders).map(file => readFileSync(join(ROOT, 'parity', file)))
+    const definition = JSON.parse(definitionBytes)
+    definition.shaders = Object.fromEntries(Object.keys(spec.shaders).map((program, index) =>
+      [program, { wgsl: shaderBytes[index].toString('utf8') }]))
+    await portableRenderer.registerPortableEffect(definition)
+    portable[name] = { definition, fixtureSha256: sha256(Buffer.concat([Buffer.from(CASES[name]), definitionBytes, ...shaderBytes])) }
+  }
   const cases = {}
   for (const [name, source] of Object.entries(CASES)) {
     const tokens = lex(source)
@@ -246,10 +288,11 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
     if (expanded.errors?.length) throw new Error(`${name}: expansion errors: ${JSON.stringify(expanded.errors)}`)
     const allocated = allocateResources(expanded.passes)
     const graph = compileGraph(source)
+    const executionGraphId = compileGraph(source.trim()).id
     // compiledAt is wall-clock metadata, not an execution input. Keep its
     // position and omission explicit so stage dumps are byte reproducible.
     const stableGraph = { ...graph, compiledAt: { $type: 'volatile-timestamp' } }
-    const stages = { source, lex: encode(tokens), parse: encode(ast), validate: encode(validated),
+    const stages = { source, lex: fullTokenView(tokens), parse: encode(ast), validate: encode(validated),
       expand: encode(expanded), allocate: encode(allocated), graph: encode(stableGraph) }
     const programs = {}
     for (const [id, spec] of Object.entries(graph.programs || {})) {
@@ -264,14 +307,15 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
     const referencedPrograms = [...new Set(passPrograms)]
     const referenced = new Set(referencedPrograms)
     const templatePrograms = Object.keys(programs).filter(id => !referenced.has(id))
-    writeJson(join(out, 'cases', `${name}.json`), { stages, programs, passPrograms, referencedPrograms, templatePrograms })
+    writeJson(join(out, 'cases', `${name}.json`), { stages, programs, passPrograms, referencedPrograms, templatePrograms, executionGraphId,
+      ...(portable[name] ? { portableDefinition: portable[name].definition,
+        fixtureSha256: portable[name].fixtureSha256 } : {}) })
     cases[name] = { sourceSha256: sha256(source), graphId: graph.id, passes: graph.passes.length,
       programs: Object.keys(programs).length, referencedPrograms: referencedPrograms.length,
-      templatePrograms: templatePrograms.length }
+      templatePrograms: templatePrograms.length,
+      ...(portable[name] ? { fixtureSha256: portable[name].fixtureSha256 } : {}) }
   }
-  const sourceManifest = { repository: lock.repository, commit: lock.commit, files: sources,
-    contentSha256: sha256(sources.map(s => `${s.path}\0${s.sha256}\n`).join('')) }
-  writeJson(join(out, 'source-manifest.json'), sourceManifest)
+  writeJson(join(out, 'source-manifest.json'), manifestSource)
   writeJson(join(out, 'inventory.json'), { effects: inventory.length, wgslFiles: sources.filter(s => s.path.endsWith('.wgsl')).length, entries: inventory })
   writeJson(join(out, 'capture-protocols.json'), captureProtocols())
   const defaultShaders = await import(pathToFileURL(join(ref, 'shaders/src/runtime/default-shaders.js')).href)
@@ -281,9 +325,9 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
     sourceSha256: sha256(defaultShaders.DEFAULT_VERTEX_SHADER_WGSL),
     authorityFile: 'shaders/src/runtime/default-shaders.js'
   })
-  writeJson(join(out, 'summary.json'), { authority: sourceManifest.contentSha256, cases,
-    effects: inventory.length, wgslFiles: sourceManifest.files.filter(s => s.path.endsWith('.wgsl')).length })
-  return { authority: sourceManifest.contentSha256, cases, effects: inventory.length }
+  writeJson(join(out, 'summary.json'), { authority: manifestSource.contentSha256, cases,
+    effects: inventory.length, wgslFiles: manifestSource.files.filter(s => s.path.endsWith('.wgsl')).length })
+  return { authority: manifestSource.contentSha256, cases, effects: inventory.length }
 }
 
 async function main() {
@@ -298,5 +342,5 @@ async function main() {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main().catch(error => { process.stderr.write(`${error.stack || error}\n`); process.exitCode = 1 })
+  main().catch(error => { process.stderr.write(`${error?.stack || (typeof error === 'object' ? JSON.stringify(error) : String(error))}\n`); process.exitCode = 1 })
 }

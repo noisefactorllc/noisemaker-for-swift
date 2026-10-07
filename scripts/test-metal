@@ -9,4 +9,4 @@ elif [ ! -f "$NM_REFERENCE_EXPORT/source-manifest.json" ]; then
     exit 1
 fi
 python3 tools/build-tint.py
-swift test --filter TranslatorGPUTests
+swift test --filter 'GPUTests'
