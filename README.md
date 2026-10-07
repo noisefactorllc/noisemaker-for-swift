@@ -22,4 +22,14 @@ Run upstream-exported graphs on a real Metal device, using WGSL translated to MS
 
 ## 5. Repository state
 
-Created as a local repository with default branch `main`. Planning does not authorize implementation, remote creation, publication, release automation, or Worker Elves enrollment. Creating the `noisefactorllc` remote enrolls the port: the scheduled port audits select every live repository named `noisemaker-for-*` and record one missing from their rotation as an inventory blocker. Create the remote only when the operator decides the port enters that rotation. Commands and APIs in the documents are proposals, not working quick-start instructions. Dependency, licensing and binary-distribution decisions remain implementation gates.
+Private development repository under `noisefactorllc`, with default branch `main`. This repository remains private until the port is ready to use and the operator explicitly authorizes a public release. It currently contains planning documents only; no implementation or release is qualified. The existing scheduled port audits discover live `noisemaker-for-*` repositories, including private repositories they can access. This repository has no CI, release, or deployment workflows. Commands and APIs in the documents are proposals, not working quick-start instructions. Dependency, licensing and binary-distribution decisions remain implementation gates.
+
+## 6. Contributing
+
+See the Noise Factor [contributing policy](https://github.com/noisefactorllc/.github/blob/main/CONTRIBUTING.md) and [Code of Conduct](https://github.com/noisefactorllc/.github/blob/main/CODE_OF_CONDUCT.md).
+
+## 7. License and trademark
+
+MIT (see [LICENSE](LICENSE)). Use of the Noisemaker and Noise Factor names in derivative products is subject to the [Trademark Policy](TRADEMARK.md).
+
+Copyright © 2026 Noise Factor LLC
