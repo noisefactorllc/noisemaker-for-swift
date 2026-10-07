@@ -2,7 +2,7 @@
 
 ## 1. Goal and execution boundary
 
-Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). This is a proposal, not an executed plan. Source paths, commands and APIs below are planned. Implementation begins only when requested by the operator.
+Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). Implementation has begun at task 1 under operator authorization. The source exporter, translator and initial native shader/ABI probes exist; later compiler/runtime paths and APIs remain planned. Task-1 distribution and physical iOS qualification remain incomplete.
 
 Write a failing behavior/ABI fixture, verify that failure, implement the smallest coherent change, and run the relevant regression set for each task. Review evidence before increasing scope. Use the existing default-branch checkout; remote publication and automation setup are separate decisions.
 
@@ -26,13 +26,13 @@ Write a failing behavior/ABI fixture, verify that failure, implement the smalles
 
 **Interface:** a small C ABI takes WGSL bytes, stage/entry point, binding table and options; returns owned MSL bytes, diagnostics and metadata with an explicit free operation. Development exporter consumes the locked authority (`NM_REFERENCE_ROOT` at the commit in `parity/reference.json`, or a clone of that commit); it is not a runtime dependency.
 
-- [ ] Pin the authority in `parity/reference.json`; export catalog inventory, representative graphs, stage dumps and capture protocols independently from that commit.
-- [ ] Probe the actual installed Swift/Xcode SDK and Metal device; select and document minimum compiler/deployment versions only after API availability checks.
-- [ ] Translate solid, one resource-heavy WGSL stage and one compute WGSL filter using reviewed Tint code, with explicit bindings and ownership tests.
+- [x] Pin the authority in `parity/reference.json`; export catalog inventory, representative graphs, stage dumps and capture protocols independently from that commit.
+- [x] Probe the actual installed Swift/Xcode SDK and Metal device; select and document minimum compiler/deployment versions only after API availability checks.
+- [x] Translate solid, one resource-heavy WGSL stage and one compute WGSL filter using reviewed Tint code, with explicit bindings and ownership tests.
 - [ ] Measure the define-variant space of the locked catalog. Compare runtime translation for everything against precompiled MSL for the catalog plus runtime translation for Portable effects, on package size, cold start and iOS viability; record the decision with its numbers.
 - [ ] Build a minimal clean SwiftPM consumer and a physical iOS/iPadOS translation probe; measure toolchain complexity, binary size and startup cost. A failed mobile probe leaves that target unqualified without blocking honest macOS-only progress.
-- [ ] Audit licenses and dependency footprint before importing translator code. Record exact generation inputs for reproducibility, without freezing product builds around failures.
-- [ ] Run `swift test --filter TranslatorTests` once the proposed target exists; require a real device test in addition to host-only tests. Start `scripts/test` with the GPU-free checks available so far.
+- [x] Audit licenses and dependency footprint before importing translator code. Record exact generation inputs for reproducibility, without freezing product builds around failures.
+- [x] Run `swift test --filter TranslatorTests` once the proposed target exists; require a real device test in addition to host-only tests. Start `scripts/test` with the GPU-free checks available so far.
 
 **Acceptance:** native Swift can obtain valid MSL via the C ABI, free all outputs safely, and build the selected package form. Unresolved mobile/toolchain limitations remain explicit.
 

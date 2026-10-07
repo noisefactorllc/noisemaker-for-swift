@@ -1,0 +1,302 @@
+#!/usr/bin/env node
+// Development-only export of the locked Noisemaker compiler authority.
+import { createHash } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { resolve, join, relative, dirname } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const REPOSITORY = 'https://github.com/noisefactorllc/noisemaker'
+const CASES = {
+  solid: 'search synth\nsolid(color: [0.2, 0.6, 0.9]).write(o0)\nrender(o0)\n',
+  resourceHeavy: 'search synth, render\nsolid().pointsEmit(stateSize: 128, seed: 1).pointsBillboardRender().write(o0)\nrender(o0)\n',
+  compute: 'search synth, filter\nnoise(seed: 1).grain().write(o0)\nrender(o0)\n',
+  numericDefineOutsideChoices: 'search synth\nnoise(type: 12, seed: 1).write(o0)\nrender(o0)\n'
+}
+
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
+const own = (v, key) => Object.prototype.hasOwnProperty.call(v, key)
+
+// All objects use ordered entry pairs; special values have explicit tags. No
+// JSON.stringify omission or accidental Map-to-empty-object conversion.
+export function encode(value, active = new Set()) {
+  if (value === undefined) return { $type: 'undefined' }
+  if (typeof value === 'function') return { $type: 'function', source: Function.prototype.toString.call(value) }
+  if (typeof value === 'bigint') return { $type: 'bigint', value: value.toString() }
+  if (typeof value === 'number' && !Number.isFinite(value)) return { $type: 'number', value: String(value) }
+  if (value === null || typeof value !== 'object') return value
+  if (active.has(value)) throw new Error('cyclic authority value cannot be exported')
+  active.add(value)
+  let out
+  if (Array.isArray(value)) out = value.map(item => encode(item, active))
+  else if (value instanceof Map) out = { $type: 'map', entries: [...value].map(([k, v]) => [encode(k, active), encode(v, active)]) }
+  else if (value instanceof Set) out = { $type: 'set', values: [...value].map(item => encode(item, active)) }
+  else if (ArrayBuffer.isView(value)) out = { $type: value.constructor.name, values: [...value].map(item => encode(item, active)) }
+  else if (value instanceof ArrayBuffer) out = { $type: 'ArrayBuffer', bytes: [...new Uint8Array(value)] }
+  else if (value instanceof Date) out = { $type: 'Date', value: value.toISOString() }
+  else out = { $type: 'object', entries: Object.keys(value).map(key => [key, encode(value[key], active)]) }
+  active.delete(value)
+  return out
+}
+
+export function countDefineVariants(def) {
+  const dimensions = []
+  const openNumericDefines = []
+  for (const [parameter, spec] of Object.entries(def.globals || {})) {
+    if (!spec?.define) continue
+    let values
+    if (spec.choices) values = [...new Set(Object.entries(spec.choices).filter(([name]) => !name.endsWith(':')).map(([, value]) => JSON.stringify(value)))].map(JSON.parse)
+    else if (spec.type === 'boolean') values = [false, true]
+    else if (spec.type === 'int' && Number.isInteger(spec.min) && Number.isInteger(spec.max) &&
+      spec.max >= spec.min && Number.isInteger(spec.step ?? 1) && (spec.step ?? 1) > 0) {
+      values = []
+      for (let value = spec.min; value <= spec.max; value += spec.step ?? 1) values.push(value)
+    }
+    else values = [spec.default]
+    // Choices and min/max describe UI/sample values. The DSL can still accept
+    // numeric literals beyond them (for example noise(type: 12)).
+    const numeric = spec.type === 'int' || spec.type === 'float' || typeof spec.default === 'number' ||
+      Object.values(spec.choices || {}).some(value => typeof value === 'number')
+    if (numeric) openNumericDefines.push(spec.define)
+    dimensions.push({ parameter, define: spec.define, values, allowsOtherLiterals: numeric })
+  }
+  let declaredSampleCombinations = 1
+  for (const d of dimensions) declaredSampleCombinations *= d.values.length
+  if (!Number.isSafeInteger(declaredSampleCombinations)) throw new Error('define sample count exceeds safe integer range')
+  const passDefines = [...new Set((def.passes || []).filter(p => p.defines).map(p => JSON.stringify(p.defines)))]
+  return { dimensions, declaredSampleCombinations, passVariants: passDefines.length,
+    passDefines: passDefines.map(JSON.parse), openNumericDefines }
+}
+
+export function captureProtocols() {
+  const cases = Object.fromEntries(Object.entries(CASES).map(([name, source]) => [name, {
+    dslSha256: sha256(source), seed: name === 'solid' ? null : 1,
+    externalInputs: [], inputAssets: [], size: [256, 256],
+    normalizedTime: 0.25, deltaTime: 0, frames: 8, resetState: 'clear pipeline writes; preserve host inputs; reset surfaces, frameIndex, lastTime and globals',
+    sample: 'presented surface after frame 8', orientation: 'top-down RGBA8 PNG'
+  }]))
+  return {
+    goldenBackend: 'webgpu',
+    presentedSurface: true,
+    assertion: 'pipeline.backend.getName() === WebGPU inside page before every capture',
+    cases,
+    static: { size: [256, 256], normalizedTime: 0.25, frames: 8, resetState: true, orientation: 'top-down RGBA8 PNG' },
+    marker: { size: [257, 129], asymmetricCorners: true, frames: 8, resetState: true, orientation: 'top-down RGBA8 PNG' },
+    timed: { runSeconds: 5, sampleEverySeconds: 1, sampleFrames: [1, 2, 4, 10, 30], frameTime: '((frame + 1) / 600) % 1', firstDeltaTime: 0, laterDeltaTime: '1/600 except at wrap', resetState: true }
+  }
+}
+
+function filesUnder(dir, suffix) {
+  if (!existsSync(dir)) return []
+  return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    const path = join(dir, entry.name)
+    return entry.isDirectory() ? filesUnder(path, suffix) : entry.isFile() && entry.name.endsWith(suffix) ? [path] : []
+  }).sort()
+}
+
+export function sourceIdentity(ref, lock, verifiedArchive = false) {
+  if (verifiedArchive) return lock.commit
+  const head = execFileSync('git', ['-C', ref, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()
+  if (head !== lock.commit) throw new Error(`authority commit mismatch: expected ${lock.commit}, found ${head}`)
+  const dirty = execFileSync('git', ['-C', ref, 'status', '--porcelain', '--untracked-files=all', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders/lib'], { encoding: 'utf8' }).trim()
+  if (dirty) throw new Error('authority shader source has local modifications or untracked files')
+  const tracked = new Set(execFileSync('git', ['-C', ref, 'ls-files', '-z', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders/lib'])
+    .toString('utf8').split('\0').filter(Boolean))
+  const inputs = [join(ref, 'package.json'), join(ref, 'share/palettes.json'), join(ref, 'shaders/effects/manifest.json'),
+    ...filesUnder(join(ref, 'shaders/src'), '.js'),
+    ...filesUnder(join(ref, 'shaders/effects'), '.js'),
+    ...filesUnder(join(ref, 'shaders/effects'), '.wgsl'),
+    ...filesUnder(join(ref, 'demo/shaders/lib'), '.js')]
+  for (const path of inputs) {
+    if (!tracked.has(relative(ref, path).replaceAll('\\', '/'))) throw new Error(`authority contains an untracked or ignored source: ${relative(ref, path)}`)
+  }
+  return head
+}
+
+// A development-only fallback for a machine without NM_REFERENCE_ROOT. Fetch an
+// object into a temporary bare store and archive only compiler inputs. No
+// branch, checkout, worktree, or persistent sibling repository is created.
+export function fetchVerifiedArchive(lock, fetchUrl = REPOSITORY) {
+  const temporary = mkdtempSync(join(tmpdir(), 'nm-swift-authority-'))
+  const bare = join(temporary, 'objects.git')
+  const root = join(temporary, 'source')
+  const paths = ['package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders/lib']
+  try {
+    execFileSync('git', ['init', '--bare', bare], { stdio: 'ignore' })
+    execFileSync('git', ['--git-dir', bare, 'fetch', '--depth=1', fetchUrl, lock.commit], { stdio: 'pipe', maxBuffer: 1 << 20 })
+    const fetched = execFileSync('git', ['--git-dir', bare, 'rev-parse', 'FETCH_HEAD'], { encoding: 'utf8' }).trim()
+    if (fetched !== lock.commit) throw new Error(`fetched authority mismatch: expected ${lock.commit}, found ${fetched}`)
+    const tree = execFileSync('git', ['--git-dir', bare, 'ls-tree', '-r', '-z', fetched, '--', ...paths], { maxBuffer: 1 << 24 })
+    if (tree.toString('utf8').split('\0').some(line => line.startsWith('120000 '))) throw new Error('authority archive contains a symlink')
+    const archive = execFileSync('git', ['--git-dir', bare, 'archive', '--format=tar', fetched, ...paths], { maxBuffer: 1 << 27 })
+    mkdirSync(root)
+    execFileSync('tar', ['-xf', '-', '-C', root], { input: archive, maxBuffer: 1 << 20 })
+    return { root, commit: fetched, cleanup: () => rmSync(temporary, { recursive: true, force: true }) }
+  } catch (error) {
+    rmSync(temporary, { recursive: true, force: true })
+    throw error
+  }
+}
+
+function writeJson(path, value) {
+  mkdirSync(dirname(path), { recursive: true })
+  writeFileSync(path, JSON.stringify(value, null, 2) + '\n')
+}
+
+function sourceEntry(ref, path) {
+  const bytes = readFileSync(path)
+  return { path: relative(ref, path).replaceAll('\\', '/'), sha256: sha256(bytes), bytes: bytes.length }
+}
+
+function injectDefines(source, defines) {
+  let prefix = ''
+  for (const [key, value] of Object.entries(defines || {})) {
+    if (typeof value === 'boolean') prefix += `const ${key}: bool = ${value};\n`
+    else if (typeof value === 'number') prefix += `const ${key}: ${Number.isInteger(value) ? 'i32' : 'f32'} = ${value};\n`
+    else prefix += `const ${key} = ${value};\n`
+  }
+  return prefix + source
+}
+
+async function exportAuthority(ref, out, lock, verifiedArchive = false) {
+  sourceIdentity(ref, lock, verifiedArchive)
+  const idx = await import(pathToFileURL(join(ref, 'shaders/src/index.js')).href)
+  const { compileGraph, lex, parse, validate, expand, allocateResources, registerEffect,
+    registerOp, registerStarterOps, mergeIntoEnums, stdEnums, sanitizeEnumName } = idx
+  await mergeIntoEnums(stdEnums)
+  registerStarterOps()
+  const effectDir = join(ref, 'shaders/effects')
+  const paths = filesUnder(effectDir, 'definition.js')
+  const sourcePaths = [
+    join(ref, 'package.json'),
+    join(ref, 'share/palettes.json'),
+    ...filesUnder(join(ref, 'demo/shaders/lib'), '.js'),
+    ...filesUnder(join(ref, 'shaders/src'), '.js'),
+    ...filesUnder(effectDir, '.js'),
+    ...filesUnder(effectDir, '.wgsl'),
+    join(effectDir, 'manifest.json')
+  ]
+  const sources = sourcePaths.map(p => sourceEntry(ref, p))
+  const inventory = []
+  const allChoices = {}
+  const starterNames = []
+  const { registerParamAliases } = await import(pathToFileURL(join(ref, 'shaders/src/lang/paramAliases.js')).href)
+  const { registerEffectAlias } = await import(pathToFileURL(join(ref, 'shaders/src/lang/effectAliases.js')).href)
+  const manifest = JSON.parse(readFileSync(join(effectDir, 'manifest.json'), 'utf8'))
+  for (const path of paths) {
+    const ns = relative(effectDir, path).split('/')[0]
+    const name = relative(effectDir, path).split('/')[1]
+    const exported = (await import(pathToFileURL(path).href)).default
+    const def = typeof exported === 'function' ? new exported() : exported
+    if (!def) throw new Error(`empty definition: ${ns}/${name}`)
+    if (!def.namespace) def.namespace = ns
+    const func = def.func || name
+    const shaderPaths = filesUnder(join(effectDir, ns, name, 'wgsl'), '.wgsl')
+    def.shaders ||= {}
+    for (const shaderPath of shaderPaths) {
+      const prog = shaderPath.slice(shaderPath.lastIndexOf('/') + 1, -'.wgsl'.length)
+      ;(def.shaders[prog] ||= {}).wgsl = readFileSync(shaderPath, 'utf8')
+    }
+    const declared = new Set((def.passes || []).map(p => p.program).filter(Boolean))
+    for (const prog of declared) if (manifest[`${ns}/${name}`]?.wgsl?.[prog] && !own(def.shaders, prog)) throw new Error(`missing WGSL ${ns}/${name}/${prog}`)
+    registerEffect(func, def)
+    registerEffect(`${ns}.${func}`, def)
+    registerEffect(`${ns}/${name}`, def)
+    registerEffect(`${ns}.${name}`, def)
+    const args = Object.entries(def.globals || {}).map(([key, spec]) => {
+      let enumPath = spec.enum || spec.enumPath
+      if (spec.choices && !enumPath) {
+        enumPath = `${ns}.${func}.${key}`
+        const bucket = ((allChoices[ns] ||= {})[func] ||= {})[key] ||= {}
+        for (const [choice, value] of Object.entries(spec.choices)) {
+          if (choice.endsWith(':')) continue
+          bucket[choice] = { type: 'Number', value }
+          const sanitized = sanitizeEnumName(choice)
+          if (sanitized && sanitized !== choice) bucket[sanitized] = { type: 'Number', value }
+        }
+      }
+      return { name: key, type: spec.type === 'vec4' ? 'color' : spec.type, default: spec.default,
+        enum: enumPath, enumPath, min: spec.min, max: spec.max, uniform: spec.uniform, choices: spec.choices }
+    })
+    registerOp(`${ns}.${func}`, { name: func, args })
+    if (def.paramAliases) registerParamAliases(`${ns}.${func}`, def.paramAliases)
+    if (def.hidden && def.deprecatedBy) registerEffectAlias(`${ns}.${func}`, def.deprecatedBy)
+    if (def.enums) await mergeIntoEnums(def.enums)
+    const inputs = new Set(['inputTex', 'inputTex3d', 'inputGeo', 'inputXyz', 'inputVel', 'inputRgba', 'src', 'o0', 'o1', 'o2', 'o3', 'o4', 'o5', 'o6', 'o7'])
+    if (!(def.passes || []).some(p => Object.values(p.inputs || {}).some(v => inputs.has(v)))) starterNames.push(`${ns}.${func}`)
+    inventory.push({ namespace: ns, name, func, definition: sourceEntry(ref, path),
+      wgsl: shaderPaths.map(p => sourceEntry(ref, p)), programs: [...declared],
+      defineVariants: countDefineVariants(def), lifecycle: {
+        onInit: !!def._configOnInit || def.onInit !== idx.Effect.prototype.onInit,
+        onUpdate: !!def._configOnUpdate || def.onUpdate !== idx.Effect.prototype.onUpdate,
+        onDestroy: !!def._configOnDestroy || def.onDestroy !== idx.Effect.prototype.onDestroy,
+        asyncInit: !!def._configAsyncInit || def.asyncInit !== idx.Effect.prototype.asyncInit
+      } })
+  }
+  if (starterNames.length) registerStarterOps(starterNames)
+  if (Object.keys(allChoices).length) await mergeIntoEnums(allChoices)
+  const cases = {}
+  for (const [name, source] of Object.entries(CASES)) {
+    const tokens = lex(source)
+    const ast = parse(tokens)
+    const validated = validate(ast)
+    const expanded = expand(validated)
+    if (expanded.errors?.length) throw new Error(`${name}: expansion errors: ${JSON.stringify(expanded.errors)}`)
+    const allocated = allocateResources(expanded.passes)
+    const graph = compileGraph(source)
+    // compiledAt is wall-clock metadata, not an execution input. Keep its
+    // position and omission explicit so stage dumps are byte reproducible.
+    const stableGraph = { ...graph, compiledAt: { $type: 'volatile-timestamp' } }
+    const stages = { source, lex: encode(tokens), parse: encode(ast), validate: encode(validated),
+      expand: encode(expanded), allocate: encode(allocated), graph: encode(stableGraph) }
+    const programs = {}
+    for (const [id, spec] of Object.entries(graph.programs || {})) {
+      if (!spec.wgsl) throw new Error(`${name}: ${id} has no WGSL source`)
+      const resolved = injectDefines(spec.wgsl, spec.defines)
+      programs[id] = { originalSha256: sha256(spec.wgsl), resolvedSha256: sha256(resolved),
+        defines: encode(spec.defines), originalWGSL: spec.wgsl, resolvedWGSL: resolved,
+        entryPoints: [...resolved.matchAll(/@(vertex|fragment|compute)\s+(?:@\w+(?:\([^)]*\))?\s+)*fn\s+(\w+)/g)].map(m => ({ stage: m[1], name: m[2] })) }
+    }
+    const passPrograms = graph.passes.map(pass => pass.program).filter(Boolean)
+    for (const id of passPrograms) if (!own(programs, id)) throw new Error(`${name}: pass refers to missing program ${id}`)
+    const referencedPrograms = [...new Set(passPrograms)]
+    const referenced = new Set(referencedPrograms)
+    const templatePrograms = Object.keys(programs).filter(id => !referenced.has(id))
+    writeJson(join(out, 'cases', `${name}.json`), { stages, programs, passPrograms, referencedPrograms, templatePrograms })
+    cases[name] = { sourceSha256: sha256(source), graphId: graph.id, passes: graph.passes.length,
+      programs: Object.keys(programs).length, referencedPrograms: referencedPrograms.length,
+      templatePrograms: templatePrograms.length }
+  }
+  const sourceManifest = { repository: lock.repository, commit: lock.commit, files: sources,
+    contentSha256: sha256(sources.map(s => `${s.path}\0${s.sha256}\n`).join('')) }
+  writeJson(join(out, 'source-manifest.json'), sourceManifest)
+  writeJson(join(out, 'inventory.json'), { effects: inventory.length, wgslFiles: sources.filter(s => s.path.endsWith('.wgsl')).length, entries: inventory })
+  writeJson(join(out, 'capture-protocols.json'), captureProtocols())
+  const defaultShaders = await import(pathToFileURL(join(ref, 'shaders/src/runtime/default-shaders.js')).href)
+  writeJson(join(out, 'default-vertex.json'), {
+    wgsl: defaultShaders.DEFAULT_VERTEX_SHADER_WGSL,
+    entryPoint: defaultShaders.DEFAULT_VERTEX_ENTRY_POINT,
+    sourceSha256: sha256(defaultShaders.DEFAULT_VERTEX_SHADER_WGSL),
+    authorityFile: 'shaders/src/runtime/default-shaders.js'
+  })
+  writeJson(join(out, 'summary.json'), { authority: sourceManifest.contentSha256, cases,
+    effects: inventory.length, wgslFiles: sourceManifest.files.filter(s => s.path.endsWith('.wgsl')).length })
+  return { authority: sourceManifest.contentSha256, cases, effects: inventory.length }
+}
+
+async function main() {
+  const lock = JSON.parse(readFileSync(join(ROOT, 'parity/reference.json'), 'utf8'))
+  if (lock.repository !== REPOSITORY || !/^[0-9a-f]{40}$/.test(lock.commit)) throw new Error('invalid authority lock')
+  const out = resolve(process.argv[2] || join(ROOT, '.build/reference'))
+  const archive = process.env.NM_REFERENCE_ROOT ? null : fetchVerifiedArchive(lock)
+  try {
+    const summary = await exportAuthority(resolve(process.env.NM_REFERENCE_ROOT || archive.root), out, lock, !!archive)
+    process.stdout.write(JSON.stringify(summary) + '\n')
+  } finally { archive?.cleanup() }
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch(error => { process.stderr.write(`${error.stack || error}\n`); process.exitCode = 1 })
+}

@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+node tools/export-reference.mjs
+node --test tools/export-reference.test.mjs
+python3 -m unittest discover -s tools -p "test_*.py"
+python3 tools/build-tint.py
+swift test --skip TranslatorGPUTests
