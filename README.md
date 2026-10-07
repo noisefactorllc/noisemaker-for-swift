@@ -18,8 +18,8 @@ The first qualification target is macOS on Apple Silicon. iOS/iPadOS device qual
 
 ## 4. First milestone
 
-Run an upstream-exported solid-color graph on a real Metal device, using WGSL translated to MSL through a small Tint C interface, with explicit binding metadata and image comparison against upstream WebGPU. This qualifies the shader/runtime seam before expanding the Swift compiler.
+Run upstream-exported graphs on a real Metal device, using WGSL translated to MSL through a small Tint C interface with explicit binding metadata: a solid color as a smoke test, then the 257×129 asymmetric marker as the first parity gate against an upstream WebGPU golden minted in the same run. A solid color is not parity evidence: the family grader counts a golden with no structure as uninformative. This qualifies the shader/runtime seam before expanding the Swift compiler.
 
 ## 5. Repository state
 
-Created as a local repository with default branch `main`. Planning does not authorize implementation, remote creation, publication, release automation, or Worker Elves enrollment. Commands and APIs in the documents are proposals, not working quick-start instructions. Dependency, licensing and binary-distribution decisions remain implementation gates.
+Created as a local repository with default branch `main`. Planning does not authorize implementation, remote creation, publication, release automation, or Worker Elves enrollment. Creating the `noisefactorllc` remote enrolls the port: the scheduled port audits select every live repository named `noisemaker-for-*` and record one missing from their rotation as an inventory blocker. Create the remote only when the operator decides the port enters that rotation. Commands and APIs in the documents are proposals, not working quick-start instructions. Dependency, licensing and binary-distribution decisions remain implementation gates.
