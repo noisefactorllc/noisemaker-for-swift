@@ -63,7 +63,9 @@ public struct ShaderTranslator: Sendable {
     private static let compilationLock = NSLock()
     private static let remappedEntryPoint = "dawn_entry_point"
 
-    public init() {}
+    private let cache: TranslationCache
+    public init() { cache = .shared }
+    init(cache: TranslationCache) { self.cache = cache }
 
     public func translate(
         wgsl: String,
@@ -127,6 +129,11 @@ public struct ShaderTranslator: Sendable {
             }
         }
 
+        let cacheKey = TranslationKey(wgsl: wgsl, entryPoint: entryPoint, stage: stage,
+            bindings: bindings, bufferSizes: bufferSizes, bufferSizesOffset: bufferSizesOffset,
+            immediateSlot: immediateSlot, appleGPUFamily9: appleGPUFamily9, strictMath: strictMath)
+        if let cached = cache.lookup(cacheKey) { return cached }
+
         let rawBindings = bindings.map { binding -> nm_tint_binding in
             var raw = nm_tint_binding()
             raw.group = binding.group
@@ -163,6 +170,7 @@ public struct ShaderTranslator: Sendable {
         // Tint is currently serialized. Input pointers remain alive until the synchronous C call returns.
         Self.compilationLock.lock()
         defer { Self.compilationLock.unlock() }
+        if let cached = cache.lookup(cacheKey) { return cached }
         let bytes = Array(wgsl.utf8)
         let result: (Int32, nm_tint_output) = bytes.withUnsafeBufferPointer { source in
             entryPoint.withCString { entryName in
@@ -197,7 +205,7 @@ public struct ShaderTranslator: Sendable {
         guard let source = String(bytes: mslBytes, encoding: .utf8) else {
             throw TintTranslationError.translationFailed("Tint returned non-UTF-8 MSL")
         }
-        return TintTranslation(
+        let translation = TintTranslation(
             source: source,
             entryPoint: entryPoint,
             mslEntryPoint: Self.remappedEntryPoint,
@@ -211,5 +219,7 @@ public struct ShaderTranslator: Sendable {
             dawnRevision: String(cString: nm_tint_dawn_revision()),
             strictMath: strictMath
         )
+        cache.insert(translation, for: cacheKey)
+        return translation
     }
 }

@@ -1,0 +1,4 @@
+module CNoisemakerTint {
+  header "NoisemakerTint.h"
+  export *
+}

@@ -1,9 +1,10 @@
 import Foundation
 import Metal
-import XCTest
+import Testing
 @testable import Noisemaker
 
-final class LifetimeGPUTests: XCTestCase {
+@Suite(.serialized)
+struct LifetimeGPUTests {
     private func renderer(_ device: MTLDevice, corruptFinalUniform: Bool = false) throws -> NoisemakerRenderer {
         let reference = ProcessInfo.processInfo.environment["NM_REFERENCE_EXPORT"].map(URL.init(fileURLWithPath:)) ??
             URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
@@ -11,7 +12,8 @@ final class LifetimeGPUTests: XCTestCase {
         var caseData = try Data(contentsOf: reference.appendingPathComponent("cases/marker.json"))
         if corruptFinalUniform {
             // Keep the real first pass and make the final pass fail only while
-            // packing its uniform, after the first encoder has recorded work.
+            // packing an undersized vec4 uniform, after the first encoder has
+            // recorded work. Invalid strings are valid source zero defaults.
             func field(_ object: [String: Any], _ name: String) -> Any {
                 (object["entries"] as! [[Any]]).first { ($0[0] as? String) == name }![1]
             }
@@ -23,7 +25,7 @@ final class LifetimeGPUTests: XCTestCase {
                 result["entries"] = entries
                 return result
             }
-            var exported = try XCTUnwrap(JSONSerialization.jsonObject(with: caseData) as? [String: Any])
+            var exported = try requireValue(JSONSerialization.jsonObject(with: caseData) as? [String: Any])
             var stages = exported["stages"] as! [String: Any]
             var graph = stages["graph"] as! [String: Any]
             var programs = field(graph, "programs") as! [String: Any]
@@ -36,7 +38,7 @@ final class LifetimeGPUTests: XCTestCase {
             graph = replacing(graph, "programs", programs)
             var passes = field(graph, "passes") as! [[String: Any]]
             passes[passes.count - 1] = replacing(passes.last!, "uniforms",
-                ["$type": "object", "entries": [["failValue", "invalid-number"]]])
+                ["$type": "object", "entries": [["failValue", [1, 2]]]])
             graph = replacing(graph, "passes", passes)
             stages["graph"] = graph
             exported["stages"] = stages
@@ -47,23 +49,23 @@ final class LifetimeGPUTests: XCTestCase {
             caseData = try JSONSerialization.data(withJSONObject: exported)
         }
         let graph = try RenderGraph(exportedCaseData: caseData)
-        let vertex = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: reference.appendingPathComponent("default-vertex.json"))) as? [String: Any])
+        let vertex = try requireValue(JSONSerialization.jsonObject(with: Data(contentsOf: reference.appendingPathComponent("default-vertex.json"))) as? [String: Any])
         return try NoisemakerRenderer(device: device, graph: graph, size: RenderSize(width: 257, height: 129),
-            defaultVertexWGSL: try XCTUnwrap(vertex["wgsl"] as? String))
+            defaultVertexWGSL: try requireValue(vertex["wgsl"] as? String))
     }
 
-    func testUnretainedCommandSurvivesRendererAndLeaseRelease() throws {
-        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice())
-        let queue = try XCTUnwrap(device.makeCommandQueue())
-        let event = try XCTUnwrap(device.makeSharedEvent())
-        let command = try XCTUnwrap(queue.makeCommandBufferWithUnretainedReferences())
+    @Test func testUnretainedCommandSurvivesRendererAndLeaseRelease() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
+        let queue = try requireValue(device.makeCommandQueue())
+        let event = try requireValue(device.makeSharedEvent())
+        let command = try requireValue(queue.makeCommandBufferWithUnretainedReferences())
         command.encodeWaitForEvent(event, value: 1)
         let stride = ((257 * 8 + 255) / 256) * 256
-        let staging = try XCTUnwrap(device.makeBuffer(length: stride * 129, options: .storageModeShared))
+        let staging = try requireValue(device.makeBuffer(length: stride * 129, options: .storageModeShared))
         try autoreleasepool {
             let renderer = try renderer(device)
             let lease = try renderer.encode(into: command)
-            let blit = try XCTUnwrap(command.makeBlitCommandEncoder())
+            let blit = try requireValue(command.makeBlitCommandEncoder())
             blit.copy(from: lease.texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOrigin(x: 0,y: 0,z: 0),
                 sourceSize: MTLSize(width: 257,height: 129,depth: 1), to: staging, destinationOffset: 0,
                 destinationBytesPerRow: stride, destinationBytesPerImage: stride * 129)
@@ -72,120 +74,120 @@ final class LifetimeGPUTests: XCTestCase {
         }
         event.signaledValue = 1
         command.waitUntilCompleted()
-        XCTAssertEqual(command.status, .completed)
-        XCTAssertNil(command.error)
+        expectEqual(command.status, .completed)
+        expectNil(command.error)
         let words = staging.contents().assumingMemoryBound(to: UInt16.self)
-        XCTAssertEqual(Float(Float16(bitPattern: words[8 * stride / 2 + 8 * 4])), 1)
-        XCTAssertEqual(Float(Float16(bitPattern: words[120 * stride / 2 + 8 * 4 + 2])), 1)
+        expectEqual(Float(Float16(bitPattern: words[8 * stride / 2 + 8 * 4])), 1)
+        expectEqual(Float(Float16(bitPattern: words[120 * stride / 2 + 8 * 4 + 2])), 1)
     }
 
-    func testPartialEncodingFailureRetainsUnretainedCommandResources() throws {
-        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice())
-        let queue = try XCTUnwrap(device.makeCommandQueue())
-        let event = try XCTUnwrap(device.makeSharedEvent())
-        let command = try XCTUnwrap(queue.makeCommandBufferWithUnretainedReferences())
+    @Test func testPartialEncodingFailureRetainsUnretainedCommandResources() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
+        let queue = try requireValue(device.makeCommandQueue())
+        let event = try requireValue(device.makeSharedEvent())
+        let command = try requireValue(queue.makeCommandBufferWithUnretainedReferences())
         command.encodeWaitForEvent(event, value: 1)
         try autoreleasepool {
             let renderer = try renderer(device, corruptFinalUniform: true)
-            XCTAssertThrowsError(try renderer.encode(into: command)) { error in
-                XCTAssertTrue(String(describing: error).contains("failValue"))
+            expectThrows(try renderer.encode(into: command)) { error in
+                expectTrue(String(describing: error).contains("failValue"))
             }
             command.commit()
         }
         event.signaledValue = 1
         command.waitUntilCompleted()
-        XCTAssertEqual(command.status, .completed)
-        XCTAssertNil(command.error)
+        expectEqual(command.status, .completed)
+        expectNil(command.error)
     }
 
-    func testRejectsUncommittedFramesAndOtherQueues() throws {
-        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice())
+    @Test func testRejectsUncommittedFramesAndOtherQueues() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
         let renderer = try renderer(device)
-        let queue = try XCTUnwrap(device.makeCommandQueue())
-        let first = try XCTUnwrap(queue.makeCommandBuffer())
+        let queue = try requireValue(device.makeCommandQueue())
+        let first = try requireValue(queue.makeCommandBuffer())
         let lease = try renderer.encode(into: first)
-        XCTAssertThrowsError(try renderer.encode(into: first))
-        XCTAssertThrowsError(try renderer.encode(into: XCTUnwrap(queue.makeCommandBuffer())))
+        expectThrows(try renderer.encode(into: first))
+        expectThrows(try renderer.encode(into: requireValue(queue.makeCommandBuffer())))
         first.commit()
-        let otherQueue = try XCTUnwrap(device.makeCommandQueue())
-        XCTAssertThrowsError(try renderer.encode(into: XCTUnwrap(otherQueue.makeCommandBuffer())))
+        let otherQueue = try requireValue(device.makeCommandQueue())
+        expectThrows(try renderer.encode(into: requireValue(otherQueue.makeCommandBuffer())))
         first.waitUntilCompleted()
-        XCTAssertEqual(first.status, .completed)
+        expectEqual(first.status, .completed)
         withExtendedLifetime(lease) {}
     }
 
-    func testAbandonedBorrowedCommandDoesNotBlockFutureFrames() throws {
-        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice())
+    @Test func testAbandonedBorrowedCommandDoesNotBlockFutureFrames() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
         let renderer = try renderer(device)
-        let queue = try XCTUnwrap(device.makeCommandQueue())
+        let queue = try requireValue(device.makeCommandQueue())
         weak var abandoned: MTLCommandBuffer?
         try autoreleasepool {
-            let command = try XCTUnwrap(queue.makeCommandBuffer())
+            let command = try requireValue(queue.makeCommandBuffer())
             abandoned = command
             _ = try renderer.encode(into: command)
         }
-        XCTAssertNil(abandoned, "Renderer must not own an uncommitted borrowed command")
+        expectNil(abandoned, "Renderer must not own an uncommitted borrowed command")
         let resumed = try renderer.render()
         resumed.commandBuffer.waitUntilCompleted()
-        XCTAssertEqual(resumed.commandBuffer.status, .completed)
+        expectEqual(resumed.commandBuffer.status, .completed)
     }
 
-    func testBoundedSubmissionsRecoverCapacityAfterCompletion() throws {
-        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice())
+    @Test func testBoundedSubmissionsRecoverCapacityAfterCompletion() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
         let renderer = try renderer(device)
-        let queue = try XCTUnwrap(device.makeCommandQueue())
-        let event = try XCTUnwrap(device.makeSharedEvent())
-        let gate = try XCTUnwrap(queue.makeCommandBuffer())
+        let queue = try requireValue(device.makeCommandQueue())
+        let event = try requireValue(device.makeSharedEvent())
+        let gate = try requireValue(queue.makeCommandBuffer())
         let firstLease = try renderer.encode(into: gate)
         gate.encodeWaitForEvent(event, value: 1)
         gate.commit()
         defer { event.signaledValue = 1 }
         var frames: [FrameSubmission] = []
         for index in 0..<3 { frames.append(try renderer.render(frame: FrameState(time: 0, delta: 0, frameIndex: UInt64(index)))) }
-        XCTAssertThrowsError(try renderer.render()) { error in
-            XCTAssertEqual(error as? RenderSubmissionError, .capacityExceeded)
+        expectThrows(try renderer.render()) { error in
+            expectEqual(error as? RenderSubmissionError, .capacityExceeded)
         }
-        XCTAssertEqual(Set(frames.map { ObjectIdentifier($0.output.texture) }).count, 3)
-        XCTAssertFalse(frames[0].output.texture === firstLease.texture)
+        expectEqual(Set(frames.map { ObjectIdentifier($0.output.texture) }).count, 3)
+        expectFalse(frames[0].output.texture === firstLease.texture)
         event.signaledValue = 1
         for frame in frames {
             frame.commandBuffer.waitUntilCompleted()
-            XCTAssertEqual(frame.commandBuffer.status, .completed)
+            expectEqual(frame.commandBuffer.status, .completed)
         }
         // Metal invokes completion handlers before waitUntilCompleted returns.
         let recovered = try renderer.render()
         recovered.commandBuffer.waitUntilCompleted()
-        XCTAssertEqual(recovered.commandBuffer.status, .completed)
+        expectEqual(recovered.commandBuffer.status, .completed)
         withExtendedLifetime(firstLease) {}
     }
 
-    func testDelayedConsumerReadsRetainedOutputAfterLaterFrames() throws {
-        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice())
+    @Test func testDelayedConsumerReadsRetainedOutputAfterLaterFrames() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
         let renderer = try renderer(device)
         let first = try renderer.render()
         first.commandBuffer.waitUntilCompleted()
         for _ in 0..<6 {
             let later = try renderer.render()
             later.commandBuffer.waitUntilCompleted()
-            XCTAssertFalse(later.output.texture === first.output.texture)
+            expectFalse(later.output.texture === first.output.texture)
         }
         let queue = first.commandBuffer.commandQueue
-        let consumer = try XCTUnwrap(queue.makeCommandBuffer())
+        let consumer = try requireValue(queue.makeCommandBuffer())
         let stride = ((257 * 8 + 255) / 256) * 256
-        let staging = try XCTUnwrap(device.makeBuffer(length: stride * 129, options: .storageModeShared))
-        let blit = try XCTUnwrap(consumer.makeBlitCommandEncoder())
+        let staging = try requireValue(device.makeBuffer(length: stride * 129, options: .storageModeShared))
+        let blit = try requireValue(consumer.makeBlitCommandEncoder())
         blit.copy(from: first.output.texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOrigin(x: 0,y: 0,z: 0),
             sourceSize: MTLSize(width: 257,height: 129,depth: 1), to: staging, destinationOffset: 0,
             destinationBytesPerRow: stride, destinationBytesPerImage: stride * 129)
         blit.endEncoding()
         consumer.commit()
         consumer.waitUntilCompleted()
-        XCTAssertEqual(consumer.status, .completed)
+        expectEqual(consumer.status, .completed)
         let words = staging.contents().assumingMemoryBound(to: UInt16.self)
         for (x,y,expected) in [(8,8,[Float(1),0,0,1]), (248,8,[Float(0),1,0,1]),
                                 (8,120,[Float(0),0,1,1]), (248,120,[Float(1),1,0,1])] {
             for channel in 0..<4 {
-                XCTAssertEqual(Float(Float16(bitPattern: words[y * stride / 2 + x * 4 + channel])), expected[channel], accuracy: 0.004)
+                expectEqual(Float(Float16(bitPattern: words[y * stride / 2 + x * 4 + channel])), expected[channel], accuracy: 0.004)
             }
         }
     }

@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = json.loads((ROOT / 'tools/tint/dawn.json').read_text())
 WORK = ROOT / '.build/tint'
 CACHE = WORK / 'source'
-LIBRARY = WORK / 'CNoisemakerTint.xcframework'
+LIBRARY = ROOT / 'Artifacts/CNoisemakerTint.xcframework'
 
 
 def run(*args, cwd=None):
@@ -114,7 +114,7 @@ def build():
         path = source(dep['repository'], dep['commit'], dep['path'].replace('/', '_'))
         defs.append(f'-D{dep["cmake_variable"]}={path}')
     fingerprint = hashlib.sha256()
-    for input_path in (ROOT / 'tools/tint/dawn.json', ROOT / 'tools/tint/CMakeLists.txt',
+    for input_path in (Path(__file__), ROOT / 'tools/tint/dawn.json', ROOT / 'tools/tint/CMakeLists.txt',
                        ROOT / 'Sources/CNoisemakerTint/NoisemakerTint.cpp',
                        ROOT / 'Sources/CNoisemakerTint/include/NoisemakerTint.h',
                        dawn_root / '.source-files.json',
@@ -141,10 +141,17 @@ def build():
                for file in digest_files):
             print(f'Using hash-verified cached {LIBRARY}')
             return
-    build_dir = WORK / 'build' / fingerprint.hexdigest()[:16]
+    # CMake rechecks live inputs when reusing a development build directory.
+    # The published artifact always retains the complete input fingerprint.
+    build_dir = Path(os.environ.get('NM_TINT_BUILD_DIR',
+        str(WORK / 'build' / fingerprint.hexdigest()[:16]))).resolve()
+    if not build_dir.is_relative_to((WORK / 'build').resolve()):
+        raise RuntimeError('NM_TINT_BUILD_DIR must be inside .build/tint/build')
     run(cmake, '-S', ROOT / 'tools/tint', '-B', build_dir, '-G', 'Ninja',
         '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_OSX_ARCHITECTURES=arm64',
-        '-DCMAKE_OSX_DEPLOYMENT_TARGET=14.0', *defs)
+        '-DCMAKE_OSX_DEPLOYMENT_TARGET=14.0',
+        f'-DCMAKE_C_FLAGS=-ffile-prefix-map={ROOT}=.',
+        f'-DCMAKE_CXX_FLAGS=-ffile-prefix-map={ROOT}=.', *defs)
     run(cmake, '--build', build_dir, '--target', 'nm_tint_shim', '--parallel',
         str(os.cpu_count() or 4))
     archives = sorted(build_dir.rglob('*.a'))
@@ -153,9 +160,9 @@ def build():
     slice_dir = LIBRARY / 'macos-arm64'
     slice_dir.mkdir(parents=True, exist_ok=True)
     merged = slice_dir / 'libCNoisemakerTint.a'
-    if merged.exists():
-        merged.unlink()
-    run('libtool', '-static', '-no_warning_for_no_symbols', '-o', merged, *archives)
+    temporary_archive = slice_dir / 'libCNoisemakerTint.pending.a'
+    run('env', 'ZERO_AR_DATE=1', 'libtool', '-static', '-no_warning_for_no_symbols', '-o', temporary_archive, *archives)
+    temporary_archive.replace(merged)
     headers = slice_dir / 'Headers'
     headers.mkdir(exist_ok=True)
     shutil.copy2(ROOT / 'Sources/CNoisemakerTint/include/NoisemakerTint.h',
@@ -173,6 +180,20 @@ def build():
     digests_path.write_text(json.dumps({str(file.relative_to(LIBRARY)): hashlib.sha256(file.read_bytes()).hexdigest()
                                        for file in digest_files}, sort_keys=True) + '\n')
     stamp.write_text(fingerprint.hexdigest() + '\n')
+    (ROOT / 'Artifacts/translator.json').write_text(json.dumps({
+        'schemaVersion': 1, 'dawnCommit': dawn['commit'],
+        'dependencies': [{'repository': dep['repository'], 'commit': dep['commit']}
+                         for dep in SPEC['dependencies']],
+        'platform': 'macos', 'architecture': 'arm64', 'deploymentTarget': '14.0',
+        'compiler': output('xcrun', 'clang', '--version').splitlines()[0],
+        'sdkVersion': output('xcrun', '--sdk', 'macosx', '--show-sdk-version'),
+        'buildFingerprint': fingerprint.hexdigest(),
+        'inputs': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
+                   for name in ['tools/build-tint.py', 'tools/tint/dawn.json', 'tools/tint/CMakeLists.txt',
+                                'Sources/CNoisemakerTint/NoisemakerTint.cpp',
+                                'Sources/CNoisemakerTint/include/NoisemakerTint.h']},
+        'files': json.loads(digests_path.read_text()),
+    }, indent=2) + '\n')
     print(f'Built {LIBRARY}')
     print(f'Archive bytes: {merged.stat().st_size}')
 

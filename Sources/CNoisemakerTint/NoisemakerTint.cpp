@@ -35,6 +35,9 @@
 #include "src/tint/lang/wgsl/enums.h"
 #include "src/tint/lang/wgsl/feature_status.h"
 #include "src/tint/lang/wgsl/inspector/inspector.h"
+#include "src/tint/lang/wgsl/sem/variable.h"
+#include "src/tint/lang/wgsl/ast/variable.h"
+#include "src/tint/lang/wgsl/ast/module.h"
 #include "src/tint/lang/wgsl/program/program.h"
 #include "src/tint/lang/wgsl/reader/reader.h"
 #include "src/tint/utils/diagnostic/source.h"
@@ -283,6 +286,15 @@ extern "C" int nm_tint_wgsl_to_msl(const char* wgsl,
     if (!found_entry || inspector.has_error()) {
         return Fail(out, "nm_tint_wgsl_to_msl: entry point missing or invalid: " + inspector.error());
     }
+    std::set<std::pair<uint32_t, uint32_t>> runtime_storage;
+    for (auto* variable : program.AST().GlobalVariables()) {
+        const auto* semantic = program.Sem().Get(variable)->As<tint::sem::GlobalVariable>();
+        if (semantic && semantic->AddressSpace() == tint::core::AddressSpace::kStorage &&
+            !semantic->Type()->UnwrapRef()->HasFixedFootprint()) {
+            const auto& point = semantic->Attributes().binding_point;
+            if (point) runtime_storage.emplace(point->group, point->binding);
+        }
+    }
     for (const auto& resource : inspector.GetResourceBindings(options->entry_point)) {
         using Type = tint::inspector::ResourceBinding::ResourceType;
         uint32_t expected_kind;
@@ -308,6 +320,19 @@ extern "C" int nm_tint_wgsl_to_msl(const char* wgsl,
         }
         if (!mapped) {
             return Fail(out, "nm_tint_wgsl_to_msl: missing or mismatched resource binding");
+        }
+        // Robustness inserts arrayLength even without an explicit source call.
+        // The MSL writer requires its size table before lowering those calls;
+        // checking output metadata afterward is too late and can trigger an ICE.
+        if (runtime_storage.count({resource.bind_group, resource.binding}) != 0) {
+            bool has_size = false;
+            for (size_t i = 0; i < options->buffer_size_count; ++i) {
+                has_size |= options->buffer_sizes[i].group == resource.bind_group &&
+                            options->buffer_sizes[i].binding == resource.binding;
+            }
+            if (!has_size) {
+                return Fail(out, "nm_tint_wgsl_to_msl: runtime storage array requires buffer-size metadata");
+            }
         }
     }
     if (inspector.has_error()) {

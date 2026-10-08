@@ -114,6 +114,17 @@ public enum UniformWriter {
     /// Values are flattened in declaration order, with matrices column-major.
     /// Padding is always initialized to zero, and scalar writes are little-endian.
     public static func encode(values: [String: [Double]], layout: UniformLayout) throws -> Data {
+        try encode(values: values, layout: layout, allowSourceFloat32Coercion: false)
+    }
+
+    /// The source JavaScript uniform packer writes authored NaN/Infinity f32
+    /// values. Keep the public writer strict and admit them only on that path.
+    static func encodeSource(values: [String: [Double]], layout: UniformLayout) throws -> Data {
+        try encode(values: values, layout: layout, allowSourceFloat32Coercion: true)
+    }
+
+    private static func encode(values: [String: [Double]], layout: UniformLayout,
+                               allowSourceFloat32Coercion: Bool) throws -> Data {
         guard Set(values.keys) == Set(layout.fields.map(\.name)) else {
             throw UniformError.invalidValue("uniform fields are missing or unknown")
         }
@@ -124,12 +135,19 @@ public enum UniformWriter {
                 throw UniformError.invalidValue("\(field.name): expected \(field.scalars.count) numeric components")
             }
             for (scalar, value) in zip(field.scalars, values) {
-                guard value.isFinite else { throw UniformError.invalidValue("\(field.name): non-finite value") }
+                if !value.isFinite {
+                    guard allowSourceFloat32Coercion,
+                          case .f32 = scalar.type else {
+                        throw UniformError.invalidValue("\(field.name): non-finite value")
+                    }
+                }
                 let bits: UInt32
                 switch scalar.type {
                 case .f32:
                     let converted = Float(value)
-                    guard converted.isFinite else { throw UniformError.invalidValue("\(field.name): f32 overflow") }
+                    guard converted.isFinite || allowSourceFloat32Coercion else {
+                        throw UniformError.invalidValue("\(field.name): f32 overflow")
+                    }
                     bits = converted.bitPattern
                 case .i32:
                     guard value.rounded(.towardZero) == value, value >= Double(Int32.min), value <= Double(Int32.max) else {

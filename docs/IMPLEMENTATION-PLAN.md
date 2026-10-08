@@ -2,7 +2,7 @@
 
 ## 1. Goal and execution boundary
 
-Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). Implementation has begun at task 1 under operator authorization. The source exporter, translator, initial graph executor, native lexer/parser and lifetime checks exist; remaining compiler/runtime paths and complete catalog qualification are in progress. Task-1 distribution and physical iOS qualification remain incomplete.
+Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). Implementation has begun at task 1 under operator authorization. The source exporter, translator, native compiler, Metal graph executor, host inputs, MetalKit integration and lifetime checks are implemented. The 2,824-case compiler differential, 101 CPU tests and 66 native Metal tests pass. Complete catalog rendering qualification, public distribution and physical iOS qualification remain incomplete.
 
 Write a failing behavior/ABI fixture, verify that failure, implement the smallest coherent change, and run the relevant regression set for each task. Review evidence before increasing scope. Use the existing default-branch checkout; remote publication and automation setup are separate decisions.
 
@@ -66,7 +66,7 @@ Current evidence: the presented marker passes with maximum channel error 0 and S
 - [ ] Test wrong-device command buffers, uncommitted/out-of-order encode requests, injected allocation errors, resize during in-flight work and failed graph replacement.
 - [ ] Run `swift test --filter RuntimeGPU` and `swift test --filter LifetimeGPU` with Metal validation enabled on a capable native host.
 
-Current evidence: blur, compute-buffer conversion, isolated MRT and fractional-coordinate sampling have same-run presented-output comparisons and GPU tests of intermediate textures. Borrowed and convenience submission paths have native lifetime regressions, including three in-flight slots, delayed consumers, abandoned commands, cross-queue rejection and unretained references after partial failures. Surface binding transactions match 16 locked-upstream two-frame traces; GPU feedback integration remains unfinished.
+Current evidence: blur, compute-buffer conversion, isolated MRT and fractional-coordinate sampling have same-run presented-output comparisons and GPU tests of intermediate textures. Borrowed and convenience submission paths have native lifetime regressions, including three in-flight slots, delayed consumers, abandoned commands, cross-queue rejection and unretained references after partial failures. Surface binding transactions match 16 locked-upstream two-frame traces; Global and ordinary persistent feedback have native GPU persistence/reset regressions. Mesh triangle rendering, including custom OBJ input, has exact WebGPU parity; point rendering has source-bound selected-case evidence; the complete rendering sweep remains open.
 
 **Acceptance:** pass/resource semantics and completion behavior agree with fixture contracts; no CPU frame-loop wait or readback is required.
 
@@ -76,14 +76,14 @@ Current evidence: blur, compute-buffer conversion, isolated MRT and fractional-c
 
 **Interface:** `NoisemakerCompiler.compile(source:) throws -> RenderGraph`; ordered typed diagnostics preserve upstream stage/source information.
 
-- [ ] Specify tagged values, missing/null behavior, ordered objects and exact step indexing with failing fixtures.
+- [x] Specify tagged values, missing/null behavior, ordered objects and exact step indexing with failing fixtures.
 - [x] Test UTF-16 code-unit lines, columns and offsets, and `hashSource` (signed 32-bit, base 36) on ASCII and non-ASCII source.
-- [ ] Port lexer, parser, validator, expander and allocation in order; compare each stage with independent upstream dumps before the next.
-- [ ] Cover enums, aliases, defaults, expressions, defines, nested chains, surfaces, uniform aliases, scoped parameters and `mediaSteps`.
+- [x] Port lexer, parser, validator, expander and allocation in order; compare each stage with independent upstream dumps before the next.
+- [x] Cover enums, aliases, defaults, expressions, defines, nested chains, surfaces, uniform aliases, scoped parameters and `mediaSteps`.
 - [ ] Test reference-supported input, malformed input, and reference refusals as distinct classes; unsupported claimed features fail completeness.
-- [ ] Add `swift test --filter CompilerTests` and `node tools/check-stages.mjs` (against the locked authority) to `scripts/test`; render native-produced graphs with task 3's GPU suite.
+- [x] Run the compiler tests, source-stage exporter, and full `CorpusStageParityTests` differential through `scripts/test`; render native-produced graphs in the GPU suite.
 
-Current evidence: native lexer/parser tests compare 26 lexical cases and 69 parser cases with independently executed locked upstream stages, including diagnostics and strict/default subchain behavior. Validation, expansion, allocation and native graph generation are not implemented.
+Current evidence: native lexer/parser tests compare 26 lexical cases and 69 parser cases with independently executed locked upstream stages, including diagnostics and strict/default subchain behavior. Validation, expansion, allocation and native graph generation now match all 2,824 pinned corpus cases. The tracked `CorpusStageParityTests` gate checks 16,944 exact hashes across lexing and the five compiler stages; runtime capability checks remain separate.
 
 **Acceptance:** stage equivalence and identical graph behavior with no JavaScript runtime in the shipping package.
 
@@ -93,8 +93,8 @@ Current evidence: native lexer/parser tests compare 26 lexical cases and 69 pars
 
 **Interface:** catalog generation preserves upstream definition/WGSL identity; variant compiler consumes complete source/define/stage/binding/options keys and produces traceable pipelines; `scripts/parity-summary` mints WebGPU goldens and renders candidates in the same run and prints the family `PARITY-SUMMARY` line.
 
-- [ ] Import the shared corpus (shared programs, curated programs, timed tier, Portable cases) and upstream `parity-case.json` programs; generate the coverage corpus from the locked definitions and add its freshness check to `scripts/test`.
-- [ ] Generate assets twice and compare hashes; prove oracle generation does not use candidate assets.
+- [x] Import the shared corpus (shared programs, curated programs, timed tier, Portable cases) and upstream `parity-case.json` programs; generate the coverage corpus from the locked definitions and add its freshness check to `scripts/test`.
+- [x] Generate assets twice and compare hashes; prove oracle generation does not use candidate assets.
 - [ ] Port by runtime dependency: simple sources/filters, noise/mixers, stateful passes, geometry and remaining special cases.
 - [ ] Add integer/half/derivative/numerical fixtures and deterministic automation traces; inspect translator settings when outputs differ.
 - [ ] When a difference traces to a WebGPU-versus-WebGL2 divergence, capture the WebGL2 frame for that case, fix the WGSL upstream toward WebGL2, and move the authority lock; the case stays failing until then.
@@ -109,10 +109,10 @@ Current evidence: native lexer/parser tests compare 26 lexical cases and 69 pars
 **Interface:** host-fed textures and snapshots, live parameters, output leases, `NoisemakerCompiler.registerEffect` for Portable effects, plus an optional MTKView adapter separate from the core renderer.
 
 - [ ] Test per-step media isolation, orientation/alpha, fixed-font text, mesh UV/normals, and audio/MIDI snapshots against reference fixtures.
-- [ ] Register Portable effects at run time, translate and render their WGSL, and refuse one without a WGSL program with a diagnostic.
-- [ ] Present GPU output through MetalKit without CPU readback; test physical-pixel resizing and a temporarily unavailable drawable.
+- [x] Register Portable effects at run time, translate and render their WGSL, and refuse one without a WGSL program with a diagnostic.
+- [x] Present GPU output through MetalKit without CPU readback; test physical-pixel resizing and a temporarily unavailable drawable.
 - [ ] Exercise invalid DSL, failed shader compilation, graph replacement, reset and view teardown while GPU work remains in flight.
-- [ ] Run 100 compile/render/resize/dispose cycles with bounded owned resources, completed command buffers and retained downstream consumers.
+- [x] Run 100 compile/render/resize/dispose cycles with bounded owned resources, completed command buffers and retained downstream consumers.
 
 **Acceptance:** a real app can embed, resize, reconfigure, show errors and recover while preserving input/output ownership and avoiding live-frame stalls.
 
@@ -120,7 +120,7 @@ Current evidence: native lexer/parser tests compare 26 lexical cases and 69 pars
 
 **Proposed files:** `Tests/PackageConsumer/`, `tools/package-check.sh`, package resources and required license notices; Apple example target settings established by the feasibility probe.
 
-- [ ] Build/test a clean macOS consumer without sibling checkouts, Node, Rust or runtime network fetches.
+- [x] Build/test a clean macOS consumer without sibling checkouts, Node, Rust or runtime network fetches.
 - [ ] Run `scripts/test` and `scripts/parity-summary`, plus the lifetime, recovery and integration gates, on Apple Silicon macOS.
 - [ ] Qualify iOS/iPadOS on physical Metal devices, recording compiler/SDK/deployment floors, memory limits and translator viability; report simulators separately.
 - [ ] Only add Intel/AMD Mac or other Apple-platform support claims after the same evidence exists there.

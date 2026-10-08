@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "authority": {
+    "repository": "https://github.com/noisefactorllc/noisemaker",
+    "commit": "8e5835932a7297d360b943200b42953224eea0a4",
+    "sourceManifestSha256": "3081e0e370c73ad57e05af28ddcb7ff50b943a4f6b93aa7dd84f193f3f818f80"
+  },
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+  "format": {
+    "channels": "RGBA",
+    "bitDepth": 8,
+    "orientation": "top-down",
+    "colorSpace": "srgb",
+    "stage": "software Canvas2D getImageData after source asyncInit, before WebGPU upload"
+  },
+  "wormSource": {
+    "path": "shaders/src/cpu/wormTracer.js",
+    "sha256": "efc3dae5f79beeeb3cba63a2e52626c063b88eb72000acadb63b0cf3d6e343be"
+  },
+  "cases": [
+    {
+      "id": "fibers-default",
+      "effect": "fibers",
+      "width": 65,
+      "height": 33,
+      "params": {},
+      "file": "fibers-default.rgba8",
+      "sha256": "6cc2e28c56e0032af4d9237ab2a296811f2b68cc8f57ccf87fbe81bc93eab068",
+      "bytes": 8580,
+      "updates": 137,
+      "alphaPixels": 1335,
+      "segmentFile": "fibers-default.segments.f64le",
+      "segmentCount": 1940,
+      "segmentBytes": 139680,
+      "segmentsSha256": "fcd608e9339b7cfdd661c47c087154073b7ecc22d609cf1a74d9703fca904888",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/fibers/definition.js",
+        "effectSha256": "bc38949082a5ae4ac68005b751afaa8ceb315e3a6edf8f8a92100b56baed2f6d"
+      }
+    },
+    {
+      "id": "fibers-dense",
+      "effect": "fibers",
+      "width": 67,
+      "height": 35,
+      "params": {
+        "seed": 2,
+        "density": 1
+      },
+      "file": "fibers-dense.rgba8",
+      "sha256": "924c0b6b6555c967cdeec56d1d0ac5639320003d5ad5a1675a007ed297baace2",
+      "bytes": 9380,
+      "updates": 229,
+      "alphaPixels": 1780,
+      "segmentFile": "fibers-dense.segments.f64le",
+      "segmentCount": 3340,
+      "segmentBytes": 240480,
+      "segmentsSha256": "687ddc863b717143eb4f3bbaee778b4e9dd3714ca0f2c84b8b91d96003232c60",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/fibers/definition.js",
+        "effectSha256": "bc38949082a5ae4ac68005b751afaa8ceb315e3a6edf8f8a92100b56baed2f6d"
+      }
+    },
+    {
+      "id": "scratches-default",
+      "effect": "scratches",
+      "width": 65,
+      "height": 33,
+      "params": {},
+      "file": "scratches-default.rgba8",
+      "sha256": "37d21381a7235542a71012aa0d1be6cfa6cda04c13a0f4c4fd461a574bf767be",
+      "bytes": 8580,
+      "updates": 25,
+      "alphaPixels": 222,
+      "segmentFile": "scratches-default.segments.f64le",
+      "segmentCount": 938,
+      "segmentBytes": 67536,
+      "segmentsSha256": "a1122d4d20c7cd49e6a8358b4487938f31e280bbcc1a0fe28feaea3412229ff3",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/scratches/definition.js",
+        "effectSha256": "0668b1a3236239f98ac6ef5ed4451576eab0d5b4b982bada58995f1e2421bacc"
+      }
+    },
+    {
+      "id": "scratches-seeded",
+      "effect": "scratches",
+      "width": 67,
+      "height": 35,
+      "params": {
+        "seed": 2,
+        "density": 0.8
+      },
+      "file": "scratches-seeded.rgba8",
+      "sha256": "8364d22dd1417bbe8485a27ecc477138eef663b036c31e2e1e01240c960e6035",
+      "bytes": 9380,
+      "updates": 45,
+      "alphaPixels": 422,
+      "segmentFile": "scratches-seeded.segments.f64le",
+      "segmentCount": 2072,
+      "segmentBytes": 149184,
+      "segmentsSha256": "b8f21e7129c1c370113b8fb18306932179a17e7175904f3d53768f1c663eb805",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/scratches/definition.js",
+        "effectSha256": "0668b1a3236239f98ac6ef5ed4451576eab0d5b4b982bada58995f1e2421bacc"
+      }
+    },
+    {
+      "id": "strayHair-default",
+      "effect": "strayHair",
+      "width": 65,
+      "height": 33,
+      "params": {},
+      "file": "strayHair-default.rgba8",
+      "sha256": "3079ab2ce5a6a57e3ed80e49e25a33176eed0df553a08742b34982651ea11e43",
+      "bytes": 8580,
+      "updates": 3,
+      "alphaPixels": 8,
+      "segmentFile": "strayHair-default.segments.f64le",
+      "segmentCount": 57,
+      "segmentBytes": 4104,
+      "segmentsSha256": "86f8516149bd4ba432a0e14abac11d920aa6f4003488227864a1cd78d3162a1b",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/strayHair/definition.js",
+        "effectSha256": "67ef0436220641b7d29c45bb2fd3e84286f517210d53553db22189d86eb16acb"
+      }
+    },
+    {
+      "id": "strayHair-dense",
+      "effect": "strayHair",
+      "width": 69,
+      "height": 31,
+      "params": {
+        "seed": 3,
+        "density": 1
+      },
+      "file": "strayHair-dense.rgba8",
+      "sha256": "0cd4417198851751fb683003c4c22c7eba3bcdc37319a992d01d8ce9529dd0a9",
+      "bytes": 8556,
+      "updates": 3,
+      "alphaPixels": 6,
+      "segmentFile": "strayHair-dense.segments.f64le",
+      "segmentCount": 55,
+      "segmentBytes": 3960,
+      "segmentsSha256": "66297e4cef5d162dec9f58e8c477aa3e5bac0912af2fa676a958d862d81ad1f9",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/strayHair/definition.js",
+        "effectSha256": "67ef0436220641b7d29c45bb2fd3e84286f517210d53553db22189d86eb16acb"
+      }
+    }
+  ]
+}

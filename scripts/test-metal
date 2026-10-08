@@ -8,5 +8,7 @@ elif [ ! -f "$NM_REFERENCE_EXPORT/source-manifest.json" ]; then
     echo "NM_REFERENCE_EXPORT must contain a locked source export" >&2
     exit 1
 fi
-python3 tools/build-tint.py
+python3 tools/verify-artifact.py
 swift test --filter 'GPUTests'
+swift build --product nm-render
+NM_RENDER_BIN="$(swift build --show-bin-path)/nm-render" python3 tools/test_corpus_capture.py

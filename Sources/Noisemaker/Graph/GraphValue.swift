@@ -1,17 +1,25 @@
 import Foundation
 import CoreFoundation
 
-public struct GraphField {
+public struct GraphField: Sendable {
     public let name: String
     public let value: GraphValue
+    public init(name: String, value: GraphValue) {
+        self.name = name
+        self.value = value
+    }
 }
 
-public struct GraphMapEntry {
+public struct GraphMapEntry: Sendable {
     public let key: GraphValue
     public let value: GraphValue
+    public init(key: GraphValue, value: GraphValue) {
+        self.key = key
+        self.value = value
+    }
 }
 
-public indirect enum GraphValue {
+public indirect enum GraphValue: Sendable {
     case undefined
     case null
     case bool(Bool)
@@ -67,8 +75,13 @@ public indirect enum GraphValue {
             switch tag {
             case "undefined": return .undefined
             case "number":
-                if object["value"] as? String == "-0" { return .number(-0.0) }
-                throw GraphDiagnostic.unsupported("tagged nonfinite or unknown number")
+                switch object["value"] as? String {
+                case "-0": return .number(-0.0)
+                case "NaN": return .number(.nan)
+                case "Infinity": return .number(.infinity)
+                case "-Infinity": return .number(-.infinity)
+                default: throw GraphDiagnostic.unsupported("unknown tagged number")
+                }
             case "object":
                 guard let entries = object["entries"] as? [[Any]] else {
                     throw GraphDiagnostic.invalid("tagged object lacks entries")

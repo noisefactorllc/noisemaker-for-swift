@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "authorityCommit": "8e5835932a7297d360b943200b42953224eea0a4",
+  "sourceManifestSha256": "3081e0e370c73ad57e05af28ddcb7ff50b943a4f6b93aa7dd84f193f3f818f80",
+  "corpusSha256": "9e2c1ed88cbe6d0a326f296e52c385ec0b22efdea849cd8eda6788e79faa3b3b",
+  "cases": [
+    {
+      "id": "qtPrograms/funcChainScoped",
+      "sourceSha256": "2359f10267574f82c4561fcf64cdd725d9da0f710c3957464e4ec6e17355a414",
+      "sourceFailure": "compile/createTexture/invalid-height",
+      "nativeFailure": "graph/nonfinite-dimension",
+      "dimensionParameter": "zoom_chain_0"
+    },
+    {
+      "id": "qtPrograms/funcNodeScoped",
+      "sourceSha256": "f8de79e998677e4772974218f221428b1d72d196cc5c1dc77c8e9ab355868014",
+      "sourceFailure": "compile/createTexture/invalid-height",
+      "nativeFailure": "graph/nonfinite-dimension",
+      "dimensionParameter": "stateSize_node_1"
+    },
+    {
+      "id": "qtPrograms/funcVolumeSize",
+      "sourceSha256": "032af7333800a7861f4ae70a6480c41c4f2530f7a979e250246b05abc708adbc",
+      "sourceFailure": "compile/createTexture/invalid-height",
+      "nativeFailure": "graph/nonfinite-dimension",
+      "dimensionParameter": "volumeSize_chain_0"
+    }
+  ]
+}

@@ -15,7 +15,7 @@ test('archived browser source must match the locked export byte for byte with no
   const out = mkdtempSync(join(tmpdir(), 'nm-marker-manifest-'))
   const archiveRoot = mkdtempSync(join(tmpdir(), 'nm-marker-archive-'))
   try {
-    for (const path of ['package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects',
+    for (const path of ['LICENSE', 'package.json', 'share/palettes.json', 'share/meshes', 'shaders/src', 'shaders/effects',
       'demo/shaders', 'vendor/shade-mcp/harness']) {
       cpSync(join(authority.root, path), join(archiveRoot, path), { recursive: true })
     }

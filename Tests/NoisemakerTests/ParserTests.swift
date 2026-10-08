@@ -1,8 +1,9 @@
 import Foundation
-import XCTest
+import Testing
 @testable import Noisemaker
 
-final class ParserTests: XCTestCase {
+@Suite(.serialized)
+struct ParserTests {
     private struct Lock: Decodable {
         let commit: String
         let sourceManifestSha256: String
@@ -27,53 +28,53 @@ final class ParserTests: XCTestCase {
         let corpus = try JSONDecoder().decode(Corpus.self, from: data)
         let lock = try JSONDecoder().decode(Lock.self,
             from: Data(contentsOf: root.appendingPathComponent("parity/reference.json")))
-        XCTAssertEqual(corpus.authority.commit, lock.commit)
-        XCTAssertEqual(corpus.authority.sourceManifestSha256, lock.sourceManifestSha256)
-        XCTAssertEqual(corpus.authority.namespaces, NoisemakerParser.builtInNamespaces)
-        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
-        return try XCTUnwrap(object["cases"] as? [[String: Any]])
+        expectEqual(corpus.authority.commit, lock.commit)
+        expectEqual(corpus.authority.sourceManifestSha256, lock.sourceManifestSha256)
+        expectEqual(corpus.authority.namespaces, NoisemakerParser.builtInNamespaces)
+        let object = try requireValue(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        return try requireValue(object["cases"] as? [[String: Any]])
     }
 
-    func testASTAndSubchainWarningsMatchLockedUpstreamParser() throws {
+    @Test func testASTAndSubchainWarningsMatchLockedUpstreamParser() throws {
         let corpus = try cases()
         var compared = 0
         for item in corpus where item["ast"] != nil {
-            let name = try XCTUnwrap(item["name"] as? String)
-            let source = try XCTUnwrap(item["source"] as? String)
+            let name = try requireValue(item["name"] as? String)
+            let source = try requireValue(item["source"] as? String)
             let strict = item["strict"] as? Bool ?? false
-            let expected = try ParserValue.decodeTagged(try XCTUnwrap(item["ast"]))
+            let expected = try ParserValue.decodeTagged(try requireValue(item["ast"]))
             let actual = try parseCase(source, item: item, strict: strict)
-            XCTAssertEqual(actual, expected, name)
+            expectEqual(actual, expected, name)
             let warningData = try JSONSerialization.data(withJSONObject: item["warnings"] as? [Any] ?? [])
             let warnings = try JSONDecoder().decode([ParserDiagnostic].self, from: warningData)
-            XCTAssertEqual(actual.collectSubchainArgumentDiagnostics(), warnings, name)
+            expectEqual(actual.collectSubchainArgumentDiagnostics(), warnings, name)
             compared += 1
         }
-        XCTAssertGreaterThanOrEqual(compared, 18)
+        expectAtLeast(compared, 18)
     }
 
-    func testErrorsAndUTF16SpansMatchLockedUpstreamParser() throws {
+    @Test func testErrorsAndUTF16SpansMatchLockedUpstreamParser() throws {
         let corpus = try cases()
         var compared = 0
         for item in corpus where item["error"] != nil {
-            let name = try XCTUnwrap(item["name"] as? String)
-            let source = try XCTUnwrap(item["source"] as? String)
+            let name = try requireValue(item["name"] as? String)
+            let source = try requireValue(item["source"] as? String)
             let strict = item["strict"] as? Bool ?? false
-            let failure = try XCTUnwrap(item["error"] as? [String: Any])
-            let diagnostic = try XCTUnwrap(failure["diagnostic"])
+            let failure = try requireValue(item["error"] as? [String: Any])
+            let diagnostic = try requireValue(failure["diagnostic"])
             let expected = try JSONDecoder().decode(ParserDiagnostic.self,
                 from: JSONSerialization.data(withJSONObject: diagnostic))
-            XCTAssertThrowsError(try parseCase(source, item: item, strict: strict), name) { error in
+            expectThrows(try parseCase(source, item: item, strict: strict), name) { error in
                 guard let actual = error as? ParserError else {
-                    XCTFail("\(name): expected ParserError, got \(error)")
+                    recordFailure("\(name): expected ParserError, got \(error)")
                     return
                 }
-                XCTAssertEqual(actual.diagnostic, expected, name)
-                XCTAssertEqual(actual.localizedDescription, failure["message"] as? String, name)
+                expectEqual(actual.diagnostic, expected, name)
+                expectEqual(actual.localizedDescription, failure["message"] as? String, name)
             }
             compared += 1
         }
-        XCTAssertGreaterThanOrEqual(compared, 12)
+        expectAtLeast(compared, 12)
     }
 
     private func parseCase(_ source: String, item: [String: Any], strict: Bool) throws -> ParserValue {
@@ -86,23 +87,23 @@ final class ParserTests: XCTestCase {
         return try NoisemakerParser.parse(source, strictSubchainArguments: strict)
     }
 
-    func testIncompleteTokenStreamFailsExplicitly() throws {
-        XCTAssertThrowsError(try NoisemakerParser.parse(tokens: [])) { error in
-            XCTAssertTrue(error is ParserIncomplete)
+    @Test func testIncompleteTokenStreamFailsExplicitly() throws {
+        expectThrows(try NoisemakerParser.parse(tokens: [])) { error in
+            expectTrue(error is ParserIncomplete)
         }
         let tokens = try NoisemakerLexer.lex("search synth")
-        XCTAssertThrowsError(try NoisemakerParser.parse(tokens: Array(tokens.dropLast()))) { error in
-            XCTAssertTrue(error is ParserIncomplete)
+        expectThrows(try NoisemakerParser.parse(tokens: Array(tokens.dropLast()))) { error in
+            expectTrue(error is ParserIncomplete)
         }
         let valid = try NoisemakerLexer.lex("search synth")
-        XCTAssertThrowsError(try NoisemakerParser.parse(tokens: valid + valid)) { error in
-            XCTAssertTrue(error is ParserIncomplete)
+        expectThrows(try NoisemakerParser.parse(tokens: valid + valid)) { error in
+            expectTrue(error is ParserIncomplete)
         }
     }
 
-    func testMalformedCallerNumericTokensFailWithoutTrapping() throws {
+    @Test func testMalformedCallerNumericTokensFailWithoutTrapping() throws {
         let tokens = try NoisemakerLexer.lex("search synth\nlet x = 1")
-        let index = try XCTUnwrap(tokens.firstIndex(where: { $0.type == "NUMBER" }))
+        let index = try requireValue(tokens.firstIndex(where: { $0.type == "NUMBER" }))
         _ = try NoisemakerParser.parse(tokens: tokens)
         let original = tokens[index]
         for (type, lexeme) in [
@@ -112,8 +113,8 @@ final class ParserTests: XCTestCase {
             var malformed = tokens
             malformed[index] = LexerToken(type: type, lexeme: lexeme, line: original.line,
                                           col: original.col, position: original.position)
-            XCTAssertThrowsError(try NoisemakerParser.parse(tokens: malformed), "\(type) \(lexeme)") { error in
-                XCTAssertTrue(error is ParserIncomplete, "\(type) \(lexeme): \(error)")
+            expectThrows(try NoisemakerParser.parse(tokens: malformed), "\(type) \(lexeme)") { error in
+                expectTrue(error is ParserIncomplete, "\(type) \(lexeme): \(error)")
             }
         }
     }

@@ -2,9 +2,9 @@ import test, { after } from 'node:test'
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { appendFileSync, cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { appendFileSync, cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { encode, fullTokenView, countDefineVariants, captureProtocols, fetchVerifiedArchive, sourceIdentity } from './export-reference.mjs'
 
@@ -75,6 +75,21 @@ test('locked export carries exact default vertex and is reproducible', async () 
   try {
     run()
     const vertex = JSON.parse(readFileSync(join(out, 'default-vertex.json'), 'utf8'))
+    const catalog = JSON.parse(readFileSync(join(out, 'catalog.json'), 'utf8'))
+    assert.deepEqual(catalog.effects.filter(effect =>
+      Object.values(effect.lifecycle).some(Boolean) || effect.externalTexture || effect.externalMesh)
+      .map(effect => `${effect.namespace}.${effect.func}`).sort(),
+    ['filter.fibers', 'filter.scratches', 'filter.strayHair', 'filter.text',
+      'render.meshLoader', 'synth.media'])
+    const { expandPalette } = await import(pathToFileURL(join(referenceRoot(), 'shaders/src/runtime/palette-expansion.js')).href)
+    assert.equal(catalog.paletteTable.length, 55)
+    for (const [position, encoded] of catalog.paletteTable.entries()) {
+      const actual = Object.fromEntries(encoded.entries)
+      const source = expandPalette(position + 1)
+      assert.deepEqual(actual, { amp: source.paletteAmp, freq: source.paletteFreq,
+        offset: source.paletteOffset, phase: source.palettePhase, mode: source.paletteMode })
+    }
+    assert.equal(expandPalette(56), null)
     const inventory = JSON.parse(readFileSync(join(out, 'inventory.json'), 'utf8'))
     const sources = JSON.parse(readFileSync(join(out, 'source-manifest.json'), 'utf8')).files
     assert.ok(sources.some(file => file.path === 'package.json'))
@@ -82,6 +97,7 @@ test('locked export carries exact default vertex and is reproducible', async () 
     assert.ok(sources.some(file => file.path === 'demo/shaders/index.html'))
     assert.ok(sources.some(file => file.path === 'vendor/shade-mcp/harness/index.js'))
     assert.ok(sources.some(file => file.path === 'share/palettes.json'))
+    assert.ok(sources.some(file => file.path === 'share/meshes/sphere.obj'))
     const noise = inventory.entries.find(entry => entry.namespace === 'synth' && entry.name === 'noise')
     assert.ok(noise.defineVariants.openNumericDefines.includes('NOISE_TYPE'))
     const numericCase = JSON.parse(readFileSync(join(out, 'cases/numericDefineOutsideChoices.json'), 'utf8'))
@@ -137,7 +153,9 @@ test('locked export carries exact default vertex and is reproducible', async () 
 })
 
 test('fallback fetches and verifies the pinned commit without a branch or worktree', () => {
-  const archive = fetchVerifiedArchive(lock, process.env.NM_REFERENCE_ROOT || lock.repository)
+  const localGit = [process.env.NM_REFERENCE_ROOT, resolve('../noisemaker')].find(path =>
+    path && existsSync(join(path, '.git')))
+  const archive = fetchVerifiedArchive(lock, process.env.NM_REFERENCE_GIT_URL || localGit || lock.repository)
   try {
     assert.equal(archive.commit, lock.commit)
     assert.equal(readFileSync(join(archive.root, 'shaders/src/runtime/default-shaders.js'), 'utf8'),
@@ -148,11 +166,11 @@ test('fallback fetches and verifies the pinned commit without a branch or worktr
 test('authority refuses an untracked shader helper or effect', () => {
   const root = mkdtempSync(join(tmpdir(), 'nm-swift-dirty-'))
   try {
-    for (const path of ['package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness']) {
+    for (const path of ['LICENSE', 'package.json', 'share/palettes.json', 'share/meshes', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness']) {
       cpSync(join(referenceRoot(), path), join(root, path), { recursive: true, dereference: true })
     }
     execFileSync('git', ['init', '-b', 'main', root], { stdio: 'ignore' })
-    execFileSync('git', ['-C', root, 'add', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'])
+    execFileSync('git', ['-C', root, 'add', 'LICENSE', 'package.json', 'share/palettes.json', 'share/meshes', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'])
     execFileSync('git', ['-C', root, 'add', '-f', 'demo/shaders/img/.DS_Store'])
     execFileSync('git', ['-C', root, '-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-m', 'authority fixture'], { stdio: 'ignore' })
     const localLock = { ...lock, commit: execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim() }

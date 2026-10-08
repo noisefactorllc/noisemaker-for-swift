@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "dawnCommit": "50c9f7b4ee3fef0bdc9166056098271ea85ef9fc",
+  "dependencies": [
+    {
+      "repository": "https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp",
+      "commit": "dd67f5ca84f65ebb88ac0ea0fe2c1d58663e519f"
+    },
+    {
+      "repository": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Headers",
+      "commit": "0d25db97cb9b8f725e4c95e4553001710e7fc39d"
+    }
+  ],
+  "platform": "macos",
+  "architecture": "arm64",
+  "deploymentTarget": "14.0",
+  "compiler": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
+  "sdkVersion": "15.2",
+  "buildFingerprint": "215ca1aede19327cefd0ed2063726fe62be80a1f540cf42d599a294428558225",
+  "inputs": {
+    "tools/build-tint.py": "858fc3ecc468d595b79896afa30d89702d3d1f912c05d83e296d3dd0dddc8b56",
+    "tools/tint/dawn.json": "0308499f8c5b738040a8a409eae4e6dc77cb9bddb5be7880e1326e4f64a5a19f",
+    "tools/tint/CMakeLists.txt": "81d7bc9f1dfd9e092dc6c9f920cd79b1c25d49d2408e46767f3f0f2a7c61997e",
+    "Sources/CNoisemakerTint/NoisemakerTint.cpp": "9263188d11b3137f1ba4b1fdb28802304f40ed57a1f6e3e67317b9235b3121b3",
+    "Sources/CNoisemakerTint/include/NoisemakerTint.h": "02c3c6393a49f6a6105dcb8a8a20eac0ef38615cc67760a74b4af7222ac7cca3"
+  },
+  "files": {
+    "Info.plist": "3af8bdaf58e301bd843ff7dbb7a612d4caa2821af320bc3ca34c8d902360a369",
+    "macos-arm64/Headers/NoisemakerTint.h": "02c3c6393a49f6a6105dcb8a8a20eac0ef38615cc67760a74b4af7222ac7cca3",
+    "macos-arm64/Headers/module.modulemap": "91290d0a7e95e5570015f78020f65566d6efd580afb862d20b488f21c670b859",
+    "macos-arm64/libCNoisemakerTint.a": "47f07e4cf46655aef0e8285feced577d6b70207090915a865a7d4415ca33e74e"
+  }
+}

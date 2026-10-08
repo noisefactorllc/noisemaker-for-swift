@@ -1,78 +1,90 @@
-import XCTest
+import Testing
 @testable import Noisemaker
 
-final class TranslatorTests: XCTestCase {
+@Suite(.serialized)
+struct TranslatorTests {
     private let valid = "@compute @workgroup_size(1) fn main() {}"
 
-    func testDeterministicTranslationAndOwnedOutput() throws {
+    @Test func testDeterministicTranslationAndOwnedOutput() throws {
         let translator = ShaderTranslator()
         let first = try translator.translate(wgsl: valid, entryPoint: "main", stage: .compute)
         let second = try translator.translate(wgsl: valid, entryPoint: "main", stage: .compute)
-        XCTAssertEqual(first.source, second.source)
-        XCTAssertTrue(first.source.contains("dawn_entry_point"))
-        XCTAssertEqual(first.mslEntryPoint, "dawn_entry_point")
-        XCTAssertEqual(first.workgroupSize.0, 1)
-        XCTAssertEqual(first.workgroupSize.1, 1)
-        XCTAssertEqual(first.workgroupSize.2, 1)
+        expectEqual(first.source, second.source)
+        expectTrue(first.source.contains("dawn_entry_point"))
+        expectEqual(first.mslEntryPoint, "dawn_entry_point")
+        expectEqual(first.workgroupSize.0, 1)
+        expectEqual(first.workgroupSize.1, 1)
+        expectEqual(first.workgroupSize.2, 1)
     }
 
-    func testMalformedWGSLReturnsDiagnostic() {
-        XCTAssertThrowsError(try ShaderTranslator().translate(
+    @Test func testMalformedWGSLReturnsDiagnostic() {
+        expectThrows(try ShaderTranslator().translate(
             wgsl: "@compute fn", entryPoint: "main", stage: .compute)) { error in
             guard case TintTranslationError.translationFailed(let message) = error else {
-                return XCTFail("Expected a Tint diagnostic, got \(error)")
+                return recordFailure("Expected a Tint diagnostic, got \(error)")
             }
-            XCTAssertFalse(message.isEmpty)
+            expectFalse(message.isEmpty)
         }
     }
 
-    func testDuplicateBindingIsRejectedBeforeTint() {
+    @Test func testDuplicateBindingIsRejectedBeforeTint() {
         let binding = TintBinding(group: 0, binding: 0, kind: .storage, slot: 0)
-        XCTAssertThrowsError(try ShaderTranslator().translate(
+        expectThrows(try ShaderTranslator().translate(
             wgsl: valid, entryPoint: "main", stage: .compute,
             bindings: [binding, binding])) { error in
             guard case TintTranslationError.invalidInput = error else {
-                return XCTFail("Expected binding validation, got \(error)")
+                return recordFailure("Expected binding validation, got \(error)")
             }
         }
     }
 
-    func testStorageSizeMetadataIsPreserved() throws {
+    @Test func testStorageSizeMetadataIsPreserved() throws {
         let wgsl = "@group(0) @binding(0) var<storage, read_write> out: array<f32>; @compute @workgroup_size(1) fn main() { out[0] = 1.0; }"
         let size = TintBufferSize(group: 0, binding: 0, index: 0)
         let result = try ShaderTranslator().translate(
             wgsl: wgsl, entryPoint: "main", stage: .compute,
             bindings: [TintBinding(group: 0, binding: 0, kind: .storage, slot: 0)],
             bufferSizes: [size], bufferSizesOffset: 0, immediateSlot: 30)
-        XCTAssertEqual(result.bufferSizes, [size])
-        XCTAssertEqual(result.bufferSizesOffset, 0)
-        XCTAssertEqual(result.immediateSlot, 30)
+        expectEqual(result.bufferSizes, [size])
+        expectEqual(result.bufferSizesOffset, 0)
+        expectEqual(result.immediateSlot, 30)
     }
 
-    func testRequestedStageMustMatchWGSL() {
-        XCTAssertThrowsError(try ShaderTranslator().translate(
-            wgsl: valid, entryPoint: "main", stage: .fragment))
-    }
-
-    func testMissingBindingMapFails() {
-        let wgsl = "@group(0) @binding(0) var<uniform> value: f32; @compute @workgroup_size(1) fn main() { let x = value; }"
-        XCTAssertThrowsError(try ShaderTranslator().translate(
-            wgsl: wgsl, entryPoint: "main", stage: .compute))
-    }
-
-    func testDuplicateStorageSizeIndexIsRejected() {
-        let sizes = [TintBufferSize(group: 0, binding: 0, index: 0),
-                     TintBufferSize(group: 0, binding: 1, index: 0)]
-        XCTAssertThrowsError(try ShaderTranslator().translate(
-            wgsl: valid, entryPoint: "main", stage: .compute,
-            bufferSizes: sizes, bufferSizesOffset: 0)) { error in
-            guard case TintTranslationError.invalidInput = error else {
-                return XCTFail("Expected size-index validation, got \(error)")
+    @Test func testRuntimeStorageWithoutSizeReturnsDiagnostic() {
+        for storage in ["array<f32>", "Tail"] {
+            let wgsl = "struct Tail { count: u32, values: array<f32> }; @group(0) @binding(0) var<storage, read_write> output: \(storage); @compute @workgroup_size(1) fn main() { " +
+                (storage == "Tail" ? "output.values[0] = 1.0;" : "output[0] = 1.0;") + " }"
+            expectThrows(try ShaderTranslator().translate(wgsl: wgsl, entryPoint: "main", stage: .compute,
+                bindings: [TintBinding(group:0,binding:0,kind:.storage,slot:0)])) { error in
+                expectTrue(String(describing:error).contains("buffer-size metadata"))
             }
         }
     }
 
-    func testConcurrentCallsProduceSameResult() async throws {
+    @Test func testRequestedStageMustMatchWGSL() {
+        expectThrows(try ShaderTranslator().translate(
+            wgsl: valid, entryPoint: "main", stage: .fragment))
+    }
+
+    @Test func testMissingBindingMapFails() {
+        let wgsl = "@group(0) @binding(0) var<uniform> value: f32; @compute @workgroup_size(1) fn main() { let x = value; }"
+        expectThrows(try ShaderTranslator().translate(
+            wgsl: wgsl, entryPoint: "main", stage: .compute))
+    }
+
+    @Test func testDuplicateStorageSizeIndexIsRejected() {
+        let sizes = [TintBufferSize(group: 0, binding: 0, index: 0),
+                     TintBufferSize(group: 0, binding: 1, index: 0)]
+        expectThrows(try ShaderTranslator().translate(
+            wgsl: valid, entryPoint: "main", stage: .compute,
+            bufferSizes: sizes, bufferSizesOffset: 0)) { error in
+            guard case TintTranslationError.invalidInput = error else {
+                return recordFailure("Expected size-index validation, got \(error)")
+            }
+        }
+    }
+
+    @Test func testConcurrentCallsProduceSameResult() async throws {
         let wgsl = valid
         let expected = try ShaderTranslator().translate(wgsl: wgsl, entryPoint: "main", stage: .compute).source
         let outputs = try await withThrowingTaskGroup(of: String.self) { group in
@@ -85,7 +97,7 @@ final class TranslatorTests: XCTestCase {
             for try await result in group { results.append(result) }
             return results
         }
-        XCTAssertEqual(outputs.count, 8)
-        XCTAssertTrue(outputs.allSatisfy { $0 == expected })
+        expectEqual(outputs.count, 8)
+        expectTrue(outputs.allSatisfy { $0 == expected })
     }
 }

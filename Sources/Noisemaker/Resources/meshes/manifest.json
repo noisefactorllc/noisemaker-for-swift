@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "authority": {
+    "repository": "https://github.com/noisefactorllc/noisemaker",
+    "commit": "8e5835932a7297d360b943200b42953224eea0a4",
+    "sourceManifestSha256": "3081e0e370c73ad57e05af28ddcb7ff50b943a4f6b93aa7dd84f193f3f818f80",
+    "licenseSha256": "91c83bf22e48749181dc44701878124f556559700472218cd05cdeda4f719ca4"
+  },
+  "files": [
+    {
+      "name": "capsule.obj",
+      "sha256": "bccbe621026d07ee2df6cffc8a3202bcfc8b1cbd0298357a26af167ec63b4002",
+      "bytes": 61735
+    },
+    {
+      "name": "cone.obj",
+      "sha256": "a5914c57f081d3a7481fae8dc22dfd6c2574495ce0de81368fb9424d1c0fa1ae",
+      "bytes": 7613
+    },
+    {
+      "name": "cube.obj",
+      "sha256": "67b11dbbf4cb4be31ded12775886a6e550538554d1f18a9227ad52fbd7fde8f7",
+      "bytes": 659
+    },
+    {
+      "name": "cylinder.obj",
+      "sha256": "b6205cc5d31f447258ea029045eb0276224f5f0111ce90264fcdcf5fee846c2c",
+      "bytes": 11257
+    },
+    {
+      "name": "icosphere.obj",
+      "sha256": "73c1dfdd846fe4852b83d704c9dfb7d5deaa67a349db928ae432b3c928a29694",
+      "bytes": 18050
+    },
+    {
+      "name": "sphere.obj",
+      "sha256": "77dd8c1b520c3fbfc79557184196f30be32c6a94ea3996aa5b79500bce8fc829",
+      "bytes": 61735
+    },
+    {
+      "name": "torus.obj",
+      "sha256": "ceeca04655e0d352365b818edda2b320693a0b023140287cae16f9d805bcac6f",
+      "bytes": 63371
+    }
+  ]
+}

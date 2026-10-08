@@ -1,0 +1,2708 @@
+{
+  "schemaVersion": 1,
+  "authority": {
+    "commit": "8e5835932a7297d360b943200b42953224eea0a4",
+    "sourceManifestSha256": "3081e0e370c73ad57e05af28ddcb7ff50b943a4f6b93aa7dd84f193f3f818f80"
+  },
+  "corpusSha256": "9e2c1ed88cbe6d0a326f296e52c385ec0b22efdea849cd8eda6788e79faa3b3b",
+  "cases": [
+    {
+      "id": "coverage/filter_crt",
+      "sourceSha256": "01ec75de83775c746ff8abfbcf7586086f44dffe1d7863f6ee992502ac0d7efb",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_crt",
+          "selectedEntryPoint": "main",
+          "isCompute": true,
+          "resolvedWgslSha256": "53eb31bf755346ac64891809e90b82a95fb7a92c5c5b30c0738163cf7b774e67",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "CRTParams"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "CRTParams"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [
+            0,
+            1,
+            2
+          ],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_fxaa",
+      "sourceSha256": "16a0f775bbeb3dce1fa736eef4835800f37a84ba458d28ae022964f760c727cc",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_fxaa",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "4ca32c78a8a97d0d8769b0e496f70e907c01e5d1782b798b17425f8662427a5a",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_grain",
+      "sourceSha256": "c9f55d01ad5207587309e1487e12400387c9eb6bdaf67b41d27f9f8fa43cf21a",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_grain",
+          "selectedEntryPoint": "main",
+          "isCompute": true,
+          "resolvedWgslSha256": "e10b12fe8f50397f53d44b6763b29a55ad690db3894997c4e6141f1ec8d3a4ef",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "GrainParams"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "GrainParams"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [
+            0,
+            2
+          ],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_historicPalette",
+      "sourceSha256": "136810216684dbddc793bfe30dd1c5a01a34526e2efedd66ab4d31b41e829b95",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_historicPalette",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "db85558ac133a4b4e12c9c5267c0102e975759eacc42c7986c6955587497c130",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_osd",
+      "sourceSha256": "f2646e1c724a411e00e313b0358d37713352afd4a79c041fcd4a4e682014e36c",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_osd",
+          "selectedEntryPoint": "main",
+          "isCompute": true,
+          "resolvedWgslSha256": "64a52e3d30550bef6b6731dcac694eb487258234f9bff2039ec9eff72a02d7cc",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "OsdParams"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "OsdParams"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [
+            0,
+            2
+          ],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_palette",
+      "sourceSha256": "e3b7d9d156533aa0d6be70a19252114317b1908ae12f06143583c042075cb3ec",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_palette",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "de9acc6ea60536713d1022bb58fba73c1260c77c0d29eb20199bd9800e44ee53",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_reindex",
+      "sourceSha256": "1ede9cd676cd900048831155efb38f18be82d4251e26c22c0585ba319ce109a2",
+      "graphPassCount": 5,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_nmReindexStats",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "d5c818c9cb6307605e4df0e89eadd74e40966f9f3e5975b6425b8f280f62e974",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_1_pass_1",
+          "programId": "node_1_nmReindexReduce",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "e46056a03cffacf0cbf1f84e7cc7ad89e68de403408aa611401a327ec107b5a8",
+          "sourceHasBindings": true,
+          "inputs": [
+            "statsTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "stats_texture",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "uniform",
+              "name": "resolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "stats_texture",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "uniform",
+              "name": "resolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "stats_texture",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": false,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_1_pass_2",
+          "programId": "node_1_nmReindexApply",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "276413bb0d6d4a2266061b21495739767506a3e6f7be57824e29fb31b25aea39",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex",
+            "statsTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "stats_texture",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uDisplacement",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "stats_texture",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uDisplacement",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            },
+            {
+              "name": "stats_texture",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": false,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_smooth",
+      "sourceSha256": "f8727f8f2287ba14a85d4f68097fab3ca2ba36e3f60c0bf09228ff2576977728",
+      "graphPassCount": 4,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_modPattern",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "c38dfa314a5bdacbc1d260486bda78705760b91af701d265ea0d0ecb633e8ec8",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_smoothEdge",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "76e79bdbeb46ab67637ae2d9871966ef582a9302f64f4d9f52c73e2533897728",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_1_pass_1",
+          "programId": "node_1_smoothBlend",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "0d9a9af6cb42b7ab4b04de04456e26d760aeb2d81bd3522a23555af831884d0d",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex",
+            "edgeTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "texture",
+              "name": "edgeTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "texture",
+              "name": "edgeTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            },
+            {
+              "name": "edgeTex",
+              "binding": 2,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter_snow",
+      "sourceSha256": "79a7ec1b49bc90823b6eded86cfb4e1bac98574aa94de9ba3fd7593cd617f7a9",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_snow",
+          "selectedEntryPoint": "main",
+          "isCompute": true,
+          "resolvedWgslSha256": "7fb617ff6ee669c5dd10a582e805c6ed66f44e89507d8f50cf6192610993daea",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "SnowParams"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "inputTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "storage",
+              "name": "output_buffer",
+              "storage": "storage, read_write",
+              "typeDecl": "array<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "params",
+              "storage": "uniform",
+              "typeDecl": "SnowParams"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [
+            0,
+            2
+          ],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/filter3d_palette3d",
+      "sourceSha256": "2b9ac11f6471832a5ef6715c469a54e3e5b0e2650a2b670e97cd51c800c89cd3",
+      "graphPassCount": 4,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_precompute__COLOR_MODE_0__OCTAVES_1__RIDGES_false",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "df3dd841d30778782af88a0696bf97fcac723b7b16b6b3491b29197ffed8f9db",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "color",
+            "geoOut"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "time",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "uniform",
+              "name": "scale",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "seed",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "volumeSize",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 4,
+              "type": "uniform",
+              "name": "speed",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "time",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "uniform",
+              "name": "scale",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "seed",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "volumeSize",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 4,
+              "type": "uniform",
+              "name": "speed",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_pass_0",
+          "programId": "node_1_palette3d",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "c64f1a7bf00669623f8e2ac45f2ad9448ebc3beb5992c0e6766bd1c629d117ba",
+          "sourceHasBindings": true,
+          "inputs": [
+            "inputTex3d"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex3d",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "sampler",
+              "name": "inputSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "inputTex3d",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "inputTex3d",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_2_pass_0",
+          "programId": "node_2_render3d__FILTERING_0__INVERT_false",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "b890fa5d5197531548709ae4bf56699b3f0643c4c782caf6adc903f66bed8d46",
+          "sourceHasBindings": true,
+          "inputs": [
+            "volumeCache",
+            "analyticalGeo"
+          ],
+          "outputs": [
+            "color",
+            "geoOut"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "resolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "uniform",
+              "name": "time",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "threshold",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "volumeSize",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 4,
+              "type": "uniform",
+              "name": "orbitSpeed",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 5,
+              "type": "uniform",
+              "name": "bgColor",
+              "storage": "uniform",
+              "typeDecl": "vec3<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 6,
+              "type": "uniform",
+              "name": "bgAlpha",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 7,
+              "type": "texture",
+              "name": "volumeCache",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 8,
+              "type": "uniform",
+              "name": "tileOffset",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 9,
+              "type": "uniform",
+              "name": "fullResolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "resolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "uniform",
+              "name": "time",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "uniform",
+              "name": "threshold",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "volumeSize",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 4,
+              "type": "uniform",
+              "name": "orbitSpeed",
+              "storage": "uniform",
+              "typeDecl": "i32"
+            },
+            {
+              "group": 0,
+              "binding": 5,
+              "type": "uniform",
+              "name": "bgColor",
+              "storage": "uniform",
+              "typeDecl": "vec3<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 6,
+              "type": "uniform",
+              "name": "bgAlpha",
+              "storage": "uniform",
+              "typeDecl": "f32"
+            },
+            {
+              "group": 0,
+              "binding": 7,
+              "type": "texture",
+              "name": "volumeCache",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 8,
+              "type": "uniform",
+              "name": "tileOffset",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 9,
+              "type": "uniform",
+              "name": "fullResolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "volumeCache",
+              "binding": 7,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_3_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/synth_cellularAutomata",
+      "sourceSha256": "564a514095cb4d5374ad707c7647e678021efcf6f007337fc893ed1ba3e8c01b",
+      "graphPassCount": 3,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_caFb",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "97fed4960208f2e8735edab29786814116b55a053b17285812bf631c29012517",
+          "sourceHasBindings": true,
+          "inputs": [
+            "bufTex",
+            "tex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "samp",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "texture",
+              "name": "bufTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "texture",
+              "name": "tex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "samp",
+              "storage": "",
+              "typeDecl": "sampler"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "texture",
+              "name": "bufTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "texture",
+              "name": "tex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "bufTex",
+              "binding": 2,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            },
+            {
+              "name": "tex",
+              "binding": 3,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_0_pass_1",
+          "programId": "node_0_ca",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "0d9ec4ce2ebcf9b5c99e0c44424664dabd117429ae270b47195c1efaa5686848",
+          "sourceHasBindings": true,
+          "inputs": [
+            "fbTex",
+            "prevFrameTex",
+            "bufTex",
+            "tex"
+          ],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "fbTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "sampler",
+              "name": "mySampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "texture",
+              "name": "fbTex",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 2,
+              "type": "sampler",
+              "name": "mySampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "fbTex",
+              "binding": 1,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        },
+        {
+          "passId": "node_1_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/synth_mandelbrot",
+      "sourceSha256": "622662fd147e30ebd8fa49a093d9972e9155bccfa567124a5d81b8e40dbb17d8",
+      "graphPassCount": 2,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_mandelbrot",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "f72eb1ae5d52a18f440131bd65eb360158a3ddd763ae5438b2089518cbd92fc7",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage/synth_newton",
+      "sourceSha256": "0969b0da627263ecb8c849e5552ee86abc840387e332f01e7a064101f2193b20",
+      "graphPassCount": 2,
+      "passes": [
+        {
+          "passId": "node_0_pass_0",
+          "programId": "node_0_newton",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "959e7393b5a76ba7b0fa5f705538cc8817e27a1e51515ddf1de2708ccc6420df",
+          "sourceHasBindings": true,
+          "inputs": [],
+          "outputs": [
+            "fragColor"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "uniform",
+              "name": "uniforms",
+              "storage": "uniform",
+              "typeDecl": "Uniforms"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": []
+        },
+        {
+          "passId": "node_1_write_blit",
+          "programId": "blit",
+          "selectedEntryPoint": "main",
+          "isCompute": false,
+          "resolvedWgslSha256": "ef1bb6b03ae6cd22bebcbdbad2765c2e4b3d5f2250eb7145f6e9b4ccb6bc6dd1",
+          "sourceHasBindings": true,
+          "inputs": [
+            "src"
+          ],
+          "outputs": [
+            "color"
+          ],
+          "bindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "bindGroupBindings": [
+            {
+              "group": 0,
+              "binding": 0,
+              "type": "texture",
+              "name": "src",
+              "storage": "",
+              "typeDecl": "texture_2d<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 1,
+              "type": "sampler",
+              "name": "srcSampler",
+              "storage": "",
+              "typeDecl": "sampler"
+            }
+          ],
+          "selectedEntryPointBindingIndices": [],
+          "liveTextureInputs": [
+            {
+              "name": "src",
+              "binding": 0,
+              "type": "texture",
+              "inPassInputs": true,
+              "inPassOutputs": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "syntaxCases": [
+    {
+      "id": "spaced-decorators",
+      "wgsl": "@group (0) @binding (1) var<uniform> value: f32; fn main() { let x = value; }",
+      "wgslSha256": "c76ab2a8f89b142ba87b5cedca932069248ce369d55bbe1e728863cd63133255",
+      "bindings": [
+        {
+          "group": 0,
+          "binding": 1,
+          "type": "uniform",
+          "name": "value",
+          "storage": "uniform",
+          "typeDecl": "f32"
+        }
+      ]
+    },
+    {
+      "id": "compact-decorators",
+      "wgsl": "@group(0)@binding(1)var<uniform> value:f32;fn main(){let x=value;}",
+      "wgslSha256": "72c4995c7e42157ad8695763af0d447808f69d95cc0bf0f86858f64b2bf992f2",
+      "bindings": [
+        {
+          "group": 0,
+          "binding": 1,
+          "type": "uniform",
+          "name": "value",
+          "storage": "uniform",
+          "typeDecl": "f32"
+        }
+      ]
+    }
+  ]
+}

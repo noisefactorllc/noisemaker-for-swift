@@ -11,11 +11,11 @@ public struct ParserField: Equatable, Sendable {
 public struct ParserValue: Equatable, Sendable {
     fileprivate indirect enum Storage: Equatable, Sendable {
         case undefined, null, bool(Bool), number(Double), specialNumber(String)
-        case string(String), array([ParserValue]), object([ParserField])
+        case string(String), taggedFunction(String), array([ParserValue]), object([ParserField])
     }
 
     fileprivate let storage: Storage
-    fileprivate let sourcePosition: SourcePosition?
+    let sourcePosition: SourcePosition?
     public let subchainArgumentDiagnostics: [ParserDiagnostic]
 
     fileprivate init(_ storage: Storage, position: SourcePosition? = nil,
@@ -49,25 +49,28 @@ public struct ParserValue: Equatable, Sendable {
     }
     public var bool: Bool? { if case .bool(let value) = storage { return value }; return nil }
     public var type: String? { field("type")?.string }
+    public var isNull: Bool { if case .null = storage { return true }; return false }
+    public var isUndefined: Bool { if case .undefined = storage { return true }; return false }
 
-    fileprivate static let undefined = Self(.undefined)
-    fileprivate static let null = Self(.null)
-    fileprivate static func bool(_ value: Bool) -> Self { Self(.bool(value)) }
-    fileprivate static func number(_ value: Double) -> Self {
+    static let undefined = Self(.undefined)
+    static let null = Self(.null)
+    static func bool(_ value: Bool) -> Self { Self(.bool(value)) }
+    static func number(_ value: Double) -> Self {
         if value.isNaN { return Self(.specialNumber("NaN")) }
         if value == .infinity { return Self(.specialNumber("Infinity")) }
         if value == -.infinity { return Self(.specialNumber("-Infinity")) }
         if value == 0 && value.sign == .minus { return Self(.specialNumber("-0")) }
         return Self(.number(value))
     }
-    fileprivate static func string(_ value: String) -> Self { Self(.string(value)) }
-    fileprivate static func array(_ value: [Self]) -> Self { Self(.array(value)) }
-    fileprivate static func object(_ fields: [(String, Self)], position: SourcePosition? = nil,
+    static func string(_ value: String) -> Self { Self(.string(value)) }
+    static func taggedFunction(_ source: String) -> Self { Self(.taggedFunction(source)) }
+    static func array(_ value: [Self]) -> Self { Self(.array(value)) }
+    static func object(_ fields: [(String, Self)], position: SourcePosition? = nil,
                                    subchainArgumentDiagnostics: [ParserDiagnostic] = []) -> Self {
         Self(.object(fields.map { ParserField(name: $0.0, value: $0.1) }), position: position,
              subchainArgumentDiagnostics: subchainArgumentDiagnostics)
     }
-    fileprivate func adding(_ name: String, _ value: Self) -> Self {
+    func adding(_ name: String, _ value: Self) -> Self {
         guard case .object(let fields) = storage else { return self }
         return Self(.object(fields + [ParserField(name: name, value: value)]), position: sourcePosition,
                     subchainArgumentDiagnostics: subchainArgumentDiagnostics)
@@ -83,6 +86,22 @@ public struct ParserValue: Equatable, Sendable {
         default: break
         }
         return found
+    }
+
+    /// Development parity encoding for the ordered upstream stage contract.
+    func taggedValue() -> Any {
+        switch storage {
+        case .undefined: return ["$type": "undefined"]
+        case .null: return NSNull()
+        case .bool(let value): return value
+        case .number(let value): return value
+        case .specialNumber(let value): return ["$type": "number", "value": value]
+        case .string(let value): return value
+        case .taggedFunction(let source): return ["$type": "function", "source": source]
+        case .array(let values): return values.map { $0.taggedValue() }
+        case .object(let fields):
+            return ["$type": "object", "entries": fields.map { [$0.name, $0.value.taggedValue()] as [Any] }]
+        }
     }
 
     public static func decodeTagged(_ input: Any) throws -> Self {
@@ -101,6 +120,11 @@ public struct ParserValue: Equatable, Sendable {
         case "number":
             guard let value = object["value"] as? String else { throw ParserIncomplete("malformed tagged number") }
             return Self(.specialNumber(value))
+        case "function":
+            guard let source = object["source"] as? String else {
+                throw ParserIncomplete("malformed tagged function")
+            }
+            return .taggedFunction(source)
         case "object":
             guard let entries = object["entries"] as? [[Any]] else { throw ParserIncomplete("malformed tagged object") }
             return .object(try entries.map { entry in

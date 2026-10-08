@@ -1,0 +1,66 @@
+#!/bin/sh
+set -u
+cd "$(dirname "$0")/.."
+
+mkdir -p .build/parity-full
+run_dir="$(mktemp -d "$PWD/.build/parity-full/run.XXXXXXXX")"
+golden_dir="$run_dir/goldens"
+candidate_dir="$run_dir/candidates"
+printf 'parity-summary artifacts: %s\n' "$run_dir" >&2
+
+cpu_ready=1
+node tools/import-catalog.mjs --check || cpu_ready=0
+node tools/import-corpus.mjs --check || cpu_ready=0
+node tools/export-corpus-stages.mjs --check || cpu_ready=0
+node tools/check-corpus-coverage.mjs || cpu_ready=0
+node tools/export-reference.mjs "$PWD/.build/reference" >/dev/null || cpu_ready=0
+
+if [ "$cpu_ready" -ne 1 ]; then
+  printf 'parity-summary: source, catalog, corpus, or stage freshness failed\n' >&2
+  python3 parity/summarize.py "$golden_dir" "$candidate_dir" "$@"
+  exit 2
+fi
+if [ -z "${NM_REFERENCE_ROOT:-}" ]; then
+  printf 'parity-summary: NM_REFERENCE_ROOT is required for the browser golden host\n' >&2
+  python3 parity/summarize.py "$golden_dir" "$candidate_dir" "$@"
+  exit 2
+fi
+if ! python3 tools/verify-artifact.py >/dev/null ||
+   ! python3 tools/qualification-fingerprint.py > "$run_dir/inputs-before-build.json"; then
+  printf 'parity-summary: native build inputs failed verification\n' >&2
+  exit 2
+fi
+if ! swift build --configuration debug --product nm-render; then
+  printf 'parity-summary: current native renderer build failed\n' >&2
+  exit 2
+fi
+bin_dir="$(swift build --configuration debug --show-bin-path)" || exit 2
+fresh_bin="$bin_dir/nm-render"
+if [ ! -x "$fresh_bin" ]; then
+  printf 'parity-summary: freshly built native renderer is missing: %s\n' "$fresh_bin" >&2
+  exit 2
+fi
+render_bin="${NM_RENDER_BIN:-$fresh_bin}"
+if [ ! -x "$render_bin" ] || ! cmp -s "$render_bin" "$fresh_bin"; then
+  printf 'parity-summary: NM_RENDER_BIN differs from the freshly built renderer\n' >&2
+  exit 2
+fi
+if ! python3 tools/qualification-fingerprint.py > "$run_dir/inputs-after-build.json" ||
+   ! cmp -s "$run_dir/inputs-before-build.json" "$run_dir/inputs-after-build.json" ||
+   ! python3 tools/qualification-fingerprint.py --binary "$fresh_bin" > "$run_dir/build-fingerprint.json"; then
+  printf 'parity-summary: native build inputs changed during compilation\n' >&2
+  exit 2
+fi
+printf 'parity-summary copied build fingerprint: %s\n' "$run_dir/build-fingerprint.json" >&2
+
+node parity/batch-golden.mjs "$golden_dir" "$@" || printf 'parity-summary: reference batch reported case failures\n' >&2
+"$render_bin" --corpus "$PWD/parity/corpus.json" --out-dir "$candidate_dir" \
+  --goldens "$golden_dir/goldens.json" "$@" || \
+  printf 'parity-summary: native batch reported case failures\n' >&2
+if ! python3 tools/qualification-fingerprint.py --binary "$fresh_bin" > "$run_dir/build-fingerprint-after-gate.json" ||
+   ! cmp -s "$run_dir/build-fingerprint.json" "$run_dir/build-fingerprint-after-gate.json" ||
+   ! cmp -s "$render_bin" "$fresh_bin"; then
+  printf 'parity-summary: native source, package, artifact, or executable changed during parity run\n' >&2
+  exit 2
+fi
+python3 parity/summarize.py "$golden_dir" "$candidate_dir" "$@"

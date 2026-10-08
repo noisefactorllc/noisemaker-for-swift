@@ -1,11 +1,12 @@
 import Foundation
 import Metal
-import XCTest
+import Testing
 @testable import Noisemaker
 
-final class UniformLayoutGPUTests: XCTestCase {
-    func testShaderReadsMixedUniformOffsetsAndPadding() throws {
-        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice(), "Uniform ABI qualification requires native Metal")
+@Suite(.serialized)
+struct UniformLayoutGPUTests {
+    @Test func testShaderReadsMixedUniformOffsetsAndPadding() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice(), "Uniform ABI qualification requires native Metal")
         let layout = try UniformLayout(fields: [
             UniformField(name: "gain", type: .f32),
             UniformField(name: "direction", type: .vector(.f32, count: 3)),
@@ -46,23 +47,23 @@ final class UniformLayoutGPUTests: XCTestCase {
         let options = MTLCompileOptions()
         options.fastMathEnabled = false
         let library = try device.makeLibrary(source: translation.source, options: options)
-        let function = try XCTUnwrap(library.makeFunction(name: translation.mslEntryPoint))
+        let function = try requireValue(library.makeFunction(name: translation.mslEntryPoint))
         let pipeline = try device.makeComputePipelineState(function: function)
         let uniforms = try data.withUnsafeBytes { bytes in
-            try XCTUnwrap(device.makeBuffer(bytes: bytes.baseAddress!, length: bytes.count, options: .storageModeShared))
+            try requireValue(device.makeBuffer(bytes: bytes.baseAddress!, length: bytes.count, options: .storageModeShared))
         }
-        let output = try XCTUnwrap(device.makeBuffer(length: expected.count * 4, options: .storageModeShared))
-        let queue = try XCTUnwrap(device.makeCommandQueue())
-        let command = try XCTUnwrap(queue.makeCommandBuffer())
-        let encoder = try XCTUnwrap(command.makeComputeCommandEncoder())
+        let output = try requireValue(device.makeBuffer(length: expected.count * 4, options: .storageModeShared))
+        let queue = try requireValue(device.makeCommandQueue())
+        let command = try requireValue(queue.makeCommandBuffer())
+        let encoder = try requireValue(command.makeComputeCommandEncoder())
         encoder.setComputePipelineState(pipeline)
         encoder.setBuffer(uniforms, offset: 0, index: 6)
         encoder.setBuffer(output, offset: 0, index: 7)
         encoder.dispatchThreads(MTLSize(width: 1, height: 1, depth: 1), threadsPerThreadgroup: MTLSize(width: 1, height: 1, depth: 1))
         encoder.endEncoding()
         command.commit(); command.waitUntilCompleted()
-        XCTAssertEqual(command.status, .completed, "\(String(describing: command.error))")
+        expectEqual(command.status, .completed, "\(String(describing: command.error))")
         let actual = Array(UnsafeBufferPointer(start: output.contents().assumingMemoryBound(to: Float.self), count: expected.count))
-        XCTAssertEqual(actual, expected)
+        expectEqual(actual, expected)
     }
 }

@@ -1,12 +1,13 @@
 import Foundation
 import Metal
-import XCTest
+import Testing
 @testable import Noisemaker
 
 // Task-1 feasibility only: these are native shader/ABI probes, not graph parity.
-final class TranslatorGPUTests: XCTestCase {
+@Suite(.serialized)
+struct TranslatorGPUTests {
     private func device() throws -> MTLDevice {
-        try XCTUnwrap(MTLCreateSystemDefaultDevice(), "Run on a native Metal host; GPU absence is a failure, not a skipped qualification")
+        try requireValue(MTLCreateSystemDefaultDevice(), "Run on a native Metal host; GPU absence is a failure, not a skipped qualification")
     }
 
     private func fixture(_ path: String) throws -> [String: Any] {
@@ -14,41 +15,41 @@ final class TranslatorGPUTests: XCTestCase {
             .deletingLastPathComponent().deletingLastPathComponent()
         let root = ProcessInfo.processInfo.environment["NM_REFERENCE_EXPORT"]
             ?? package.appendingPathComponent(".build/reference").path
-        let lock = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: package.appendingPathComponent("parity/reference.json"))) as? [String: String])
-        let manifest = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: root).appendingPathComponent("source-manifest.json"))) as? [String: Any])
+        let lock = try requireValue(JSONSerialization.jsonObject(with: Data(contentsOf: package.appendingPathComponent("parity/reference.json"))) as? [String: String])
+        let manifest = try requireValue(JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: root).appendingPathComponent("source-manifest.json"))) as? [String: Any])
         guard manifest["commit"] as? String == lock["commit"],
               manifest["repository"] as? String == lock["repository"] else {
             throw NSError(domain: "NoisemakerProbe", code: 1, userInfo: [NSLocalizedDescriptionKey: "Export does not match the authority lock"])
         }
-        return try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: root).appendingPathComponent(path))) as? [String: Any])
+        return try requireValue(JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: root).appendingPathComponent(path))) as? [String: Any])
     }
 
     private func program(_ name: String, id: String) throws -> String {
-        let programs = try XCTUnwrap(try fixture("cases/\(name).json")["programs"] as? [String: [String: Any]])
-        return try XCTUnwrap(programs[id]?["resolvedWGSL"] as? String)
+        let programs = try requireValue(try fixture("cases/\(name).json")["programs"] as? [String: [String: Any]])
+        return try requireValue(programs[id]?["resolvedWGSL"] as? String)
     }
 
     private func function(_ translation: TintTranslation, device: MTLDevice) throws -> MTLFunction {
         let options = MTLCompileOptions()
         options.fastMathEnabled = false
         let library = try device.makeLibrary(source: translation.source, options: options)
-        return try XCTUnwrap(library.makeFunction(name: translation.mslEntryPoint))
+        return try requireValue(library.makeFunction(name: translation.mslEntryPoint))
     }
 
     private func buffer<T>(_ values: [T], device: MTLDevice) throws -> MTLBuffer {
         try values.withUnsafeBytes { bytes in
-            try XCTUnwrap(device.makeBuffer(bytes: bytes.baseAddress!, length: bytes.count, options: .storageModeShared))
+            try requireValue(device.makeBuffer(bytes: bytes.baseAddress!, length: bytes.count, options: .storageModeShared))
         }
     }
 
     private func finish(_ command: MTLCommandBuffer) throws {
         command.commit()
         command.waitUntilCompleted()
-        XCTAssertEqual(command.status, .completed, "\(String(describing: command.error))")
+        expectEqual(command.status, .completed, "\(String(describing: command.error))")
         if let error = command.error { throw error }
     }
 
-    func testRepresentativeUpstreamStagesCreateMetalFunctions() throws {
+    @Test func testRepresentativeUpstreamStagesCreateMetalFunctions() throws {
         let gpu = try device()
         let translator = ShaderTranslator()
         let pattern = #"@group\(\s*(\d+)\s*\)\s*@binding\(\s*(\d+)\s*\)\s*var(?:<([^>]+)>)?\s+\w+\s*:\s*([^;]+);"#
@@ -56,20 +57,20 @@ final class TranslatorGPUTests: XCTestCase {
         var compiled = 0, expected = 0
         for name in ["solid", "resourceHeavy", "compute"] {
             let exported = try fixture("cases/\(name).json")
-            let programs = try XCTUnwrap(exported["programs"] as? [String: [String: Any]])
-            let referenced = try XCTUnwrap(exported["referencedPrograms"] as? [String])
-            XCTAssertFalse(referenced.isEmpty)
+            let programs = try requireValue(exported["programs"] as? [String: [String: Any]])
+            let referenced = try requireValue(exported["referencedPrograms"] as? [String])
+            expectFalse(referenced.isEmpty)
             for id in referenced {
                 let spec = programs[id]!
-                let wgsl = try XCTUnwrap(spec["resolvedWGSL"] as? String)
+                let wgsl = try requireValue(spec["resolvedWGSL"] as? String)
                 let source = wgsl as NSString
                 let matches = regex.matches(in: wgsl, range: NSRange(location: 0, length: source.length))
-                XCTAssertEqual(matches.count, wgsl.components(separatedBy: "@group(").count - 1, "Every binding must be explicit: \(id)")
+                expectEqual(matches.count, wgsl.components(separatedBy: "@group(").count - 1, "Every binding must be explicit: \(id)")
                 var bindings: [TintBinding] = [], sizes: [TintBufferSize] = []
                 var nextBuffer: UInt32 = 0, nextTexture: UInt32 = 0, nextSampler: UInt32 = 0
                 for match in matches {
-                    let group = try XCTUnwrap(UInt32(source.substring(with: match.range(at: 1))))
-                    let binding = try XCTUnwrap(UInt32(source.substring(with: match.range(at: 2))))
+                    let group = try requireValue(UInt32(source.substring(with: match.range(at: 1))))
+                    let binding = try requireValue(UInt32(source.substring(with: match.range(at: 2))))
                     let space = match.range(at: 3).location == NSNotFound ? "" : source.substring(with: match.range(at: 3))
                     let type = source.substring(with: match.range(at: 4)).trimmingCharacters(in: .whitespacesAndNewlines)
                     let kind: TintBindingKind, slot: UInt32
@@ -80,12 +81,12 @@ final class TranslatorGPUTests: XCTestCase {
                     } else if type.hasPrefix("texture_storage_") { kind = .storageTexture; slot = nextTexture; nextTexture += 1 }
                     else if type.hasPrefix("texture_") { kind = .texture; slot = nextTexture; nextTexture += 1 }
                     else if type.hasPrefix("sampler") { kind = .sampler; slot = nextSampler; nextSampler += 1 }
-                    else { XCTFail("Unknown binding \(space) \(type) in \(id)"); return }
+                    else { recordFailure("Unknown binding \(space) \(type) in \(id)"); return }
                     bindings.append(TintBinding(group: group, binding: binding, kind: kind, slot: slot))
                 }
-                XCTAssertLessThan(nextBuffer, 30)
-                let entries = try XCTUnwrap(spec["entryPoints"] as? [[String: String]])
-                XCTAssertFalse(entries.isEmpty, id)
+                expectLess(nextBuffer, 30)
+                let entries = try requireValue(spec["entryPoints"] as? [[String: String]])
+                expectFalse(entries.isEmpty, id)
                 expected += entries.count
                 for entry in entries {
                     let stage: TintStage
@@ -93,27 +94,27 @@ final class TranslatorGPUTests: XCTestCase {
                     case "vertex": stage = .vertex
                     case "fragment": stage = .fragment
                     case "compute": stage = .compute
-                    default: XCTFail("Unknown stage in \(id)"); return
+                    default: recordFailure("Unknown stage in \(id)"); return
                     }
-                    let translated = try translator.translate(wgsl: wgsl, entryPoint: XCTUnwrap(entry["name"]), stage: stage,
+                    let translated = try translator.translate(wgsl: wgsl, entryPoint: requireValue(entry["name"]), stage: stage,
                         bindings: bindings, bufferSizes: sizes, bufferSizesOffset: sizes.isEmpty ? nil : 0, immediateSlot: 30)
                     _ = try function(translated, device: gpu)
                     compiled += 1
                 }
             }
         }
-        XCTAssertEqual(compiled, expected)
-        XCTAssertGreaterThan(compiled, 0)
+        expectEqual(compiled, expected)
+        expectGreater(compiled, 0)
         print("METAL-PROBE representative-stages=\(compiled) (library compilation only)")
     }
 
-    func testSolidFragmentRendersPremultipliedFloatColor() throws {
+    @Test func testSolidFragmentRendersPremultipliedFloatColor() throws {
         let gpu = try device()
         print("METAL-PROBE device=\(gpu.name) os=\(ProcessInfo.processInfo.operatingSystemVersionString)")
         let translator = ShaderTranslator()
         let vertex = try fixture("default-vertex.json")
-        let vertexWGSL = try XCTUnwrap(vertex["wgsl"] as? String)
-        let vertexEntry = try XCTUnwrap(vertex["entryPoint"] as? String)
+        let vertexWGSL = try requireValue(vertex["wgsl"] as? String)
+        let vertexEntry = try requireValue(vertex["entryPoint"] as? String)
         let vs = try translator.translate(wgsl: vertexWGSL, entryPoint: vertexEntry, stage: .vertex)
         let fs = try translator.translate(wgsl: program("solid", id: "node_0_solid"), entryPoint: "main", stage: .fragment,
             bindings: [TintBinding(group: 0, binding: 0, kind: .uniform, slot: 3), TintBinding(group: 0, binding: 1, kind: .uniform, slot: 7)])
@@ -126,17 +127,17 @@ final class TranslatorGPUTests: XCTestCase {
         let td = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba32Float, width: width, height: height, mipmapped: false)
         td.usage = [.renderTarget]
         td.storageMode = .private
-        let texture = try XCTUnwrap(gpu.makeTexture(descriptor: td))
+        let texture = try requireValue(gpu.makeTexture(descriptor: td))
         let rowBytes = ((width * 16 + 255) / 256) * 256
-        let readback = try XCTUnwrap(gpu.makeBuffer(length: rowBytes * height, options: .storageModeShared))
-        let queue = try XCTUnwrap(gpu.makeCommandQueue())
-        let command = try XCTUnwrap(queue.makeCommandBuffer())
+        let readback = try requireValue(gpu.makeBuffer(length: rowBytes * height, options: .storageModeShared))
+        let queue = try requireValue(gpu.makeCommandQueue())
+        let command = try requireValue(queue.makeCommandBuffer())
         let pass = MTLRenderPassDescriptor()
         pass.colorAttachments[0].texture = texture
         pass.colorAttachments[0].loadAction = .clear
         pass.colorAttachments[0].storeAction = .store
         pass.colorAttachments[0].clearColor = MTLClearColorMake(1, 0, 1, 1)
-        let encoder = try XCTUnwrap(command.makeRenderCommandEncoder(descriptor: pass))
+        let encoder = try requireValue(command.makeRenderCommandEncoder(descriptor: pass))
         encoder.setRenderPipelineState(pipeline)
         let color = try buffer([Float(0.2), 0.6, 0.9, 0], device: gpu)
         let alpha = try buffer([Float(0.5)], device: gpu)
@@ -144,7 +145,7 @@ final class TranslatorGPUTests: XCTestCase {
         encoder.setFragmentBuffer(alpha, offset: 0, index: 7)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
         encoder.endEncoding()
-        let blit = try XCTUnwrap(command.makeBlitCommandEncoder())
+        let blit = try requireValue(command.makeBlitCommandEncoder())
         blit.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
             sourceSize: MTLSize(width: width, height: height, depth: 1), to: readback, destinationOffset: 0,
             destinationBytesPerRow: rowBytes, destinationBytesPerImage: rowBytes * height)
@@ -161,12 +162,12 @@ final class TranslatorGPUTests: XCTestCase {
                 else { nonFinite += 1 }
             } }
         }
-        XCTAssertEqual(nonFinite, 0)
-        XCTAssertLessThan(maxError, 0.000001)
+        expectEqual(nonFinite, 0)
+        expectLess(maxError, 0.000001)
         print("METAL-PROBE solid pixels=\(width * height) maxError=\(maxError) informative=false")
     }
 
-    func testStorageArrayLengthUsesExplicitImmediateByteLengths() throws {
+    @Test func testStorageArrayLengthUsesExplicitImmediateByteLengths() throws {
         let gpu = try device()
         let wgsl = """
         @group(0) @binding(0) var<storage, read> values: array<u32>;
@@ -180,16 +181,16 @@ final class TranslatorGPUTests: XCTestCase {
             bindings: [TintBinding(group: 0, binding: 0, kind: .storage, slot: 2),
                 TintBinding(group: 0, binding: 1, kind: .storage, slot: 3)],
             bufferSizes: [TintBufferSize(group: 0, binding: 0, index: 0)], bufferSizesOffset: 16, immediateSlot: 29)
-        XCTAssertTrue(translation.needsStorageBufferSizes)
+        expectTrue(translation.needsStorageBufferSizes)
         let pipeline = try gpu.makeComputePipelineState(function: function(translation, device: gpu))
         let input = try buffer([UInt32](repeating: 37, count: 16), device: gpu)
-        let queue = try XCTUnwrap(gpu.makeCommandQueue())
+        let queue = try requireValue(gpu.makeCommandQueue())
         for count: UInt32 in [16, 5] {
             let output = try buffer([UInt32.max, UInt32.max], device: gpu)
             // Deliberate nonzero offset and nondefault slot catch layout/slot guesses.
             let immediate = try buffer([UInt32(99), 99, 99, 99, count * 4], device: gpu)
-            let command = try XCTUnwrap(queue.makeCommandBuffer())
-            let encoder = try XCTUnwrap(command.makeComputeCommandEncoder())
+            let command = try requireValue(queue.makeCommandBuffer())
+            let encoder = try requireValue(command.makeComputeCommandEncoder())
             encoder.setComputePipelineState(pipeline)
             encoder.setBuffer(input, offset: 0, index: 2)
             encoder.setBuffer(output, offset: 0, index: 3)
@@ -198,12 +199,12 @@ final class TranslatorGPUTests: XCTestCase {
             encoder.endEncoding()
             try finish(command)
             let values = output.contents().assumingMemoryBound(to: UInt32.self)
-            XCTAssertEqual(values[0], count)
-            XCTAssertEqual(values[1], 37)
+            expectEqual(values[0], count)
+            expectEqual(values[1], 37)
         }
     }
 
-    func testGrainComputePreservesAsymmetricTextureWhenAlphaIsZero() throws {
+    @Test func testGrainComputePreservesAsymmetricTextureWhenAlphaIsZero() throws {
         let gpu = try device()
         let width = 257, height = 129
         var pixels = [Float](repeating: 0, count: width * height * 4)
@@ -217,7 +218,7 @@ final class TranslatorGPUTests: XCTestCase {
         let td = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba32Float, width: width, height: height, mipmapped: false)
         td.usage = [.shaderRead]
         td.storageMode = .shared
-        let input = try XCTUnwrap(gpu.makeTexture(descriptor: td))
+        let input = try requireValue(gpu.makeTexture(descriptor: td))
         pixels.withUnsafeBytes { bytes in input.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
             withBytes: bytes.baseAddress!, bytesPerRow: width * 16) }
         let output = try buffer([Float](repeating: -99, count: pixels.count), device: gpu)
@@ -227,13 +228,13 @@ final class TranslatorGPUTests: XCTestCase {
             bindings: [TintBinding(group: 0, binding: 0, kind: .texture, slot: 4), TintBinding(group: 0, binding: 1, kind: .storage, slot: 6),
                 TintBinding(group: 0, binding: 2, kind: .uniform, slot: 9)],
             bufferSizes: [TintBufferSize(group: 0, binding: 1, index: 0)], bufferSizesOffset: 0, immediateSlot: 30)
-        XCTAssertEqual(result.workgroupSize.0, 8)
-        XCTAssertEqual(result.workgroupSize.1, 8)
-        XCTAssertEqual(result.workgroupSize.2, 1)
+        expectEqual(result.workgroupSize.0, 8)
+        expectEqual(result.workgroupSize.1, 8)
+        expectEqual(result.workgroupSize.2, 1)
         let pipeline = try gpu.makeComputePipelineState(function: function(result, device: gpu))
-        let queue = try XCTUnwrap(gpu.makeCommandQueue())
-        let command = try XCTUnwrap(queue.makeCommandBuffer())
-        let encoder = try XCTUnwrap(command.makeComputeCommandEncoder())
+        let queue = try requireValue(gpu.makeCommandQueue())
+        let command = try requireValue(queue.makeCommandBuffer())
+        let encoder = try requireValue(command.makeComputeCommandEncoder())
         encoder.setComputePipelineState(pipeline)
         encoder.setTexture(input, index: 4)
         encoder.setBuffer(output, offset: 0, index: 6)
@@ -244,7 +245,7 @@ final class TranslatorGPUTests: XCTestCase {
         encoder.endEncoding()
         try finish(command)
         let actual = Array(UnsafeBufferPointer(start: output.contents().assumingMemoryBound(to: Float.self), count: pixels.count))
-        XCTAssertEqual(actual, pixels, "Compute dimensions, storage length, parameter offsets, texture addressing and alpha must all match")
+        expectEqual(actual, pixels, "Compute dimensions, storage length, parameter offsets, texture addressing and alpha must all match")
         print("METAL-PROBE grain-alpha-zero exact-floats=\(pixels.count)")
     }
 }

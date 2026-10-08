@@ -73,6 +73,15 @@ final class FrameCoordinator: @unchecked Sendable {
         previousCommand = command
     }
 
+    func requireIdle() throws {
+        lock.lock()
+        defer { lock.unlock() }
+        guard inFlight == 0,
+              previousCommand == nil || previousCommand?.status == .completed || previousCommand?.status == .error else {
+            throw GraphDiagnostic.invalid("renderer has an uncommitted or in-flight frame")
+        }
+    }
+
     func discard(_ command: MTLCommandBuffer) {
         lock.lock()
         defer { lock.unlock() }

@@ -1,13 +1,26 @@
 #!/bin/sh
 set -eu
 cd "$(dirname "$0")/.."
+node tools/import-catalog.mjs --check
+node tools/import-corpus.mjs --check
+node tools/check-corpus-coverage.mjs
+node tools/export-corpus-stages.mjs --check
+node tools/export-initial-state.mjs --check
+node tools/export-binding-oracle.mjs --check
 node tools/export-reference.mjs
 node tools/export-surfaces.mjs
 node tools/export-uniforms.mjs
 node tools/export-lexer.mjs
 node tools/export-parser.mjs
-node --test tools/export-reference.test.mjs parity/marker-golden.test.mjs
+node tools/export-automation.mjs
+node tools/export-worm-traces.mjs --check
+node tools/export-obj-oracle.mjs --check
+node tools/export-param-updates.mjs --check
+node tools/export-audio-host.mjs --check
+node tools/import-meshes.mjs --check
+node tools/check-overlays.mjs
+node --test tools/export-reference.test.mjs tools/export-worm-traces.test.mjs tools/export-obj-oracle.test.mjs tools/export-param-updates.test.mjs tools/export-audio-host.test.mjs tools/import-meshes.test.mjs tools/check-overlays.test.mjs parity/marker-golden.test.mjs parity/merge-goldens.test.mjs
 python3 -m unittest discover -s tools -p "test_*.py"
 python3 -m unittest discover -s parity -p "test_*.py"
-python3 tools/build-tint.py
+python3 tools/verify-artifact.py
 swift test --skip 'GPUTests'

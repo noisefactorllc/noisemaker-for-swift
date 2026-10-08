@@ -39,9 +39,8 @@ final class BufferToTextureBridge {
                 TintBinding(group: 0, binding: 1, kind: .uniform, slot: 1)
             ], bufferSizes: [TintBufferSize(group: 0, binding: 0, index: 0)],
             bufferSizesOffset: 0, immediateSlot: 30)
-        let options = MTLCompileOptions()
-        options.fastMathEnabled = false
-        let library = try device.makeLibrary(source: translated.source, options: options)
+        let library = try MetalLibraryCache.library(device: device,
+            source: translated.source)
         guard let fragment = library.makeFunction(name: translated.mslEntryPoint) else {
             throw GraphDiagnostic.missing("buffer-to-texture fragment function")
         }

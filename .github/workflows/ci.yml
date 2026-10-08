@@ -1,0 +1,30 @@
+name: Swift package
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: swift-package-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  package:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install image grader dependency
+        run: python3 -m venv .build/ci-python && .build/ci-python/bin/pip install Pillow
+      - name: Check source, compiler, package, and tooling
+        run: |
+          export PATH="$PWD/.build/ci-python/bin:$PATH"
+          scripts/test
+          python3 tools/package-check.py --build-only
+      - name: Check for generated source drift
+        run: git diff --exit-code
+# Hosted CI does not qualify Metal rendering. Run scripts/test-metal and
+# scripts/parity-summary on a native GPU host before publication approval.

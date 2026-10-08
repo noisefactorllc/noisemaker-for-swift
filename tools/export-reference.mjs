@@ -21,12 +21,14 @@ export const CASES = {
   repeatFeedback: 'search synth\nreactionDiffusion(zoom: x16, iterations: 2, seed: 1).write(o0)\nrender(o0)\n',
   marker: readFileSync(join(ROOT, 'parity/marker.dsl'), 'utf8'),
   mrtProbe: readFileSync(join(ROOT, 'parity/mrt.dsl'), 'utf8'),
-  samplerProbe: readFileSync(join(ROOT, 'parity/sampler.dsl'), 'utf8')
+  samplerProbe: readFileSync(join(ROOT, 'parity/sampler.dsl'), 'utf8'),
+  sampled3dProbe: readFileSync(join(ROOT, 'parity/sampled3d.dsl'), 'utf8')
 }
 const PORTABLE_CASES = {
   marker: { definition: 'marker.portable.json', shaders: { marker: 'marker.marker.wgsl' } },
   mrtProbe: { definition: 'mrt.portable.json', shaders: { split: 'mrt.split.wgsl', combine: 'mrt.combine.wgsl' } },
-  samplerProbe: { definition: 'sampler.portable.json', shaders: { pattern: 'sampler.pattern.wgsl', sample: 'sampler.sample.wgsl' } }
+  samplerProbe: { definition: 'sampler.portable.json', shaders: { pattern: 'sampler.pattern.wgsl', sample: 'sampler.sample.wgsl' } },
+  sampled3dProbe: { definition: 'sampled3d.portable.json', shaders: { show: 'sampled3d.show.wgsl' } }
 }
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
@@ -93,7 +95,10 @@ export function countDefineVariants(def) {
 export function captureProtocols() {
   const cases = Object.fromEntries(Object.entries(CASES).map(([name, source]) => [name, {
     dslSha256: sha256(source), seed: ['resourceHeavy', 'compute', 'numericDefineOutsideChoices', 'builtinEnum', 'multipassBlur', 'computeFilter', 'mrtNoise3d', 'repeatFeedback'].includes(name) ? 1 : null,
-    externalInputs: [], inputAssets: [], size: PORTABLE_CASES[name] || ['multipassBlur', 'computeFilter', 'repeatFeedback', 'mrtNoise3d'].includes(name) ? [257, 129] : [256, 256],
+    externalInputs: name === 'sampled3dProbe' ? [{ id: 'node_0_volume', kind: 'texture3d', frame: 0 }] : [],
+    inputAssets: name === 'sampled3dProbe' ? [{ path: 'parity/inputs/sampled3d-v1.rgba8',
+      sha256: sha256(readFileSync(join(ROOT, 'parity/inputs/sampled3d-v1.rgba8'))) }] : [],
+    size: PORTABLE_CASES[name] || ['multipassBlur', 'computeFilter', 'repeatFeedback', 'mrtNoise3d'].includes(name) ? [257, 129] : [256, 256],
     normalizedTime: 0.25, deltaTime: 0, frames: 8, resetState: 'clear pipeline writes; preserve host inputs; reset surfaces, frameIndex, lastTime and globals',
     sample: 'presented surface after frame 8', orientation: 'top-down RGBA8 PNG'
   }]))
@@ -118,21 +123,26 @@ function filesUnder(dir, suffix) {
 
 function authorityInputs(ref) {
   return [join(ref, 'package.json'), join(ref, 'share/palettes.json'),
+    ...filesUnder(join(ref, 'share/meshes'), ''),
     ...filesUnder(join(ref, 'demo/shaders'), ''),
     ...filesUnder(join(ref, 'vendor/shade-mcp/harness'), '.js'),
     ...filesUnder(join(ref, 'shaders/src'), '.js'),
     ...filesUnder(join(ref, 'shaders/effects'), '.js'),
     ...filesUnder(join(ref, 'shaders/effects'), '.wgsl'),
+    ...filesUnder(join(ref, 'shaders/effects'), 'parity-case.json'),
     join(ref, 'shaders/effects/manifest.json')]
 }
 
-function sourceManifest(ref, lock) {
+export function sourceManifest(ref, lock) {
   const files = authorityInputs(ref).map(p => sourceEntry(ref, p))
   const contentSha256 = sha256(files.map(s => `${s.path}\0${s.sha256}\n`).join(''))
   return { repository: lock.repository, commit: lock.commit, files, contentSha256 }
 }
 
 export function sourceIdentity(ref, lock, verifiedArchive = false) {
+  if (lock.licenseSha256 && sha256(readFileSync(join(ref, 'LICENSE'))) !== lock.licenseSha256) {
+    throw new Error('authority license hash mismatch')
+  }
   if (verifiedArchive) return lock.commit
   if (!existsSync(join(ref, '.git'))) {
     if (!lock.sourceManifestSha256) throw new Error('archive authority requires a pinned source manifest hash')
@@ -142,9 +152,9 @@ export function sourceIdentity(ref, lock, verifiedArchive = false) {
   }
   const head = execFileSync('git', ['-C', ref, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()
   if (head !== lock.commit) throw new Error(`authority commit mismatch: expected ${lock.commit}, found ${head}`)
-  const dirty = execFileSync('git', ['-C', ref, 'status', '--porcelain', '--untracked-files=all', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'], { encoding: 'utf8' }).trim()
+  const dirty = execFileSync('git', ['-C', ref, 'status', '--porcelain', '--untracked-files=all', '--', 'package.json', 'share/palettes.json', 'share/meshes', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'], { encoding: 'utf8' }).trim()
   if (dirty) throw new Error('authority shader source has local modifications or untracked files')
-  const tracked = new Set(execFileSync('git', ['-C', ref, 'ls-files', '-z', '--', 'package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'])
+  const tracked = new Set(execFileSync('git', ['-C', ref, 'ls-files', '-z', '--', 'package.json', 'share/palettes.json', 'share/meshes', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'])
     .toString('utf8').split('\0').filter(Boolean))
   for (const path of authorityInputs(ref)) {
     if (!tracked.has(relative(ref, path).replaceAll('\\', '/'))) throw new Error(`authority contains an untracked or ignored source: ${relative(ref, path)}`)
@@ -159,7 +169,7 @@ export function fetchVerifiedArchive(lock, fetchUrl = REPOSITORY) {
   const temporary = mkdtempSync(join(tmpdir(), 'nm-swift-authority-'))
   const bare = join(temporary, 'objects.git')
   const root = join(temporary, 'source')
-  const paths = ['package.json', 'share/palettes.json', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness']
+  const paths = ['LICENSE', 'package.json', 'share/palettes.json', 'share/meshes', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness']
   try {
     execFileSync('git', ['init', '--bare', bare], { stdio: 'ignore' })
     execFileSync('git', ['--git-dir', bare, 'fetch', '--depth=1', fetchUrl, lock.commit], { stdio: 'pipe', maxBuffer: 1 << 20 })
@@ -197,7 +207,7 @@ function injectDefines(source, defines) {
   return prefix + source
 }
 
-async function exportAuthority(ref, out, lock, verifiedArchive = false) {
+export async function exportAuthority(ref, out, lock, verifiedArchive = false) {
   sourceIdentity(ref, lock, verifiedArchive)
   const idx = await import(pathToFileURL(join(ref, 'shaders/src/index.js')).href)
   const { compileGraph, lex, parse, validate, expand, allocateResources, registerEffect,
@@ -211,6 +221,10 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
   const sources = manifestSource.files
   if (lock.sourceManifestSha256 && manifestSource.contentSha256 !== lock.sourceManifestSha256) throw new Error('pinned authority source manifest hash mismatch')
   const inventory = []
+  const catalogEffects = []
+  const enumMerges = [{ source: 'std', value: encode(stdEnums) }]
+  const paramAliasPairs = []
+  const effectAliasPairs = []
   const allChoices = {}
   const starterNames = []
   const { registerParamAliases } = await import(pathToFileURL(join(ref, 'shaders/src/lang/paramAliases.js')).href)
@@ -252,22 +266,88 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
         enum: enumPath, enumPath, min: spec.min, max: spec.max, uniform: spec.uniform, choices: spec.choices }
     })
     registerOp(`${ns}.${func}`, { name: func, args })
-    if (def.paramAliases) registerParamAliases(`${ns}.${func}`, def.paramAliases)
-    if (def.hidden && def.deprecatedBy) registerEffectAlias(`${ns}.${func}`, def.deprecatedBy)
-    if (def.enums) await mergeIntoEnums(def.enums)
+    if (def.paramAliases) {
+      registerParamAliases(`${ns}.${func}`, def.paramAliases)
+      paramAliasPairs.push([`${ns}.${func}`, def.paramAliases])
+    }
+    if (def.hidden && def.deprecatedBy) {
+      registerEffectAlias(`${ns}.${func}`, def.deprecatedBy)
+      effectAliasPairs.push([`${ns}.${func}`, def.deprecatedBy])
+    }
+    if (def.enums) {
+      await mergeIntoEnums(def.enums)
+      enumMerges.push({ source: `${ns}/${name}`, value: encode(def.enums) })
+    }
     const inputs = new Set(['inputTex', 'inputTex3d', 'inputGeo', 'inputXyz', 'inputVel', 'inputRgba', 'src', 'o0', 'o1', 'o2', 'o3', 'o4', 'o5', 'o6', 'o7'])
     if (!(def.passes || []).some(p => Object.values(p.inputs || {}).some(v => inputs.has(v)))) starterNames.push(`${ns}.${func}`)
+    const lifecycle = {
+      onInit: !!def._configOnInit || def.onInit !== idx.Effect.prototype.onInit,
+      onUpdate: !!def._configOnUpdate || def.onUpdate !== idx.Effect.prototype.onUpdate,
+      onDestroy: !!def._configOnDestroy || def.onDestroy !== idx.Effect.prototype.onDestroy,
+      asyncInit: !!def._configAsyncInit || def.asyncInit !== idx.Effect.prototype.asyncInit
+    }
     inventory.push({ namespace: ns, name, func, definition: sourceEntry(ref, path),
       wgsl: shaderPaths.map(p => sourceEntry(ref, p)), programs: [...declared],
-      defineVariants: countDefineVariants(def), lifecycle: {
-        onInit: !!def._configOnInit || def.onInit !== idx.Effect.prototype.onInit,
-        onUpdate: !!def._configOnUpdate || def.onUpdate !== idx.Effect.prototype.onUpdate,
-        onDestroy: !!def._configOnDestroy || def.onDestroy !== idx.Effect.prototype.onDestroy,
-        asyncInit: !!def._configAsyncInit || def.asyncInit !== idx.Effect.prototype.asyncInit
-      } })
+      defineVariants: countDefineVariants(def), lifecycle })
+    catalogEffects.push({ key: `${ns}/${name}`, namespace: ns, name, func,
+      definition: sourceEntry(ref, path), wgsl: shaderPaths.map(p => sourceEntry(ref, p)),
+      registrationKeys: [func, `${ns}.${func}`, `${ns}/${name}`, `${ns}.${name}`],
+      starter: starterNames.includes(`${ns}.${func}`), lifecycle,
+      externalTexture: def.externalTexture ?? null, externalMesh: def.externalMesh ?? null,
+      value: encode(def) })
   }
   if (starterNames.length) registerStarterOps(starterNames)
-  if (Object.keys(allChoices).length) await mergeIntoEnums(allChoices)
+  if (Object.keys(allChoices).length) {
+    await mergeIntoEnums(allChoices)
+    enumMerges.push({ source: 'choices', value: encode(allChoices) })
+  }
+  const { ops } = await import(pathToFileURL(join(ref, 'shaders/src/lang/ops.js')).href)
+  const enumModule = await import(pathToFileURL(join(ref, 'shaders/src/lang/enums.js')).href)
+  const defaultShaders = await import(pathToFileURL(join(ref, 'shaders/src/runtime/default-shaders.js')).href)
+  const { expandPalette } = await import(pathToFileURL(join(ref, 'shaders/src/runtime/palette-expansion.js')).href)
+  // The source exposes palette expansion rather than its private table. Query
+  // every one-based entry in order, preserving its exact JS numeric values.
+  const paletteTable = []
+  for (let index = 1; index <= 10000; index++) {
+    const value = expandPalette(index)
+    if (value === null) break
+    paletteTable.push({ amp: value.paletteAmp, freq: value.paletteFreq,
+      offset: value.paletteOffset, phase: value.palettePhase, mode: value.paletteMode })
+  }
+  if (!paletteTable.length || paletteTable.length === 10000 || expandPalette(0) !== null ||
+      expandPalette(paletteTable.length + 1) !== null) {
+    throw new Error('upstream palette expansion does not have a finite one-based table')
+  }
+  const license = readFileSync(join(ref, 'LICENSE'), 'utf8')
+  if (sha256(license) !== lock.licenseSha256) throw new Error('authority license hash mismatch')
+  if (catalogEffects.length !== paths.length ||
+      new Set(catalogEffects.map(effect => effect.key)).size !== catalogEffects.length ||
+      Object.keys(ops).length !== catalogEffects.length) {
+    throw new Error('source catalog inventory, unique keys, and validator registrations disagree')
+  }
+  // Upstream expander emits this program for a normal render(o0) graph.
+  // Take the emitted value rather than copying a WGSL/GLSL literal by hand.
+  const blitProgram = compileGraph(CASES.solid).programs.blit
+  if (!blitProgram?.wgsl || !blitProgram?.fragment) throw new Error('upstream blit program missing')
+  writeJson(join(out, 'catalog.json'), {
+    schemaVersion: 1,
+    authority: { repository: lock.repository, commit: lock.commit, sourceManifestSha256: manifestSource.contentSha256 },
+    license: { path: 'LICENSE', sha256: sha256(license), text: license },
+    effectCount: catalogEffects.length,
+    effects: catalogEffects,
+    stdEnums: encode(stdEnums),
+    enumMerges,
+    mergedEnums: encode(enumModule.default),
+    validatorOps: encode(ops),
+    starterOps: starterNames,
+    paramAliases: encode(new Map(paramAliasPairs)),
+    effectAliases: encode(new Map(effectAliasPairs)),
+    paletteTable: encode(paletteTable),
+    blitProgram: encode(blitProgram),
+    defaultVertex: { wgsl: defaultShaders.DEFAULT_VERTEX_SHADER_WGSL,
+      entryPoint: defaultShaders.DEFAULT_VERTEX_ENTRY_POINT,
+      sourceSha256: sha256(defaultShaders.DEFAULT_VERTEX_SHADER_WGSL) }
+  })
   const portable = {}
   const portableRenderer = new idx.CanvasRenderer()
   for (const [name, spec] of Object.entries(PORTABLE_CASES)) {
@@ -318,7 +398,6 @@ async function exportAuthority(ref, out, lock, verifiedArchive = false) {
   writeJson(join(out, 'source-manifest.json'), manifestSource)
   writeJson(join(out, 'inventory.json'), { effects: inventory.length, wgslFiles: sources.filter(s => s.path.endsWith('.wgsl')).length, entries: inventory })
   writeJson(join(out, 'capture-protocols.json'), captureProtocols())
-  const defaultShaders = await import(pathToFileURL(join(ref, 'shaders/src/runtime/default-shaders.js')).href)
   writeJson(join(out, 'default-vertex.json'), {
     wgsl: defaultShaders.DEFAULT_VERTEX_SHADER_WGSL,
     entryPoint: defaultShaders.DEFAULT_VERTEX_ENTRY_POINT,

@@ -30,7 +30,7 @@ function pngChunk(type, data) {
   return out
 }
 
-function encodePng(width, height, rgba) {
+export function encodePng(width, height, rgba) {
   if (rgba.length !== width * height * 4) throw new Error(`GPU readback has ${rgba.length} bytes for ${width}x${height}`)
   const ihdr = Buffer.alloc(13)
   ihdr.writeUInt32BE(width, 0)
@@ -61,9 +61,11 @@ export function verifyArchivedSource(ref, lock, exportedRoot) {
   if (manifestHash !== manifest.contentSha256 || manifestHash !== lock.sourceManifestSha256) throw new Error('reference source manifest hash does not match lock')
   const recorded = new Map(manifest.files.map(file => [file.path, file.sha256]))
   const actual = [join(ref, 'package.json'), join(ref, 'share/palettes.json'),
+    ...filesUnder(join(ref, 'share/meshes'), ''),
     ...filesUnder(join(ref, 'shaders/src'), '.js'),
     ...filesUnder(join(ref, 'shaders/effects'), '.js'),
     ...filesUnder(join(ref, 'shaders/effects'), '.wgsl'),
+    ...filesUnder(join(ref, 'shaders/effects'), 'parity-case.json'),
     join(ref, 'shaders/effects/manifest.json'),
     ...filesUnder(join(ref, 'demo/shaders'), ''),
     ...filesUnder(join(ref, 'vendor/shade-mcp/harness'), '.js')]
@@ -74,7 +76,7 @@ export function verifyArchivedSource(ref, lock, exportedRoot) {
   }
 }
 
-async function sizePage(page) {
+export async function sizePage(page, width = WIDTH, height = HEIGHT) {
   await page.setViewportSize({ width: 1000, height: 700 })
   await page.evaluate(({ width, height }) => {
     window.__noisemakerSetPaused?.(true)
@@ -89,7 +91,7 @@ async function sizePage(page) {
     Object.defineProperty(canvas, 'height', { configurable: true, get: () => height, set: () => {} })
     Object.assign(canvas.style, { width: `${width}px`, height: `${height}px`, border: '0', padding: '0', margin: '0' })
     renderer.resize(width, height)
-  }, { width: WIDTH, height: HEIGHT })
+  }, { width, height })
 }
 
 async function mint(casePath, output, metadataPath) {
