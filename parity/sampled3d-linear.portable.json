@@ -1,0 +1,26 @@
+{
+  "name": "Sampled 3D Linear Probe",
+  "namespace": "user",
+  "func": "sampled3dLinearProbe",
+  "starter": true,
+  "textures3d": {
+    "volume": {
+      "width": 8,
+      "height": 8,
+      "depth": 8,
+      "format": "rgba8unorm",
+      "filter": "linear"
+    }
+  },
+  "passes": [
+    {
+      "name": "show",
+      "program": "show",
+      "inputs": { "volTex": "volume" },
+      "outputs": { "fragColor": "outputTex" }
+    }
+  ],
+  "shaders": {
+    "show": {}
+  }
+}

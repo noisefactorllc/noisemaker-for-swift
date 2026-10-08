@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "chromiumTag": "151.0.7922.34",
+  "skiaRepository": "https://skia.googlesource.com/skia",
+  "skiaRevision": "0208108c7aed5f4e0faa525cbba52c238005a1ef",
+  "archiveSha256": "24a264a43f641d60c18eb2b84fe654e9b4b8b81f326e192abe68e4f464ed1930",
+  "sourceTreeSha256": "9a2837c512595dd39b4147012601056ad9476707331bac6f018fe642c5d87504",
+  "licenseSha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd",
+  "gnSha256": "76c4542d5ad22fc944a5d50f4db5f2ad2ff3792ac48afb08d4415f0da41ce570",
+  "excludedArchiveSymlink": "src/ports/fontations/Cargo.toml",
+  "platform": "macos",
+  "architecture": "arm64",
+  "deploymentTarget": "14.0"
+}

@@ -22,7 +22,7 @@ public enum GraphDimension {
         case .string(let name):
             if ["screen", "auto", "input", "resolution"].contains(name) { return .screen }
             if name.hasSuffix("%"), let percent = Double(name.dropLast()),
-               percent.isFinite, percent > 0, percent <= 100 {
+               percent.isFinite, percent > 0 {
                 return .percent(percent)
             }
         case .object(let fields):

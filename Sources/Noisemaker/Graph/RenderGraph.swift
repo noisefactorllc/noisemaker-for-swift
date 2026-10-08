@@ -194,10 +194,32 @@ public struct RenderGraph {
                 "effectKey", "effectFunc", "effectNamespace", "nodeId", "stepIndex", "uniformSpecs",
                 "uniformAliases", "scopedParams", "inheritsVolumeSize"
             ], context: "pass \(index)")
-            for key in ["workgroups", "storageBuffers", "storageTextures",
-                        "samplerTypes"] {
-                if let candidate = value.field(key), !candidate.isUndefined {
-                    throw GraphDiagnostic.unsupported("pass \(index) uses \(key)")
+            if let buffers = value.field("storageBuffers"), !buffers.isUndefined {
+                throw GraphDiagnostic.unsupported("pass \(index) uses storageBuffers")
+            }
+            let storageTextures = value.field("storageTextures")
+            let workgroups = value.field("workgroups")
+            let hasStorage = storageTextures?.isUndefined == false
+            if hasStorage {
+                guard programs[value.field("program")?.stringValue ?? ""]?.stage == .compute,
+                      let entries = storageTextures?.objectFields, entries.count == 1,
+                      entries[0].value.stringValue?.isEmpty == false,
+                      let groups = workgroups?.arrayValue, groups.count == 3,
+                      groups.allSatisfy({ group in
+                          guard let count = group.numberValue else { return false }
+                          return count.isFinite && count >= 1 && count <= 65_535 &&
+                              count.rounded(.towardZero) == count
+                      }) else {
+                    throw GraphDiagnostic.unsupported("pass \(index) requires one 3D storage output and three numeric workgroups")
+                }
+            } else if let workgroups, !workgroups.isUndefined {
+                throw GraphDiagnostic.unsupported("pass \(index) uses workgroups without storageTextures")
+            }
+            if let samplers = value.field("samplerTypes"), !samplers.isUndefined {
+                guard let fields = samplers.objectFields, fields.allSatisfy({
+                    ["default", "nearest", "repeat", "mipmap"].contains($0.value.stringValue ?? "")
+                }) else {
+                    throw GraphDiagnostic.unsupported("pass \(index) invalid samplerTypes")
                 }
             }
             if let type = value.field("type"), !type.isUndefined,
@@ -275,7 +297,8 @@ public struct RenderGraph {
             }
             let inputs = try Self.namedObject(value.field("inputs"), "pass \(id) inputs")
             let outputs = try Self.namedObject(value.field("outputs"), "pass \(id) outputs")
-            guard (1...8).contains(outputs.count), inputs.count <= 16 else {
+            guard (hasStorage ? outputs.isEmpty : (1...8).contains(outputs.count)),
+                  inputs.count <= 16 else {
                 throw GraphDiagnostic.unsupported("pass \(id) attachment or input count exceeds task-3 subset")
             }
             if let drawBuffers = value.field("drawBuffers"), !drawBuffers.isUndefined {
@@ -383,7 +406,8 @@ public struct RenderGraph {
             guard let rawWidth = item.value.field("width"),
                   let rawHeight = item.value.field("height"),
                   let format = item.value.field("format")?.stringValue,
-                  ["rgba16f", "rgba16float", "rgba8", "rgba8unorm", "rgba32f", "rgba32float"].contains(format) else {
+                  ["rgba16f", "rgba16float", "rgba8", "rgba8unorm", "rgba32f", "rgba32float",
+                   "r8", "r8unorm", "r16f", "r16float", "r32f", "r32float"].contains(format) else {
                 throw GraphDiagnostic.unsupported("texture \(item.key) dimensions or format")
             }
             let width = try GraphDimension.decode(rawWidth, context: "texture \(item.key) width")
@@ -440,6 +464,33 @@ public struct RenderGraph {
             throw GraphDiagnostic.unsupported("no pass writes renderSurface \(renderSurface)")
         }
         let declared = Set(textures.map(\.key))
+        for pass in passes {
+            guard let storage = pass.raw.field("storageTextures"), !storage.isUndefined else { continue }
+            guard let entry = storage.objectFields?.first,
+                  let name = entry.value.stringValue,
+                  let texture = textures.first(where: { $0.key == name && $0.is3D }),
+                  let program = programs[pass.program] else {
+                throw GraphDiagnostic.unsupported("pass \(pass.id) storage output is not a declared 3D texture")
+            }
+            let declarations = try ShaderCompiler.bindingDeclarations(program.resolvedWGSL)
+            let expectedFormat: String
+            switch texture.format {
+            case "rgba8": expectedFormat = "rgba8unorm"
+            case "rgba16f": expectedFormat = "rgba16float"
+            case "rgba32f": expectedFormat = "rgba32float"
+            case "r8": expectedFormat = "r8unorm"
+            case "r16f": expectedFormat = "r16float"
+            case "r32f": expectedFormat = "r32float"
+            default: expectedFormat = texture.format
+            }
+            guard declarations.contains(where: { declaration in
+                declaration.name == entry.name &&
+                    String(declaration.type.filter { !$0.isWhitespace }) ==
+                    "texture_storage_3d<\(expectedFormat),write>"
+            }) else {
+                throw GraphDiagnostic.unsupported("pass \(pass.id) 3D storage format or access differs from texture \(name)")
+            }
+        }
         let producedTransient = Set(passes.flatMap { pass in
             pass.outputs.compactMap { $0.value.stringValue }.filter { !$0.hasPrefix("global_") }
         })
@@ -459,12 +510,15 @@ public struct RenderGraph {
             return texture.key
         })
         for pass in passes {
-            let outputNames = Set(pass.outputs.compactMap { $0.value.stringValue })
-            guard outputNames.count == pass.outputs.count,
+            let storageNames = pass.raw.field("storageTextures")?.objectFields?
+                .compactMap { $0.value.stringValue } ?? []
+            let outputNames = Set(pass.outputs.compactMap { $0.value.stringValue } + storageNames)
+            guard outputNames.count == pass.outputs.count + storageNames.count,
                   outputNames.allSatisfy({ declared.contains($0) ||
                       ($0.hasPrefix("global_") && !Self.isExternalMeshTexture($0)) }) else {
                 throw GraphDiagnostic.unsupported("pass \(pass.id) targets undeclared or duplicate textures")
             }
+            persistentNames.formUnion(storageNames)
             if programs[pass.program]?.stage != .compute,
                outputNames.contains(where: { name in
                    textures.contains(where: { $0.key == name && $0.is3D })
@@ -598,6 +652,7 @@ public struct RenderGraph {
             resolved[texture.key] = dimensions
         }
         for pass in passes where programs[pass.program]?.stage == .compute {
+            if pass.raw.field("storageTextures")?.isUndefined == false { continue }
             guard let outputName = pass.outputs.first?.value.stringValue,
                   let output = resolved[outputName], output == size else {
                 throw GraphDiagnostic.unsupported("pass \(pass.id) compute output must be screen-sized for upstream buffer indexing")

@@ -19,7 +19,9 @@ const MICRO_ASSETS = {
   marker: ['marker.portable.json', 'marker.marker.wgsl'],
   mrtProbe: ['mrt.portable.json', 'mrt.split.wgsl', 'mrt.combine.wgsl'],
   samplerProbe: ['sampler.portable.json', 'sampler.pattern.wgsl', 'sampler.sample.wgsl'],
-  sampled3dProbe: ['sampled3d.portable.json', 'sampled3d.show.wgsl']
+  sampled3dProbe: ['sampled3d.portable.json', 'sampled3d.show.wgsl'],
+  sampled3dLinearProbe: ['sampled3d-linear.portable.json', 'sampled3d-linear.show.wgsl'],
+  storage3dProbe: ['storage3d.portable.json', 'storage3d.fill.wgsl', 'storage3d.show.wgsl']
 }
 const hash = bytes => createHash('sha256').update(bytes).digest('hex')
 const readJson = path => JSON.parse(readFileSync(path, 'utf8'))
@@ -236,7 +238,7 @@ async function makeCorpus() {
   for (const [name, source] of Object.entries(CASES)) {
     const assets = (MICRO_ASSETS[name] || []).map(file => asset(ROOT, `parity/${file}`))
     const capture = structuredClone(captureProtocols().cases[name])
-    if (name === 'sampled3dProbe') {
+    if (name === 'sampled3dProbe' || name === 'sampled3dLinearProbe') {
       const path = 'parity/inputs/sampled3d-v1.rgba8'
       const bytes = readFileSync(join(ROOT, path))
       if (bytes.length !== 8 * 8 * 8 * 4) throw new Error('sampled 3D input byte count differs')
@@ -270,6 +272,20 @@ async function makeCorpus() {
     cases.push(entry(`micro/${name}`, item.source,
       { ...item.origin, generator: 'locked AudioState samples copied into the supported Pipeline.setAudioState plain-array host interface' },
       'micro', item.assets, { capture }))
+  }
+  // The upstream synth parity cases also read audioWaveform/audioSpectrum.
+  // Give them the same source-derived host samples as the coverage fixtures.
+  for (const [id, expectedEffect] of [
+    ['upstream/synth/scope', 'synth/scope'],
+    ['upstream/synth/spectrum', 'synth/spectrum']
+  ]) {
+    const item = cases.find(entry => entry.id === id)
+    if (!item || !item.claimedEffects.includes(expectedEffect)) {
+      throw new Error(`locked upstream audio effect lacks coverage: ${id}`)
+    }
+    item.assets.push(audioAsset)
+    item.capture.audioInput = { assetPath: audioAsset.path, assetSha256: audioAsset.sha256,
+      frame: 0, updatePolicy: 'static-before-frame-1' }
   }
   const roll = cases.find(item => item.id === 'coverage/synth_roll')
   if (!roll || !roll.assets.some(sidecar => sidecar.path.endsWith('.midi.json'))) {

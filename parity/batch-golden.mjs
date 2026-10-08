@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // Same-run WebGPU presented-surface capture in one browser session.
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { platform, release, arch } from 'node:os'
+import { createReadStream, existsSync, mkdirSync, readFileSync, realpathSync, renameSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { sourceIdentity } from '../tools/export-reference.mjs'
@@ -10,6 +12,23 @@ import { encodePng, sizePage, verifyArchivedSource } from './marker-golden.mjs'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
 const readJson = path => JSON.parse(readFileSync(path, 'utf8'))
+const require = createRequire(import.meta.url)
+
+async function fileSha256(path) {
+  const checksum = createHash('sha256')
+  for await (const block of createReadStream(path)) checksum.update(block)
+  return checksum.digest('hex')
+}
+
+function chromiumExecutable(referenceRoot, headless) {
+  // This is the same registry and selection used by the pinned Playwright
+  // Chromium launcher with no channel or executablePath override.
+  const core = require(join(referenceRoot, 'node_modules/playwright-core/lib/coreBundle.js'))
+  const name = headless ? 'chromium-headless-shell' : 'chromium'
+  const path = core.registry?.registry?.findExecutable(name)?.executablePath()
+  if (!path) throw new Error(`Playwright has no ${name} executable`)
+  return realpathSync(path)
+}
 const EXTERNAL_TEXTURE_ID = /^[A-Za-z][A-Za-z0-9]*_step_\d+$/
 const ASYNC_OVERLAY_ID = /^node_\d+_[A-Za-z][A-Za-z0-9]*$/
 const MESH_TEXTURE_INPUT = /^global_mesh\d+_(positions|normals|uvs)/
@@ -53,7 +72,10 @@ function sampleFrames(item) {
   return [item.capture.frames]
 }
 
-async function installAsyncInitTracker(page) {
+export async function installAsyncInitTracker(page) {
+  // The editor can appear before the demo finishes constructing its pipeline.
+  // Install the tracker only after the actual source runtime is available.
+  await page.waitForFunction(() => !!window.__noisemakerRenderingPipeline, null, { timeout: 120000 })
   await page.evaluate(() => {
     const proto = Object.getPrototypeOf(window.__noisemakerRenderingPipeline)
     if (proto.__nmTracksAsyncInit) return
@@ -689,6 +711,22 @@ async function main() {
       !Array.isArray(prior.cases) || prior.cases.length > selected.length)) {
     throw new Error('resumed golden ledger differs from locked authority or selected corpus')
   }
+  const fingerprintPath = process.env.NM_QUALIFICATION_FINGERPRINT
+  const qualificationFingerprintSha256 = fingerprintPath ? sha256(readFileSync(fingerprintPath)) : null
+  const fingerprint = fingerprintPath ? readJson(fingerprintPath) : null
+  const qualifiedBrowser = fingerprint?.referenceAuthority?.browser
+  const headless = !(process.env.SHADE_HEADLESS === '0' || process.env.SHADE_HEADLESS === 'false')
+  const executablePath = chromiumExecutable(referenceRoot, headless)
+  const executableSha256 = await fileSha256(executablePath)
+  if (fingerprintPath && (!qualifiedBrowser || qualifiedBrowser.headless !== headless ||
+      qualifiedBrowser.executablePath !== executablePath ||
+      qualifiedBrowser.executableSha256 !== executableSha256 ||
+      !/^[0-9a-f]{64}$/.test(qualifiedBrowser.bundleSha256))) {
+    throw new Error('launched Chromium executable differs from qualification fingerprint')
+  }
+  if (prior && prior.qualificationFingerprintSha256 !== qualificationFingerprintSha256) {
+    throw new Error('resumed golden qualification fingerprint differs')
+  }
   const ledger = prior?.cases || []
   // A failure has no binary artifact to rehash. Re-execute it and every later
   // case rather than trusting an editable diagnostic from a previous process.
@@ -722,17 +760,27 @@ async function main() {
   }
   const writeLedger = () => {
     writeFileSync(`${ledgerPath}.tmp`, JSON.stringify({ schemaVersion: 1, authority: lock,
-      corpusSha256, expected: selected.length,
+      corpusSha256, qualificationFingerprintSha256, expected: selected.length,
       cases: ledger }, null, 2) + '\n')
     renameSync(`${ledgerPath}.tmp`, ledgerPath)
   }
   writeLedger()
   for (let start = ledger.length; start < selected.length; start = ledger.length) {
     const session = new BrowserSession({ backend: 'webgpu' })
+    if (session.options.headless !== headless) {
+      throw new Error('pinned browser harness launch mode differs from qualified Chromium')
+    }
     await session.setup()
     try {
     await session.setBackend('webgpu')
     const page = session.page
+    const runtimeEnvironment = {
+      browser: session.browser.version(), node: process.version,
+      os: `${platform()} ${release()}`, architecture: arch(),
+      ...(qualifiedBrowser ? { browserExecutablePath: executablePath,
+        browserExecutableSha256: executableSha256,
+        browserBundleSha256: qualifiedBrowser.bundleSha256 } : {})
+    }
     const errors = []
     const images = new Map()
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()) })
@@ -778,7 +826,7 @@ async function main() {
       const item = selected[index]
       const oracle = stageById.get(item.id)
       const record = { id: item.id, sourceSha256: item.sourceSha256,
-        capture: item.capture, backend: 'WebGPU' }
+        capture: item.capture, backend: 'WebGPU', runtimeEnvironment: { ...runtimeEnvironment } }
       try {
         if (!oracle || oracle.sourceSha256 !== item.sourceSha256 || oracle.stages.graph?.status !== 'ok') {
           throw new Error('case lacks matching successful locked-JS graph oracle')
@@ -843,6 +891,14 @@ async function main() {
           throw new Error(`invalid source WebGPU device texture dimension limit: ${actualLimit}`)
         }
         record.capabilityProfile = { maxTextureDimension2D: actualLimit }
+        record.runtimeEnvironment.device = await page.evaluate(() => {
+          const device = window.__noisemakerRenderingPipeline.backend.device
+          const info = device.adapterInfo
+          if (!info) throw new Error('active WebGPU device lacks adapter identity')
+          return { vendor: info.vendor, architecture: info.architecture, device: info.device,
+            description: info.description, features: [...device.features].sort(),
+            maxTextureDimension2D: device.limits.maxTextureDimension2D }
+        })
         if (current.passes !== oracle.passCount) throw new Error(`reference pass count ${current.passes} differs from stage oracle ${oracle.passCount}`)
         if (oracle.effects.includes('filter.text')) {
           // The unmodified demo schedules its hidden text canvas upload 50 ms
@@ -904,4 +960,6 @@ async function main() {
   if (ledger.some(x => x.status !== 'ok')) process.exitCode = 1
 }
 
-main().catch(error => { process.stderr.write(`${error?.stack || String(error)}\n`); process.exitCode = 1 })
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch(error => { process.stderr.write(`${error?.stack || String(error)}\n`); process.exitCode = 1 })
+}

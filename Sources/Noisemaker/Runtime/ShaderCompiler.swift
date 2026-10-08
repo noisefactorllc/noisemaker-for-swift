@@ -7,6 +7,7 @@ struct ShaderResource {
     let slot: Int
     let uniformPlan: UniformPlan?
     let is3DTexture: Bool
+    let sampledTextureName: String?
 }
 
 struct WGSLBindingDeclaration {
@@ -175,7 +176,9 @@ enum ShaderCompiler {
             let address = field(3).trimmingCharacters(in: .whitespacesAndNewlines)
             let name = field(4)
             let type = field(5).trimmingCharacters(in: .whitespacesAndNewlines)
-            let storage = type.contains("texture_storage_2d") || address.contains("storage")
+            let compactType = String(type.filter { !$0.isWhitespace })
+            let storage = compactType.hasPrefix("texture_storage_2d<") ||
+                compactType.hasPrefix("texture_storage_3d<") || address.contains("storage")
             if !storage {
                 let escaped = NSRegularExpression.escapedPattern(for: name)
                 let occurrences = try NSRegularExpression(pattern: #"\b"# + escaped + #"\b"#)
@@ -190,11 +193,28 @@ enum ShaderCompiler {
         }
     }
 
+    /// Sampling calls, not WGSL declaration order, associate a sampler with a
+    /// texture. Shared samplers have no single inferred texture policy.
+    static func samplerTextureUses(_ source: String) -> [String: String] {
+        let clean = stripComments(source)
+        let ns = clean as NSString
+        let pattern = try! NSRegularExpression(pattern:
+            #"\btextureSample\w*\s*\(\s*(\w+)\s*,\s*(\w+)\s*,"#)
+        var uses: [String: Set<String>] = [:]
+        for match in pattern.matches(in: clean, range: NSRange(location: 0, length: ns.length)) {
+            let texture = ns.substring(with: match.range(at: 1))
+            let sampler = ns.substring(with: match.range(at: 2))
+            uses[sampler, default: []].insert(texture)
+        }
+        return uses.compactMapValues { $0.count == 1 ? $0.first : nil }
+    }
+
     static func prepare(pass: GraphPass, program: GraphProgram, vertex: MTLFunction,
                         device: MTLDevice, translator: ShaderTranslator,
                         pixelFormats: [MTLPixelFormat], colorUniforms: Set<String>) throws -> PreparedRenderPass {
         let wgsl = program.resolvedWGSL
         let declarations = try bindingDeclarations(wgsl)
+        let sampledTextures = samplerTextureUses(wgsl)
         var bindings: [TintBinding] = []
         var storageSizes: [TintBufferSize] = []
         var resources: [ShaderResource] = []
@@ -204,6 +224,7 @@ enum ShaderCompiler {
             let addressSpace = declaration.addressSpace
             let name = declaration.name
             let type = declaration.type
+            let compactType = String(type.filter { !$0.isWhitespace })
             let kind: TintBindingKind, slot: UInt32, uniformPlan: UniformPlan?
             if addressSpace == "uniform" {
                 kind = .uniform; slot = nextBuffer; nextBuffer += 1
@@ -225,8 +246,11 @@ enum ShaderCompiler {
                     index: UInt32(storageSizes.count)))
             } else if addressSpace.hasPrefix("storage") {
                 throw GraphDiagnostic.unsupported("program \(program.id) storage buffer \(name) needs a declared compute resource plan")
-            } else if type.hasPrefix("texture_storage_") {
-                throw GraphDiagnostic.unsupported("program \(program.id) storage texture \(name) needs a declared output plan")
+            } else if compactType.hasPrefix("texture_storage_3d<") &&
+                      pass.raw.field("storageTextures")?.field(name)?.stringValue != nil {
+                kind = .storageTexture; slot = nextTexture; nextTexture += 1; uniformPlan = nil
+            } else if compactType.hasPrefix("texture_storage_") {
+                throw GraphDiagnostic.unsupported("program \(program.id) storage texture \(name) needs a declared 3D output plan")
             } else if type == "texture_2d<f32>" || type == "texture_3d<f32>" {
                 kind = .texture; slot = nextTexture; nextTexture += 1; uniformPlan = nil
             } else if type == "sampler" {
@@ -239,15 +263,25 @@ enum ShaderCompiler {
             }
             bindings.append(TintBinding(group: group, binding: binding, kind: kind, slot: slot))
             resources.append(ShaderResource(name: name, kind: kind, slot: Int(slot),
-                uniformPlan: uniformPlan, is3DTexture: type == "texture_3d<f32>"))
+                uniformPlan: uniformPlan,
+                is3DTexture: type == "texture_3d<f32>" || compactType.hasPrefix("texture_storage_3d<"),
+                sampledTextureName: kind == .sampler ? sampledTextures[name] : nil))
         }
         // WebGPU creates zero/default uniform buffers for absent names and
         // binds a transparent dummy view for an unbound live texture. The
         // encoder's typed writer validates present values when a frame runs.
         if program.stage == .compute {
-            guard pixelFormats.count == 1, storageSizes.count == 1,
-                  resources.filter({ $0.kind == .storage }).count == 1 else {
-                throw GraphDiagnostic.unsupported("pass \(pass.id) compute output requires one f32 storage buffer and one texture")
+            let storageTextures = resources.filter { $0.kind == .storageTexture }.count
+            if storageTextures > 0 {
+                guard storageTextures == 1, pixelFormats.isEmpty, storageSizes.isEmpty,
+                      !resources.contains(where: { $0.kind == .storage }) else {
+                    throw GraphDiagnostic.unsupported("pass \(pass.id) compute 3D output requires one storage texture")
+                }
+            } else {
+                guard pixelFormats.count == 1, storageSizes.count == 1,
+                      resources.filter({ $0.kind == .storage }).count == 1 else {
+                    throw GraphDiagnostic.unsupported("pass \(pass.id) compute output requires one f32 storage buffer and one texture")
+                }
             }
         } else if !storageSizes.isEmpty {
             throw GraphDiagnostic.unsupported("pass \(pass.id) render storage output")

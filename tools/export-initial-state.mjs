@@ -12,6 +12,22 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const OUTPUT = join(ROOT, 'parity/initial-program-state.json')
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
 const json = path => JSON.parse(readFileSync(path, 'utf8'))
+function firstDifference(expected, actual, path = '$') {
+  if (Object.is(expected, actual)) return null
+  if (expected === null || actual === null || typeof expected !== 'object' || typeof actual !== 'object') {
+    return { path, expected, actual }
+  }
+  const expectedKeys = Object.keys(expected)
+  const actualKeys = Object.keys(actual)
+  if (JSON.stringify(expectedKeys) !== JSON.stringify(actualKeys)) {
+    return { path: `${path} keys`, expected: expectedKeys, actual: actualKeys }
+  }
+  for (const key of expectedKeys) {
+    const difference = firstDifference(expected[key], actual[key], `${path}.${key}`)
+    if (difference) return difference
+  }
+  return null
+}
 const IDS = [
   'curated/blender_bb_only', 'curated/babylonjs_target_particles',
   'programs/funcStateValues', 'programs/coalesce',
@@ -173,7 +189,11 @@ async function main() {
   const bytes = Buffer.from(JSON.stringify(actual, null, 2) + '\n')
   if (mode === '--write') writeFileSync(OUTPUT, bytes)
   else if (!existsSync(OUTPUT) || !readFileSync(OUTPUT).equals(bytes)) {
-    throw new Error('live initial-state oracle differs from locked source runtime')
+    const difference = existsSync(OUTPUT)
+      ? firstDifference(json(OUTPUT), actual)
+      : { path: '$', expected: 'missing oracle', actual: 'captured' }
+    const detail = JSON.stringify(difference)
+    throw new Error(`live initial-state oracle differs from locked source runtime: ${detail.slice(0, 600)}`)
   }
   process.stdout.write(`${mode} initial-state ${IDS.length} cases sha256=${sha256(bytes)}\n`)
 }

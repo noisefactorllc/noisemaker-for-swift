@@ -17,7 +17,8 @@ import Testing
             reference.appendingPathComponent("summary.json"))) as? [String: Any])
         let inventory = try #require(summary["cases"] as? [String: [String: Any]])
         let files = inventory.keys.sorted().map { directory.appendingPathComponent($0 + ".json") }
-        let portableCases: Set<String> = ["marker", "mrtProbe", "samplerProbe", "sampled3dProbe"]
+        let portableCases: Set<String> = ["marker", "mrtProbe", "samplerProbe", "sampled3dProbe",
+                                          "sampled3dLinearProbe", "storage3dProbe"]
         var compared = 0
         for file in files {
             let name = file.deletingPathExtension().lastPathComponent

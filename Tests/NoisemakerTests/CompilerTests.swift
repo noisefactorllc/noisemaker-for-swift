@@ -39,6 +39,76 @@ import Testing
         #expect(registry.effect(key: "user.rejectedProbe") != nil)
     }
 
+    @Test func portableRegistrationMatchesSourceEntryPoint() throws {
+        let base = #"{"name":"Portable Probe","namespace":"user","func":"portableProbe","globals":{"gain":{"type":"float","default":1}},"passes":[{"program":"probe","inputs":{},"outputs":{"color":"outputTex"}}]}"#
+        let shader = ["probe": "@fragment fn main() {}"]
+        let rejected: [(String, [String: String])] = [
+            (base.replacingOccurrences(of: #""name":"Portable Probe","#, with: "")
+                 .replacingOccurrences(of: #""func":"portableProbe","#, with: ""), shader),
+            (base.replacingOccurrences(of: #""namespace":"user""#, with: #""namespace":"other""#), shader),
+            (base.replacingOccurrences(of: #""namespace":"user""#, with: #""namespace":null"#), shader),
+            (base.replacingOccurrences(of: #""namespace":"user""#, with: #""namespace":42"#), shader),
+            (base.replacingOccurrences(of: #""func":"portableProbe""#, with: #""func":42"#), shader),
+            (base.replacingOccurrences(of: #""namespace":"user","#, with: #""namespace":"user","starter":"yes","#), shader),
+            (base.replacingOccurrences(of: #""program":"probe""#, with: #""program":"""#), shader),
+            (base.replacingOccurrences(of: #""inputs":{}"#, with: #""inputs":{"src":""}"#), shader),
+            (base.replacingOccurrences(of: #""outputs":{"color":"outputTex"}"#, with: #""outputs":["outputTex"]"#), shader),
+            (base.replacingOccurrences(of: #""gain":{"type":"float","default":1}"#, with: #""gain":1"#), shader),
+            (base.replacingOccurrences(of: #""default":1"#, with: #""default":1,"choices":{"bad":"word"}"#), shader),
+            (base.replacingOccurrences(of: #""passes":"#, with: #""paramAliases":{"old":"missing"},"passes":"#), shader),
+            (base.replacingOccurrences(of: #""namespace":"user","#, with: #""namespace":"user","toString":1,"#), shader),
+            (base.replacingOccurrences(of: #""namespace":"user","#, with: #""namespace":"user","shaders":[],"#), shader),
+            (base.replacingOccurrences(of: #""passes":[{"program":"probe","inputs":{},"outputs":{"color":"outputTex"}}]"#,
+                with: #""passes":[{"program":"probe"},{"program":"other"}],"shaders":{"probe":{"glsl":"void main() {}"},"other":{}}"#),
+             ["probe": "@fragment fn main() {}", "other": "@fragment fn main() {}"]),
+            (base, ["probe": "  "])
+        ]
+        var registry = try EffectRegistry.bundled()
+        let count = registry.effects.count
+        let starters = registry.starterOps
+        let aliases = registry.paramAliases
+        let ops = registry.validatorOps
+        for (index, item) in rejected.enumerated() {
+            expectThrows(try registry.registerPortable(definitionJSON: Data(item.0.utf8),
+                                                       shaderSources: item.1)) { error in
+                #expect(error is CatalogError, "rejected case \(index)")
+            }
+            #expect(registry.effects.count == count, "rejected case \(index)")
+            #expect(registry.starterOps == starters, "rejected case \(index)")
+            #expect(registry.paramAliases.sameOrderedValue(as: aliases), "rejected case \(index)")
+            #expect(registry.validatorOps == ops, "rejected case \(index)")
+            #expect(registry.effect(key: "user.portableProbe") == nil, "rejected case \(index)")
+        }
+        try registry.registerPortable(definitionJSON: Data(base.utf8), shaderSources: shader)
+        #expect(registry.effect(key: "user.portableProbe") != nil)
+        expectThrows(try registry.registerPortable(definitionJSON: Data(base.utf8),
+                                                   shaderSources: shader)) { error in
+            #expect(error is CatalogError)
+        }
+        #expect(registry.effects.count == count + 1)
+
+        let accepted: [(String, Bool)] = [
+            (base, true),
+            (base.replacingOccurrences(of: #""name":"Portable Probe","#, with: ""), true),
+            (base.replacingOccurrences(of: #""name":"Portable Probe""#, with: #""name":"portableProbe""#)
+                .replacingOccurrences(of: #""func":"portableProbe","#, with: ""), true),
+            (base.replacingOccurrences(of: #""name":"Portable Probe""#, with: #""name":"portableProbe""#)
+                .replacingOccurrences(of: #""func":"portableProbe""#, with: #""func":null"#), true),
+            (base.replacingOccurrences(of: #""namespace":"user","#, with: ""), true),
+            (base.replacingOccurrences(of: #""namespace":"user","#, with: #""namespace":"user","starter":true,"#), true),
+            (base.replacingOccurrences(of: #""namespace":"user","#, with: #""namespace":"user","starter":false,"#), false),
+            (base.replacingOccurrences(of: #""type":"float""#, with: #""type":"nonsense""#), true),
+            (base.replacingOccurrences(of: #""program":"probe""#, with: #""program":"probe","repeat":-1"#), true),
+            (base.replacingOccurrences(of: #""inputs":{}"#, with: #""inputs":{"src":"unknownTex"}"#), true)
+        ]
+        for (index, item) in accepted.enumerated() {
+            var fresh = try EffectRegistry.bundled()
+            try fresh.registerPortable(definitionJSON: Data(item.0.utf8), shaderSources: shader)
+            #expect(fresh.effect(key: "user.portableProbe") != nil, "accepted case \(index)")
+            #expect(fresh.isStarter("user.portableProbe") == item.1, "accepted case \(index)")
+        }
+    }
+
     @Test func oversizedLogicalStepIndexThrowsWithoutTrapping() throws {
         let step = ParserValue.object([
             ("op", .string("_read")), ("args", .object([])),

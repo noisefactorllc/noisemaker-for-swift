@@ -12,10 +12,19 @@ const SOURCE_WORM = 'shaders/src/cpu/wormTracer.js'
 const CASES = [
   { id: 'fibers-default', effect: 'fibers', width: 65, height: 33, params: {} },
   { id: 'fibers-dense', effect: 'fibers', width: 67, height: 35, params: { seed: 2, density: 1 } },
+  { id: 'fibers-coverage-256', effect: 'fibers', width: 256, height: 256,
+    params: { seed: 1, density: 1 }, hostUpload: { sourceCaseId: 'coverage/filter_fibers',
+      textureId: 'node_1_overlayTex', sha256: '21afa5dd331c57f68f60328533e5199686244c5f74ac690006370a73501cbdc2' } },
   { id: 'scratches-default', effect: 'scratches', width: 65, height: 33, params: {} },
   { id: 'scratches-seeded', effect: 'scratches', width: 67, height: 35, params: { seed: 2, density: 0.8 } },
+  { id: 'scratches-coverage-256', effect: 'scratches', width: 256, height: 256,
+    params: { seed: 1, density: 0.3 }, hostUpload: { sourceCaseId: 'coverage/filter_scratches',
+      textureId: 'node_1_overlayTex', sha256: '8484f0ff8a5d72095e5a95d922a043194dc2e437a6c47b2b32ea855110fe3a40' } },
   { id: 'strayHair-default', effect: 'strayHair', width: 65, height: 33, params: {} },
-  { id: 'strayHair-dense', effect: 'strayHair', width: 69, height: 31, params: { seed: 3, density: 1 } }
+  { id: 'strayHair-dense', effect: 'strayHair', width: 69, height: 31, params: { seed: 3, density: 1 } },
+  { id: 'strayHair-coverage-256', effect: 'strayHair', width: 256, height: 256,
+    params: { seed: 1, density: 1 }, hostUpload: { sourceCaseId: 'coverage/filter_strayHair',
+      textureId: 'node_1_overlayTex', sha256: '50be00e66dcfd9af668162406e30fa2caa6a37b91e4815fef0e3dcbc7fd0dd6f' } }
 ]
 const hash = bytes => createHash('sha256').update(bytes).digest('hex')
 
@@ -107,6 +116,17 @@ async function generate(ref, lock) {
       const bytes = captures.get(item.id)
       if (!bytes || bytes.length !== item.width * item.height * 4 || !details.alphaPixels) {
         throw new Error(`${item.id} capture has missing, wrong-sized, or empty pixels`)
+      }
+      if (item.hostUpload) {
+        const rowBytes = item.width * 4
+        const uploaded = Buffer.allocUnsafe(bytes.length)
+        for (let row = 0; row < item.height; row++) {
+          bytes.copy(uploaded, row * rowBytes, (item.height - 1 - row) * rowBytes,
+            (item.height - row) * rowBytes)
+        }
+        if (hash(uploaded) !== item.hostUpload.sha256) {
+          throw new Error(`${item.id} Canvas bytes differ from captured source WebGPU host upload`)
+        }
       }
       const segmentBytes = Buffer.allocUnsafe(details.segments.length * 9 * 8)
       details.segments.forEach((segment, index) => {

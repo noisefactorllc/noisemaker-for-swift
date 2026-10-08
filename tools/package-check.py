@@ -18,8 +18,9 @@ args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 subprocess.run([sys.executable, str(root / 'tools/verify-artifact.py')], check=True)
 artifact = root / 'Artifacts/CNoisemakerTint.xcframework'
-if not artifact.is_dir():
-    raise SystemExit('Run python3 tools/build-tint.py before checking the package')
+raster_artifact = root / 'Artifacts/CNoisemakerRaster.xcframework'
+if not artifact.is_dir() or not raster_artifact.is_dir():
+    raise SystemExit('Build Tint and raster artifacts before checking the package')
 with tempfile.TemporaryDirectory(prefix='noisemaker-consumer-') as temporary:
     workspace = Path(temporary)
     package = workspace / 'Noisemaker'
@@ -30,11 +31,14 @@ with tempfile.TemporaryDirectory(prefix='noisemaker-consumer-') as temporary:
     for name in ['dawn', 'abseil-cpp', 'spirv-headers']:
         notice = f'LICENSE-{name}.txt'
         shutil.copy2(root / 'tools/tint' / notice, package / 'tools/tint' / notice)
+    (package / 'tools/raster').mkdir(parents=True)
+    shutil.copy2(root / 'tools/raster/LICENSE-skia.txt', package / 'tools/raster/LICENSE-skia.txt')
     shutil.copytree(root / 'Sources', package / 'Sources')
     # Preserve the manifest test target without carrying authority exports or sibling sources.
     (package / 'Tests/NoisemakerTests').mkdir(parents=True)
     (package / 'Tests/NoisemakerTests/ConsumerFixture.swift').write_text('import Noisemaker\n')
     shutil.copytree(artifact, package / 'Artifacts/CNoisemakerTint.xcframework')
+    shutil.copytree(raster_artifact, package / 'Artifacts/CNoisemakerRaster.xcframework')
     copied_files = sorted(path for path in package.rglob('*') if path.is_file())
     copied_manifest = [(path.relative_to(package).as_posix(), hashlib.sha256(path.read_bytes()).hexdigest())
                        for path in copied_files]
@@ -75,6 +79,9 @@ for mesh in BuiltinMesh.allCases { let loaded = try mesh.load(); precondition(lo
 guard let device = MTLCreateSystemDefaultDevice(), let queue = device.makeCommandQueue(),
       let command = queue.makeCommandBuffer() else { fatalError("Native Metal required") }
 let size = try RenderSize(width: 17, height: 9)
+let overlay = try BuiltinOverlay.render(.fibers, size: size)
+precondition(overlay.rgba.count == size.width * size.height * 4)
+precondition(overlay.rgba.contains { $0 != 0 })
 let renderer = try NoisemakerRenderer(device: device, graph: graph, size: size)
 let output = try renderer.encode(into: command)
 command.commit()
@@ -117,6 +124,7 @@ print("CONSUMER-PASS native_passes=\\(graph.passes.count) dawn=\\(result.dawnRev
                                   'isolated SwiftPM package, catalog and seven meshes, native compiler, Tint, MetalKit module, completed Metal frame and pixel readback'),
                       'metalExecuted': not args.build_only,
                       'executableBytes': executable.stat().st_size,
-                      'archiveBytes': (artifact / 'macos-arm64/libCNoisemakerTint.a').stat().st_size,
+                      'tintArchiveBytes': (artifact / 'macos-arm64/libCNoisemakerTint.a').stat().st_size,
+                      'rasterArchiveBytes': (raster_artifact / 'macos-arm64/libCNoisemakerRaster.a').stat().st_size,
                       'copiedPackageSnapshotSha256': snapshot_sha256,
                       'publication': 'local verification only'}))

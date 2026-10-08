@@ -20,17 +20,85 @@ struct PortableVolumeGPUTests {
     private let source = "search user\nsampled3dProbe().write(o0)\nrender(o0)\n"
 
     private func fixture(device: MTLDevice, definition: String? = nil,
-                         shader: String? = nil) throws -> NoisemakerRenderer {
+                         shader: String? = nil, source: String? = nil,
+                         size: (Int, Int) = (256, 256)) throws -> NoisemakerRenderer {
         var registry = try EffectRegistry.bundled()
         try registry.registerPortable(definitionJSON: Data((definition ?? self.definition).utf8),
                                       orderedShaderSources: [("show", shader ?? self.shader)])
-        let graph = try NoisemakerCompiler(registry: registry).compile(source: source)
+        let graph = try NoisemakerCompiler(registry: registry).compile(source: source ?? self.source)
         let vertex = registry.defaultVertex
         return try NoisemakerRenderer(device: device, graph: graph,
-            size: RenderSize(width: 256, height: 256),
+            size: RenderSize(width: size.0, height: size.1),
             defaultVertexWGSL: try requireValue(vertex.field("wgsl")?.stringValue),
             vertexEntryPoint: try requireValue(vertex.field("entryPoint")?.stringValue),
             registry: registry)
+    }
+
+    @Test func sourceLinearVolumeFixtureVariesAcrossXYZ() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let definition = try String(contentsOf: root.appendingPathComponent(
+            "parity/sampled3d-linear.portable.json"), encoding: .utf8)
+        let shader = try String(contentsOf: root.appendingPathComponent(
+            "parity/sampled3d-linear.show.wgsl"), encoding: .utf8)
+        let source = try String(contentsOf: root.appendingPathComponent(
+            "parity/sampled3d-linear.dsl"), encoding: .utf8)
+        let volumeBytes = try Data(contentsOf: root.appendingPathComponent(
+            "parity/inputs/sampled3d-v1.rgba8"))
+        expectEqual(volumeBytes.count, 8 * 8 * 8 * 4)
+        let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
+        let renderer = try fixture(device: device, definition: definition,
+            shader: shader, source: source, size: (257, 129))
+        let descriptor = MTLTextureDescriptor()
+        descriptor.textureType = .type3D
+        descriptor.pixelFormat = .rgba8Unorm
+        descriptor.width = 8
+        descriptor.height = 8
+        descriptor.depth = 8
+        descriptor.storageMode = .shared
+        descriptor.usage = .shaderRead
+        let volume = try requireValue(device.makeTexture(descriptor: descriptor))
+        volumeBytes.withUnsafeBytes { bytes in
+            volume.replace(region: MTLRegionMake3D(0, 0, 0, 8, 8, 8),
+                mipmapLevel: 0, slice: 0, withBytes: bytes.baseAddress!,
+                bytesPerRow: 8 * 4, bytesPerImage: 8 * 8 * 4)
+        }
+        let queue = try requireValue(device.makeCommandQueue())
+        let command = try requireValue(queue.makeCommandBuffer())
+        let output = try renderer.encode(frame: FrameState(time: 0.25, delta: 0,
+            frameIndex: 7), into: command,
+            externalTextures: ["node_0_volume": volume])
+        let presentedDescriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: .bgra8Unorm, width: 257, height: 129, mipmapped: false)
+        presentedDescriptor.storageMode = .shared
+        presentedDescriptor.usage = .renderTarget
+        let presented = try requireValue(device.makeTexture(descriptor: presentedDescriptor))
+        try TexturePresenter(device: device).encode(source: output.texture,
+            target: presented, into: command)
+        command.commit()
+        command.waitUntilCompleted()
+        expectEqual(command.status, .completed, "\(String(describing: command.error))")
+        if let error = command.error { throw error }
+        var pixels = [UInt8](repeating: 0, count: 257 * 129 * 4)
+        presented.getBytes(&pixels, bytesPerRow: 257 * 4,
+            from: MTLRegionMake2D(0, 0, 257, 129), mipmapLevel: 0)
+        // The same sidecars captured on locked WebGPU: varying x, y and z
+        // across the surface distinguish fractional sampling from nearest.
+        let expected: [(Int, Int, [UInt8])] = [
+            (3, 3, [89, 158, 0, 255]),
+            (7, 3, [213, 158, 0, 255]),
+            (3, 7, [89, 34, 0, 255]),
+            (35, 3, [89, 158, 29, 255]),
+            (99, 11, [89, 158, 91, 255])
+        ]
+        for (x, y, rgba) in expected {
+            for channel in 0..<4 {
+                let stored = channel == 0 ? 2 : (channel == 2 ? 0 : channel)
+                let actual = pixels[(y * 257 + x) * 4 + stored]
+                expectLess(abs(Int(actual) - Int(rgba[channel])), 3,
+                    "source linear pixel (\(x),\(y)) channel \(channel)")
+            }
+        }
     }
 
     @Test func sourceBackedHostVolumeSamplesDistinctDepthSlices() throws {

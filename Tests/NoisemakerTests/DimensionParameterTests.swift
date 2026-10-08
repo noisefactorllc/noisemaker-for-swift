@@ -35,6 +35,18 @@ struct DimensionParameterTests {
             multiply: 1).resolve(screen: 256, parameters: ["size": 0.25]), 1)
     }
 
+    @Test func percentagesAboveOneHundredResolveBeforeCapabilityValidation() throws {
+        for (text, expected) in [("200%", 128), ("150.5%", 96), ("0.1%", 1)] {
+            let dimension = try GraphDimension.decode(.string(text), context: "percentage")
+            expectEqual(try dimension.resolve(screen: 64, parameters: [:]), expected)
+        }
+        let oversized = try GraphDimension.decode(.string("100000%"), context: "percentage")
+        expectThrows(try oversized.resolve(screen: 64, parameters: [:]))
+        for text in ["0%", "-1%", "inf%", "nan%"] {
+            expectThrows(try GraphDimension.decode(.string(text), context: "percentage"))
+        }
+    }
+
     @Test func sourceLastPassSizingValueWins() throws {
         let sources = [
             "search synth, points, render\nsolid().pointsEmit(stateSize: 128).life().pointsRender().write(o0)\nrender(o0)\n",

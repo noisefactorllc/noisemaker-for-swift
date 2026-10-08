@@ -1,0 +1,4 @@
+module CNoisemakerRaster {
+  header "NoisemakerRaster.h"
+  export *
+}

@@ -235,13 +235,23 @@ private func loadGoldenCases(_ url: URL?, corpusData: Data) throws -> GoldenCase
 private func loadHostTextures(goldens: GoldenCases?, caseID: String,
                               sourceSHA: String, capture: [String: Any],
                               required: [String], device: MTLDevice,
-                              sourceFailed: Bool)
+                              sourceFailed: Bool, nativeOverlays: [String: OverlayPixels])
     throws -> ([String: MTLTexture], [[String: Any]]) {
     guard let goldens else {
-        guard required.isEmpty else {
+        guard Set(required).isSubset(of: Set(nativeOverlays.keys)) else {
             throw GraphDiagnostic.missing("case \(caseID) requires WebGPU host texture captures")
         }
-        return ([:], [])
+        var textures: [String: MTLTexture] = [:]
+        var evidence: [[String: Any]] = []
+        for id in required {
+            let overlay = nativeOverlays[id]!
+            textures[id] = try TextureInput.rgba8(device: device, pixels: overlay.rgba, size: overlay.size)
+            evidence.append(["id": id, "frame": 0, "sha256": digest(overlay.rgba),
+                "width": overlay.size.width, "height": overlay.size.height,
+                "format": "rgba8unorm", "orientation": "top-down",
+                "bytesPerRow": overlay.size.width * 4, "origin": "nativeCpuOverlay"])
+        }
+        return (textures, evidence)
     }
     guard let golden = goldens.byID[caseID],
           (golden["status"] as? String == "ok" ||
@@ -307,7 +317,15 @@ private func loadHostTextures(goldens: GoldenCases?, caseID: String,
             }
             file = relative
         }
-        let bytes = try Data(contentsOf: file)
+        let bytes: Data
+        if let overlay = nativeOverlays[id] {
+            guard overlay.size.width == width, overlay.size.height == height else {
+                throw GraphDiagnostic.invalid("case \(caseID) native overlay dimensions differ")
+            }
+            bytes = overlay.rgba
+        } else {
+            bytes = try Data(contentsOf: file)
+        }
         guard bytes.count == width * height * 4,
               digest(bytes) == expectedSHA else {
             throw GraphDiagnostic.invalid("case \(caseID) host texture \(id) bytes or SHA differ")
@@ -318,7 +336,8 @@ private func loadHostTextures(goldens: GoldenCases?, caseID: String,
         evidence.append(["id": id, "frame": 0, "sha256": expectedSHA,
                          "width": width, "height": height,
                          "format": "rgba8unorm", "orientation": "top-down",
-                         "bytesPerRow": width * 4])
+                         "bytesPerRow": width * 4,
+                         "origin": nativeOverlays[id] == nil ? "referenceReplay" : "nativeCpuOverlay"])
     }
     guard Set(textures.keys) == Set(required) else {
         throw GraphDiagnostic.invalid("case \(caseID) host texture IDs differ from graph")
@@ -479,17 +498,11 @@ private func corpusAudioUniforms(graph: RenderGraph, snapshot: AudioInputSnapsho
         }
         for name in names {
             let samples = name == "audioWaveform" ? snapshot?.waveform : snapshot?.spectrum
-            // The locked browser binds zero for AudioState's Float32Array, but
-            // ordinary host arrays bind their actual values. Keep that source
-            // quirk in corpus capture; the Swift FrameState API accepts samples.
-            let bound: [Float]
-            if plainArray {
-                guard let samples, samples.count == 128 else {
-                    throw GraphDiagnostic.invalid("plain-array audio requires 128 \(name) samples")
-                }
-                bound = samples
-            } else {
-                bound = [Float](repeating: 0, count: 128)
+            // The corrected source binds AudioState's Float32Array and plain
+            // arrays identically. Omitted audio retains the source's zero input.
+            let bound = samples ?? [Float](repeating: 0, count: 128)
+            guard bound.count == 128 else {
+                throw GraphDiagnostic.invalid("audio requires 128 \(name) samples")
             }
             result[node, default: [:]][name] = .array(bound.map { .number(Double($0)) })
         }
@@ -570,6 +583,17 @@ func runCorpus(_ raw: [String]) throws {
     }
     try FileManager.default.createDirectory(at: outputDirectory,
         withIntermediateDirectories: true)
+    let executable = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL
+    var runtimeEnvironment: [String: Any] = [
+        "os": ProcessInfo.processInfo.operatingSystemVersionString,
+        "executableSha256": digest(try Data(contentsOf: executable)),
+        "architecture": "arm64"
+    ]
+    if let device {
+        runtimeEnvironment["device"] = ["name": device.name,
+            "registryID": String(device.registryID), "hasUnifiedMemory": device.hasUnifiedMemory,
+            "maxBufferLength": device.maxBufferLength]
+    }
     var records: [[String: Any]] = []
     for item in selected {
         guard let id = item["id"] as? String,
@@ -581,7 +605,7 @@ func runCorpus(_ raw: [String]) throws {
             var record: [String: Any] = ["id": id, "sourceSha256": sourceSHA,
                                           "backend": "Metal", "status": "fail",
                                           "hostTextures": [], "hostVolumes": [],
-                                          "nativeCpuEffects": []]
+                                          "nativeCpuEffects": [], "runtimeEnvironment": runtimeEnvironment]
             defer { records.append(record) }
             do {
             guard !id.hasPrefix("/"), id.split(separator: "/").allSatisfy({
@@ -718,10 +742,12 @@ func runCorpus(_ raw: [String]) throws {
                 nativeMeshTextures[$0] == nil && $0 != "midiNoteGrid" &&
                     !volumeRequired.contains($0)
             }
+            let nativeOverlays = try BuiltinOverlay.prepare(graph: graph, size: capture.size)
             let (replayedTextures, hostEvidence) = try loadHostTextures(
                 goldens: goldenCases, caseID: id, sourceSHA: sourceSHA,
                 capture: captureRaw, required: hostRequired,
-                device: device, sourceFailed: goldenAdmission?.sourceFailed == true)
+                device: device, sourceFailed: goldenAdmission?.sourceFailed == true,
+                nativeOverlays: nativeOverlays)
             let (hostVolumes, volumeEvidence) = try loadHostVolume(
                 corpusURL: corpusURL, goldens: goldenCases, caseID: id,
                 capture: captureRaw, required: volumeRequired, device: device)
@@ -747,11 +773,17 @@ func runCorpus(_ raw: [String]) throws {
             externalTextures.merge(hostVolumes) { _, volume in volume }
             record["hostTextures"] = hostEvidence
             record["hostVolumes"] = volumeEvidence
-            if !hostEvidence.isEmpty { record["hostInputMode"] = "referenceReplay" }
+            if !hostEvidence.isEmpty {
+                record["hostInputMode"] = nativeOverlays.isEmpty ? "referenceReplay"
+                    : (nativeOverlays.count == hostEvidence.count ? "nativeCpuOverlay" : "mixed")
+            }
+            record["nativeCpuEffects"] = effects.filter {
+                ["filter.fibers", "filter.scratches", "filter.strayHair"].contains($0)
+            }
             if !volumeEvidence.isEmpty { record["hostInputMode"] = "sourceAuthoredVolume" }
             if !nativeMeshTextures.isEmpty,
                effects.contains("render.meshLoader") {
-                record["nativeCpuEffects"] = ["render.meshLoader"]
+                record["nativeCpuEffects"] = (record["nativeCpuEffects"] as? [String] ?? []) + ["render.meshLoader"]
             }
             var images: [[String: Any]] = []
             var effectiveAudioHashes = Set<String>()
@@ -822,9 +854,12 @@ func runCorpus(_ raw: [String]) throws {
 private func writeCorpusLedger(records: [[String: Any]], corpusData: Data,
                                selectedCount: Int, outputDirectory: URL,
                                compileOnly: Bool) throws {
-    let ledger: [String: Any] = ["schemaVersion": 1,
+    var ledger: [String: Any] = ["schemaVersion": 1,
         "corpusSha256": digest(corpusData), "expected": selectedCount,
         "compileOnly": compileOnly, "cases": records]
+    if let path = ProcessInfo.processInfo.environment["NM_QUALIFICATION_FINGERPRINT"] {
+        ledger["qualificationFingerprintSha256"] = digest(try Data(contentsOf: URL(fileURLWithPath: path)))
+    }
     let data = try JSONSerialization.data(withJSONObject: ledger,
         options: [.prettyPrinted, .sortedKeys])
     try data.write(to: outputDirectory.appendingPathComponent("candidates.json"), options: .atomic)

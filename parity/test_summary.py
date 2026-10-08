@@ -32,7 +32,9 @@ class SummaryBoundaryTests(unittest.TestCase):
                      'stage': 'graph', 'status': 'fail',
                      'error': 'Unsupported graph semantics: texture dimension parameter zoom_chain_0 is not a finite number',
                      'capabilityProfile': {'maxTextureDimension2D': 8192}}
-        refusal = json.loads((ROOT / 'parity/source-refusals.json').read_text())['cases'][0]
+        refusal = dict(id=item['id'], sourceSha256=item['sourceSha256'],
+                       sourceFailure='compile/createTexture/invalid-height',
+                       nativeFailure='graph/nonfinite-dimension', dimensionParameter='zoom_chain_0')
         return item, golden, candidate, refusal
 
     def test_source_refusal_class_and_diagnostic_variations(self):
@@ -62,37 +64,42 @@ class SummaryBoundaryTests(unittest.TestCase):
 
     def test_sampled_volume_requires_exact_binary_and_identity(self):
         corpus = json.loads((ROOT / 'parity/corpus.json').read_text())
-        item = next(case for case in corpus['cases'] if case['id'] == 'micro/sampled3dProbe')
-        contract = item['capture']['volumeInput']
-        source = ROOT / contract['assetPath']
-        with tempfile.TemporaryDirectory() as temporary:
-            output = Path(temporary)
-            binary = output / 'volume.rgba8'
-            binary.write_bytes(source.read_bytes())
-            record = {**contract, 'sha256': contract['assetSha256']}
-            golden = {'hostVolumes': [{**record, 'path': 'volume.rgba8'}]}
-            candidate = {'hostVolumes': [record]}
-            summarize.verify_volume_evidence(item, golden, candidate, output)
-            with self.assertRaisesRegex(ValueError, 'inventory differs'):
-                summarize.verify_volume_evidence(item, golden, {'hostVolumes': []}, output)
-            with self.assertRaisesRegex(ValueError, 'native host volume identity'):
-                summarize.verify_volume_evidence(item, golden,
-                    {'hostVolumes': [{**record, 'depth': 7}]}, output)
-            binary.write_bytes(bytes([1]) + binary.read_bytes()[1:])
-            with self.assertRaisesRegex(ValueError, 'SHA256 mismatch'):
-                summarize.verify_volume_evidence(item, golden, candidate, output)
+        for case_id in ('micro/sampled3dProbe', 'micro/sampled3dLinearProbe'):
+            with self.subTest(case_id=case_id):
+                item = next(case for case in corpus['cases'] if case['id'] == case_id)
+                contract = item['capture']['volumeInput']
+                source = ROOT / contract['assetPath']
+                with tempfile.TemporaryDirectory() as temporary:
+                    output = Path(temporary)
+                    binary = output / 'volume.rgba8'
+                    binary.write_bytes(source.read_bytes())
+                    record = {**contract, 'sha256': contract['assetSha256']}
+                    golden = {'hostVolumes': [{**record, 'path': 'volume.rgba8'}]}
+                    candidate = {'hostVolumes': [record]}
+                    summarize.verify_volume_evidence(item, golden, candidate, output)
+                    with self.assertRaisesRegex(ValueError, 'unsupported host volume'):
+                        summarize.verify_volume_evidence({**item, 'id': 'micro/unregisteredProbe'},
+                                                         golden, candidate, output)
+                    with self.assertRaisesRegex(ValueError, 'inventory differs'):
+                        summarize.verify_volume_evidence(item, golden, {'hostVolumes': []}, output)
+                    with self.assertRaisesRegex(ValueError, 'native host volume identity'):
+                        summarize.verify_volume_evidence(item, golden,
+                            {'hostVolumes': [{**record, 'depth': 7}]}, output)
+                    binary.write_bytes(bytes([1]) + binary.read_bytes()[1:])
+                    with self.assertRaisesRegex(ValueError, 'SHA256 mismatch'):
+                        summarize.verify_volume_evidence(item, golden, candidate, output)
 
     def test_refusal_inventory_provenance_and_no_pixel_credit(self):
         corpus = json.loads((ROOT / 'parity/corpus.json').read_text())
         lock = json.loads((ROOT / 'parity/reference.json').read_text())
         refusals = json.loads((ROOT / 'parity/source-refusals.json').read_text())
         inventory = summarize.refusal_inventory(refusals, corpus, lock)
-        self.assertEqual(len(inventory), 3)
+        self.assertEqual(len(inventory), 0)
         with self.assertRaisesRegex(ValueError, 'source refusal oracle'):
             summarize.refusal_inventory({**refusals, 'corpusSha256': 'stale'}, corpus, lock)
         with self.assertRaisesRegex(ValueError, 'source refusal oracle case'):
             summarize.refusal_inventory({**refusals, 'cases': [
-                {**refusals['cases'][0], 'sourceSha256': 'stale'}]}, corpus, lock)
+                {**self.refusal_pair()[3], 'sourceSha256': 'stale'}]}, corpus, lock)
         item, golden, candidate, refusal = self.refusal_pair()
         stages = json.loads((ROOT / 'parity/corpus-stages.json').read_text())
         graph_stage = next(case for case in stages['cases'] if case['id'] == item['id'])
@@ -167,11 +174,75 @@ class SummaryBoundaryTests(unittest.TestCase):
                 'corpusSha256': corpus_hash, 'authority': lock}))
             (candidate / 'candidates.json').write_text(json.dumps({'corpusSha256': corpus_hash}))
             output = io.StringIO()
-            with patch.object(summarize, 'count', return_value=(full, [], [])), \
+            with patch.object(summarize, 'verify_provenance', return_value={}), \
+                 patch.object(summarize, 'count', return_value=(full, [], [])), \
                  patch.object(sys, 'argv', ['summarize.py', str(golden), str(candidate)]), \
                  redirect_stdout(output):
                 self.assertEqual(summarize.main(), 1)
             self.assertIn('PARITY-SUMMARY ', output.getvalue())
+
+    def test_qualification_provenance_rejects_runtime_and_harness_drift(self):
+        from copy import deepcopy
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'build-fingerprint.json'
+            fingerprint = {name: {'sha256': 'a' * 64} for name in ['sources', 'artifacts', 'tools', 'scripts', 'parity']}
+            lock = json.loads((ROOT / 'parity/reference.json').read_text())
+            fingerprint['referenceAuthority'] = dict(sourceManifestSha256=lock['sourceManifestSha256'],
+                sourceManifestFileSha256='d' * 64, packageLockSha256='e' * 64, nodeModules={'sha256': 'f' * 64},
+                browser=dict(executablePath='/browser/chrome-headless-shell', executableSha256='1' * 64,
+                    bundlePath='/browser', bundleSha256='2' * 64, files=18, headless=True))
+            fingerprint['binarySha256'] = 'b' * 64
+            fingerprint['buildEnvironment'] = dict(os='macOS', architecture='arm64', swift='Swift 6', sdk='14', node='v24', python='3.14', pillow='12', pillowTree={'sha256': 'a' * 64}, shadeHeadless='1', shadeSwiftshader='')
+            path.write_text(json.dumps(fingerprint))
+            golden = {'authority': lock, 'qualificationFingerprintSha256': summarize.sha256(path), 'cases': [
+                {'capabilityProfile': {'maxTextureDimension2D': 8192}, 'runtimeEnvironment': {
+                    'os': 'Darwin', 'architecture': 'arm64', 'browser': 'Chromium 151', 'node': 'v24',
+                    'browserExecutablePath': '/browser/chrome-headless-shell',
+                    'browserExecutableSha256': '1' * 64, 'browserBundleSha256': '2' * 64,
+                    'device': dict(vendor='apple', architecture='metal', device='', description='M2',
+                                   features=[], maxTextureDimension2D=8192)}}]}
+            candidate = {'qualificationFingerprintSha256': summarize.sha256(path), 'cases': [
+                {'runtimeEnvironment': {'os': 'macOS', 'architecture': 'arm64', 'executableSha256': 'b' * 64,
+                    'device': dict(name='Apple M2', registryID='123')}}]}
+            self.assertIn('runtimeEnvironments', summarize.verify_provenance(golden, candidate, path))
+            for field, value in [('architecture', 'swiftshader'),
+                                 ('description', 'Mesa llvmpipe'),
+                                 ('device', 'Microsoft WARP')]:
+                changed = deepcopy(golden)
+                changed['cases'][0]['runtimeEnvironment']['device'][field] = value
+                with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'software WebGPU'):
+                    summarize.verify_provenance(changed, candidate, path)
+            changed = deepcopy(golden)
+            changed['cases'][0]['runtimeEnvironment']['device']['vendor'] = 'amd'
+            changed['cases'][0]['runtimeEnvironment']['device']['description'] = 'Radeon GPU'
+            self.assertIn('runtimeEnvironments', summarize.verify_provenance(changed, candidate, path))
+            for label, field in [('reference', 'browser'), ('reference', 'device'),
+                                 ('candidate', 'executableSha256'), ('candidate', 'device')]:
+                left, right = deepcopy(golden), deepcopy(candidate)
+                target = left if label == 'reference' else right
+                del target['cases'][0]['runtimeEnvironment'][field]
+                with self.assertRaises(ValueError):
+                    summarize.verify_provenance(left, right, path)
+            changed = deepcopy(candidate)
+            changed['cases'][0]['runtimeEnvironment']['executableSha256'] = 'c' * 64
+            with self.assertRaisesRegex(ValueError, 'executable differs'):
+                summarize.verify_provenance(golden, changed, path)
+            changed = deepcopy(golden)
+            changed['cases'].append(deepcopy(changed['cases'][0]))
+            changed['cases'][1]['runtimeEnvironment']['browser'] = 'Chromium other'
+            with self.assertRaisesRegex(ValueError, 'runtime changed'):
+                summarize.verify_provenance(changed, candidate, path)
+            changed = deepcopy(golden)
+            changed['cases'][0]['runtimeEnvironment']['browserExecutableSha256'] = '9' * 64
+            with self.assertRaisesRegex(ValueError, 'launched Chromium differs'):
+                summarize.verify_provenance(changed, candidate, path)
+            changed = deepcopy(golden)
+            del changed['cases'][0]['runtimeEnvironment']['browserExecutableSha256']
+            with self.assertRaisesRegex(ValueError, 'launched Chromium differs'):
+                summarize.verify_provenance(changed, candidate, path)
+            path.write_text(json.dumps({**fingerprint, 'tools': {'sha256': 'c' * 64}}))
+            with self.assertRaisesRegex(ValueError, 'fingerprint differs'):
+                summarize.verify_provenance(golden, candidate, path)
 
     def test_cpu_hooks_require_native_evidence_not_host_replay(self):
         catalog = json.loads((ROOT / 'Sources/Noisemaker/Resources/catalog.json').read_text())
@@ -180,11 +251,34 @@ class SummaryBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'native CPU effect evidence'):
                 summarize.verify_input_evidence({'filter.fibers'}, {'hostTextures': []},
                     {'hostTextures': [], 'nativeCpuEffects': []}, catalog, directory)
-            summarize.verify_input_evidence({'filter.fibers'}, {'hostTextures': []},
-                {'hostTextures': [], 'nativeCpuEffects': ['filter.fibers']}, catalog, directory)
+            with self.assertRaisesRegex(ValueError, 'lacks host input capture'):
+                summarize.verify_input_evidence({'filter.fibers'}, {'hostTextures': []},
+                    {'hostTextures': [], 'nativeCpuEffects': ['filter.fibers']}, catalog, directory)
             with self.assertRaisesRegex(ValueError, 'native CPU effect evidence'):
                 summarize.verify_input_evidence({'filter.fibers'}, {'hostTextures': []},
                     {'hostTextures': [], 'nativeCpuEffects': ['filter.text']}, catalog, directory)
+
+    def test_every_overlay_input_requires_native_generation(self):
+        catalog = json.loads((ROOT / 'Sources/Noisemaker/Resources/catalog.json').read_text())
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            data = bytes([12, 34, 56, 255])
+            references = []
+            for name in ['node_1_overlayTex', 'node_2_overlayTex', 'textTex_step_3']:
+                (directory / name).write_bytes(data)
+                references.append(dict(id=name, frame=0, sha256=hashlib.sha256(data).hexdigest(),
+                    width=1, height=1, format='rgba8unorm', orientation='top-down', bytesPerRow=4, path=name))
+            entries = [{**entry, 'origin': 'nativeCpuOverlay' if index < 2 else 'referenceReplay'}
+                       for index, entry in enumerate(references)]
+            effects = {'filter.fibers', 'filter.scratches', 'filter.text'}
+            candidate = dict(hostTextures=entries, nativeCpuEffects=['filter.fibers', 'filter.scratches'], hostInputMode='mixed')
+            summarize.verify_input_evidence(effects, {'hostTextures': references}, candidate, catalog, directory)
+            entries[1]['origin'] = 'referenceReplay'
+            with self.assertRaisesRegex(ValueError, 'overlay generation evidence'):
+                summarize.verify_input_evidence(effects, {'hostTextures': references}, candidate, catalog, directory)
+            # A pure overlay case also needs no ordinary external-media effect.
+            summarize.verify_input_evidence({'filter.fibers'}, {'hostTextures': references[:1]},
+                dict(hostTextures=entries[:1], nativeCpuEffects=['filter.fibers'], hostInputMode='nativeCpuOverlay'), catalog, directory)
 
     def test_external_text_input_requires_exact_binary_metadata(self):
         catalog = json.loads((ROOT / 'Sources/Noisemaker/Resources/catalog.json').read_text())
@@ -218,13 +312,13 @@ class SummaryBoundaryTests(unittest.TestCase):
             directory = Path(temporary)
             zero_hash = hashlib.sha256(bytes(512)).hexdigest()
             golden = {'hostTextures': [], 'hostAudio': evidence,
-                      'audioBindingEffectiveSha256': zero_hash}
+                      'audioBindingEffectiveSha256': payload['waveformF32']['sha256']}
             candidate = {'hostTextures': [], 'nativeCpuEffects': [], 'hostAudio': evidence,
-                         'audioBindingEffectiveSha256': zero_hash}
+                         'audioBindingEffectiveSha256': payload['waveformF32']['sha256']}
             summarize.verify_input_evidence({'synth.scope'}, golden, candidate, catalog, directory)
             with self.assertRaisesRegex(ValueError, 'effective audio uniform bytes'):
                 summarize.verify_input_evidence({'synth.scope'},
-                    {**golden, 'audioBindingEffectiveSha256': payload['waveformF32']['sha256']},
+                    {**golden, 'audioBindingEffectiveSha256': zero_hash},
                     candidate, catalog, directory)
             plain = {**evidence, 'representation': 'plain-array'}
             summarize.verify_input_evidence({'synth.scope'},
@@ -235,7 +329,7 @@ class SummaryBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'effective audio uniform bytes'):
                 summarize.verify_input_evidence({'synth.scope'},
                     {**golden, 'capture': {'audioInput': {'representation': 'plain-array'}},
-                     'hostAudio': plain}, {**candidate, 'hostAudio': plain}, catalog, directory)
+                     'hostAudio': plain, 'audioBindingEffectiveSha256': zero_hash}, {**candidate, 'hostAudio': plain}, catalog, directory)
             with self.assertRaisesRegex(ValueError, 'host sample identity'):
                 summarize.verify_input_evidence({'synth.scope'}, golden,
                     {**candidate, 'hostAudio': {**evidence, 'frame': 1}}, catalog, directory)
@@ -283,9 +377,8 @@ class SummaryBoundaryTests(unittest.TestCase):
             summary, details, _ = summarize.count([item], {'expected': 1, 'cases': [golden]},
                 {'expected': 1, 'cases': [candidate]}, {'expected': 1, 'cases': [stage]},
                 catalog, directory, directory, {})
-            self.assertTrue(details[0]['samples'][0]['pass'])
-            self.assertEqual((summary['uninformative'], summary['effects_evidenced']), (1, 0))
-            self.assertFalse(details[0]['audioSignalBound'])
+            self.assertEqual((summary['fail'], summary['effects_evidenced']), (1, 0))
+            self.assertIn('effective audio uniform bytes', details[0]['error'])
 
     def test_selected_green_is_probe_not_family_gate(self):
         corpus_path = ROOT / 'parity/corpus.json'
@@ -298,6 +391,16 @@ class SummaryBoundaryTests(unittest.TestCase):
             candidate = Path(temporary, 'candidates')
             golden.mkdir()
             candidate.mkdir()
+            fingerprint = {name: {'sha256': 'a' * 64} for name in ['sources', 'artifacts', 'tools', 'scripts', 'parity']}
+            lock = json.loads((ROOT / 'parity/reference.json').read_text())
+            fingerprint['referenceAuthority'] = dict(sourceManifestSha256=lock['sourceManifestSha256'],
+                sourceManifestFileSha256='d' * 64, packageLockSha256='e' * 64, nodeModules={'sha256': 'f' * 64},
+                browser=dict(executablePath='/browser/chrome-headless-shell', executableSha256='1' * 64,
+                    bundlePath='/browser', bundleSha256='2' * 64, files=18, headless=True))
+            fingerprint['binarySha256'] = 'b' * 64
+            fingerprint['buildEnvironment'] = dict(os='macOS', architecture='arm64', swift='Swift 6', sdk='14', node='v24', python='3.14', pillow='12', pillowTree={'sha256': 'a' * 64}, shadeHeadless='1', shadeSwiftshader='')
+            fingerprint_path = Path(temporary) / 'build-fingerprint.json'
+            fingerprint_path.write_text(json.dumps(fingerprint))
             width, height = item['capture']['size']
             pixels = Image.new('RGBA', (width, height))
             pixels.putdata([(x % 256, y % 256, (x + y) % 256, 255)
@@ -310,9 +413,19 @@ class SummaryBoundaryTests(unittest.TestCase):
                         'status': 'ok', 'backend': backend, 'effects': ['user.marker'],
                         'capabilityProfile': {'maxTextureDimension2D': 8192},
                         'images': [{'frame': 8, 'path': str(image_path), 'sha256': image_hash}]}
+                case['runtimeEnvironment'] = dict(os='macOS', architecture='arm64')
                 if backend == 'WebGPU':
+                    case['runtimeEnvironment'].update(browser='Chromium 151', node='v24',
+                        browserExecutablePath='/browser/chrome-headless-shell',
+                        browserExecutableSha256='1' * 64, browserBundleSha256='2' * 64,
+                        device=dict(vendor='apple', architecture='metal', device='', description='M2',
+                                    features=[], maxTextureDimension2D=8192))
                     case['capture'] = item['capture']
+                else:
+                    case['runtimeEnvironment'].update(executableSha256='b' * 64,
+                        device=dict(name='Apple M2', registryID='123'))
                 ledger = {'schemaVersion': 1, 'corpusSha256': corpus_hash,
+                          'qualificationFingerprintSha256': summarize.sha256(fingerprint_path),
                           'expected': 1, 'cases': [case]}
                 if backend == 'WebGPU':
                     ledger['authority'] = lock

@@ -65,5 +65,66 @@ def verify(root=ROOT):
     return {'platform': 'macos-arm64', 'files': len(actual), 'dawn': manifest['dawnCommit'],
             'archiveBytes': (artifact / 'macos-arm64/libCNoisemakerTint.a').stat().st_size}
 
+
+def verify_raster(root=ROOT):
+    spec = json.loads((root / 'tools/raster.json').read_text())
+    manifest = json.loads((root / 'Artifacts/raster.json').read_text())
+    if manifest.get('schemaVersion') != 1 or manifest.get('skiaRevision') != spec['skiaRevision'] or \
+            manifest.get('chromiumTag') != spec['chromiumTag'] or \
+            manifest.get('pinnedArchiveSha256') != spec['archiveSha256'] or \
+            manifest.get('sourceTreeSha256') != spec['sourceTreeSha256'] or \
+            manifest.get('gnSha256') != spec['gnSha256'] or \
+            manifest.get('licenseSha256') != spec['licenseSha256'] or \
+            manifest.get('sourceFileCount') != 12244:
+        raise RuntimeError('raster artifact source provenance differs from pin')
+    oracle = json.loads((root / 'parity/overlays/oracle.json').read_text())
+    lock = json.loads((root / 'parity/reference.json').read_text())
+    if oracle.get('authority') != {key: lock[key] for key in
+                                   ('repository', 'commit', 'sourceManifestSha256')} or \
+            spec['chromiumTag'] not in oracle.get('browser', ''):
+        raise RuntimeError('raster overlay oracle authority or browser differs from source lock')
+    inputs = {'tools/build-raster.py', 'tools/raster.json',
+              'Sources/CNoisemakerRaster/NoisemakerRaster.cpp',
+              'Sources/CNoisemakerRaster/include/NoisemakerRaster.h',
+              'tools/raster-api-test.cpp', 'tools/raster-smoke.cpp',
+              'parity/grade-overlays.py', 'parity/reference.json',
+              'parity/overlays/oracle.json'}
+    for case in oracle['cases']:
+        inputs.update({f"parity/overlays/{case['file']}",
+                       f"parity/overlays/{case['segmentFile']}"})
+    if set(manifest.get('inputs', {})) != inputs:
+        raise RuntimeError('raster build input inventory differs')
+    for name, expected in manifest['inputs'].items():
+        if hashlib.sha256((root / name).read_bytes()).hexdigest() != expected:
+            raise RuntimeError(f'raster build input differs: {name}; rebuild the artifact')
+    artifact = root / 'Artifacts/CNoisemakerRaster.xcframework'
+    actual = {str(path.relative_to(artifact)) for path in artifact.rglob('*') if path.is_file()}
+    if any(path.is_symlink() for path in artifact.rglob('*')):
+        raise RuntimeError('raster artifact must not contain symlinks')
+    if actual != set(manifest.get('files', {})):
+        raise RuntimeError('raster artifact inventory differs')
+    for name, expected in manifest['files'].items():
+        content = (artifact / name).read_bytes()
+        if hashlib.sha256(content).hexdigest() != expected:
+            raise RuntimeError(f'raster artifact hash differs: {name}')
+        if b'/Users/' in content or b'/private/var/folders/' in content:
+            raise RuntimeError(f'raster artifact contains private build paths: {name}')
+    license_copy = root / 'tools/raster/LICENSE-skia.txt'
+    if hashlib.sha256(license_copy.read_bytes()).hexdigest() != spec['licenseSha256'] or \
+            license_copy.read_bytes() != (artifact / 'LICENSE-skia.txt').read_bytes():
+        raise RuntimeError('raster license differs from pinned Skia source')
+    info = plistlib.loads((artifact / 'Info.plist').read_bytes())
+    libraries = info.get('AvailableLibraries', [])
+    if len(libraries) != 1 or libraries[0].get('SupportedPlatform') != 'macos' or \
+            libraries[0].get('SupportedArchitectures') != ['arm64'] or \
+            libraries[0].get('LibraryPath') != 'libCNoisemakerRaster.a':
+        raise RuntimeError('unexpected qualified raster platform inventory')
+    header = artifact / 'macos-arm64/Headers/NoisemakerRaster.h'
+    if header.read_bytes() != (root / 'Sources/CNoisemakerRaster/include/NoisemakerRaster.h').read_bytes():
+        raise RuntimeError('raster public ABI header differs from source')
+    return {'platform': 'macos-arm64', 'files': len(actual),
+            'skia': manifest['skiaRevision'],
+            'archiveBytes': (artifact / 'macos-arm64/libCNoisemakerRaster.a').stat().st_size}
+
 if __name__ == '__main__':
-    print(json.dumps(verify(), sort_keys=True))
+    print(json.dumps({'translator': verify(), 'raster': verify_raster()}, sort_keys=True))

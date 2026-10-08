@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "8e5835932a7297d360b943200b42953224eea0a4",
-    "sourceManifestSha256": "3081e0e370c73ad57e05af28ddcb7ff50b943a4f6b93aa7dd84f193f3f818f80"
+    "commit": "2601e738df2463aa8b765afde3a7554d2a6d0170",
+    "sourceManifestSha256": "6a2bf6c1647544ce5d4e43d513998910eb8d0caf45f48fccec9ea95dd93ec6ef"
   },
   "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
   "format": {
@@ -68,6 +68,46 @@
       "segmentCount": 3340,
       "segmentBytes": 240480,
       "segmentsSha256": "687ddc863b717143eb4f3bbaee778b4e9dd3714ca0f2c84b8b91d96003232c60",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/fibers/definition.js",
+        "effectSha256": "bc38949082a5ae4ac68005b751afaa8ceb315e3a6edf8f8a92100b56baed2f6d"
+      }
+    },
+    {
+      "id": "fibers-coverage-256",
+      "effect": "fibers",
+      "width": 256,
+      "height": 256,
+      "params": {
+        "seed": 1,
+        "density": 1
+      },
+      "hostUpload": {
+        "sourceCaseId": "coverage/filter_fibers",
+        "textureId": "node_1_overlayTex",
+        "sha256": "21afa5dd331c57f68f60328533e5199686244c5f74ac690006370a73501cbdc2"
+      },
+      "file": "fibers-coverage-256.rgba8",
+      "sha256": "3772c34c45a0905ea94d1a3097838486c26dd4b40316492dd94a1d2c9e9d4eb5",
+      "bytes": 262144,
+      "updates": 861,
+      "alphaPixels": 22838,
+      "segmentFile": "fibers-coverage-256.segments.f64le",
+      "segmentCount": 40960,
+      "segmentBytes": 2949120,
+      "segmentsSha256": "20a4c941bca692d96806970d5514d39b85d9486ab644f9e92491ae7353c36efd",
       "cap": "round",
       "join": "round",
       "canvasAttributes": {
@@ -153,6 +193,46 @@
       }
     },
     {
+      "id": "scratches-coverage-256",
+      "effect": "scratches",
+      "width": 256,
+      "height": 256,
+      "params": {
+        "seed": 1,
+        "density": 0.3
+      },
+      "hostUpload": {
+        "sourceCaseId": "coverage/filter_scratches",
+        "textureId": "node_1_overlayTex",
+        "sha256": "8484f0ff8a5d72095e5a95d922a043194dc2e437a6c47b2b32ea855110fe3a40"
+      },
+      "file": "scratches-coverage-256.rgba8",
+      "sha256": "3fbc037f11404b1b06afabdd1b5bd4fcb73dc92541f325b96b0ec46254f17f14",
+      "bytes": 262144,
+      "updates": 81,
+      "alphaPixels": 3682,
+      "segmentFile": "scratches-coverage-256.segments.f64le",
+      "segmentCount": 10752,
+      "segmentBytes": 774144,
+      "segmentsSha256": "d8549480ed102c3701960c332c03a02f3c22be5a5f4469f8f1cb876d9d45c54e",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/scratches/definition.js",
+        "effectSha256": "0668b1a3236239f98ac6ef5ed4451576eab0d5b4b982bada58995f1e2421bacc"
+      }
+    },
+    {
       "id": "strayHair-default",
       "effect": "strayHair",
       "width": 65,
@@ -202,6 +282,46 @@
       "segmentCount": 55,
       "segmentBytes": 3960,
       "segmentsSha256": "66297e4cef5d162dec9f58e8c477aa3e5bac0912af2fa676a958d862d81ad1f9",
+      "cap": "round",
+      "join": "round",
+      "canvasAttributes": {
+        "alpha": true,
+        "colorSpace": "srgb",
+        "colorType": "unorm8",
+        "desynchronized": false,
+        "toneMapping": {
+          "mode": "standard"
+        },
+        "willReadFrequently": true
+      },
+      "source": {
+        "effectPath": "shaders/effects/filter/strayHair/definition.js",
+        "effectSha256": "67ef0436220641b7d29c45bb2fd3e84286f517210d53553db22189d86eb16acb"
+      }
+    },
+    {
+      "id": "strayHair-coverage-256",
+      "effect": "strayHair",
+      "width": 256,
+      "height": 256,
+      "params": {
+        "seed": 1,
+        "density": 1
+      },
+      "hostUpload": {
+        "sourceCaseId": "coverage/filter_strayHair",
+        "textureId": "node_1_overlayTex",
+        "sha256": "50be00e66dcfd9af668162406e30fa2caa6a37b91e4815fef0e3dcbc7fd0dd6f"
+      },
+      "file": "strayHair-coverage-256.rgba8",
+      "sha256": "651f767359ebb52192327d0d04cbea4a183ac65700b67f7a67d4e558ec9bd012",
+      "bytes": 262144,
+      "updates": 3,
+      "alphaPixels": 36,
+      "segmentFile": "strayHair-coverage-256.segments.f64le",
+      "segmentCount": 160,
+      "segmentBytes": 11520,
+      "segmentsSha256": "6f5f377296d7764e9d422c366684b7fb0ce22c2ee7faaaca8e57762658ce6dda",
       "cap": "round",
       "join": "round",
       "canvasAttributes": {

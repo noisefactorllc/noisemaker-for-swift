@@ -4,7 +4,7 @@
 
 This is an independent GPU port of Noisemaker's shader engine and Polymorphic DSL under qualification. The intended deliverable is an embeddable library with a native compiler, GPU render-graph executor, effect catalog, example host, and source-bound parity harness. It is not a port of the classic CPU renderer.
 
-Status: the source exporter, Swift/Tint translator, macOS package, complete native compiler stages, Metal graph executor, host inputs, MetalKit adapter, and full corpus harness are implemented. All 2,824 corpus programs match 16,944 locked source stage hashes. Native CPU and Metal regression gates pass; full rendering parity and release qualification remain unfinished. No complete platform or release is qualified. Signatures below describe the target contract; see the README for implemented development checks and current limits.
+Status: the source exporter, Swift/Tint translator, macOS package, complete native compiler stages, Metal graph executor, host inputs, MetalKit adapter, and full corpus harness are implemented. All 2,899 corpus programs match 17,394 locked source stage hashes. The 106-test CPU and 76-test Metal suites pass. The complete same-run WebGPU/Metal gate passes on Apple M2/macOS 14.8.3: 2,877 exact cases, 22 uninformative cases, zero failures/skips/missing cases, and informative evidence for all 210 effects. This qualifies the locked catalog on that prototype host; public release, performance qualification and other Apple targets remain open. Signatures below describe the target contract; see the README for implemented development checks and current limits.
 
 The scope is the current upstream shader engine: compiler stages, effect definitions, shader programs, resource allocation, runtime state, host inputs, user-defined Portable effects, and output textures. Full catalog parity is the destination; incremental milestones do not reduce that destination. Derive the denominator from the upstream commit in the authority lock (section 4) at each qualification run, never from a count written into a document.
 
@@ -25,6 +25,7 @@ Hand-translating the complete catalog to MSL would reduce translation-tool depen
 | `Sources/Noisemaker/Runtime/` | Metal resources, frame state, pass encoding and submission |
 | `Sources/Noisemaker/Resources/` | Generated catalog and preserved WGSL |
 | `Sources/CNoisemakerTint/` | Narrow C ABI around the required Tint translation code |
+| `Sources/CNoisemakerRaster/` | Pinned Skia CPU rasterization for Canvas-compatible builtin overlays |
 | `Sources/NoisemakerMetalKit/` | Optional view/presentation adapter |
 | `Sources/NMRender/` | macOS parity/export command-line host |
 | `scripts/test`, `scripts/parity-summary` | Family check entrypoints (section 4) |
@@ -35,7 +36,7 @@ The core imports Metal and Foundation. AppKit/UIKit/SwiftUI/MetalKit belong in o
 
 ### 2.2 Proposed public contract
 
-`NoisemakerCompiler.compile(source: String) throws -> RenderGraph` performs native compilation. `NoisemakerCompiler.registerEffect(_ effect: PortableEffect) throws` registers a user-defined Portable effect (definition plus WGSL programs), validated as upstream `effect-validator.js` validates it. `NoisemakerRenderer(device: MTLDevice, graph: RenderGraph, size: RenderSize) throws` validates and prepares a graph. The renderer is confined to a documented serial executor; mutable graph/GPU state is not implicitly thread-safe.
+`NoisemakerCompiler.compile(source: String) throws -> RenderGraph` performs native compilation. `NoisemakerCompiler.registerEffect(_ effect: PortableEffect) throws` registers a user-defined Portable effect (definition plus WGSL programs), validated against the public `CanvasRenderer.registerPortableEffect` entry point. This entry point has a distinct admission contract from the internal `effect-validator.js`; native execution capabilities are checked separately. `NoisemakerRenderer(device: MTLDevice, graph: RenderGraph, size: RenderSize) throws` validates and prepares a graph. The renderer is confined to a documented serial executor; mutable graph/GPU state is not implicitly thread-safe.
 
 `encode(frame: FrameState, into: MTLCommandBuffer) throws -> OutputLease` encodes without committing or waiting. `OutputLease.texture` is a Metal texture on the renderer's device; the lease retains output resources until the host has completed its downstream GPU use. The command buffer must belong to the same device. A separate convenience `render(frame:) throws -> FrameSubmission` owns submission, bounded in-flight capacity, and completion/error reporting. `setParameter(stepIndex:name:value:)`, `setInput(binding:texture:)`, `resize(to:)`, and `reset()` take effect at documented frame boundaries.
 

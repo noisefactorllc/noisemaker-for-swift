@@ -1,20 +1,20 @@
 {
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "8e5835932a7297d360b943200b42953224eea0a4",
-    "sourceManifestSha256": "3081e0e370c73ad57e05af28ddcb7ff50b943a4f6b93aa7dd84f193f3f818f80",
-    "licenseSha256": "91c83bf22e48749181dc44701878124f556559700472218cd05cdeda4f719ca4"
+    "commit": "2601e738df2463aa8b765afde3a7554d2a6d0170",
+    "sourceManifestSha256": "6a2bf6c1647544ce5d4e43d513998910eb8d0caf45f48fccec9ea95dd93ec6ef",
+    "licenseSha256": "43a6f2220dbf51b83fdaf43cfa520e34fac2d64669b3403211bcb62f546afe7c"
   },
-  "corpusSha256": "9e2c1ed88cbe6d0a326f296e52c385ec0b22efdea849cd8eda6788e79faa3b3b",
+  "corpusSha256": "e2a1c8a62c211c4a9a28f3abda4344f5dcb3802284e486f22bb36906c53f4acc",
   "cases": [
     {
       "id": "curated/blender_bb_only",
       "sourceSha256": "f6c977ead027d4c3734a056e27d9e85dc3f5fa00f1cf80eea8df958aa1e50c95",
-      "graphStageSha256": "b989c89526d5dc71b01b1804954850a64da735d326fae694f1c5b8f36ece60ea",
+      "graphStageSha256": "2b64c45aedcc605e1bcadf523adbb97897c563add3f6277109eaa058764a9e68",
       "graphId": "-wf45fg",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -8507,11 +8507,11 @@
     {
       "id": "curated/babylonjs_target_particles",
       "sourceSha256": "a9f2bd85900deee042c50297ea10e695529f72bb0cbd2f1b091f77c06422deb2",
-      "graphStageSha256": "2f0b003c4b55ef208f926e9bb3e60bb838e2b98e08b50450371cef644fa8db04",
+      "graphStageSha256": "38a79d8ff95cc1bd107bd9513b9947122d05f32d1d8951b5e7409e78502af544",
       "graphId": "hdqr4e",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -18561,7 +18561,7 @@
       "graphId": "-l6vrkd",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -19233,7 +19233,7 @@
       "graphId": "-qqnkzc",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -20237,7 +20237,7 @@
       "graphId": "-v8q3mu",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -20248,7 +20248,7 @@
             "entries": [
               [
                 "volumeSize",
-                64
+                128
               ],
               [
                 "scale",
@@ -20276,7 +20276,7 @@
               ],
               [
                 "volumeSize_chain_0",
-                64
+                128
               ]
             ]
           },
@@ -20293,7 +20293,7 @@
             "entries": [
               [
                 "volumeSize",
-                64
+                128
               ],
               [
                 "scale",
@@ -20321,7 +20321,7 @@
               ],
               [
                 "volumeSize_chain_0",
-                64
+                128
               ],
               [
                 "threshold",
@@ -20981,15 +20981,15 @@
         },
         {
           "id": "node_0_volumeCache",
-          "width": 64,
-          "height": 4096,
+          "width": 128,
+          "height": 16384,
           "depth": 1,
           "format": "rgba16f"
         },
         {
           "id": "node_0_geoBuffer",
-          "width": 64,
-          "height": 4096,
+          "width": 128,
+          "height": 16384,
           "depth": 1,
           "format": "rgba16f"
         },
@@ -21016,7 +21016,7 @@
       "graphId": "-fpaxbg",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -21688,7 +21688,7 @@
       "graphId": "46amit",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -22927,11 +22927,11 @@
     {
       "id": "programs/funcHiddenParam",
       "sourceSha256": "ad762c8329c28652f642d2a6d2e8e717c41c380185ab2b836e74531ad843f0aa",
-      "graphStageSha256": "db1e8831233187974e4322e36e92ee68d54dc256eacdb770089241b4bb1062ef",
+      "graphStageSha256": "31041b84eb3bd545448d7584f8df7689967639692952d8e229beea860a91647a",
       "graphId": "-dxkgiq",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -23683,11 +23683,11 @@
     {
       "id": "programs/funcNumeric",
       "sourceSha256": "ba2959306166b6256470ff1026d88489f78a6a7206fdd6251225fde14bb4bc24",
-      "graphStageSha256": "2c8a0056983ea8941044b2c6946950992bb363ddc4e25e14678e2678858c3efa",
+      "graphStageSha256": "12b4d0a7b195d1d09f941609416872e365ede92b638697dafb3be9aaf3780db2",
       "graphId": "-9euyp6",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -24630,11 +24630,11 @@
     {
       "id": "programs/hero",
       "sourceSha256": "e0c083445a843a137e76fbba4572c897a6a0b034956253910dd61b9638493e08",
-      "graphStageSha256": "9d8de4f536d8cea3ba9049e7579d0562fe2050c5d5a9b765996023f1717895cc",
+      "graphStageSha256": "86139c4410be394d9baef3a40f3de16256aae267627f4cb0d8eeee11b0febeab",
       "graphId": "h8sk0z",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -36947,11 +36947,11 @@
     {
       "id": "curated/blender_int_nobl",
       "sourceSha256": "cb0e7b930f20d081c467d55874e4b1cc208aab2e78635289191efa15b7e8dd9c",
-      "graphStageSha256": "39c7276f0db78f03e5bafa7d98b154bdd68e72647eb36e4716ecef69f57341c2",
+      "graphStageSha256": "9c1a42b4fa74fb805006cf543b2fca2c2c5b8776a4481cf4f7ca90b6fff61a82",
       "graphId": "9cegyx",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -46572,11 +46572,11 @@
     {
       "id": "curated/blender_int_ns",
       "sourceSha256": "32e9b17d0afcaccc7907f2f22c15351ba38f23c7ae77a21bc576e4a0d513486b",
-      "graphStageSha256": "2bc214ca2d1f6b809d55c51ad9af7448e49173b0ed801b92b665440f7e8e0944",
+      "graphStageSha256": "08892074c8657c213ad42668e78b400a53af315aacb65e6e9ee64e16c505f68a",
       "graphId": "-t3t339",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -57207,7 +57207,7 @@
       "graphId": "jyhywl",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -57935,7 +57935,7 @@
       "graphId": "-3rxztm",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -60086,11 +60086,11 @@
     {
       "id": "coverage/points_life",
       "sourceSha256": "cf7ec1ce2ef5b2bbc3570b8f6da900032d2b22d43b6bc35b97ff3d863047c236",
-      "graphStageSha256": "194ce73ae18e485d4f445a3b010735fbd3d92f07a52c15d29023d8405e0a97b8",
+      "graphStageSha256": "6b9f03f8068aaa289f4b85a7758742f90e74adf228d7daaea50b33162daf9839",
       "graphId": "-fitzv1",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -62196,11 +62196,11 @@
     {
       "id": "coverage/points_life__boundaryMode_bounce",
       "sourceSha256": "0d1ed059c0c256a69984e51c6e12952af44c6d17395427d56adbf1ee20b4277a",
-      "graphStageSha256": "66bff19716693f273c2996aaca68bd944b2a329e29922ea592851a090f7dc53d",
+      "graphStageSha256": "82e7cb1be3d167377789cf06474407a490f35278abece24b2d1047bbd006fd46",
       "graphId": "-1mg0i0",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -64306,11 +64306,11 @@
     {
       "id": "coverage/points_life__symmetricForces_true",
       "sourceSha256": "d74d5542768e4a4faa7155873ac170cf706275a6246c936f450125fa33bb3ad9",
-      "graphStageSha256": "a29dfa5f2527ca58836c92a4bb69f61a447151244cbee86b17088386068cc598",
+      "graphStageSha256": "77b27e875f2246daae3c09a2f2958ba9f2ffa381722d0fd9b5001eaeaab88656",
       "graphId": "wj21oa",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -66416,11 +66416,11 @@
     {
       "id": "coverage/points_life__useTypeColor_true",
       "sourceSha256": "fc09ba6d6762da701057c70da366e68f30bdb45cc7f0cdbf1b084641dcfd7c14",
-      "graphStageSha256": "d91f16079dfaf226d3061a5abc7b44f4d2465543372742cf32043bbc1c2a596d",
+      "graphStageSha256": "d90fdd395f6fc7dd83b8d79d4ecc184a6711db70ba70288bb81bcdfc492c5f64",
       "graphId": "-pp50ub",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",

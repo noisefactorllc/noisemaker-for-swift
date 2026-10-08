@@ -19,7 +19,7 @@ node tools/export-param-updates.mjs --check
 node tools/export-audio-host.mjs --check
 node tools/import-meshes.mjs --check
 node tools/check-overlays.mjs
-node --test tools/export-reference.test.mjs tools/export-worm-traces.test.mjs tools/export-obj-oracle.test.mjs tools/export-param-updates.test.mjs tools/export-audio-host.test.mjs tools/import-meshes.test.mjs tools/check-overlays.test.mjs parity/marker-golden.test.mjs parity/merge-goldens.test.mjs
+node --test tools/export-reference.test.mjs tools/export-worm-traces.test.mjs tools/export-obj-oracle.test.mjs tools/export-param-updates.test.mjs tools/export-audio-host.test.mjs tools/import-meshes.test.mjs tools/check-overlays.test.mjs parity/batch-golden.test.mjs parity/marker-golden.test.mjs parity/merge-goldens.test.mjs
 python3 -m unittest discover -s tools -p "test_*.py"
 python3 -m unittest discover -s parity -p "test_*.py"
 python3 tools/verify-artifact.py

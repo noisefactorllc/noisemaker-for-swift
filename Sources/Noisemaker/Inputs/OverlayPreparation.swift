@@ -34,7 +34,22 @@ extension BuiltinOverlay {
                 continue
             }
             specifications[id] = signature
-            result[id] = try render(kind,size:size,seed:seed,density:density)
+            let canvas = try render(kind,size:size,seed:seed,density:density)
+            // Source asyncInit paints a top-down Canvas, then uploads it with
+            // flipY: true. Publish the uploaded texture's row order while
+            // keeping BuiltinOverlay.render's raw Canvas contract intact.
+            let rowBytes = size.width * 4
+            var uploaded = Data(count: canvas.rgba.count)
+            uploaded.withUnsafeMutableBytes { destination in
+                canvas.rgba.withUnsafeBytes { source in
+                    for row in 0..<size.height {
+                        destination.baseAddress!.advanced(by: row * rowBytes).copyMemory(
+                            from: source.baseAddress!.advanced(by: (size.height - 1 - row) * rowBytes),
+                            byteCount: rowBytes)
+                    }
+                }
+            }
+            result[id] = OverlayPixels(size:size,rgba:uploaded)
         }
         return result
     }

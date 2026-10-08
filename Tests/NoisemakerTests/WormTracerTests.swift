@@ -65,4 +65,25 @@ struct WormTracerTests {
             #expect(a.rgba.contains {$0 != 0})
         }
     }
+    @Test func rasterOverlaysMatchCanvasBytes() throws {
+        let root = URL(fileURLWithPath:#filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let directory = root.appendingPathComponent("parity/overlays")
+        let oracle = try #require(JSONSerialization.jsonObject(
+            with:Data(contentsOf:directory.appendingPathComponent("oracle.json"))) as? [String:Any])
+        for item in try #require(oracle["cases"] as? [[String:Any]]) {
+            let effect = try #require(item["effect"] as? String)
+            let kind = try #require(BuiltinOverlayKind(rawValue:effect))
+            let width = try #require(item["width"] as? Int)
+            let height = try #require(item["height"] as? Int)
+            let size = try RenderSize(width:width,height:height)
+            let params = try #require(item["params"] as? [String:Any])
+            let pixels = try BuiltinOverlay.render(kind,size:size,
+                seed:params["seed"] as? Double ?? 1,
+                density:params["density"] as? Double)
+            let file = try #require(item["file"] as? String)
+            let expected = try Data(contentsOf:directory.appendingPathComponent(file))
+            #expect(pixels.rgba == expected, "Canvas pixels differ for \(file)")
+        }
+    }
 }

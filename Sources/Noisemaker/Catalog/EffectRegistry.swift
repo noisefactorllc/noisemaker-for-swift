@@ -148,10 +148,20 @@ public struct EffectRegistry: Sendable {
     public mutating func registerPortable(definitionJSON: Data,
                                            orderedShaderSources: [(String, String)]) throws {
         let source = try OrderedJSON.decode(definitionJSON)
+        if let problem = PortableDefinitionValidator.validateMetadata(source) {
+            throw CatalogError.malformed("Portable effect: \(problem)")
+        }
+        let functionValue: GraphValue?
+        if let authored = source.field("func") {
+            if case .null = authored { functionValue = source.field("name") }
+            else { functionValue = authored }
+        } else {
+            functionValue = source.field("name")
+        }
         guard let fields = source.objectFields,
-              let function = source.field("func")?.stringValue ?? source.field("name")?.stringValue,
+              let function = functionValue?.stringValue,
               function.range(of: #"^[A-Za-z_][A-Za-z0-9_]*$"#, options: String.CompareOptions.regularExpression) != nil,
-              source.field("namespace")?.stringValue == nil || source.field("namespace")?.stringValue == "user",
+              source.field("namespace") == nil || source.field("namespace")?.stringValue == "user",
               let passes = source.field("passes")?.arrayValue, !passes.isEmpty else {
             throw CatalogError.malformed("invalid Portable identity or passes")
         }
@@ -171,6 +181,12 @@ public struct EffectRegistry: Sendable {
             var shader = OrderedObject(shaders[program])
             shader["wgsl"] = GraphValue.string(text)
             shaders[program] = shader.value
+        }
+        if source.field("shaders") != nil && source.field("shaders")?.objectFields == nil {
+            throw CatalogError.malformed("Portable effect: loaded shaders are required")
+        }
+        if let problem = PortableDefinitionValidator.validateShaders(passes: passes, shaders: shaders.value) {
+            throw CatalogError.malformed("Portable effect: \(problem)")
         }
         for pass in passes {
             guard let program = pass.field("program")?.stringValue, !program.isEmpty,

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "authority": {
-    "commit": "8e5835932a7297d360b943200b42953224eea0a4",
-    "sourceManifestSha256": "3081e0e370c73ad57e05af28ddcb7ff50b943a4f6b93aa7dd84f193f3f818f80"
+    "commit": "2601e738df2463aa8b765afde3a7554d2a6d0170",
+    "sourceManifestSha256": "6a2bf6c1647544ce5d4e43d513998910eb8d0caf45f48fccec9ea95dd93ec6ef"
   },
-  "corpusSha256": "9e2c1ed88cbe6d0a326f296e52c385ec0b22efdea849cd8eda6788e79faa3b3b",
+  "corpusSha256": "e2a1c8a62c211c4a9a28f3abda4344f5dcb3802284e486f22bb36906c53f4acc",
   "cases": [
     {
       "id": "coverage/filter_crt",
@@ -50,7 +50,7 @@
           "programId": "node_1_crt",
           "selectedEntryPoint": "main",
           "isCompute": true,
-          "resolvedWgslSha256": "53eb31bf755346ac64891809e90b82a95fb7a92c5c5b30c0738163cf7b774e67",
+          "resolvedWgslSha256": "3add2567b2b08d3c4a07ca0360c284fd766a9b27b4d4710f70a2f9ccd21c5c94",
           "sourceHasBindings": true,
           "inputs": [
             "inputTex"
@@ -82,6 +82,30 @@
               "name": "params",
               "storage": "uniform",
               "typeDecl": "CRTParams"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "tileOffset",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 4,
+              "type": "uniform",
+              "name": "fullResolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 5,
+              "type": "uniform",
+              "name": "renderScale",
+              "storage": "uniform",
+              "typeDecl": "f32"
             }
           ],
           "bindGroupBindings": [
@@ -108,12 +132,39 @@
               "name": "params",
               "storage": "uniform",
               "typeDecl": "CRTParams"
+            },
+            {
+              "group": 0,
+              "binding": 3,
+              "type": "uniform",
+              "name": "tileOffset",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 4,
+              "type": "uniform",
+              "name": "fullResolution",
+              "storage": "uniform",
+              "typeDecl": "vec2<f32>"
+            },
+            {
+              "group": 0,
+              "binding": 5,
+              "type": "uniform",
+              "name": "renderScale",
+              "storage": "uniform",
+              "typeDecl": "f32"
             }
           ],
           "selectedEntryPointBindingIndices": [
             0,
             1,
-            2
+            2,
+            3,
+            4,
+            5
           ],
           "liveTextureInputs": [
             {
@@ -749,7 +800,7 @@
           "programId": "node_1_osd",
           "selectedEntryPoint": "main",
           "isCompute": true,
-          "resolvedWgslSha256": "64a52e3d30550bef6b6731dcac694eb487258234f9bff2039ec9eff72a02d7cc",
+          "resolvedWgslSha256": "fab0375a1b6d742409d0fd9b851746bcf306b14d57a96a2263f5d93ee7a23d06",
           "sourceHasBindings": true,
           "inputs": [
             "inputTex"
@@ -1150,7 +1201,7 @@
           "programId": "node_1_nmReindexReduce",
           "selectedEntryPoint": "main",
           "isCompute": false,
-          "resolvedWgslSha256": "e46056a03cffacf0cbf1f84e7cc7ad89e68de403408aa611401a327ec107b5a8",
+          "resolvedWgslSha256": "5ba3eaddefe27c1504e352a19472874c46ed6b43c1dc478578a5c1aa610b03b5",
           "sourceHasBindings": true,
           "inputs": [
             "statsTex"
@@ -1163,17 +1214,9 @@
               "group": 0,
               "binding": 0,
               "type": "texture",
-              "name": "stats_texture",
+              "name": "statsTex",
               "storage": "",
               "typeDecl": "texture_2d<f32>"
-            },
-            {
-              "group": 0,
-              "binding": 1,
-              "type": "uniform",
-              "name": "resolution",
-              "storage": "uniform",
-              "typeDecl": "vec2<f32>"
             }
           ],
           "bindGroupBindings": [
@@ -1181,26 +1224,18 @@
               "group": 0,
               "binding": 0,
               "type": "texture",
-              "name": "stats_texture",
+              "name": "statsTex",
               "storage": "",
               "typeDecl": "texture_2d<f32>"
-            },
-            {
-              "group": 0,
-              "binding": 1,
-              "type": "uniform",
-              "name": "resolution",
-              "storage": "uniform",
-              "typeDecl": "vec2<f32>"
             }
           ],
           "selectedEntryPointBindingIndices": [],
           "liveTextureInputs": [
             {
-              "name": "stats_texture",
+              "name": "statsTex",
               "binding": 0,
               "type": "texture",
-              "inPassInputs": false,
+              "inPassInputs": true,
               "inPassOutputs": false
             }
           ]
@@ -1210,7 +1245,7 @@
           "programId": "node_1_nmReindexApply",
           "selectedEntryPoint": "main",
           "isCompute": false,
-          "resolvedWgslSha256": "276413bb0d6d4a2266061b21495739767506a3e6f7be57824e29fb31b25aea39",
+          "resolvedWgslSha256": "3049b24a6715c6d9f3bc72e4d21a5e75702bf88bb33826b52a3cb9282561449d",
           "sourceHasBindings": true,
           "inputs": [
             "inputTex",
@@ -1232,7 +1267,7 @@
               "group": 0,
               "binding": 1,
               "type": "texture",
-              "name": "stats_texture",
+              "name": "statsTex",
               "storage": "",
               "typeDecl": "texture_2d<f32>"
             },
@@ -1258,7 +1293,7 @@
               "group": 0,
               "binding": 1,
               "type": "texture",
-              "name": "stats_texture",
+              "name": "statsTex",
               "storage": "",
               "typeDecl": "texture_2d<f32>"
             },
@@ -1281,10 +1316,10 @@
               "inPassOutputs": false
             },
             {
-              "name": "stats_texture",
+              "name": "statsTex",
               "binding": 1,
               "type": "texture",
-              "inPassInputs": false,
+              "inPassInputs": true,
               "inPassOutputs": false
             }
           ]
@@ -1361,7 +1396,7 @@
           "programId": "node_0_modPattern",
           "selectedEntryPoint": "main",
           "isCompute": false,
-          "resolvedWgslSha256": "c38dfa314a5bdacbc1d260486bda78705760b91af701d265ea0d0ecb633e8ec8",
+          "resolvedWgslSha256": "d5c62ac1cbce207d61e1e6b1a50968d0ea5248b70047aade58f176f95c5b1443",
           "sourceHasBindings": true,
           "inputs": [],
           "outputs": [
@@ -1656,7 +1691,7 @@
           "programId": "node_1_snow",
           "selectedEntryPoint": "main",
           "isCompute": true,
-          "resolvedWgslSha256": "7fb617ff6ee669c5dd10a582e805c6ed66f44e89507d8f50cf6192610993daea",
+          "resolvedWgslSha256": "c95186be9e236cf4aeedf6d67f2ae9cb1371070fa4d3c12e88ddd76667cfec6b",
           "sourceHasBindings": true,
           "inputs": [
             "inputTex"
@@ -2334,7 +2369,7 @@
           "programId": "node_0_ca",
           "selectedEntryPoint": "main",
           "isCompute": false,
-          "resolvedWgslSha256": "0d9ec4ce2ebcf9b5c99e0c44424664dabd117429ae270b47195c1efaa5686848",
+          "resolvedWgslSha256": "bd655af9f93ab963d936bb04c0862cdbfde872f876252657fc86245fe6558525",
           "sourceHasBindings": true,
           "inputs": [
             "fbTex",
@@ -2480,7 +2515,7 @@
           "programId": "node_0_mandelbrot",
           "selectedEntryPoint": "main",
           "isCompute": false,
-          "resolvedWgslSha256": "f72eb1ae5d52a18f440131bd65eb360158a3ddd763ae5438b2089518cbd92fc7",
+          "resolvedWgslSha256": "2ebf56b5df61e7f4cbd3df812400c19ed9a779b76ef87a325f4109d8aa54f874",
           "sourceHasBindings": true,
           "inputs": [],
           "outputs": [

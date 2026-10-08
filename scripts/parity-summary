@@ -53,6 +53,8 @@ if ! python3 tools/qualification-fingerprint.py > "$run_dir/inputs-after-build.j
 fi
 printf 'parity-summary copied build fingerprint: %s\n' "$run_dir/build-fingerprint.json" >&2
 
+NM_QUALIFICATION_FINGERPRINT="$run_dir/build-fingerprint.json"
+export NM_QUALIFICATION_FINGERPRINT
 node parity/batch-golden.mjs "$golden_dir" "$@" || printf 'parity-summary: reference batch reported case failures\n' >&2
 "$render_bin" --corpus "$PWD/parity/corpus.json" --out-dir "$candidate_dir" \
   --goldens "$golden_dir/goldens.json" "$@" || \
@@ -64,3 +66,11 @@ if ! python3 tools/qualification-fingerprint.py --binary "$fresh_bin" > "$run_di
   exit 2
 fi
 python3 parity/summarize.py "$golden_dir" "$candidate_dir" "$@"
+grade_status=$?
+if ! python3 tools/qualification-fingerprint.py --binary "$fresh_bin" > "$run_dir/inputs-after-grading.json" ||
+   ! cmp -s "$run_dir/build-fingerprint.json" "$run_dir/inputs-after-grading.json"; then
+  printf 'parity-summary: qualification inputs changed during grading\n' >&2
+  rm -f "$run_dir/results.json"
+  exit 2
+fi
+exit "$grade_status"

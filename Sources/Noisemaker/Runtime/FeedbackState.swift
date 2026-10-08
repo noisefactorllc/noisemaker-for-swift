@@ -28,6 +28,9 @@ final class FeedbackState: @unchecked Sendable {
             case "rgba16f", "rgba16float": format = .rgba16Float
             case "rgba8", "rgba8unorm": format = .rgba8Unorm
             case "rgba32f", "rgba32float": format = .rgba32Float
+            case "r8", "r8unorm": format = .r8Unorm
+            case "r16f", "r16float": format = .r16Float
+            case "r32f", "r32float": format = .r32Float
             default: throw GraphDiagnostic.unsupported("global surface \(logical) format")
             }
             for physical in ["\(logical)_read", "\(logical)_write"] {
@@ -55,12 +58,31 @@ final class FeedbackState: @unchecked Sendable {
             case "rgba16f", "rgba16float": format = .rgba16Float
             case "rgba8", "rgba8unorm": format = .rgba8Unorm
             case "rgba32f", "rgba32float": format = .rgba32Float
+            case "r8", "r8unorm": format = .r8Unorm
+            case "r16f", "r16float": format = .r16Float
+            case "r32f", "r32float": format = .r32Float
             default: throw GraphDiagnostic.unsupported("persistent texture \(name) format")
             }
-            let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: format,
-                width: width, height: height, mipmapped: spec.mipmaps)
+            let descriptor: MTLTextureDescriptor
+            if spec.is3D {
+                guard let depth = try spec.depth?.resolve(screen: size.width,
+                    parameters: graph.dimensionParameters) else {
+                    throw GraphDiagnostic.missing("persistent 3D texture \(name) depth")
+                }
+                descriptor = MTLTextureDescriptor()
+                descriptor.textureType = .type3D
+                descriptor.pixelFormat = format
+                descriptor.width = width
+                descriptor.height = height
+                descriptor.depth = depth
+                descriptor.mipmapLevelCount = 1
+                descriptor.usage = [.shaderRead, .shaderWrite]
+            } else {
+                descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: format,
+                    width: width, height: height, mipmapped: spec.mipmaps)
+                descriptor.usage = [.renderTarget, .shaderRead]
+            }
             descriptor.storageMode = .private
-            descriptor.usage = [.renderTarget, .shaderRead]
             guard let texture = device.makeTexture(descriptor: descriptor) else {
                 throw GraphDiagnostic.missing("Metal persistent texture \(name)")
             }
@@ -141,18 +163,21 @@ final class FeedbackState: @unchecked Sendable {
         var copies: [(source: MTLTexture, target: MTLTexture)] = []
         for (name, source) in targets {
             guard let target = moved[name], source.device === target.device,
-                  source.textureType == .type2D, target.textureType == .type2D,
+                  source.textureType == target.textureType,
                   source.pixelFormat == target.pixelFormat,
-                  ((source.width != target.width || source.height != target.height) ||
+                  ((source.width != target.width || source.height != target.height ||
+                    source.depth != target.depth) ||
                    source.mipmapLevelCount == target.mipmapLevelCount) else {
                 throw GraphDiagnostic.unsupported("feedback transfer requires compatible texture formats")
             }
-            if source.width == target.width && source.height == target.height {
+            if source.width == target.width && source.height == target.height &&
+               source.depth == target.depth {
                 moved[name] = source
                 if clearNames.contains(name) { clear.insert(name) }
             } else {
                 clear.insert(name)
-                if persistentNames.contains(name), !clearNames.contains(name) {
+                if source.textureType == .type2D, persistentNames.contains(name),
+                   !clearNames.contains(name) {
                     copies.append((source, target))
                 }
             }

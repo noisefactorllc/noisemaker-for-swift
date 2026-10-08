@@ -37,4 +37,55 @@ struct UniformBindingTests {
         expectThrows(try UniformPlan.parse(type: "Uniforms",
             wgsl: "struct Uniforms { data: array<vec4<f32>, 1000000>, }", layout: safe, program: "oversized"))
     }
+
+    @Test func testAuthoredLayoutCanExtendFeedbackShaderMinimum() throws {
+        // MNCA shares a seven-slot authored layout across its feedback and
+        // display passes, while the feedback WGSL declares only six slots.
+        let layout = GraphValue.object([
+            GraphField(name: "tileOffset", value: .object([
+                GraphField(name: "slot", value: .number(6)),
+                GraphField(name: "components", value: .string("xy"))])),
+            GraphField(name: "fullResolution", value: .object([
+                GraphField(name: "slot", value: .number(6)),
+                GraphField(name: "components", value: .string("zw"))]))
+        ])
+        let wgsl = "struct Uniforms { data: array<vec4<f32>, 6>, }"
+        let plan = try UniformPlan.parse(type: "Uniforms", wgsl: wgsl,
+            layout: layout, program: "mncaFb")
+        guard case .packed(let count, _) = plan else {
+            Issue.record("explicit MNCA layout was not packed")
+            return
+        }
+        expectEqual(count, 7)
+        let pass = GraphPass(id: "mncaFb", program: "mncaFb", raw: .object([]),
+            inputs: [], outputs: [], uniforms: [], entryPoint: "main", repeatCount: 1)
+        let bytes = try plan.encode(name: "uniforms", pass: pass, frame: .zero,
+            size: RenderSize(width: 257, height: 129))
+        expectEqual(bytes.count, 112)
+        expectEqual(Array(bytes[96..<104]), [UInt8](repeating: 0, count: 8))
+        let widthBytes = withUnsafeBytes(of: Float(257).bitPattern.littleEndian) { Array($0) }
+        let heightBytes = withUnsafeBytes(of: Float(129).bitPattern.littleEndian) { Array($0) }
+        expectEqual(Array(bytes[104..<108]), widthBytes)
+        expectEqual(Array(bytes[108..<112]), heightBytes)
+
+        let largerMinimum = try UniformPlan.parse(type: "Uniforms",
+            wgsl: "struct Uniforms { data: array<vec4<f32>, 8>, }",
+            layout: layout, program: "mncaFb")
+        guard case .packed(let largerCount, _) = largerMinimum else {
+            Issue.record("explicit layout with a larger shader minimum was not packed")
+            return
+        }
+        expectEqual(largerCount, 8)
+        expectEqual(try largerMinimum.encode(name: "uniforms", pass: pass, frame: .zero,
+            size: RenderSize(width: 257, height: 129)).count, 128)
+    }
+
+    @Test func testAuthoredLayoutRejectsSlotBeyondUniformBufferLimit() throws {
+        let layout = GraphValue.object([GraphField(name: "value", value: .object([
+            GraphField(name: "slot", value: .number(4_096)),
+            GraphField(name: "components", value: .string("x"))]))])
+        expectThrows(try UniformPlan.parse(type: "Uniforms",
+            wgsl: "struct Uniforms { data: array<vec4<f32>, 1>, }",
+            layout: layout, program: "oversized-slot"))
+    }
 }

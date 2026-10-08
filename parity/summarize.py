@@ -102,7 +102,8 @@ def verify_input_evidence(source_effects, golden, candidate, catalog, golden_dir
     if not isinstance(native_claimed, list) or len(set(native_claimed)) != len(native_claimed) or \
             set(native_claimed) != native_required:
         raise ValueError(f'native CPU effect evidence differs from source-owned hooks: {sorted(native_required)}')
-    host_effects = {name for name in source_effects if definitions.get(name, {}).get('externalTexture')}
+    overlay_effects = source_effects & {'filter.fibers', 'filter.scratches', 'filter.strayHair'}
+    host_effects = {name for name in source_effects if definitions.get(name, {}).get('externalTexture')} | overlay_effects
     reference_inputs = golden.get('hostTextures', [])
     native_inputs = candidate.get('hostTextures', [])
     if not isinstance(reference_inputs, list) or not isinstance(native_inputs, list) or \
@@ -134,8 +135,21 @@ def verify_input_evidence(source_effects, golden, candidate, catalog, golden_dir
         observed[entry['id']] = tuple(entry.get(field) for field in fields)
     if observed != by_id:
         raise ValueError('native host input identity, format, dimensions, or bytes differ from reference')
-    if bool(reference_inputs) != (candidate.get('hostInputMode') == 'referenceReplay'):
-        raise ValueError('native host input mode does not match replay evidence')
+    native_overlays = [entry for entry in native_inputs if entry.get('origin') == 'nativeCpuOverlay']
+    # The source capture admits built-in async overlay inputs under node IDs;
+    # ordinary media inputs use their external name with a step suffix. Every
+    # overlay input must be generated natively, including repeated hook nodes.
+    overlay_ids = {entry['id'] for entry in reference_inputs
+                   if re.fullmatch(r'node_\d+_\w+', entry['id'])}
+    if {entry['id'] for entry in native_overlays} != overlay_ids or \
+            bool(overlay_effects) != bool(overlay_ids) or len(overlay_ids) < len(overlay_effects):
+        raise ValueError('native overlay generation evidence is missing or unexpected')
+    if reference_inputs:
+        expected_mode = ('nativeCpuOverlay' if len(native_overlays) == len(native_inputs) else 'mixed') if native_overlays else 'referenceReplay'
+        if candidate.get('hostInputMode') != expected_mode:
+            raise ValueError('native host input mode does not match generation or replay evidence')
+    elif candidate.get('hostInputMode') in ('referenceReplay', 'nativeCpuOverlay', 'mixed'):
+        raise ValueError('native host input mode has no texture evidence')
     audio_required = bool(source_effects & {'synth.scope', 'synth.spectrum'})
     source_audio = golden.get('hostAudio')
     native_audio = candidate.get('hostAudio')
@@ -163,8 +177,7 @@ def verify_input_evidence(source_effects, golden, candidate, catalog, golden_dir
         source_kind = 'waveform' if 'synth.scope' in source_effects else 'spectrum'
         source_binding = golden.get('audioBindingEffectiveSha256')
         native_binding = candidate.get('audioBindingEffectiveSha256')
-        expected_binding = (payload[f'{source_kind}F32']['sha256'] if representation == 'plain-array'
-                            else hashlib.sha256(bytes(512)).hexdigest())
+        expected_binding = payload[f'{source_kind}F32']['sha256']
         if source_binding != expected_binding or native_binding != expected_binding:
             raise ValueError('native and source effective audio uniform bytes differ')
     elif source_audio is not None or native_audio is not None:
@@ -179,7 +192,7 @@ def verify_volume_evidence(item, golden, candidate, golden_dir):
         if reference or native:
             raise ValueError('host volume has no corpus input contract')
         return
-    if item['id'] != 'micro/sampled3dProbe' or contract.get('id') != 'node_0_volume' or \
+    if item['id'] not in ('micro/sampled3dProbe', 'micro/sampled3dLinearProbe') or contract.get('id') != 'node_0_volume' or \
             contract.get('assetPath') != 'parity/inputs/sampled3d-v1.rgba8' or \
             (contract.get('width'), contract.get('height'), contract.get('depth')) != (8, 8, 8) or \
             contract.get('format') != 'rgba8unorm' or contract.get('bytesPerRow') != 32 or \
@@ -321,6 +334,84 @@ def qualified(summary, requested):
         summary['effects_evidenced'] == summary['effects']
 
 
+def verify_provenance(goldens, candidates, fingerprint_path):
+    fingerprint_path = Path(fingerprint_path)
+    fingerprint = json.loads(fingerprint_path.read_text())
+    fingerprint_sha = sha256(fingerprint_path)
+    for label, ledger in [('reference', goldens), ('candidate', candidates)]:
+        if ledger.get('qualificationFingerprintSha256') != fingerprint_sha:
+            raise ValueError(f'{label} qualification fingerprint differs or is missing')
+    for name in ['sources', 'artifacts', 'tools', 'scripts', 'parity']:
+        if not re.fullmatch(r'[0-9a-f]{64}', fingerprint.get(name, {}).get('sha256', '')):
+            raise ValueError(f'qualification fingerprint lacks {name}')
+    authority = fingerprint.get('referenceAuthority', {})
+    if any(not re.fullmatch(r'[0-9a-f]{64}', authority.get(key, ''))
+           for key in ['sourceManifestSha256', 'sourceManifestFileSha256', 'packageLockSha256']) or \
+            not re.fullmatch(r'[0-9a-f]{64}', authority.get('nodeModules', {}).get('sha256', '')):
+        raise ValueError('qualification fingerprint lacks external source and harness provenance')
+    if authority['sourceManifestSha256'] != goldens.get('authority', {}).get('sourceManifestSha256'):
+        raise ValueError('qualification fingerprint reference source differs from golden authority')
+    browser = authority.get('browser', {})
+    if not isinstance(browser, dict) or any(
+            not isinstance(browser.get(key), str) or not browser[key]
+            for key in ['executablePath', 'bundlePath']) or any(
+            not re.fullmatch(r'[0-9a-f]{64}', browser.get(key, ''))
+            for key in ['executableSha256', 'bundleSha256']) or \
+            type(browser.get('files')) is not int or browser['files'] < 1 or \
+            type(browser.get('headless')) is not bool:
+        raise ValueError('qualification fingerprint lacks launched Chromium bundle provenance')
+    environment = fingerprint.get('buildEnvironment', {})
+    if any(not isinstance(environment.get(key), str) or not environment[key]
+           for key in ['os', 'architecture', 'swift', 'sdk', 'node', 'python', 'pillow']):
+        raise ValueError('qualification fingerprint lacks build environment')
+    if not re.fullmatch(r'[0-9a-f]{64}', environment.get('pillowTree', {}).get('sha256', '')):
+        raise ValueError('qualification fingerprint lacks image grader dependency provenance')
+    if not all(isinstance(environment.get(key), str)
+               for key in ['shadeHeadless', 'shadeSwiftshader']) or \
+            browser['headless'] != (environment['shadeHeadless'] not in ('0', 'false')):
+        raise ValueError('qualification fingerprint browser launch environment differs')
+    identities = {}
+    for label, ledger in [('reference', goldens), ('candidate', candidates)]:
+        seen = set()
+        for record in ledger.get('cases', []):
+            runtime = record.get('runtimeEnvironment')
+            if not isinstance(runtime, dict):
+                raise ValueError(f'{label} lacks runtime environment')
+            keys = ['os', 'architecture', 'browser', 'node'] if label == 'reference' else ['os', 'architecture', 'executableSha256']
+            if any(not isinstance(runtime.get(key), str) or not runtime[key] for key in keys):
+                raise ValueError(f'{label} runtime identity is incomplete')
+            device = runtime.get('device')
+            if not isinstance(device, dict) or not device:
+                raise ValueError(f'{label} lacks actual GPU device identity')
+            if label == 'candidate':
+                if runtime['executableSha256'] != fingerprint.get('binarySha256'):
+                    raise ValueError('candidate executable differs from qualified build')
+                if not device.get('name') or not device.get('registryID'):
+                    raise ValueError('candidate Metal device identity is incomplete')
+            else:
+                if (runtime.get('browserExecutablePath') != browser['executablePath'] or
+                        runtime.get('browserExecutableSha256') != browser['executableSha256'] or
+                        runtime.get('browserBundleSha256') != browser['bundleSha256']):
+                    raise ValueError('reference launched Chromium differs from qualification fingerprint')
+                if any(not isinstance(device.get(key), str) for key in ['vendor', 'architecture', 'device', 'description']) or \
+                        not any(device.get(key) for key in ['vendor', 'architecture', 'device', 'description']) or \
+                        not isinstance(device.get('features'), list):
+                    raise ValueError('reference WebGPU adapter identity is incomplete')
+                adapter_identity = ' '.join(device[key] for key in
+                    ['vendor', 'architecture', 'device', 'description'])
+                if re.search(r'swiftshader|llvmpipe|softpipe|lavapipe|software[ -]+rasterizer|'
+                             r'microsoft basic render driver|\bwarp\b', adapter_identity, re.I):
+                    raise ValueError('software WebGPU adapter is not qualified')
+                if device.get('maxTextureDimension2D') != record.get('capabilityProfile', {}).get('maxTextureDimension2D'):
+                    raise ValueError('reference runtime capability differs from capture')
+            seen.add(json.dumps(runtime, sort_keys=True, separators=(',', ':')))
+        if len(seen) != 1:
+            raise ValueError(f'{label} runtime changed during qualification or has no captures')
+        identities[label] = json.loads(next(iter(seen)))
+    return {'fingerprintSha256': fingerprint_sha, 'fingerprint': fingerprint,
+            'runtimeEnvironments': identities}
+
+
 def main():
     if len(sys.argv) < 3:
         print('usage: parity/summarize.py <golden-dir> <candidate-dir> [case-id ...]', file=sys.stderr)
@@ -359,10 +450,13 @@ def main():
        stages.get('corpusSha256') != corpus_hash or goldens.get('authority') != lock or \
        catalog['authority']['commit'] != lock['commit']:
         raise ValueError('ledger, stage, or catalog provenance differs from current locked corpus')
+    provenance = verify_provenance(goldens, candidates, golden_dir.parent / 'build-fingerprint.json')
+    provenance['goldenLedgerSha256'] = sha256(golden_dir / 'goldens.json')
+    provenance['candidateLedgerSha256'] = sha256(candidate_dir / 'candidates.json')
     summary, details, unevidenced = count(selected, goldens, candidates, stages, catalog, golden_dir, candidate_dir,
                                          refusals)
     output = golden_dir.parent / 'results.json'
-    output.write_text(json.dumps({'summary': summary, 'cases': details, 'unevidencedEffects': unevidenced}, indent=2) + '\n')
+    output.write_text(json.dumps({'summary': summary, 'cases': details, 'unevidencedEffects': unevidenced, 'provenance': provenance}, indent=2) + '\n')
     for case in details:
         if case['bucket'] not in ('exact', 'strict'):
             diagnostic = case.get('error') or case.get('sourceFailure', '')

@@ -1,4 +1,4 @@
-import CoreGraphics
+import CNoisemakerRaster
 import Foundation
 
 public enum BuiltinOverlayKind: String, Sendable {
@@ -20,19 +20,11 @@ public enum BuiltinOverlay {
         guard seed.isFinite, density.isFinite, (0...1).contains(density) else {
             throw GraphDiagnostic.invalid("overlay seed or density is invalid")
         }
-        var bytes = Data(count:size.width * size.height * 4)
-        try bytes.withUnsafeMutableBytes { raw in
-            guard let space = CGColorSpace(name:CGColorSpace.sRGB),
-                  let context = CGContext(data:raw.baseAddress,width:size.width,height:size.height,
-                    bitsPerComponent:8,bytesPerRow:size.width * 4,space:space,
-                    bitmapInfo:CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue) else {
-                throw GraphDiagnostic.missing("CPU overlay bitmap context")
-            }
-            context.translateBy(x:0,y:CGFloat(size.height))
-            context.scaleBy(x:1,y:-1)
-            context.setLineCap(.round)
-            context.setLineJoin(.round)
-            context.setShouldAntialias(true)
+        guard let canvas = nm_raster_create(Int32(size.width), Int32(size.height)) else {
+            throw GraphDiagnostic.missing("CPU overlay raster canvas")
+        }
+        defer { nm_raster_destroy(canvas) }
+        var record = [Double](repeating: 0, count: 9)
             let seed = seed == 0 ? 1 : seed
             let layerCount = kind == .strayHair ? 1 : 4
             for layer in 0..<layerCount {
@@ -66,26 +58,26 @@ public enum BuiltinOverlay {
                                                      blue:floor(rng.float() * 30),alpha:0.666)
                     }
                 },emit:{ segment in
-                    context.setLineWidth(segment.lineWidth)
-                    context.setStrokeColor(red:segment.color.red / 255,green:segment.color.green / 255,
-                                           blue:segment.color.blue / 255,alpha:segment.color.alpha)
-                    context.beginPath()
-                    context.move(to:CGPoint(x:segment.x,y:segment.y))
-                    context.addLine(to:CGPoint(x:segment.endX,y:segment.endY))
-                    context.strokePath()
+                    record[0] = segment.x; record[1] = segment.y
+                    record[2] = segment.endX; record[3] = segment.endY
+                    record[4] = segment.lineWidth
+                    record[5] = segment.color.red; record[6] = segment.color.green
+                    record[7] = segment.color.blue; record[8] = segment.color.alpha
+                    let status = record.withUnsafeBufferPointer {
+                        nm_raster_stroke(canvas, $0.baseAddress)
+                    }
+                    guard status == 0 else {
+                        throw status == 1 ? GraphDiagnostic.invalid("overlay stroke is invalid") :
+                            GraphDiagnostic.missing("CPU overlay raster stroke")
+                    }
                 })
             }
-            // Canvas external-image uploads expose straight alpha. Quartz draws
-            // into premultiplied storage, so convert only after every stroke.
-            let pixels = raw.bindMemory(to:UInt8.self)
-            for pixel in stride(from:0,to:pixels.count,by:4) {
-                let alpha = Int(pixels[pixel + 3])
-                if alpha > 0 {
-                    for component in 0..<3 {
-                        pixels[pixel + component] = UInt8(min(255,(Int(pixels[pixel + component]) * 255 + alpha / 2) / alpha))
-                    }
-                }
-            }
+        var bytes = Data(count:size.width * size.height * 4)
+        let status = bytes.withUnsafeMutableBytes { raw in
+            nm_raster_read_rgba8(canvas, raw.baseAddress?.assumingMemoryBound(to: UInt8.self), raw.count)
+        }
+        guard status == 0 else {
+            throw GraphDiagnostic.missing("CPU overlay raster readback")
         }
         return OverlayPixels(size:size,rgba:bytes)
     }

@@ -1,0 +1,33 @@
+{
+  "name": "Storage 3D Probe",
+  "namespace": "user",
+  "func": "storage3dProbe",
+  "starter": true,
+  "textures3d": {
+    "volume": {
+      "width": 8,
+      "height": 8,
+      "depth": 8,
+      "format": "rgba8unorm"
+    }
+  },
+  "passes": [
+    {
+      "name": "fill",
+      "type": "compute",
+      "program": "fill",
+      "workgroups": [2, 2, 2],
+      "storageTextures": { "volumeOut": "node_0_volume" }
+    },
+    {
+      "name": "show",
+      "program": "show",
+      "inputs": { "volTex": "volume" },
+      "outputs": { "fragColor": "outputTex" }
+    }
+  ],
+  "shaders": {
+    "fill": {},
+    "show": {}
+  }
+}

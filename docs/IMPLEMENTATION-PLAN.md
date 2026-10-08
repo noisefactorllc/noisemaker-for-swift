@@ -2,7 +2,7 @@
 
 ## 1. Goal and execution boundary
 
-Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). Implementation has begun at task 1 under operator authorization. The source exporter, translator, native compiler, Metal graph executor, host inputs, MetalKit integration and lifetime checks are implemented. The 2,824-case compiler differential, 101 CPU tests and 66 native Metal tests pass. Complete catalog rendering qualification, public distribution and physical iOS qualification remain incomplete.
+Build the Swift compiler and direct Metal renderer described in [the architecture](../ARCHITECTURE.md) and [porting guide](../PORTING-GUIDE.md). The macOS Apple Silicon prototype has completed the locked compiler and full rendering gates under operator authorization. The source exporter, translator, native compiler, Metal graph executor, host inputs, MetalKit integration and lifetime checks are implemented. The 2,899-case compiler differential (17,394 stage hashes), 106 CPU tests and 76 native Metal tests pass. Full same-run rendering passes on Apple M2/macOS 14.8.3: 2,877 exact cases, 22 uninformative cases, zero failures/skips/missing cases, and informative evidence for all 210 effects. See the README for authority, fingerprints and remaining issue links. Public distribution, performance qualification and physical iOS qualification remain incomplete.
 
 Write a failing behavior/ABI fixture, verify that failure, implement the smallest coherent change, and run the relevant regression set for each task. Review evidence before increasing scope. Use the existing default-branch checkout; remote publication and automation setup are separate decisions.
 
@@ -66,7 +66,7 @@ Current evidence: the presented marker passes with maximum channel error 0 and S
 - [ ] Test wrong-device command buffers, uncommitted/out-of-order encode requests, injected allocation errors, resize during in-flight work and failed graph replacement.
 - [ ] Run `swift test --filter RuntimeGPU` and `swift test --filter LifetimeGPU` with Metal validation enabled on a capable native host.
 
-Current evidence: blur, compute-buffer conversion, isolated MRT and fractional-coordinate sampling have same-run presented-output comparisons and GPU tests of intermediate textures. Borrowed and convenience submission paths have native lifetime regressions, including three in-flight slots, delayed consumers, abandoned commands, cross-queue rejection and unretained references after partial failures. Surface binding transactions match 16 locked-upstream two-frame traces; Global and ordinary persistent feedback have native GPU persistence/reset regressions. Mesh triangle rendering, including custom OBJ input, has exact WebGPU parity; point rendering has source-bound selected-case evidence; the complete rendering sweep remains open.
+Current evidence: blur, compute-buffer conversion, isolated MRT and fractional-coordinate sampling have same-run presented-output comparisons and GPU tests of intermediate textures. Borrowed and convenience submission paths have native lifetime regressions, including three in-flight slots, delayed consumers, abandoned commands, cross-queue rejection and unretained references after partial failures. Surface binding transactions match 16 locked-upstream two-frame traces; Global and ordinary persistent feedback have native GPU persistence/reset regressions. Mesh triangle rendering, including custom OBJ input, has exact WebGPU parity; point rendering has source-bound selected-case evidence; the complete 2,899-case rendering sweep now passes on Apple M2.
 
 **Acceptance:** pass/resource semantics and completion behavior agree with fixture contracts; no CPU frame-loop wait or readback is required.
 
@@ -83,7 +83,7 @@ Current evidence: blur, compute-buffer conversion, isolated MRT and fractional-c
 - [ ] Test reference-supported input, malformed input, and reference refusals as distinct classes; unsupported claimed features fail completeness.
 - [x] Run the compiler tests, source-stage exporter, and full `CorpusStageParityTests` differential through `scripts/test`; render native-produced graphs in the GPU suite.
 
-Current evidence: native lexer/parser tests compare 26 lexical cases and 69 parser cases with independently executed locked upstream stages, including diagnostics and strict/default subchain behavior. Validation, expansion, allocation and native graph generation now match all 2,824 pinned corpus cases. The tracked `CorpusStageParityTests` gate checks 16,944 exact hashes across lexing and the five compiler stages; runtime capability checks remain separate.
+Current evidence: native lexer/parser tests compare 26 lexical cases and 69 parser cases with independently executed locked upstream stages, including diagnostics and strict/default subchain behavior. Validation, expansion, allocation and native graph generation now match all 2,899 pinned corpus cases. The tracked `CorpusStageParityTests` gate checks 17,394 exact hashes across lexing and the five compiler stages; runtime capability checks remain separate.
 
 **Acceptance:** stage equivalence and identical graph behavior with no JavaScript runtime in the shipping package.
 
@@ -98,7 +98,7 @@ Current evidence: native lexer/parser tests compare 26 lexical cases and 69 pars
 - [ ] Port by runtime dependency: simple sources/filters, noise/mixers, stateful passes, geometry and remaining special cases.
 - [ ] Add integer/half/derivative/numerical fixtures and deterministic automation traces; inspect translator settings when outputs differ.
 - [ ] When a difference traces to a WebGPU-versus-WebGL2 divergence, capture the WebGL2 frame for that case, fix the WGSL upstream toward WebGL2, and move the authority lock; the case stays failing until then.
-- [ ] Run `scripts/parity-summary`; missing fixtures, skips, errors, timeouts, unsupported and uninformative cases stay visible, and the exit status fails until every effect has informative evidence.
+- [x] Run `scripts/parity-summary`; missing fixtures, skips, errors, timeouts, unsupported and uninformative cases stay visible, and the exit status fails until every effect has informative evidence.
 
 **Acceptance:** `PARITY-SUMMARY` reports zero near, fail, skip and missing cases, and `effects_evidenced` equals `effects`, at the locked authority; drift or stale evidence fails the gate.
 
@@ -121,7 +121,7 @@ Current evidence: native lexer/parser tests compare 26 lexical cases and 69 pars
 **Proposed files:** `Tests/PackageConsumer/`, `tools/package-check.sh`, package resources and required license notices; Apple example target settings established by the feasibility probe.
 
 - [x] Build/test a clean macOS consumer without sibling checkouts, Node, Rust or runtime network fetches.
-- [ ] Run `scripts/test` and `scripts/parity-summary`, plus the lifetime, recovery and integration gates, on Apple Silicon macOS.
+- [x] Run `scripts/test` and `scripts/parity-summary`, plus the lifetime, recovery and integration gates, on Apple Silicon macOS.
 - [ ] Qualify iOS/iPadOS on physical Metal devices, recording compiler/SDK/deployment floors, memory limits and translator viability; report simulators separately.
 - [ ] Only add Intel/AMD Mac or other Apple-platform support claims after the same evidence exists there.
 - [ ] Benchmark cold/warm shader compilation, CPU/GPU frame cost, memory and in-flight behavior for the architecture's workload matrix.

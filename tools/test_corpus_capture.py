@@ -91,6 +91,49 @@ def test_failed_golden_admission(root, renderer, temporary, solid):
     print('failed source golden: native control pixels unchanged; seven invalid ledgers refused')
 
 
+def test_native_overlays_without_replay(root, renderer, temporary, corpus):
+    oracle = json.loads((root / 'parity/overlays/oracle.json').read_text())
+    for effect in ['fibers', 'scratches', 'strayHair']:
+        source = next(item for item in corpus['cases'] if item['id'] == f'coverage/filter_{effect}')
+        case = copy.deepcopy(source)
+        fixture = next(item for item in oracle['cases'] if item['id'] == f'{effect}-coverage-256')
+        upload = fixture['hostUpload']
+        assert upload['sourceCaseId'] == case['id']
+        assert upload['textureId'] == 'node_1_overlayTex'
+        assert case['capture']['size'] == [fixture['width'], fixture['height']] == [256, 256]
+        corpus_path = temporary / f'{effect}-corpus.json'
+        corpus_data = json.dumps({'schemaVersion': 1, 'cases': [case]}).encode()
+        corpus_path.write_bytes(corpus_data)
+        output = temporary / f'{effect}-native'
+        def capture(out, golden=None):
+            args = [str(renderer), '--corpus', str(corpus_path), '--out-dir', str(out)]
+            if golden is not None:
+                args += ['--goldens', str(golden)]
+            result = subprocess.run(args, cwd=root, capture_output=True, text=True)
+            assert result.returncode == 0, result.stderr
+            record = json.loads((out / 'candidates.json').read_text())['cases'][0]
+            assert record['status'] == 'ok', record
+            assert record['nativeCpuEffects'] == [f'filter.{effect}'], record
+            assert record['hostInputMode'] == 'nativeCpuOverlay', record
+            assert len(record['hostTextures']) == 1, record
+            entry = record['hostTextures'][0]
+            assert entry['origin'] == 'nativeCpuOverlay' and entry['id'] == upload['textureId'], entry
+            assert entry['sha256'] == upload['sha256'], entry
+            return record
+        record = capture(output)
+        # The input ledger is authenticated, but its pixel path does not exist.
+        # A successful second render proves the native path never replays it.
+        golden_path = temporary / f'{effect}-goldens.json'
+        entry = {**record['hostTextures'][0], 'path': 'intentionally-absent.rgba8'}
+        golden = dict(id=case['id'], sourceSha256=case['sourceSha256'], capture=case['capture'],
+                      backend='WebGPU', status='ok', capabilityProfile=record['capabilityProfile'], hostTextures=[entry])
+        golden_path.write_text(json.dumps(dict(schemaVersion=1, corpusSha256=hashlib.sha256(corpus_data).hexdigest(),
+                                              expected=1, cases=[golden])))
+        second = capture(temporary / f'{effect}-with-ledger', golden_path)
+        assert [item['sha256'] for item in second['images']] == [item['sha256'] for item in record['images']]
+    print('native overlays: all three full-size source host uploads match without reading reference pixel files')
+
+
 def main():
     root = Path(__file__).resolve().parent.parent
     renderer = Path(os.environ['NM_RENDER_BIN']).resolve()
@@ -117,6 +160,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='nm-timed-capture-') as directory:
         temporary = Path(directory)
         test_failed_golden_admission(root, renderer, temporary, solid)
+        test_native_overlays_without_replay(root, renderer, temporary, corpus)
         corpus_path = temporary / 'corpus.json'
         output = temporary / 'candidates'
         corpus_path.write_text(json.dumps({'schemaVersion': 1, 'cases': [case]}))

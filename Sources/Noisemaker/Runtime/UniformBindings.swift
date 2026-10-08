@@ -30,13 +30,13 @@ enum UniformPlan {
                   let mappings = layout.objectFields else {
                 throw GraphDiagnostic.unsupported("program \(program) packed uniform layout does not match WGSL data array")
             }
-            let count = (try UniformLayout(fields: fields).byteCount + 15) / 16
+            var count = (try UniformLayout(fields: fields).byteCount + 15) / 16
             var entries: [PackedUniformEntry] = []
             var occupied = Set<Int>()
             for mapping in mappings {
                 guard let slotValue = mapping.value.field("slot")?.numberValue,
-                      slotValue.rounded() == slotValue, slotValue >= 0,
-                      slotValue < Double(count),
+                      slotValue.isFinite, slotValue.rounded() == slotValue,
+                      slotValue >= 0, slotValue < 4_096,
                       let components = mapping.value.field("components")?.stringValue,
                       !components.isEmpty, components.count <= 4 else {
                     throw GraphDiagnostic.invalid("program \(program) invalid packed uniform \(mapping.name)")
@@ -56,6 +56,7 @@ enum UniformPlan {
                     throw GraphDiagnostic.unsupported("program \(program) packed components must be contiguous")
                 }
                 let slot = Int(slotValue)
+                count = max(count, slot + 1)
                 for component in offsets {
                     guard occupied.insert(slot * 4 + component).inserted else {
                         throw GraphDiagnostic.invalid("program \(program) overlapping packed uniform slots")

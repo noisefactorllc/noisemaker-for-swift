@@ -95,6 +95,7 @@ public final class NoisemakerRenderer {
     public let maximumTextureDimension2D: Int
     private let passes: [PreparedRenderPass]
     private let sampler: MTLSamplerState
+    private let repeatSampler: MTLSamplerState
     private let linearSampler: MTLSamplerState
     private let mipSampler: MTLSamplerState?
     private let mipGenerator: MipGenerator?
@@ -179,7 +180,7 @@ public final class NoisemakerRenderer {
             entryPoint: vertexEntryPoint, stage: .vertex)
         let vertex = try MetalVariantCache.shared.function(device: device,
             source: vertexTranslation.source, name: vertexTranslation.mslEntryPoint)
-        self.passes = try graph.passes.map { pass in
+        let preparedPasses = try graph.passes.map { pass in
             guard let program = graph.programs[pass.program] else {
                 throw GraphDiagnostic.missing("program \(pass.program)")
             }
@@ -201,7 +202,10 @@ public final class NoisemakerRenderer {
                 pixelFormats: formats,
                 colorUniforms: try Self.colorUniformNames(pass: pass, registry: effectRegistry))
         }
-        self.bufferBridge = graph.programs.values.contains(where: { $0.stage == .compute })
+        self.passes = preparedPasses
+        self.bufferBridge = preparedPasses.contains(where: { prepared in
+            prepared.resources.contains(where: { $0.kind == .storage })
+        })
             ? try BufferToTextureBridge(device: device, vertex: vertex, translator: translator)
             : nil
         let descriptor = MTLSamplerDescriptor()
@@ -220,8 +224,19 @@ public final class NoisemakerRenderer {
             throw GraphDiagnostic.missing("Metal linear sampler")
         }
         self.linearSampler = linearSampler
+        descriptor.sAddressMode = .repeat
+        descriptor.tAddressMode = .repeat
+        guard let repeatSampler = device.makeSamplerState(descriptor: descriptor) else {
+            throw GraphDiagnostic.missing("Metal repeat sampler")
+        }
+        self.repeatSampler = repeatSampler
         let mipTextures = graph.textures.filter(\.mipmaps)
-        if mipTextures.isEmpty {
+        let usesAuthoredMips = graph.passes.contains { pass in
+            pass.raw.field("samplerTypes")?.objectFields?.contains {
+                $0.value.stringValue == "mipmap"
+            } == true
+        }
+        if mipTextures.isEmpty && !usesAuthoredMips {
             self.mipSampler = nil
             self.mipGenerator = nil
         } else {
@@ -235,7 +250,7 @@ public final class NoisemakerRenderer {
                 throw GraphDiagnostic.missing("Metal mipmapped sampler")
             }
             self.mipSampler = mipSampler
-            self.mipGenerator = try MipGenerator(device: device,
+            self.mipGenerator = mipTextures.isEmpty ? nil : try MipGenerator(device: device,
                 formats: Set(try mipTextures.map { try Self.pixelFormat($0.format).rawValue }))
         }
     }
@@ -265,7 +280,7 @@ public final class NoisemakerRenderer {
         var succeeded = false
         var feedbackBegan = false
         var audioBindingData: [Data] = []
-        var retained: [AnyObject] = [sampler, linearSampler, dummyTexture]
+        var retained: [AnyObject] = [sampler, linearSampler, repeatSampler, dummyTexture]
         if let mipSampler { retained.append(mipSampler) }
         if let mipGenerator { retained.append(mipGenerator) }
         retained.append(contentsOf: frameTextures.values.map { $0 as AnyObject })
@@ -449,6 +464,7 @@ public final class NoisemakerRenderer {
     private struct PassTargets {
         let inputs: [String: MTLTexture]
         let outputs: [MTLTexture]
+        let storageOutputs: [String: MTLTexture]
     }
 
     private func passTargets(_ pass: GraphPass, targets: [String: MTLTexture],
@@ -479,7 +495,16 @@ public final class NoisemakerRenderer {
             }
             return target
         }
-        return PassTargets(inputs: inputs, outputs: outputs)
+        var storageOutputs: [String: MTLTexture] = [:]
+        for output in pass.raw.field("storageTextures")?.objectFields ?? [] {
+            guard let logical = output.value.stringValue,
+                  let target = targets[logical], target.textureType == .type3D,
+                  target.usage.contains(.shaderWrite) else {
+                throw GraphDiagnostic.missing("pass \(pass.id) writable 3D texture \(output.name)")
+            }
+            storageOutputs[output.name] = target
+        }
+        return PassTargets(inputs: inputs, outputs: outputs, storageOutputs: storageOutputs)
     }
 
     private func clear(_ target: MTLTexture, command: MTLCommandBuffer,
@@ -492,6 +517,9 @@ public final class NoisemakerRenderer {
             case .rgba8Unorm: bytesPerPixel = 4
             case .rgba16Float: bytesPerPixel = 8
             case .rgba32Float: bytesPerPixel = 16
+            case .r8Unorm: bytesPerPixel = 1
+            case .r16Float: bytesPerPixel = 2
+            case .r32Float: bytesPerPixel = 4
             default: throw GraphDiagnostic.unsupported("3D clear pixel format")
             }
             let (rowPixels, rowOverflow) = target.width.multipliedReportingOverflow(by: bytesPerPixel)
@@ -587,6 +615,37 @@ public final class NoisemakerRenderer {
         return dummyTexture
     }
 
+    private func samplerState(_ resource: ShaderResource, pass: GraphPass) -> MTLSamplerState {
+        let usesMips = pass.inputs.contains { input in
+            guard let name = input.value.stringValue else { return false }
+            return graph.textures.contains { $0.key == name && $0.mipmaps }
+        }
+        let sampledName = pass.inputs.first {
+            $0.key == resource.sampledTextureName
+        }?.value.stringValue
+        let sampledVolume = graph.textures.first {
+            $0.key == sampledName && $0.is3D
+        }
+        let usesExternal = pass.inputs.contains { input in
+            guard let name = input.value.stringValue else { return false }
+            // WebGPU uploadDataTexture creates MIDI's RGBA32F grid without
+            // isExternal; only media/image uploads select the linear default.
+            return name != "midiNoteGrid" && graph.externalTextureNames.contains(name)
+        }
+        switch pass.raw.field("samplerTypes")?.field(resource.name)?.stringValue {
+        case "default": return linearSampler
+        case "nearest": return sampler
+        case "repeat": return repeatSampler
+        case "mipmap": return mipSampler ?? linearSampler
+        default:
+            if let sampledVolume {
+                return sampledVolume.filter == "nearest" ? sampler : linearSampler
+            }
+            return usesExternal ? linearSampler
+                : (usesMips ? (mipSampler ?? linearSampler) : sampler)
+        }
+    }
+
     private func encodeRender(_ prepared: PreparedRenderPass, pipeline: MTLRenderPipelineState,
                               targets: PassTargets, frame: FrameState,
                               command: MTLCommandBuffer, retained: inout [AnyObject],
@@ -650,18 +709,7 @@ public final class NoisemakerRenderer {
                         encoder.setVertexTexture(texture, index: resource.slot)
                     }
                 case .sampler:
-                    let usesMips = pass.inputs.contains { input in
-                        guard let name = input.value.stringValue else { return false }
-                        return graph.textures.contains { $0.key == name && $0.mipmaps }
-                    }
-                    let usesLinearVolume = pass.inputs.contains { input in
-                        guard let name = input.value.stringValue else { return false }
-                        return graph.textures.contains {
-                            $0.key == name && $0.is3D && $0.filter == "linear"
-                        }
-                    }
-                    let selected = usesMips ? (mipSampler ?? sampler)
-                        : (usesLinearVolume ? linearSampler : sampler)
+                    let selected = samplerState(resource, pass: pass)
                     encoder.setFragmentSamplerState(selected, index: resource.slot)
                     if prepared.customVertex {
                         encoder.setVertexSamplerState(selected, index: resource.slot)
@@ -733,6 +781,12 @@ public final class NoisemakerRenderer {
                                command: MTLCommandBuffer, retained: inout [AnyObject],
                                audioBindingData: inout [Data]) throws {
         let pass = prepared.graphPass
+        if prepared.resources.contains(where: { $0.kind == .storageTexture }) {
+            try encodeStorageTextureCompute(prepared, pipeline: pipeline, targets: targets,
+                frame: frame, command: command, retained: &retained,
+                audioBindingData: &audioBindingData)
+            return
+        }
         guard let target = targets.outputs.first, let bridge = bufferBridge else {
             throw GraphDiagnostic.missing("pass \(pass.id) compute output or conversion pipeline")
         }
@@ -823,11 +877,73 @@ public final class NoisemakerRenderer {
         retained.append(contentsOf: try bridge.encode(storage, into: target, command: command))
     }
 
+    private func encodeStorageTextureCompute(_ prepared: PreparedRenderPass,
+                                             pipeline: MTLComputePipelineState,
+                                             targets: PassTargets, frame: FrameState,
+                                             command: MTLCommandBuffer,
+                                             retained: inout [AnyObject],
+                                             audioBindingData: inout [Data]) throws {
+        let pass = prepared.graphPass
+        guard let counts = pass.raw.field("workgroups")?.arrayValue,
+              counts.count == 3,
+              let gx = counts[0].numberValue, let gy = counts[1].numberValue,
+              let gz = counts[2].numberValue else {
+            throw GraphDiagnostic.invalid("pass \(pass.id) 3D compute workgroups")
+        }
+        let (x, y, z) = prepared.workgroupSize
+        let caps = device.maxThreadsPerThreadgroup
+        guard x > 0, y > 0, z > 0,
+              UInt64(x) <= UInt64(caps.width), UInt64(y) <= UInt64(caps.height),
+              UInt64(z) <= UInt64(caps.depth),
+              UInt64(x) * UInt64(y) * UInt64(z) <= UInt64(pipeline.maxTotalThreadsPerThreadgroup) else {
+            throw GraphDiagnostic.unsupported("pass \(pass.id) workgroup size exceeds Metal capability")
+        }
+        let threads = MTLSize(width: Int(x), height: Int(y), depth: Int(z))
+        let groups = MTLSize(width: Int(gx), height: Int(gy), depth: Int(gz))
+        guard let encoder = command.makeComputeCommandEncoder() else {
+            throw GraphDiagnostic.missing("Metal 3D compute encoder for \(pass.id)")
+        }
+        encoder.label = pass.id
+        encoder.setComputePipelineState(pipeline)
+        do {
+            for resource in prepared.resources {
+                switch resource.kind {
+                case .uniform:
+                    let buffer = try uniformBuffer(resource, pass: pass, frame: frame,
+                        colorUniforms: prepared.colorUniforms, retained: &retained,
+                        audioBindingData: &audioBindingData)
+                    encoder.setBuffer(buffer, offset: 0, index: resource.slot)
+                case .texture:
+                    encoder.setTexture(try inputTexture(resource, pass: pass, targets: targets),
+                        index: resource.slot)
+                case .storageTexture:
+                    guard let target = targets.storageOutputs[resource.name] else {
+                        throw GraphDiagnostic.missing("pass \(pass.id) 3D storage binding \(resource.name)")
+                    }
+                    encoder.setTexture(target, index: resource.slot)
+                case .sampler:
+                    encoder.setSamplerState(samplerState(resource, pass: pass),
+                        index: resource.slot)
+                default:
+                    throw GraphDiagnostic.unsupported("pass \(pass.id) 3D compute binding \(resource.name)")
+                }
+            }
+            encoder.dispatchThreadgroups(groups, threadsPerThreadgroup: threads)
+            encoder.endEncoding()
+        } catch {
+            encoder.endEncoding()
+            throw error
+        }
+    }
+
     private static func pixelFormat(_ format: String) throws -> MTLPixelFormat {
         switch format {
         case "rgba16f", "rgba16float": return .rgba16Float
         case "rgba8", "rgba8unorm": return .rgba8Unorm
         case "rgba32f", "rgba32float": return .rgba32Float
+        case "r8", "r8unorm": return .r8Unorm
+        case "r16f", "r16float": return .r16Float
+        case "r32f", "r32float": return .r32Float
         default: throw GraphDiagnostic.unsupported("texture format \(format)")
         }
     }
@@ -837,7 +953,14 @@ public final class NoisemakerRenderer {
         // Source-allocated 3D volumes may be populated by a host upload before
         // rendering. Supplying one replaces only that named volume for this frame.
         let optionalVolumes = Set(graph.textures.filter(\.is3D).map(\.key))
+        let writableVolumes = Set(graph.passes.flatMap { pass in
+            pass.raw.field("storageTextures")?.objectFields?
+                .compactMap { $0.value.stringValue } ?? []
+        })
         let names = Set(supplied.keys)
+        guard names.isDisjoint(with: writableVolumes) else {
+            throw GraphDiagnostic.unsupported("internally written 3D textures cannot be externally replaced")
+        }
         guard required.isSubset(of: names), names.isSubset(of: required.union(optionalVolumes)) else {
             throw GraphDiagnostic.missing("external textures \(graph.externalTextureNames)")
         }

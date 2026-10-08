@@ -22,13 +22,17 @@ export const CASES = {
   marker: readFileSync(join(ROOT, 'parity/marker.dsl'), 'utf8'),
   mrtProbe: readFileSync(join(ROOT, 'parity/mrt.dsl'), 'utf8'),
   samplerProbe: readFileSync(join(ROOT, 'parity/sampler.dsl'), 'utf8'),
-  sampled3dProbe: readFileSync(join(ROOT, 'parity/sampled3d.dsl'), 'utf8')
+  sampled3dProbe: readFileSync(join(ROOT, 'parity/sampled3d.dsl'), 'utf8'),
+  sampled3dLinearProbe: readFileSync(join(ROOT, 'parity/sampled3d-linear.dsl'), 'utf8'),
+  storage3dProbe: readFileSync(join(ROOT, 'parity/storage3d.dsl'), 'utf8')
 }
 const PORTABLE_CASES = {
   marker: { definition: 'marker.portable.json', shaders: { marker: 'marker.marker.wgsl' } },
   mrtProbe: { definition: 'mrt.portable.json', shaders: { split: 'mrt.split.wgsl', combine: 'mrt.combine.wgsl' } },
   samplerProbe: { definition: 'sampler.portable.json', shaders: { pattern: 'sampler.pattern.wgsl', sample: 'sampler.sample.wgsl' } },
-  sampled3dProbe: { definition: 'sampled3d.portable.json', shaders: { show: 'sampled3d.show.wgsl' } }
+  sampled3dProbe: { definition: 'sampled3d.portable.json', shaders: { show: 'sampled3d.show.wgsl' } },
+  sampled3dLinearProbe: { definition: 'sampled3d-linear.portable.json', shaders: { show: 'sampled3d-linear.show.wgsl' } },
+  storage3dProbe: { definition: 'storage3d.portable.json', shaders: { fill: 'storage3d.fill.wgsl', show: 'storage3d.show.wgsl' } }
 }
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
@@ -95,8 +99,8 @@ export function countDefineVariants(def) {
 export function captureProtocols() {
   const cases = Object.fromEntries(Object.entries(CASES).map(([name, source]) => [name, {
     dslSha256: sha256(source), seed: ['resourceHeavy', 'compute', 'numericDefineOutsideChoices', 'builtinEnum', 'multipassBlur', 'computeFilter', 'mrtNoise3d', 'repeatFeedback'].includes(name) ? 1 : null,
-    externalInputs: name === 'sampled3dProbe' ? [{ id: 'node_0_volume', kind: 'texture3d', frame: 0 }] : [],
-    inputAssets: name === 'sampled3dProbe' ? [{ path: 'parity/inputs/sampled3d-v1.rgba8',
+    externalInputs: ['sampled3dProbe', 'sampled3dLinearProbe'].includes(name) ? [{ id: 'node_0_volume', kind: 'texture3d', frame: 0 }] : [],
+    inputAssets: ['sampled3dProbe', 'sampled3dLinearProbe'].includes(name) ? [{ path: 'parity/inputs/sampled3d-v1.rgba8',
       sha256: sha256(readFileSync(join(ROOT, 'parity/inputs/sampled3d-v1.rgba8'))) }] : [],
     size: PORTABLE_CASES[name] || ['multipassBlur', 'computeFilter', 'repeatFeedback', 'mrtNoise3d'].includes(name) ? [257, 129] : [256, 256],
     normalizedTime: 0.25, deltaTime: 0, frames: 8, resetState: 'clear pipeline writes; preserve host inputs; reset surfaces, frameIndex, lastTime and globals',
