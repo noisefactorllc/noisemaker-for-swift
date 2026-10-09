@@ -25,10 +25,23 @@ final class FeedbackResampler {
         var pipelines: [UInt: MTLRenderPipelineState] = [:]
         for format in formats {
             let descriptor = MTLRenderPipelineDescriptor()
-            descriptor.vertexFunction = library.makeFunction(name: "resizeVertex")
-            descriptor.fragmentFunction = library.makeFunction(name: "resizeFragment")
+            descriptor.vertexFunction = RuntimeBenchmarkProbe.measure("metalFunctionCreateMS") {
+                library.makeFunction(name: "resizeVertex")
+            }
+            if descriptor.vertexFunction != nil {
+                RuntimeBenchmarkProbe.active?.record("metalFunctionCreateCount")
+            }
+            descriptor.fragmentFunction = RuntimeBenchmarkProbe.measure("metalFunctionCreateMS") {
+                library.makeFunction(name: "resizeFragment")
+            }
+            if descriptor.fragmentFunction != nil {
+                RuntimeBenchmarkProbe.active?.record("metalFunctionCreateCount")
+            }
             descriptor.colorAttachments[0].pixelFormat = MTLPixelFormat(rawValue: format)!
-            pipelines[format] = try device.makeRenderPipelineState(descriptor: descriptor)
+            pipelines[format] = try RuntimeBenchmarkProbe.measure("metalRenderPipelineCompileMS") {
+                try device.makeRenderPipelineState(descriptor: descriptor)
+            }
+            RuntimeBenchmarkProbe.active?.record("metalRenderPipelineCompileCount")
         }
         self.pipelines = pipelines
     }

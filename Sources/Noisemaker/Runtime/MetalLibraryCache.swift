@@ -30,13 +30,17 @@ final class MetalLibraryCache: @unchecked Sendable {
         lock.lock(); defer {lock.unlock()}
         if let entry = entries[key] {
             hits += 1
+            RuntimeBenchmarkProbe.active?.record("metalLibraryCacheHitCount")
             order.removeAll {$0 == key}
             order.append(key)
             return entry.library
         }
         let options = MTLCompileOptions()
         options.fastMathEnabled = Self.fastMathEnabled
-        let library = try device.makeLibrary(source:source,options:options)
+        let library = try RuntimeBenchmarkProbe.measure("metalLibraryCompileMS") {
+            try device.makeLibrary(source:source,options:options)
+        }
+        RuntimeBenchmarkProbe.active?.record("metalLibraryCompileCount")
         let cost = source.utf8.count
         guard maxEntries > 0, cost <= maxSourceBytes else { return library }
         while !order.isEmpty && (entries.count >= maxEntries || sourceBytes + cost > maxSourceBytes) {

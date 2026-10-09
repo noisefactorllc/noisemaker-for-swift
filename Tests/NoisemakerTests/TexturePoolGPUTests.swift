@@ -4,6 +4,25 @@ import Testing
 
 @Suite(.serialized)
 struct TexturePoolGPUTests {
+    @Test func benchmarkCountsNewTexturesAndCompletedLeaseReuse() throws {
+        let device = try #require(MTLCreateSystemDefaultDevice())
+        let probe = RuntimeBenchmarkProbe()
+        RuntimeBenchmarkProbe.install(probe)
+        defer { RuntimeBenchmarkProbe.install(nil) }
+        let pool = TexturePool(device: device)
+        var first: TextureLease? = try pool.checkout(pixelFormat: .rgba8Unorm,
+            width: 17, height: 9, usage: [.shaderRead, .renderTarget], storageMode: .private)
+        let identifier = ObjectIdentifier(try #require(first).texture)
+        first = nil
+        let second = try pool.checkout(pixelFormat: .rgba8Unorm,
+            width: 17, height: 9, usage: [.shaderRead, .renderTarget], storageMode: .private)
+        #expect(ObjectIdentifier(second.texture) == identifier)
+        let samples = probe.drain()
+        #expect(samples["texturePoolAllocationCount"] == [1])
+        #expect(samples["texturePoolReuseCount"] == [1])
+        #expect((samples["texturePoolAllocatedBytes"]?.first ?? 0) > 0)
+    }
+
     @Test func reuseRequiresMatchingDescriptorAndReleasedToken() throws {
         let device = try #require(MTLCreateSystemDefaultDevice())
         let pool = TexturePool(device: device)

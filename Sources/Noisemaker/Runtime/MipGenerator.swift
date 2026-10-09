@@ -27,11 +27,21 @@ final class MipGenerator {
         let library = try MetalLibraryCache.library(device: device, source: source)
         var pipelines: [UInt: MTLRenderPipelineState] = [:]
         for format in formats {
-            guard let pixelFormat = MTLPixelFormat(rawValue: format),
-                  let vertex = library.makeFunction(name: "mipVertex"),
-                  let fragment = library.makeFunction(name: "mipFragment") else {
+            guard let pixelFormat = MTLPixelFormat(rawValue: format) else {
                 throw GraphDiagnostic.missing("Metal mipmap shader functions or format")
             }
+            guard let vertex = RuntimeBenchmarkProbe.measure("metalFunctionCreateMS", {
+                library.makeFunction(name: "mipVertex")
+            }) else {
+                throw GraphDiagnostic.missing("Metal mipmap shader functions or format")
+            }
+            RuntimeBenchmarkProbe.active?.record("metalFunctionCreateCount")
+            guard let fragment = RuntimeBenchmarkProbe.measure("metalFunctionCreateMS", {
+                library.makeFunction(name: "mipFragment")
+            }) else {
+                throw GraphDiagnostic.missing("Metal mipmap shader functions or format")
+            }
+            RuntimeBenchmarkProbe.active?.record("metalFunctionCreateCount")
             let descriptor = MTLRenderPipelineDescriptor()
             descriptor.vertexFunction = vertex
             descriptor.fragmentFunction = fragment

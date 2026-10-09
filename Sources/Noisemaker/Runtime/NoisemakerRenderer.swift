@@ -169,6 +169,8 @@ public final class NoisemakerRenderer {
         guard let dummy = device.makeTexture(descriptor: dummyDescriptor) else {
             throw GraphDiagnostic.missing("Metal transparent dummy texture")
         }
+        RuntimeBenchmarkProbe.active?.record("rendererTextureAllocationCount")
+        RuntimeBenchmarkProbe.active?.record("rendererTextureAllocatedBytes", Double(dummy.allocatedSize))
         let zero = [UInt8](repeating: 0, count: 4)
         zero.withUnsafeBytes { bytes in
             dummy.replace(region: MTLRegionMake2D(0, 0, 1, 1), mipmapLevel: 0,
@@ -532,6 +534,8 @@ public final class NoisemakerRenderer {
                   let zero = device.makeBuffer(length: totalBytes, options: .storageModePrivate) else {
                 throw GraphDiagnostic.unsupported("3D clear exceeds device buffer limit")
             }
+            RuntimeBenchmarkProbe.active?.record("rendererBufferAllocationCount")
+            RuntimeBenchmarkProbe.active?.record("rendererBufferAllocatedBytes", Double(zero.allocatedSize))
             retained.append(zero)
             guard let blit = command.makeBlitCommandEncoder() else {
                 throw GraphDiagnostic.missing("Metal 3D clear encoder")
@@ -594,6 +598,8 @@ public final class NoisemakerRenderer {
             bytes.baseAddress.flatMap { device.makeBuffer(bytes: $0, length: data.count,
                 options: .storageModeShared) }
         }) else { throw GraphDiagnostic.missing("Metal uniform buffer for \(pass.id)") }
+        RuntimeBenchmarkProbe.active?.record("rendererBufferAllocationCount")
+        RuntimeBenchmarkProbe.active?.record("rendererBufferAllocatedBytes", Double(buffer.allocatedSize))
         retained.append(buffer)
         return buffer
     }
@@ -812,6 +818,8 @@ public final class NoisemakerRenderer {
             }
             record = existing
         } else if let created = device.makeBuffer(length: byteCount, options: .storageModePrivate) {
+            RuntimeBenchmarkProbe.active?.record("rendererBufferAllocationCount")
+            RuntimeBenchmarkProbe.active?.record("rendererBufferAllocatedBytes", Double(created.allocatedSize))
             record = ComputeStorageRecord(buffer: created)
             computeStorageBuffers[bufferName] = record
         } else {

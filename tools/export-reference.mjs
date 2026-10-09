@@ -24,7 +24,9 @@ export const CASES = {
   samplerProbe: readFileSync(join(ROOT, 'parity/sampler.dsl'), 'utf8'),
   sampled3dProbe: readFileSync(join(ROOT, 'parity/sampled3d.dsl'), 'utf8'),
   sampled3dLinearProbe: readFileSync(join(ROOT, 'parity/sampled3d-linear.dsl'), 'utf8'),
-  storage3dProbe: readFileSync(join(ROOT, 'parity/storage3d.dsl'), 'utf8')
+  storage3dProbe: readFileSync(join(ROOT, 'parity/storage3d.dsl'), 'utf8'),
+  heightGridPointsOrientation: 'search synth, points, render\ntestPattern(pattern: uvMap).write(o1)\nsolid(color: #ffffff).pointsEmit(stateSize: x128).heightGrid(heightScale: 0, diffuseTex: read(o1)).pointsRender(viewMode: perspective, rotateX: 1.5708, density: 100, intensity: 0, inputIntensity: 0).write(o0)\nrender(o0)\n',
+  heightGridBillboardOrientation: 'search synth, points, render\ntestPattern(pattern: uvMap).write(o1)\nsolid(color: #ffffff).pointsEmit(stateSize: x128).heightGrid(heightScale: 0, diffuseTex: read(o1)).pointsBillboardRender(viewMode: perspective, rotateX: 1.5708, density: 100, intensity: 0, inputIntensity: 0, shapeMode: square, pointSize: 3, depositOpacity: 20, blendMode: alpha).write(o0)\nrender(o0)\n'
 }
 const PORTABLE_CASES = {
   marker: { definition: 'marker.portable.json', shaders: { marker: 'marker.marker.wgsl' } },

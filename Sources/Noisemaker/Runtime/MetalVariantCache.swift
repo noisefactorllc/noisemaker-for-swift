@@ -98,14 +98,18 @@ final class MetalVariantCache: @unchecked Sendable {
         lock.lock(); defer { lock.unlock() }
         if let entry = functions[key] {
             functionHits += 1
+            RuntimeBenchmarkProbe.active?.record("metalFunctionCacheHitCount")
             functionOrder.removeAll { $0 == key }
             functionOrder.append(key)
             return entry.function
         }
         let library = try MetalLibraryCache.library(device: device, source: source)
-        guard let result = library.makeFunction(name: name) else {
+        guard let result = RuntimeBenchmarkProbe.measure("metalFunctionCreateMS", {
+            library.makeFunction(name: name)
+        }) else {
             throw GraphDiagnostic.missing("Metal function \(name) in translated source")
         }
+        RuntimeBenchmarkProbe.active?.record("metalFunctionCreateCount")
         let cost = source.utf8.count + name.utf8.count
         guard maxFunctions > 0, cost <= maxSourceBytes else { return result }
         while !functionOrder.isEmpty &&
@@ -140,11 +144,15 @@ final class MetalVariantCache: @unchecked Sendable {
         lock.lock(); defer { lock.unlock() }
         if let entry = renders[key] {
             renderHits += 1
+            RuntimeBenchmarkProbe.active?.record("metalRenderPipelineCacheHitCount")
             renderOrder.removeAll { $0 == key }
             renderOrder.append(key)
             return entry.pipeline
         }
-        let pipeline = try device.makeRenderPipelineState(descriptor: descriptor)
+        let pipeline = try RuntimeBenchmarkProbe.measure("metalRenderPipelineCompileMS") {
+            try device.makeRenderPipelineState(descriptor: descriptor)
+        }
+        RuntimeBenchmarkProbe.active?.record("metalRenderPipelineCompileCount")
         guard maxPipelines > 0 else { return pipeline }
         while renders.count >= maxPipelines, !renderOrder.isEmpty {
             renders.removeValue(forKey: renderOrder.removeFirst())
@@ -160,11 +168,15 @@ final class MetalVariantCache: @unchecked Sendable {
         lock.lock(); defer { lock.unlock() }
         if let entry = computes[key] {
             computeHits += 1
+            RuntimeBenchmarkProbe.active?.record("metalComputePipelineCacheHitCount")
             computeOrder.removeAll { $0 == key }
             computeOrder.append(key)
             return entry.pipeline
         }
-        let pipeline = try device.makeComputePipelineState(function: function)
+        let pipeline = try RuntimeBenchmarkProbe.measure("metalComputePipelineCompileMS") {
+            try device.makeComputePipelineState(function: function)
+        }
+        RuntimeBenchmarkProbe.active?.record("metalComputePipelineCompileCount")
         guard maxPipelines > 0 else { return pipeline }
         while computes.count >= maxPipelines, !computeOrder.isEmpty {
             computes.removeValue(forKey: computeOrder.removeFirst())

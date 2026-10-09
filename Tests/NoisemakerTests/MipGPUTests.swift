@@ -88,11 +88,20 @@ struct MipGPUTests {
         let queue = try requireValue(device.makeCommandQueue())
         let generator = try MipGenerator(device: device,
             formats: Set([MTLPixelFormat.rgba8Unorm.rawValue]))
-        let cases: [(width: Int, height: Int, expected: [[UInt8]])] = [
-            (5, 3, [[41,31,46,255,123,31,80,255], [123,31,80,255]]),
+        let cases: [(width: Int, height: Int, expected: [[UInt8]], sourceHashes: [String])] = [
+            (5, 3, [[41,31,46,255,123,31,80,255], [123,31,80,255]], [
+                "d22a7cc3cf67f8cdae58accd8519addcdf5c2f55e3ed25eb25e38ea3064140bc",
+                "b4fefeb3dd2b07e0973798e67eaeb997ef9c2ab992acce63d13e23e81ca04dd7",
+                "5558393def283f27a990596e0715ef57194c69201aa1df81edcf54c7b0ca7199"]),
             (1, 7, [[0,31,29,255,0,93,87,255,0,155,145,255],
-                    [0,93,87,255]])
+                    [0,93,87,255]], [
+                "2a52b37a11263d3f90bd5c59225e33a4562affcc2c5e8e710214a5e3e4411a8a",
+                "f2109ae8353e15f1e86fcf647a129c8cee3eb72c24a8e4df37f56dd8f2268a00",
+                "099b0567133199424a987363ceb713c488def3fe923a52e406a3a53e2dc650a0"])
         ]
+        func sha(_ pixels: [UInt8]) -> String {
+            SHA256.hash(data: Data(pixels)).map { String(format: "%02x", $0) }.joined()
+        }
         for item in cases {
             let descriptor = MTLTextureDescriptor.texture2DDescriptor(
                 pixelFormat: .rgba8Unorm, width: item.width, height: item.height,
@@ -113,6 +122,7 @@ struct MipGPUTests {
                     mipmapLevel: 0, withBytes: bytes.baseAddress!,
                     bytesPerRow: item.width * 4)
             }
+            expectEqual(sha(pixels), item.sourceHashes[0], "source level zero pixels")
             let command = try requireValue(queue.makeCommandBuffer())
             var retained: [AnyObject] = []
             try generator.encode(texture: texture, into: command, retained: &retained)
@@ -129,6 +139,8 @@ struct MipGPUTests {
                         from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: level)
                 }
                 expectEqual(actual, item.expected[level - 1])
+                expectEqual(sha(actual), item.sourceHashes[level],
+                    "source WebGL2/WebGPU mip level \(level) pixels")
             }
             _ = retained
         }

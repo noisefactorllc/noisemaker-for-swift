@@ -224,6 +224,49 @@ struct PortableStorageVolumeGPUTests {
         }
     }
 
+    @Test func explicitComputeEntryPointMatchesImplicitAcrossEveryVolumeSlice() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
+        let queue = try requireValue(device.makeCommandQueue())
+        let explicitDefinition = definition.replacingOccurrences(of:
+            #""type":"compute","program":"fill""#,
+            with: #""type":"compute","program":"fill","entryPoint":"main""#)
+        var captures: [Data] = []
+        for variant in [definition, explicitDefinition] {
+            let renderer = try fixture(device: device, definition: variant)
+            let command = try requireValue(queue.makeCommandBuffer())
+            let output = try renderer.encode(into: command)
+            let volume = try requireValue(output.graphTexture("node_0_volume"))
+            let readback = try readVolume(volume, into: command, device: device)
+            command.commit()
+            command.waitUntilCompleted()
+            expectEqual(command.status, .completed, "\(String(describing: command.error))")
+            if let error = command.error { throw error }
+            let bytes = Data(bytes: readback.contents(), count: 256 * 8 * 8)
+            captures.append(bytes)
+            for z in 0..<8 { for y in 0..<8 { for x in 0..<8 {
+                let offset = z * 256 * 8 + y * 256 + x * 4
+                for (channel, position) in [x, y, z].enumerated() {
+                    expectLess(abs(Int(bytes[offset + channel]) -
+                        Int((Double(position) * 255 / 7).rounded())), 2)
+                }
+                expectEqual(bytes[offset + 3], 255)
+            } } }
+        }
+        expectEqual(captures.count, 2)
+        expectEqual(captures[0], captures[1])
+        // Same tightly packed XYZ-ordered bytes captured by the upstream
+        // test_webgpu_storage_volume_entrypoint.mjs real-device regression.
+        for capture in captures {
+            var packed = Data()
+            for z in 0..<8 { for y in 0..<8 {
+                let offset = z * 256 * 8 + y * 256
+                packed.append(capture.subdata(in: offset..<(offset + 8 * 4)))
+            } }
+            let digest = SHA256.hash(data: packed).map { String(format: "%02x", $0) }.joined()
+            expectEqual(digest, "1fa6c63e0cd32e71b5419746ba381058ca579d230dfbe0238fdc7008df3a5a9c")
+        }
+    }
+
     @Test func skippedStorageWriterKeepsVolumeAcrossCompletedFrames() throws {
         let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
         let conditional = definition.replacingOccurrences(of:

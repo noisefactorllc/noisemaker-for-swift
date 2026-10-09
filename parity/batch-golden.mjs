@@ -33,6 +33,50 @@ const EXTERNAL_TEXTURE_ID = /^[A-Za-z][A-Za-z0-9]*_step_\d+$/
 const ASYNC_OVERLAY_ID = /^node_\d+_[A-Za-z][A-Za-z0-9]*$/
 const MESH_TEXTURE_INPUT = /^global_mesh\d+_(positions|normals|uvs)/
 const SESSION_CASE_LIMIT = 60
+export function createCaptureCancellation() {
+  let signal = null
+  let session = null
+  let closing = null
+  const beginClose = () => {
+    if (!session || closing) return
+    const current = session
+    closing = Promise.resolve().then(() => current.teardown())
+    // The main loop awaits this promise in its finally block; attach a
+    // handler now so an early teardown rejection is never unhandled.
+    closing.catch(() => {})
+  }
+  const cancel = name => {
+    if (signal) return
+    signal = name
+    process.exitCode = name === 'SIGINT' ? 130 : 143
+    beginClose()
+  }
+  const onInterrupt = () => cancel('SIGINT')
+  const onTerminate = () => cancel('SIGTERM')
+  process.on('SIGINT', onInterrupt)
+  process.on('SIGTERM', onTerminate)
+  return {
+    get cancelled() { return !!signal },
+    throwIfCancelled() { if (signal) throw new Error(`golden capture cancelled by ${signal}`) },
+    setSession(current) {
+      session = current
+      if (signal) beginClose()
+    },
+    async closeSession(current) {
+      if (session === current) session = null
+      try { await closing }
+      finally {
+        closing = null
+        // setup may have completed after an early signal-triggered teardown.
+        await current.teardown()
+      }
+    },
+    dispose() {
+      process.off('SIGINT', onInterrupt)
+      process.off('SIGTERM', onTerminate)
+    }
+  }
+}
 const safeId = id => {
   if (!/^[A-Za-z0-9_/-]+$/.test(id) || id.includes('..')) throw new Error(`unsafe case id ${id}`)
   return id
@@ -677,6 +721,8 @@ async function capture(page, item, index, images, expected) {
 }
 
 async function main() {
+  const cancellation = createCaptureCancellation()
+  try {
   const [outArg, ...caseArgs] = process.argv.slice(2)
   if (!outArg) throw new Error('usage: node parity/batch-golden.mjs <out-dir> [--resume] [corpus-case-id ...]')
   const resume = caseArgs[0] === '--resume'
@@ -766,12 +812,15 @@ async function main() {
   }
   writeLedger()
   for (let start = ledger.length; start < selected.length; start = ledger.length) {
+    cancellation.throwIfCancelled()
     const session = new BrowserSession({ backend: 'webgpu' })
+    cancellation.setSession(session)
+    try {
     if (session.options.headless !== headless) {
       throw new Error('pinned browser harness launch mode differs from qualified Chromium')
     }
     await session.setup()
-    try {
+    cancellation.throwIfCancelled()
     await session.setBackend('webgpu')
     const page = session.page
     const runtimeEnvironment = {
@@ -823,6 +872,7 @@ async function main() {
     await page.waitForFunction(() => !!window.__noisemakerCanvasRenderer && !!document.getElementById('dsl-editor'), null, { timeout: 120000 })
     await installAsyncInitTracker(page)
     for (let index = start; index < Math.min(start + SESSION_CASE_LIMIT, selected.length); index++) {
+      cancellation.throwIfCancelled()
       const item = selected[index]
       const oracle = stageById.get(item.id)
       const record = { id: item.id, sourceSha256: item.sourceSha256,
@@ -937,6 +987,7 @@ async function main() {
           ...(hostVolume ? { hostVolumes: [hostVolume] } : {}),
           ...(hostAudio ? { hostAudio } : {}), ...result })
       } catch (error) {
+        cancellation.throwIfCancelled()
         const deviceLimit = await page.evaluate(() =>
           window.__noisemakerRenderingPipeline?.backend?.device?.limits?.maxTextureDimension2D).catch(() => null)
         if (Number.isSafeInteger(deviceLimit) && deviceLimit >= 256 && deviceLimit <= 16384) {
@@ -945,6 +996,7 @@ async function main() {
         record.status = 'fail'
         record.error = error?.stack || String(error)
       }
+      cancellation.throwIfCancelled()
       ledger.push(record)
       writeLedger()
       process.stderr.write(`[golden ${index + 1}/${selected.length}] ${item.id}: ${record.status}${record.error ? `: ${record.error.split('\n')[0]}` : ''}\n`)
@@ -952,14 +1004,16 @@ async function main() {
       // Do not feed the next case to that browser session.
       if (record.status !== 'ok') break
     }
-    } finally { await session.teardown() }
+    } finally { await cancellation.closeSession(session) }
   }
+  cancellation.throwIfCancelled()
   writeLedger()
   process.stdout.write(JSON.stringify({ expected: selected.length, captured: ledger.filter(x => x.status === 'ok').length,
     failed: ledger.filter(x => x.status !== 'ok').map(x => x.id) }) + '\n')
   if (ledger.some(x => x.status !== 'ok')) process.exitCode = 1
+  } finally { cancellation.dispose() }
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main().catch(error => { process.stderr.write(`${error?.stack || String(error)}\n`); process.exitCode = 1 })
+  main().catch(error => { process.stderr.write(`${error?.stack || String(error)}\n`); process.exitCode ||= 1 })
 }

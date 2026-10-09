@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sourceManifestSha256": "f09953193cf0a3ef98e10da732c5160137ee8431bacdf1bf0d982c73507c7626",
+  "sourceManifestSha256": "17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6",
   "imports": {
     "rustCommit": "61d81dfd1f64294ad3b67ee6c2b49aa5f2ae230a",
     "qtCommit": "a572b7c4902918d4f68def112146f312cc689ff9",
-    "upstreamCommit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa"
+    "upstreamCommit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923"
   },
   "expected": {
     "programs": 360,
@@ -13,8 +13,8 @@
     "curated": 383,
     "portable": 2,
     "qtPrograms": 3,
-    "upstream": 126,
-    "micro": 17
+    "upstream": 130,
+    "micro": 19
   },
   "cases": [
     {
@@ -19728,7 +19728,7 @@
       "sourceSha256": "cdae7a2f291129c302a6910c6a6c7db9f2a25bd501746fad60c4a682b9e692dc",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter3d/flow3d/definition.js",
         "sha256": "6b47b65aa97bca7d383675630cb8f7a56c36cae473e11ac0b4e8810b449bf71a",
         "generator": "locked choice/boolean coverage"
@@ -19757,7 +19757,7 @@
       "sourceSha256": "d4f46de98446746b083c0fd3312d21c0db60bb9882fbfdea1c8d25c7e64000e3",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter3d/flow3d/definition.js",
         "sha256": "6b47b65aa97bca7d383675630cb8f7a56c36cae473e11ac0b4e8810b449bf71a",
         "generator": "locked choice/boolean coverage"
@@ -19882,7 +19882,7 @@
       "sourceSha256": "6a98cee606b54f26c6c76ef340ac02107ba971a711ec1615d19314009ac140f4",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter3d/palette3d/definition.js",
         "sha256": "2affd727aeb0fdf7b2c60512d85c78fa50c59ad5e45fe32e0a8e8d734f6b4a00",
         "generator": "locked choice/boolean coverage"
@@ -19911,7 +19911,7 @@
       "sourceSha256": "2b479474ef559f2219a458a5fcda40139829710f4e607cc9abcb73f70ec60b7b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter3d/palette3d/definition.js",
         "sha256": "2affd727aeb0fdf7b2c60512d85c78fa50c59ad5e45fe32e0a8e8d734f6b4a00",
         "generator": "locked choice/boolean coverage"
@@ -19940,7 +19940,7 @@
       "sourceSha256": "274ccce21eabf2b81a8677ada66169d00d37af25085161c96a9253c3be7620bc",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter3d/palette3d/definition.js",
         "sha256": "2affd727aeb0fdf7b2c60512d85c78fa50c59ad5e45fe32e0a8e8d734f6b4a00",
         "generator": "locked choice/boolean coverage"
@@ -27937,7 +27937,7 @@
       "sourceSha256": "d82cd7fe1812899f100d3a6e8ccb0c79c996e1eca4bea63bc2af3d37808f998e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/text/definition.js",
         "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
         "generator": "locked choice/boolean coverage"
@@ -27966,7 +27966,7 @@
       "sourceSha256": "9a349aaf43309df0069a88a750370c8364d46a7dd79bb1c1042b76902b516a6e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/text/definition.js",
         "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
         "generator": "locked choice/boolean coverage"
@@ -27995,7 +27995,7 @@
       "sourceSha256": "6adf4afbac40aba74298258b398333c583211ecc9f6184550fa248b8fc737ea8",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/text/definition.js",
         "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
         "generator": "locked choice/boolean coverage"
@@ -28024,7 +28024,7 @@
       "sourceSha256": "63a9175ecda7547c31a3ebc76472d4c0f510d45c404197c7f2fddf3ca0505169",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/text/definition.js",
         "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
         "generator": "locked choice/boolean coverage"
@@ -28053,7 +28053,7 @@
       "sourceSha256": "8447c3fab14ce980c09a3cf59c5ed9cad0afca42f0663c00f1f60cc7c5194a50",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/text/definition.js",
         "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
         "generator": "locked choice/boolean coverage"
@@ -28082,7 +28082,7 @@
       "sourceSha256": "0e2604000b1a24cd2faf0b3caf1c6edf9262f45c7c1d7d1e99673151b141427b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/text/definition.js",
         "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
         "generator": "locked choice/boolean coverage"
@@ -28111,7 +28111,7 @@
       "sourceSha256": "c3270cd3d0725964cc86e33df761c5117eca35e0fb32980748f4ce86e9c03c51",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/text/definition.js",
         "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
         "generator": "locked choice/boolean coverage"
@@ -33324,7 +33324,7 @@
       "sourceSha256": "02c8b7ee356ccf04216b74d3ee90ee38b8de793432d17c6962f13d0d869dd653",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/render3d/definition.js",
         "sha256": "cfef9f05340eaae9f19b097dab7a3db465268bc130626b19bd0e72ee9847ea7e",
         "generator": "locked choice/boolean coverage"
@@ -33353,7 +33353,7 @@
       "sourceSha256": "5492a4ee16051797844ec52f4ce546ed563ab704eee93e9de95b1c48b924dc7c",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/render3d/definition.js",
         "sha256": "cfef9f05340eaae9f19b097dab7a3db465268bc130626b19bd0e72ee9847ea7e",
         "generator": "locked choice/boolean coverage"
@@ -33382,7 +33382,7 @@
       "sourceSha256": "7ea44e9f879896eaead764eb695dd8766a561e4e75d2f34dc2b1865c8a83ce62",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/render3d/definition.js",
         "sha256": "cfef9f05340eaae9f19b097dab7a3db465268bc130626b19bd0e72ee9847ea7e",
         "generator": "locked choice/boolean coverage"
@@ -33483,7 +33483,7 @@
       "sourceSha256": "74452ad1245f5ec4512b210a4564ca0147448de54f4a13e36e0942132393ae83",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderCubemap3d/definition.js",
         "sha256": "95ad600e12511aa9ab019ed7beff35f1152a1ae510eb8e4716ec204be17ba483",
         "generator": "locked choice/boolean coverage"
@@ -33512,7 +33512,7 @@
       "sourceSha256": "825ba798ea60118bfe3800ae6c9ad2b4ef9f5b67cd3fdbd0d6a801888b01091e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderCubemap3d/definition.js",
         "sha256": "95ad600e12511aa9ab019ed7beff35f1152a1ae510eb8e4716ec204be17ba483",
         "generator": "locked choice/boolean coverage"
@@ -33541,7 +33541,7 @@
       "sourceSha256": "efce5fe12e61dd8e1855fdd67a9acfd6a7131531878a1b9cfe79c88b3ec9010c",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderCubemap3d/definition.js",
         "sha256": "95ad600e12511aa9ab019ed7beff35f1152a1ae510eb8e4716ec204be17ba483",
         "generator": "locked choice/boolean coverage"
@@ -33594,7 +33594,7 @@
       "sourceSha256": "cb3a844248c94bc2b292c0709eab7378189ba9b4f093041f95476ffe90b76869",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderCubemapSurface/definition.js",
         "sha256": "fc17c202527caf30cedf63347d1415adb4552d2a185bd82d93a1a0693d298c7c",
         "generator": "locked choice/boolean coverage"
@@ -33623,7 +33623,7 @@
       "sourceSha256": "8df9dac01f890b235148ea0dbedcee2a066d1ea569e8952fd72398c647c8a59e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderCubemapSurface/definition.js",
         "sha256": "fc17c202527caf30cedf63347d1415adb4552d2a185bd82d93a1a0693d298c7c",
         "generator": "locked choice/boolean coverage"
@@ -33652,7 +33652,7 @@
       "sourceSha256": "ace8976d6879ac9d25b4f3002bea69edfcd87ecfad91a6b9bc07007638cb773d",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderCubemapSurface/definition.js",
         "sha256": "fc17c202527caf30cedf63347d1415adb4552d2a185bd82d93a1a0693d298c7c",
         "generator": "locked choice/boolean coverage"
@@ -33825,7 +33825,7 @@
       "sourceSha256": "b1a5ab4cd60d1de48e91962d933f7472831509c8a53b440639076a01cff773d4",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderLit3d/definition.js",
         "sha256": "0ddd55e2fbd000590b980a3980480c57c459319e0b973dcfdd08f3445fe3054e",
         "generator": "locked choice/boolean coverage"
@@ -33854,7 +33854,7 @@
       "sourceSha256": "b6d3109aa1567069a300c7fcedcccde7b24a96966521a3f8e406340cb02b334b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderLit3d/definition.js",
         "sha256": "0ddd55e2fbd000590b980a3980480c57c459319e0b973dcfdd08f3445fe3054e",
         "generator": "locked choice/boolean coverage"
@@ -33883,7 +33883,7 @@
       "sourceSha256": "4f0b8fbc57f8bef3e0f874f8da9943640016bedf2b0e94fdbb71a5f75b34d8dc",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderLit3d/definition.js",
         "sha256": "0ddd55e2fbd000590b980a3980480c57c459319e0b973dcfdd08f3445fe3054e",
         "generator": "locked choice/boolean coverage"
@@ -42636,8 +42636,8 @@
       "assets": [
         {
           "path": "parity/inputs/audio-v1.json",
-          "sha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
-          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"ae42c125df7390c6452617378fd6b20b6fd5b5aa\",\n    \"sourceManifestSha256\": \"f09953193cf0a3ef98e10da732c5160137ee8431bacdf1bf0d982c73507c7626\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
+          "sha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
+          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"735e1fdc4945e0df8ba47f8d657cd204e1b72923\",\n    \"sourceManifestSha256\": \"17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
         }
       ],
       "capture": {
@@ -42653,7 +42653,7 @@
         "orientation": "top-down RGBA8 PNG",
         "audioInput": {
           "assetPath": "parity/inputs/audio-v1.json",
-          "assetSha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
+          "assetSha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
           "frame": 0,
           "updatePolicy": "static-before-frame-1"
         }
@@ -43896,8 +43896,8 @@
       "assets": [
         {
           "path": "parity/inputs/audio-v1.json",
-          "sha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
-          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"ae42c125df7390c6452617378fd6b20b6fd5b5aa\",\n    \"sourceManifestSha256\": \"f09953193cf0a3ef98e10da732c5160137ee8431bacdf1bf0d982c73507c7626\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
+          "sha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
+          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"735e1fdc4945e0df8ba47f8d657cd204e1b72923\",\n    \"sourceManifestSha256\": \"17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
         }
       ],
       "capture": {
@@ -43913,7 +43913,7 @@
         "orientation": "top-down RGBA8 PNG",
         "audioInput": {
           "assetPath": "parity/inputs/audio-v1.json",
-          "assetSha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
+          "assetSha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
           "frame": 0,
           "updatePolicy": "static-before-frame-1"
         }
@@ -53509,8 +53509,8 @@
       "assets": [
         {
           "path": "parity/inputs/audio-v1.json",
-          "sha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
-          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"ae42c125df7390c6452617378fd6b20b6fd5b5aa\",\n    \"sourceManifestSha256\": \"f09953193cf0a3ef98e10da732c5160137ee8431bacdf1bf0d982c73507c7626\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
+          "sha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
+          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"735e1fdc4945e0df8ba47f8d657cd204e1b72923\",\n    \"sourceManifestSha256\": \"17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
         }
       ],
       "capture": {
@@ -53526,7 +53526,7 @@
         "orientation": "top-down RGBA8 PNG",
         "audioInput": {
           "assetPath": "parity/inputs/audio-v1.json",
-          "assetSha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
+          "assetSha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
           "frame": 0,
           "updatePolicy": "static-before-frame-1",
           "representation": "plain-array"
@@ -53547,8 +53547,8 @@
       "assets": [
         {
           "path": "parity/inputs/audio-v1.json",
-          "sha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
-          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"ae42c125df7390c6452617378fd6b20b6fd5b5aa\",\n    \"sourceManifestSha256\": \"f09953193cf0a3ef98e10da732c5160137ee8431bacdf1bf0d982c73507c7626\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
+          "sha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
+          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"735e1fdc4945e0df8ba47f8d657cd204e1b72923\",\n    \"sourceManifestSha256\": \"17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
         }
       ],
       "capture": {
@@ -53564,7 +53564,7 @@
         "orientation": "top-down RGBA8 PNG",
         "audioInput": {
           "assetPath": "parity/inputs/audio-v1.json",
-          "assetSha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
+          "assetSha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
           "frame": 0,
           "updatePolicy": "static-before-frame-1",
           "representation": "plain-array"
@@ -53643,6 +53643,60 @@
         "size": [
           257,
           129
+        ],
+        "normalizedTime": 0.25,
+        "deltaTime": 0,
+        "frames": 8,
+        "resetState": "clear pipeline writes; preserve host inputs; reset surfaces, frameIndex, lastTime and globals",
+        "sample": "presented surface after frame 8",
+        "orientation": "top-down RGBA8 PNG"
+      }
+    },
+    {
+      "id": "micro/heightGridBillboardOrientation",
+      "family": "micro",
+      "source": "search synth, points, render\ntestPattern(pattern: uvMap).write(o1)\nsolid(color: #ffffff).pointsEmit(stateSize: x128).heightGrid(heightScale: 0, diffuseTex: read(o1)).pointsBillboardRender(viewMode: perspective, rotateX: 1.5708, density: 100, intensity: 0, inputIntensity: 0, shapeMode: square, pointSize: 3, depositOpacity: 20, blendMode: alpha).write(o0)\nrender(o0)\n",
+      "sourceSha256": "d40f16ddcce99ada7b951804b67d456e7f011de4f61fe7b0e3cf7dca6a35ebde",
+      "origin": {
+        "repository": "noisemaker-for-swift",
+        "path": "tools/export-reference.mjs:CASES.heightGridBillboardOrientation"
+      },
+      "assets": [],
+      "capture": {
+        "dslSha256": "d40f16ddcce99ada7b951804b67d456e7f011de4f61fe7b0e3cf7dca6a35ebde",
+        "seed": null,
+        "externalInputs": [],
+        "inputAssets": [],
+        "size": [
+          256,
+          256
+        ],
+        "normalizedTime": 0.25,
+        "deltaTime": 0,
+        "frames": 8,
+        "resetState": "clear pipeline writes; preserve host inputs; reset surfaces, frameIndex, lastTime and globals",
+        "sample": "presented surface after frame 8",
+        "orientation": "top-down RGBA8 PNG"
+      }
+    },
+    {
+      "id": "micro/heightGridPointsOrientation",
+      "family": "micro",
+      "source": "search synth, points, render\ntestPattern(pattern: uvMap).write(o1)\nsolid(color: #ffffff).pointsEmit(stateSize: x128).heightGrid(heightScale: 0, diffuseTex: read(o1)).pointsRender(viewMode: perspective, rotateX: 1.5708, density: 100, intensity: 0, inputIntensity: 0).write(o0)\nrender(o0)\n",
+      "sourceSha256": "bef2f1f7cd61dc0962ac1739926b95aec9b772dc42fafcd96388e7da152e0578",
+      "origin": {
+        "repository": "noisemaker-for-swift",
+        "path": "tools/export-reference.mjs:CASES.heightGridPointsOrientation"
+      },
+      "assets": [],
+      "capture": {
+        "dslSha256": "bef2f1f7cd61dc0962ac1739926b95aec9b772dc42fafcd96388e7da152e0578",
+        "seed": null,
+        "externalInputs": [],
+        "inputAssets": [],
+        "size": [
+          256,
+          256
         ],
         "normalizedTime": 0.25,
         "deltaTime": 0,
@@ -69578,7 +69632,7 @@
       "sourceSha256": "0311dcb5b14505b6755086523d314d4874f21682fdbcbb806ab97ce828b54f47",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/bitEffects/parity-case.json",
         "sha256": "57c87b3900e8788cd94475a684e33237ed1463a46c3492a677252bc5ed41fc2f"
       },
@@ -69620,7 +69674,7 @@
       "sourceSha256": "92271be1063b1ea1a844277e134432a19cba004f15c984c0d0ae63a1b90a946f",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/cellNoise/parity-case.json",
         "sha256": "a1e5a2630a4f4031e53b5f0e1a039cc702d8da8da108cb5d5559d061f7486814"
       },
@@ -69669,7 +69723,7 @@
       "sourceSha256": "b1f45a808e57655c2a3782649c21dbe093c6aaecb0b193c2ae960bcf61a0d0f1",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/cellRefract/parity-case.json",
         "sha256": "07a7091931bf8220f64cde46cf57f7a4a7db8b81797467e42febf65d717d7e92"
       },
@@ -69720,7 +69774,7 @@
       "sourceSha256": "58a76066c04a998725219e47424dfa929222009a4b48d06e6b674af1858ea43b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/coalesce/parity-case.json",
         "sha256": "89af3d63b0044275d10a2e4d595a01f1d824e961f04050886b54b58cb2c89120"
       },
@@ -69765,7 +69819,7 @@
       "sourceSha256": "581780b16258a8ada7bd32e6f605d682ed7153dc7066d5e6ede6d97eb80c24ed",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/composite/parity-case.json",
         "sha256": "33680cb0794abaad4bcc6406a48c9ca4121ca52f8d1a008f28b9c0077df83f83"
       },
@@ -69811,7 +69865,7 @@
       "sourceSha256": "c03e59e3ba3d54dc9ecf9b32dab2b36a6eba388cf99d96b3b6cf6485f053d9c3",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/effects/parity-case.json",
         "sha256": "58764a413e71a860546c481d02f84dbb8c380934c3079c2e935561d6581e8093"
       },
@@ -69856,7 +69910,7 @@
       "sourceSha256": "b77ce304cb3376065df31e5810e82c96449efd36be314438c441c9a2c4d963b3",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/fractal/parity-case.json",
         "sha256": "2b96fe797ad83975fc3da23129858ca6655de36f17182dfc45e83869c206bdaf"
       },
@@ -69898,7 +69952,7 @@
       "sourceSha256": "0a8fcf7cbd292ce78abcc9d6a862c21cb0a10c84c4fc2d7a7b6dcd846c17e1b2",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/glitch/parity-case.json",
         "sha256": "3cff8885d873b41d0c5ba8e753a72cd905c59ffe38ebb1ddd343ccca8ef2aacd"
       },
@@ -69942,7 +69996,7 @@
       "sourceSha256": "d20361902cbe8fbefb7702590e00fcb36ad5cad94f1bb081d6bfe84d2ede7702",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/kaleido/parity-case.json",
         "sha256": "40c9ae5b50d2fd2e0d875f730d4023595cfd8caa1788171e8760c384d83b8750"
       },
@@ -69993,7 +70047,7 @@
       "sourceSha256": "61ca4246c034cc975ea61562951a4b1f1c91ad48ddaecbd091c2ef97c71decc4",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/lensDistortion/parity-case.json",
         "sha256": "843c3fe83cb3fe86b1410c448a6297f205ca759a6df63db599432e5069183144"
       },
@@ -70044,7 +70098,7 @@
       "sourceSha256": "a44a14a687038f1248dd0caf96a2e6429e57b24a1cf290a0858fbaf04ed17731",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/noise/parity-case.json",
         "sha256": "1629373831db15fcc74d50d3f37cb46617cc8e28cc85f2fbd4daa202574b8f72"
       },
@@ -70086,7 +70140,7 @@
       "sourceSha256": "375a5ac6c22323059c96caa33f72bd1e0fbdeaa73c8b7f67cfa7dc05a1a35029",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/noise3d/parity-case.json",
         "sha256": "0fa0a462ce2aaa6105fe164809e183fa075de52978557544a739378bf329a3ed"
       },
@@ -70129,7 +70183,7 @@
       "sourceSha256": "b5549ceb5d7140e1cf169e8687e712fd97f0e5a687b1dd06495f7cd53a81ef03",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/refract/parity-case.json",
         "sha256": "a8bbb5315b23d0114a11082d6214374c792685b5e51e5282d2f9a7dd16fb5ff8"
       },
@@ -70180,7 +70234,7 @@
       "sourceSha256": "66b82a3f577d8e097ab3636880c650f126a99480b9436b42aecb1d78e1d2d1d1",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/shapeMixer/parity-case.json",
         "sha256": "1fdcb232368d737769b4f1b1d95c04e97de2ba017b7634cc9ebf65fcb9942a10"
       },
@@ -70233,7 +70287,7 @@
       "sourceSha256": "b8d0b97af1e162d42b2ff3e3282b47f7d3cb541b7c7400e25f08df2db35da82a",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/shapes/parity-case.json",
         "sha256": "e1fa7bba601b7b6ebf626cbb433f2683f88db67d601832b5afcb3982050e323a"
       },
@@ -70282,7 +70336,7 @@
       "sourceSha256": "8a39c99c4b8c81aec4dea937baa5c20b93f85b44941c95c41b2e78e570181187",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/shapes3d/parity-case.json",
         "sha256": "c3597b1652ff019ea292cb521cb273bb226323427da011b9201fd1e805042dba"
       },
@@ -70324,7 +70378,7 @@
       "sourceSha256": "e62a4421ac811ecd92efdd2b0a54d65288c9d0d34704971602448bdf9091dd44",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/classicNoisedeck/splat/parity-case.json",
         "sha256": "3470e55e1ec33309ed8eaceda2f27d84481f4a61c233a72cc96b2632596cbefb"
       },
@@ -70377,7 +70431,7 @@
       "sourceSha256": "53f5e3d533b4f873d7a4fa1a8171aead4c01ffe945c36ed2e90c2263659c954a",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/adjust/parity-case.json",
         "sha256": "5e75d9f155fbf3f4e752799baf548e08bd013b6e7eebb745875cc6d470d82ae0"
       },
@@ -70425,7 +70479,7 @@
       "sourceSha256": "bdcc6590bf96f485de9f43f8a29893cc261628580e7cb1f5f565fce099446c0f",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/bloom/parity-case.json",
         "sha256": "cb0a40fcadecdbef6474e90e13b7e5dfd746b92474836a60f69e8383c8806560"
       },
@@ -70476,7 +70530,7 @@
       "sourceSha256": "1981715263fd84ff460c12c7a250f4ff429cf4e4d8adb54494d18089e98b3578",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/blur/parity-case.json",
         "sha256": "ddd67beac3cee136cf1d31ad2e21dda58a4ec901d93ce39def897b7652cb9bbd"
       },
@@ -70527,7 +70581,7 @@
       "sourceSha256": "431675a5a132c5ce5cd7a32d4b751d306aed96dcf005320dee4a026979c26ecf",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/bulge/parity-case.json",
         "sha256": "3d1110401d3bc061810deee24dec281674707021ffa94de8e80d007709212c26"
       },
@@ -70578,7 +70632,7 @@
       "sourceSha256": "35fb39755dba3d0bfb2ce6762988a14a348defa9051c42ffcacd65ead7392c3c",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/chrome/parity-case.json",
         "sha256": "e9ef13047b624517650fb043ef90d4aaae18ff8d419c460e61c3238bcd593599"
       },
@@ -70622,7 +70676,7 @@
       "sourceSha256": "bd5cecfe63e60fd9d984692f4a9a9e62775923b013175ce3dc2a57085acaa8f8",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/convolutionFeedback/parity-case.json",
         "sha256": "586361725974f7f559d65d619569e77b9073e338d9f870ca42131a56bdfa81ec"
       },
@@ -70673,7 +70727,7 @@
       "sourceSha256": "f78c4fe5574d361ebf294238984fd5072facf5fe9ab8a69bd6b6b005419c4feb",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/corrupt/parity-case.json",
         "sha256": "4e16af2b760930f5858f712ac0ae1e5e528c031b9eef9011da4342d501c87a43"
       },
@@ -70724,7 +70778,7 @@
       "sourceSha256": "0fef426af1d88d777fceb908945d283ba599285f517680464d14ce2babc68dca",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/crt/parity-case.json",
         "sha256": "1df7464d3d6bcf772bcb3e57abc6818302d854aa194793aa7cd516bc221bc196"
       },
@@ -70775,7 +70829,7 @@
       "sourceSha256": "60faaf9295402d29c19451d1f1ffbd3807f4cd1c8680d4e23800a8907a88515b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/degauss/parity-case.json",
         "sha256": "9696d25ddbcc1fbcde7be187fb80517a2afe19b7c0aa21797b483b16eee99e8e"
       },
@@ -70819,7 +70873,7 @@
       "sourceSha256": "9c8f574dc9eed31afd1a583eca3e75de2df1f25cb746bc532d00b0addcd17d9f",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/deriv/parity-case.json",
         "sha256": "ad2a239a5ddb58936fef8ccb7a2ebd498b70f8f5b8bfe7a9964af24bb64e5f5b"
       },
@@ -70870,7 +70924,7 @@
       "sourceSha256": "a9529698706cfea829fe73e4bd8bb7176aef2c18dd6489a3f999a8884926733e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/dither/parity-case.json",
         "sha256": "397c4fd5c40eba3758135083f5e71cf90bc4260d7e299512041708043d5bece1"
       },
@@ -70921,7 +70975,7 @@
       "sourceSha256": "5095cecf5c76384b56e7d52ab35cb212ec0d49a76f1d222fdd1bca863ab4c983",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/feedback/parity-case.json",
         "sha256": "0d4bde373ddfeeb5d35368cb7bb2efd7533fbc64984a6028cf4cd1a3bd5b81cf"
       },
@@ -70965,7 +71019,7 @@
       "sourceSha256": "6d50093eb5fbbab85c2c1f4718406caba422bcc3ac386b48cd2506e8324e5576",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/fibers/parity-case.json",
         "sha256": "cac4c67ec5186aed3e796121103ec17e3601863ae2e10a0398233617d8680401"
       },
@@ -71010,7 +71064,7 @@
       "sourceSha256": "4259e846d3104ea7133a3e888c5050dbeb278ba06ccc7af08e566675ea80bf0a",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/flipMirror/parity-case.json",
         "sha256": "45013f3d22ba6bc7e1b8049ecfc4da411b37e1d9be8a04a3bd5d76af359bb742"
       },
@@ -71061,7 +71115,7 @@
       "sourceSha256": "f1b76bfa0330769a84d1f523e4f00e9a6a99a56b3ae625c60c4bd2f4b055174b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/fxaa/parity-case.json",
         "sha256": "57d8034cb8d574cf590d06886a9580c3ae9083cfccc5c5fec75c15c4e1fc9c31"
       },
@@ -71106,7 +71160,7 @@
       "sourceSha256": "d665e5fb2d4349eedc189b87e37a7ef719695ed4c47cfbaa05d05ea74ab7cffb",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/glowingEdge/parity-case.json",
         "sha256": "1f9c5b0253ed46ed773e009545602239d1c7de09c5b31d540cbc54adae3fedf8"
       },
@@ -71151,13 +71205,57 @@
       ]
     },
     {
+      "id": "upstream/filter/glyphMap",
+      "family": "upstream",
+      "source": "search synth, filter\nnoise(seed: 1, scaleX: 50, scaleY: 50).glyphMap().write(o0)\nrender(o0)",
+      "sourceSha256": "b7c62fa9f77493560169713fee596ac8662511cbcd66db8f1a8c898de5ea9b9f",
+      "origin": {
+        "repository": "https://github.com/noisefactorllc/noisemaker",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
+        "path": "shaders/effects/filter/glyphMap/parity-case.json",
+        "sha256": "63027bb8cdadbf5f2e932d3c993be2ddf27ed2dc17b32221beee1559c095f987"
+      },
+      "assets": [],
+      "capture": {
+        "size": [
+          64,
+          64
+        ],
+        "normalizedTime": 0.25,
+        "deltaTime": 0,
+        "frames": 8,
+        "resetState": true,
+        "sample": "WebGPU presented surface",
+        "orientation": "top-down RGBA8 PNG"
+      },
+      "upstreamCase": {
+        "schemaVersion": 1,
+        "effects": [
+          "filter/glyphMap",
+          "synth/noise"
+        ],
+        "dsl": "search synth, filter\nnoise(seed: 1, scaleX: 50, scaleY: 50).glyphMap().write(o0)\nrender(o0)",
+        "surface": "o0",
+        "resolution": [
+          64,
+          64
+        ],
+        "epsilon": 0,
+        "requireColorVariation": true
+      },
+      "claimedEffects": [
+        "filter/glyphMap",
+        "synth/noise"
+      ]
+    },
+    {
       "id": "upstream/filter/grade",
       "family": "upstream",
       "source": "search synth, mixer, filter\n\ntestPattern(pattern: colorBars).alphaMask(tex: solid(color: #808080), maskMode: true).grade(exposure: 0.2, contrast: 0.15, fadedFilm: 0.15, preset: warmFilm, alpha: 0.6, vignetteAmount: 0.4).write(o0)\nrender(o0)",
       "sourceSha256": "661aa7c7cd2ddd1ffd5db3e8e0fffb5f3282d1e33d9fb9e836e92aefba17a2b6",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/grade/parity-case.json",
         "sha256": "1d491e24a145453b0821bf4cb0bdc80152e4ce0a7e4c307406c8f8689988aab6"
       },
@@ -71205,7 +71303,7 @@
       "sourceSha256": "894951f7ce4291d6f98a947727c4dd6c49f5b3e7b21d1661ff4487674eabe6bb",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/grime/parity-case.json",
         "sha256": "f091635bfd4cadcec8ba5f401f8a7f124559f39fa42fb33a4a6cbfeea47e85c9"
       },
@@ -71249,7 +71347,7 @@
       "sourceSha256": "0b391ab85ffccf2024bfac533634c2b3bcae429cfcf9a9a79d67eca975a42189",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/invert/parity-case.json",
         "sha256": "dc961faf33be99db2ff20cbe4f855ba29438bded7be7ede1d41578273d098c71"
       },
@@ -71297,7 +71395,7 @@
       "sourceSha256": "60f7f4274cf5e686c4df55d7076e4c8195b97786df6ebe1f9bdc079cb89276e3",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/lensWarp/parity-case.json",
         "sha256": "d8dffaf1c273ba5766c05f0cf36053a657e973c555d26a761fbd6169efdc2a75"
       },
@@ -71341,7 +71439,7 @@
       "sourceSha256": "3419b02a56fcab41d96ab8d10b5c944c6747a819bfca93cb4ded83e76a24137c",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/lighting/parity-case.json",
         "sha256": "fe9b76be39a4719b37bd9d405b8a8088e8fc62aa2412ceff21422661837ef921"
       },
@@ -71392,7 +71490,7 @@
       "sourceSha256": "d458b815f88396f4b94a28e8d0f9f6b0ca2c4672669097ed6f2102a02199b98b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/normalMap/parity-case.json",
         "sha256": "01b4bcd4aeb09273e6c21d9e6ad8a1792b6cbd70c179c97f92f8bc8fec6572d1"
       },
@@ -71437,7 +71535,7 @@
       "sourceSha256": "2fcaca4b9c985f4a38d8b1e05a3e26c3c6191e922adc369fe82c810af34debe0",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/normalize/parity-case.json",
         "sha256": "3b4e297ccd049c96985191b7657039dc92fff3d1a672d8ed5b97344dd6857db9"
       },
@@ -71482,7 +71580,7 @@
       "sourceSha256": "0538cc5f30375cc1125b6aeb5a3dd631de9f5f9f05ddcb10a628716cda8e5aba",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/octaveWarp/parity-case.json",
         "sha256": "f45beee336d3db80cf866f434e3c43b28dafecbfcd20ec01b81f74d5d8dd71b9"
       },
@@ -71533,7 +71631,7 @@
       "sourceSha256": "faf74c82489f47f9945f7c19519bfb5f55eabf30881768c944f720d5c6cc4fd3",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/osd/parity-case.json",
         "sha256": "07fecf681cad3cfc6efa041151cd1a27e8b1f6de6bb79e26077d503793e38085"
       },
@@ -71577,7 +71675,7 @@
       "sourceSha256": "61b461dd0bb808fe3010e392e49ca6fbe0c1050568ceac9055dcc100b12af110",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/outline/parity-case.json",
         "sha256": "12467bd04678fd8eed378dd77329d668e4e43e110da0baca0b73a2835efacf5d"
       },
@@ -71621,7 +71719,7 @@
       "sourceSha256": "dd151a35edcd49dfc6d127cebb78f40b7a656f70c2379857a9eb250adb60ffc0",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/pinch/parity-case.json",
         "sha256": "1c23b4e294f8102aa259f124e8495afe49878f71bf3d3bb3e01c9f189fb3d0bf"
       },
@@ -71672,7 +71770,7 @@
       "sourceSha256": "86c414959d2bb6797ce03d37a6e08e1a3669622434b0ce73cf7279853612197e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/pixelSort/parity-case.json",
         "sha256": "cb965f4d909af9460af20177368548d85b2505231c39a026e7c00c1286e8e5ea"
       },
@@ -71716,7 +71814,7 @@
       "sourceSha256": "50f3824357008fe395b940b5f10447784900848cc2d7cc570d17394fb8474092",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/polar/parity-case.json",
         "sha256": "c7d0b54aefc311238cc1a3c23bd4130af0195aa70f8a59531f45532994caf9f8"
       },
@@ -71767,7 +71865,7 @@
       "sourceSha256": "85e16d7fd7d79133f9eee7c02ebfb5a01096ebd700a5a645fdd5def58ff53c30",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/pondRipples/parity-case.json",
         "sha256": "2f57c46182b52cc4f9c63033f6315a3e4d82f1f24203e3e9b755186ad1e552c3"
       },
@@ -71811,7 +71909,7 @@
       "sourceSha256": "7b5a28460dfe1fe28cde80ae79efb056ac8d7d2f15384d2423e5de32e22c1155",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/prismaticAberration/parity-case.json",
         "sha256": "a5cd71d249d16b168322727a26dd169cc22582080ae879ccbdef5bbd865bd845"
       },
@@ -71856,7 +71954,7 @@
       "sourceSha256": "1a71ec8b8404eb154f3b43aea6cebe49ab368210e07245e143e85c6acbc52903",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/reindex/parity-case.json",
         "sha256": "ce71ee30c90769d245aa08cfbe7f55e61fc0a45a0968d2806047abd40abc3f40"
       },
@@ -71900,7 +71998,7 @@
       "sourceSha256": "041c1f00dd10ef3e73907faccc2d389efcafde105a706d66931bb665a8152a22",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/repeat/parity-case.json",
         "sha256": "b6d23b612c4db88de13f632d63850f3dfa6a4f8b9c5020183314cf998d919f09"
       },
@@ -71944,7 +72042,7 @@
       "sourceSha256": "b5579662b878308ed0b79b5edb3882bc19b19be731cc7af4b8018149ef835539",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/reverb/parity-case.json",
         "sha256": "423fe31218bc0d3b083334913bdeaec29c46c475ddcc0fa7427cf6d679c7b01e"
       },
@@ -71988,7 +72086,7 @@
       "sourceSha256": "0191da1cb57a311801bb9859b331f7cafa4253165acaef773ba3665f31d8140d",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/rotate/parity-case.json",
         "sha256": "cc3bc8a164b42eff5e8811ff03f11acddcb0902c2fd800bc801f1d1720273abb"
       },
@@ -72032,7 +72130,7 @@
       "sourceSha256": "792d26d5280d6919bfe0925e0666948446e18a408ece59a7d495774a02961c1a",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/scale/parity-case.json",
         "sha256": "f4c889299e006a051056f6d9a817beb7bde78fca69f5eda9a5d38eb8c8759084"
       },
@@ -72083,7 +72181,7 @@
       "sourceSha256": "bd5125b6891310b7ed3a1ac5ed4523a68c67951c8c6bd910e74f965d46d365de",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/scanlineError/parity-case.json",
         "sha256": "d18e65962ec3c01f6b14fe953173824dbd79ddc362e94e58b54279458401f308"
       },
@@ -72128,7 +72226,7 @@
       "sourceSha256": "b9f9b72b4ade909404849b92d7eb012ee995b82b4f33dd80a8fc91de0e1ffeb7",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/scratches/parity-case.json",
         "sha256": "e0b5f9c2de7c741055d427be4ddf32cebba11ab3d68812b0203a2147221182e3"
       },
@@ -72173,7 +72271,7 @@
       "sourceSha256": "4f894130f84ae53fdc9b62d7133ab0db46bd61c694734d976b02e45536453542",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/scroll/parity-case.json",
         "sha256": "69de85fc34486da1585d4ba40e69510b5f3693aaec88829313e1b2fe919c14a3"
       },
@@ -72217,7 +72315,7 @@
       "sourceSha256": "97a359cb57f5adc5374df8e890e4ed1b2adfad0183be59b0f280818b59941cef",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/sharpen/parity-case.json",
         "sha256": "2169475bce662de2e3931eeae4edfc05ddbd478a4ee40062a32a79d1fa41c9a2"
       },
@@ -72269,7 +72367,7 @@
       "sourceSha256": "096d7867684cffb5f1316450ddc681e2d49383923c2bfe3efb4a92d878706688",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/simpleAberration/parity-case.json",
         "sha256": "90497399eaca3ce2fd64df08c22ca537b0bb10e967fe9824df004b21ed7dc09a"
       },
@@ -72320,7 +72418,7 @@
       "sourceSha256": "06028bcf1adf5306e0fff948fbfeedff41a5e44d0976867065bdb0b594f32741",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/skew/parity-case.json",
         "sha256": "cdd97e0ad5fba6cc0adf29fbc3bf136c01dd18a6cccc72b6e1d40fe55ac9a188"
       },
@@ -72371,7 +72469,7 @@
       "sourceSha256": "0342fb5c6a10029fb5b7928b7b714f0dc04bfb4721624344ebd20878fd610431",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/smooth/parity-case.json",
         "sha256": "3837f207c70aff74ad581a534aa1fc3ca3ec25b453bf736ea3bbdb93eecb949c"
       },
@@ -72416,7 +72514,7 @@
       "sourceSha256": "853b5b8811df49c62431d53f913e394df6989be68124d62d7c535d90313cd9c6",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/snow/parity-case.json",
         "sha256": "9b655900330071c8d769a081bb68ba919179cb918ba39ff68f183535926b8d9c"
       },
@@ -72460,7 +72558,7 @@
       "sourceSha256": "f13310414d10c9bc9b598a7175900a0a98e763913640660e6490db184b2b4662",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/sobel/parity-case.json",
         "sha256": "5a8453d41a1664d2e486ae0c94a474bde0993a1242bb3a5d203a377eade5a674"
       },
@@ -72511,7 +72609,7 @@
       "sourceSha256": "006811391d5f46cfcc1c09ae49774c547c832769cd6ad62a333a07a54c7f6664",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/spinBlur/parity-case.json",
         "sha256": "4201e77a2968be84b85cfa4784c4e83f76f9dbb49c00726470044c39375c8f05"
       },
@@ -72555,7 +72653,7 @@
       "sourceSha256": "836863912df9e5080cf4da33aa52ecefbfbc5f0da4353e207d411e5a8cbe4afe",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/spiral/parity-case.json",
         "sha256": "700421656177ce3a14b7788ce01fd06ad96651c752c0ef2a461ea00dd94809bd"
       },
@@ -72606,7 +72704,7 @@
       "sourceSha256": "6e04778f75f4591a39291328c98ec38b945389b8e140aa0279552951dbb800d9",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/spookyTicker/parity-case.json",
         "sha256": "1c0060235adeea6f218b649b6ba4dd1e5ab917ec0a4ebc61c00ea55929d3aaa4"
       },
@@ -72658,7 +72756,7 @@
       "sourceSha256": "cd19fe3a3193c47e55ed0849ce14d8f7409e1dba8478bf17fc0751b6b2305769",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/strayHair/parity-case.json",
         "sha256": "fb7be28ea982662b2b35d6c4d7c68407092ed8cc34d8c57bc89a2a29cd94446e"
       },
@@ -72703,7 +72801,7 @@
       "sourceSha256": "6c7dc9aede8989554314941bc36e3ef93b43d7c0be3c783bbe94dd36385d91f0",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/texture/parity-case.json",
         "sha256": "c32c88a4cebb63252f88a0d97fd3ea84210df198f6a1bf662aa87223ed2e0867"
       },
@@ -72747,7 +72845,7 @@
       "sourceSha256": "5713aef183fb4eb705f7f1b4cda657ca78b1fb39ca74112340cb6f2a30a19b4b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/tile/parity-case.json",
         "sha256": "46560a1fbd544adbf7a6a95935ae15f830ae606e4691668084e5a38af2cafe5c"
       },
@@ -72798,7 +72896,7 @@
       "sourceSha256": "0fcd83d7762728db81f2b7ca7cb6558dab27dc08ad117f46bfd9cf3506bac47c",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/tint/parity-case.json",
         "sha256": "735bc4b5a7a17e0bfc949b4712a032a8ce065469682bea9e9ee57c32a36f6480"
       },
@@ -72846,7 +72944,7 @@
       "sourceSha256": "973c7f73a7114a9f1b6d6171da705f9e906239f81bd801298eac515773e8a87a",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/translate/parity-case.json",
         "sha256": "0726e3f7dc09a5bdb9e239f3cbeaf5e5e05f25e5a80f95fc5a11c916cb60a472"
       },
@@ -72890,7 +72988,7 @@
       "sourceSha256": "08ca60406a800ab587641276d5b2e438c5e70e60e94fa60da72691b598ce9279",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/tunnel/parity-case.json",
         "sha256": "2767a8f80037ec5bbcf6e686bea336f9bba0fe22fd3401cbdc7ad085b4b69c13"
       },
@@ -72941,7 +73039,7 @@
       "sourceSha256": "02615cd5cd89f8a3a0b2c4d7347146cf2c41a4cb9c05c923760a3ea00dc87534",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/unsharpMask/parity-case.json",
         "sha256": "fa3fbe680ccbda956c9a76ac76ee40fa6f12c0774328bba75cae33986c6d7359"
       },
@@ -72986,7 +73084,7 @@
       "sourceSha256": "19ffd8f9fe1b2f369945189d8f4423bd6f8adf5c6abfe49d1f2256ff385f460e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/vaseline/parity-case.json",
         "sha256": "117008f1a934ce25496b72aa3c48a05f6dbf3135d97bdbbc818676e3bbad6825"
       },
@@ -73037,7 +73135,7 @@
       "sourceSha256": "2ba4e23f923d3bc96e9939906df0d6bb29e31582cd1f7a9408b0bf3db1e85c9c",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/vignette/parity-case.json",
         "sha256": "1ac85017ec4a5ee667c98a68facb38abd5a9d2bffe72f82c7a6161fabb2d9f27"
       },
@@ -73088,7 +73186,7 @@
       "sourceSha256": "c856a6b46423d3c0a52d4c2553c4d40e328a1fc2618077c8c9b8ac9ae7d8c2e2",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/warp/parity-case.json",
         "sha256": "a7868e9a2048ffba37f23e44a6f11b30fa7efddd326ed4a0ef8079f204ed7909"
       },
@@ -73139,7 +73237,7 @@
       "sourceSha256": "a64fa5fc3cde7024cc7f735cc197d7d0aa02d17cbef9512b4adfd3ef5db86b74",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/waves/parity-case.json",
         "sha256": "db0b2f381b6b09639a5f89f9c7b0491a96d2ccbb5a71e6c0d6c6c7364591c8ab"
       },
@@ -73190,7 +73288,7 @@
       "sourceSha256": "1bbe6336218e44dda2a239636fa1faf05001bc358ee0a5ac29c363ec45a10ac2",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/wobble/parity-case.json",
         "sha256": "8fb64201b4b1787e5a02a9c4ee33acac2f6ea9738ec8c6c88d7caf3b4e8ab686"
       },
@@ -73234,7 +73332,7 @@
       "sourceSha256": "96c91b944ec159073e2c2af84645645f27da694ac0cb9b7a3a56fc0d109f9d4f",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter/zoomBlur/parity-case.json",
         "sha256": "c56969e0a80302feef0393c50740d2a07d8458ed82efd33e4892dc88e6419145"
       },
@@ -73285,7 +73383,7 @@
       "sourceSha256": "d1af9dea96c9da4941cf358624b925cedee4e87c98b653787d8324cfa592b711",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/filter3d/flow3d/parity-case.json",
         "sha256": "541597da089bab453c67d89e8198f056ad2f0551aa24b67f87b03e1e1f2ea828"
       },
@@ -73331,7 +73429,7 @@
       "sourceSha256": "0b917520cdfb66d63456dd239886844274d2bf7d06f630472687159027844670",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/alphaMask/parity-case.json",
         "sha256": "86d44a7ad2388938dd31d94413ec4c94e228f0c0cd750cdb8dcbaf6b61fa2df0"
       },
@@ -73377,7 +73475,7 @@
       "sourceSha256": "a49452184b1d14e62401c37813b1e8ddd1e3a41504cc5a5944417e3685a1edfc",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/blendMode/parity-case.json",
         "sha256": "4f27238223ced1f7b81ee65694dffb1493c05c2eb51e8cf98627039e7011aa51"
       },
@@ -73423,7 +73521,7 @@
       "sourceSha256": "a443de9f6d5f211564aa4947f1b016b0406154481bfd766bd3790ad3a7375fe0",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/centerMask/parity-case.json",
         "sha256": "1c4941eeff85af64368f0e04dc0d6ee9fb1c776174ca3a185050fbbddc66cec6"
       },
@@ -73474,7 +73572,7 @@
       "sourceSha256": "ccc9a9f359e43f7a33222bfccca23bf3efff5448322f58d7b3f528744da6f620",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/focusBlur/parity-case.json",
         "sha256": "c0671a82b7b25d93ecb3e2f49f7e52bf2b01dde61cbdef4c1123476d2123b6fb"
       },
@@ -73527,7 +73625,7 @@
       "sourceSha256": "94899f24fded6d14b0d97cd0191e09ba04c4a8964f464f8fe4908b6e94c50b69",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/patternMix/parity-case.json",
         "sha256": "d422e0e00cc97e81f3371988e01c30ce4811d042ac95901130fc1c1f6b445996"
       },
@@ -73578,7 +73676,7 @@
       "sourceSha256": "4dbf25f56b722c3ac4dc5cb8746b34ae5802e45eb33790f9596cbf4547560419",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/shadow/parity-case.json",
         "sha256": "993043c0205893566e9fb0760f62e0fbfddfc510c0f876c246d897216451d86c"
       },
@@ -73629,7 +73727,7 @@
       "sourceSha256": "2a05fb35619d6f603d887e28872507c987502d12824fb70f5f359439ca72f218",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/shapeMask/parity-case.json",
         "sha256": "a0d68cfde60e4a9725484321102ce677e7f77742a04b7e8cf340bf76f3b0c721"
       },
@@ -73681,7 +73779,7 @@
       "sourceSha256": "3dd0b34687b45be04fd8ef68c04997ce7ba15e4252df28dfd8f47c1f604ed63b",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/mixer/uvRemap/parity-case.json",
         "sha256": "4cb73cdd5ee5ae32104eeee60b07f80bf5c19894ead190e27229b1354539b19f"
       },
@@ -73727,7 +73825,7 @@
       "sourceSha256": "b75c0168d19c5a575811cb392f80c7ac08dd614f74e6000dea4e87c60d575305",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/attractor/parity-case.json",
         "sha256": "cb6555a4d0bad9aa31576a140d76137175a94ce0c4ec8b48800481bbe8d72cdf"
       },
@@ -73775,7 +73873,7 @@
       "sourceSha256": "65de002914e3a1e28ace1e5ebb086758822b616b1e084d51014569835948315f",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/buddhabrot/parity-case.json",
         "sha256": "ae8e124b86fee60fb8b0e74b8d2787eda05e9c846d0bf555f9fcf8ab3068c3ac"
       },
@@ -73823,7 +73921,7 @@
       "sourceSha256": "a64e1ca03d5d12b7eea239b1c29bb65e4d5f37d5e736541fe6b667c8e4386361",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/dla/parity-case.json",
         "sha256": "d5567fa77850058cad2ac802109aa6d14a7c51ee473a5e5706599613f6da8890"
       },
@@ -73867,13 +73965,13 @@
     {
       "id": "upstream/points/flock",
       "family": "upstream",
-      "source": "search synth, points, render\n\nsolid().pointsEmit(stateSize: x64).flock().pointsRender().write(o0)\nrender(o0)",
-      "sourceSha256": "502cdede2553e0811e5f0bf9a3fc20fbcb75ebf9c7cce30255aea3eccd1d392a",
+      "source": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).flock().pointsRender().write(o0)\nrender(o0)",
+      "sourceSha256": "585f05f145aeb257c49b4c3e5ac7267a785c5b32b6d417158e44b4d0fbe28e9c",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/flock/parity-case.json",
-        "sha256": "2404c2ab879d878241f866f8824e47f41d68ec52ee0cdb3e62f012aaf9936d5c"
+        "sha256": "d886889efdb3e55d67907f723e8ee2846e7c2a8e039388ecdca7f3164813e074"
       },
       "assets": [],
       "capture": {
@@ -73891,12 +73989,12 @@
       "upstreamCase": {
         "schemaVersion": 1,
         "effects": [
-          "synth/solid",
+          "synth/noise",
           "render/pointsEmit",
           "points/flock",
           "render/pointsRender"
         ],
-        "dsl": "search synth, points, render\n\nsolid().pointsEmit(stateSize: x64).flock().pointsRender().write(o0)\nrender(o0)",
+        "dsl": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).flock().pointsRender().write(o0)\nrender(o0)",
         "surface": "o0",
         "resolution": [
           64,
@@ -73906,7 +74004,7 @@
         "requireColorVariation": true
       },
       "claimedEffects": [
-        "synth/solid",
+        "synth/noise",
         "render/pointsEmit",
         "points/flock",
         "render/pointsRender"
@@ -73919,7 +74017,7 @@
       "sourceSha256": "f716c446a45a4cd046715972b7e8bbd5c0f3bed89fffde69c7f642e0396cae18",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/flow/parity-case.json",
         "sha256": "1c60c0ac2b3eeb6dc6ce134de23b0eec28df99e37e947a24d6959956012b003b"
       },
@@ -73967,7 +74065,7 @@
       "sourceSha256": "edc2921c7ff4997b886ac2977dd9ff5821ffd7fffcaa9c0bd053464017c97699",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/heightGrid/parity-case.json",
         "sha256": "e2b525f1e7dce36d6d2208af1ba3f5f4c5581687591dc6688058732164e77f28"
       },
@@ -74011,15 +74109,15 @@
       ]
     },
     {
-      "id": "upstream/points/life",
+      "id": "upstream/points/hydraulic",
       "family": "upstream",
-      "source": "search synth, points, render\n\nsolid().pointsEmit(stateSize: x64).life().pointsRender().write(o0)\nrender(o0)",
-      "sourceSha256": "bdf381b042a3c46d20435c16aae7a8c57dab6e453fcb415cb5d7b0f797d5477b",
+      "source": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).hydraulic().pointsRender().write(o0)\nrender(o0)",
+      "sourceSha256": "d0824f602e36ba17426c0463f52ba97cc6d04bbb9a3632e18f05aff6ad0ec3a7",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
-        "path": "shaders/effects/points/life/parity-case.json",
-        "sha256": "fe34ccbbccb864b9180af5e9200db9ec2504c382a86832b2d5b2a1b48e24a5fd"
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
+        "path": "shaders/effects/points/hydraulic/parity-case.json",
+        "sha256": "6b048fd5b353ee7988330cef5cbd71b04e9678deb0ffdc4ea53dd7fbfdd403f8"
       },
       "assets": [],
       "capture": {
@@ -74037,12 +74135,12 @@
       "upstreamCase": {
         "schemaVersion": 1,
         "effects": [
-          "synth/solid",
+          "synth/noise",
           "render/pointsEmit",
-          "points/life",
+          "points/hydraulic",
           "render/pointsRender"
         ],
-        "dsl": "search synth, points, render\n\nsolid().pointsEmit(stateSize: x64).life().pointsRender().write(o0)\nrender(o0)",
+        "dsl": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).hydraulic().pointsRender().write(o0)\nrender(o0)",
         "surface": "o0",
         "resolution": [
           64,
@@ -74052,7 +74150,103 @@
         "requireColorVariation": true
       },
       "claimedEffects": [
-        "synth/solid",
+        "synth/noise",
+        "render/pointsEmit",
+        "points/hydraulic",
+        "render/pointsRender"
+      ]
+    },
+    {
+      "id": "upstream/points/lenia",
+      "family": "upstream",
+      "source": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).lenia().pointsRender().write(o0)\nrender(o0)",
+      "sourceSha256": "85c176f291cf1b30e0d6aee615c28cca461686bf3fd070ddd503d5c32e35a07e",
+      "origin": {
+        "repository": "https://github.com/noisefactorllc/noisemaker",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
+        "path": "shaders/effects/points/lenia/parity-case.json",
+        "sha256": "d5226ec35c0af9acb1436700983b698b774eb88c8f27c6c7b5439e39c4336143"
+      },
+      "assets": [],
+      "capture": {
+        "size": [
+          64,
+          64
+        ],
+        "normalizedTime": 0.25,
+        "deltaTime": 0,
+        "frames": 8,
+        "resetState": true,
+        "sample": "WebGPU presented surface",
+        "orientation": "top-down RGBA8 PNG"
+      },
+      "upstreamCase": {
+        "schemaVersion": 1,
+        "effects": [
+          "synth/noise",
+          "render/pointsEmit",
+          "points/lenia",
+          "render/pointsRender"
+        ],
+        "dsl": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).lenia().pointsRender().write(o0)\nrender(o0)",
+        "surface": "o0",
+        "resolution": [
+          64,
+          64
+        ],
+        "epsilon": 0,
+        "requireColorVariation": true
+      },
+      "claimedEffects": [
+        "synth/noise",
+        "render/pointsEmit",
+        "points/lenia",
+        "render/pointsRender"
+      ]
+    },
+    {
+      "id": "upstream/points/life",
+      "family": "upstream",
+      "source": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).life().pointsRender().write(o0)\nrender(o0)",
+      "sourceSha256": "46425c1a0a622e43e29ab9cbb4f69fcf0a3e0d6b7b1f9103b0acc412087bb132",
+      "origin": {
+        "repository": "https://github.com/noisefactorllc/noisemaker",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
+        "path": "shaders/effects/points/life/parity-case.json",
+        "sha256": "72a3dac8e5d6b086791edd66a0f9f067d3bd9446811c2b19539014db18983057"
+      },
+      "assets": [],
+      "capture": {
+        "size": [
+          64,
+          64
+        ],
+        "normalizedTime": 0.25,
+        "deltaTime": 0,
+        "frames": 8,
+        "resetState": true,
+        "sample": "WebGPU presented surface",
+        "orientation": "top-down RGBA8 PNG"
+      },
+      "upstreamCase": {
+        "schemaVersion": 1,
+        "effects": [
+          "synth/noise",
+          "render/pointsEmit",
+          "points/life",
+          "render/pointsRender"
+        ],
+        "dsl": "search synth, points, render\n\nnoise(seed: 1).pointsEmit(stateSize: x64).life().pointsRender().write(o0)\nrender(o0)",
+        "surface": "o0",
+        "resolution": [
+          64,
+          64
+        ],
+        "epsilon": 0,
+        "requireColorVariation": true
+      },
+      "claimedEffects": [
+        "synth/noise",
         "render/pointsEmit",
         "points/life",
         "render/pointsRender"
@@ -74065,7 +74259,7 @@
       "sourceSha256": "aec09f6c3ab4be1453029c34ec5e3864ca9917fcc0f896bb5c2acb0853b8ac5a",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/physarum/parity-case.json",
         "sha256": "c50d74886a70cdbdebc4b40f945cfc918056ba9fee0a61a08169c834ab2bc6e7"
       },
@@ -74113,7 +74307,7 @@
       "sourceSha256": "2ec5ebf0271df90455a9ce392e894391754f55272cc6743b1ffba909166a3607",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/points/physical/parity-case.json",
         "sha256": "f8619924ac1e34b0f6330b8220aed8a18439f5f7b0480bfc754314eb70f11551"
       },
@@ -74161,7 +74355,7 @@
       "sourceSha256": "fd9ab26dc8825e6cc161982b9e111715df59a90333f73f3aff2ade6f3452eb7d",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/meshRender/parity-case.json",
         "sha256": "0e9336facb94c72d7625bd6d1e8e2773f57db0ea7f67202f90a605e7c73e3bf6"
       },
@@ -74212,7 +74406,7 @@
       "sourceSha256": "da055734fc6c94f4ac6876f5a915593f317fe71b1b094cf73d27a782b5a4b2f3",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/pointsBillboardRender/parity-case.json",
         "sha256": "bf319272e7021493f6b405b05129df17a11d30a06b366a7d8ac9e312c5f5001f"
       },
@@ -74262,7 +74456,7 @@
       "sourceSha256": "0e98894b8a568a31139bb9734b278de0d46c715f67d45389958e23a5ab28e4ea",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/pointsEmit/parity-case.json",
         "sha256": "ef0356bbbf2083c57a361be75ac710ea350d43655850045794374032913edc7f"
       },
@@ -74308,7 +74502,7 @@
       "sourceSha256": "d0526d9f31d2ac64abe19b82624f2b8b75ec9786f1aa483f981decea74e2a05f",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/pointsRender/parity-case.json",
         "sha256": "b72527498263fc8f2cff744475e6f2cae33578149f65aa515f8239a9fbb8cf6a"
       },
@@ -74352,13 +74546,57 @@
       ]
     },
     {
+      "id": "upstream/render/render3d",
+      "family": "upstream",
+      "source": "search synth3d, render\n\nnoise3d(volumeSize: x32).render3d(filtering: voxel).write(o0)\nrender(o0)",
+      "sourceSha256": "87dd5aa8426e2415ebf9de662dfcdb2d445a5d824289acaff2b07e28e8defe40",
+      "origin": {
+        "repository": "https://github.com/noisefactorllc/noisemaker",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
+        "path": "shaders/effects/render/render3d/parity-case.json",
+        "sha256": "688c95b493ea4cd3ba035ce18d9a1fc8b4ddea22b989f203bef99ea3dbd87fa2"
+      },
+      "assets": [],
+      "capture": {
+        "size": [
+          64,
+          64
+        ],
+        "normalizedTime": 0.25,
+        "deltaTime": 0,
+        "frames": 8,
+        "resetState": true,
+        "sample": "WebGPU presented surface",
+        "orientation": "top-down RGBA8 PNG"
+      },
+      "upstreamCase": {
+        "schemaVersion": 1,
+        "effects": [
+          "synth3d/noise3d",
+          "render/render3d"
+        ],
+        "dsl": "search synth3d, render\n\nnoise3d(volumeSize: x32).render3d(filtering: voxel).write(o0)\nrender(o0)",
+        "surface": "o0",
+        "resolution": [
+          64,
+          64
+        ],
+        "epsilon": 0,
+        "requireColorVariation": true
+      },
+      "claimedEffects": [
+        "synth3d/noise3d",
+        "render/render3d"
+      ]
+    },
+    {
       "id": "upstream/render/renderLandscape3d",
       "family": "upstream",
       "source": "search synth, synth3d, render\nheightmap3d(heightTex: testPattern(pattern: gradient), tex: testPattern(pattern: colorBars), volumeSize: x32, heightScale: 0.6, baseHeight: 0.1).renderLandscape3d(filtering: isosurface, viewMode: perspective, rotateX: 0.62, rotateY: 0.5, posY: 12).write(o0)\nrender(o0)",
       "sourceSha256": "5a93d5e6b7e8ae2372d2f6e824a7e72d128297cfc70d018fc1b2fe3611809906",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderLandscape3d/parity-case.json",
         "sha256": "52b5c5b1c922e9bc1479c4396a9c51b76a6caffb337473988dc2e1eaad1c0257"
       },
@@ -74404,7 +74642,7 @@
       "sourceSha256": "bbb10adcc5349c7b29ab3fc4a435df5b862d9802606cd398c86104bf19b2cef7",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/render/renderLit3d/parity-case.json",
         "sha256": "5d178659a5d786d796d0aa652e9b3113154979770a8cbaa95fac3074965fb8b0"
       },
@@ -74449,7 +74687,7 @@
       "sourceSha256": "c4b94a8f64b9cc5acf582b4853168b0d6b336a2b5eb71346788ec7bc4419b3f0",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/cellularAutomata/parity-case.json",
         "sha256": "65454de2a000db1192f214fad6f08a9c7d2c5930302b7dfdb250209c1f2b0db3"
       },
@@ -74498,7 +74736,7 @@
       "sourceSha256": "d3445f6942b4c9d3f4535f368217cf5ffa1d6bd7b554329b0b9022895273de13",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/curl/parity-case.json",
         "sha256": "e88cd708ba601a0b836f340ab8228f6b2c32136d21fc727d55083b6d86e9bf2c"
       },
@@ -74540,7 +74778,7 @@
       "sourceSha256": "d91e5bfe9e5eff4954773a3f4a37b24c727b49e4bad25c0eb8751a3831a838ca",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/julia/parity-case.json",
         "sha256": "a3e9c9c24e126c8bc1e50e13bce89f88be91c8b9d131d4a260443880cd339d9d"
       },
@@ -74583,7 +74821,7 @@
       "sourceSha256": "60ed9b78b10a13f2346ba451f911b91db739115e04634f2859b3da017b9b1361",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/mandelbrot/parity-case.json",
         "sha256": "b163ff7ee4d844459f60863211d759a8112b313498ea9f98a1bffccef052f38c"
       },
@@ -74633,7 +74871,7 @@
       "sourceSha256": "cb7ca5bf215061fe60d837dc046fde14ff9e00ca7381c6b62cc3962edca96985",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/media/parity-case.json",
         "sha256": "4b4e14135dd31aa5336d4de312714206c7f4b6c596ccd1c0c7112a00b2596e74"
       },
@@ -74749,7 +74987,7 @@
       "sourceSha256": "5a04a4f595e316a01ad4eef24b98a5d724ebe562b36c46cf668fdab561a492c5",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/mnca/parity-case.json",
         "sha256": "c5a4b46c5d5d5f6555527e74cf10b5391fa5ea95e3a524f55a782697cb34ac9c"
       },
@@ -74798,7 +75036,7 @@
       "sourceSha256": "fd3ccb074cc86e0a73eeb00efa38b7c2f478f36ae6472853c6991a514c929970",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/modPattern/parity-case.json",
         "sha256": "adeed8ac5c805e1839eaa22f7fb4ba30a772142e81d3a9bdad4c2a40feef8eeb"
       },
@@ -74847,7 +75085,7 @@
       "sourceSha256": "9fd76da366a9c2288d6125f4899fa732aa50c3a2b402f375a4ee2f22ae3196a2",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/navierStokes/parity-case.json",
         "sha256": "f2cdde5a563eae4a943466799b37bdb6371d0ccfb42442819bfbdb114cb6a183"
       },
@@ -74898,7 +75136,7 @@
       "sourceSha256": "ecc0dc70478aef8f8ceb65410d1cd061512c26b7eafa98dab34de1f3f0de4d98",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/newton/parity-case.json",
         "sha256": "f3f3c3813140277015f982dfcdde32efdddb3714f582b7f514aaa8f33f137816"
       },
@@ -74941,7 +75179,7 @@
       "sourceSha256": "d26b2912b56f5dbbc745567a27caf6d0c79f6a24e3f453a4dff4503ab5d50a4e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/osc2d/parity-case.json",
         "sha256": "95be0b1aef36d71148b179ab86d616d3ba71518eb20a33b7561a406b906b0ea3"
       },
@@ -74983,7 +75221,7 @@
       "sourceSha256": "d8b6e7bc7d92dfe750ceaf849d4b12cf9aa2a9c6ce9efe1df93f28e567e26dfb",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/pattern/parity-case.json",
         "sha256": "641c40e770f0b306f73f7df589f4964af8831a67d569b289121c25c80fe919ee"
       },
@@ -75032,7 +75270,7 @@
       "sourceSha256": "0ab5e9a75ecdd1e21dbc07fa87b2b8e4eeb78cabd45ed9e70e4fa35f3ddf39ef",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/polygon/parity-case.json",
         "sha256": "89397e4d115db67b9720f159be7faf3ba038a74d086edc6bb917b82f903b4f95"
       },
@@ -75081,7 +75319,7 @@
       "sourceSha256": "ba9728bb117b179f47dceeb357cc0ae64033d8c937918b8e3809ef960c5e8747",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/reactionDiffusion/parity-case.json",
         "sha256": "1bae224b87a772b6d2cd5b29fc0de7287a37099c585ed2462b4d475f903364e0"
       },
@@ -75132,7 +75370,7 @@
       "sourceSha256": "81d0976c5a48521f7425bada1185ee273f9d53d663c7ba3b39139ed6bf6e43a2",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/remap/parity-case.json",
         "sha256": "d2a332f4d99f249f5c058a29679cbedf46cb87556c6b69075acfe0bccdd33cbf"
       },
@@ -75176,15 +75414,15 @@
       "sourceSha256": "d890cb18718221e51b0861efa4cbfec5b8b8100639487a76e90b5d31dfbbb636",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/scope/parity-case.json",
         "sha256": "3888dc19d448f3a5da99841ac2f16d9d87572728d03a97d067b5ee5e8e3bf9b5"
       },
       "assets": [
         {
           "path": "parity/inputs/audio-v1.json",
-          "sha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
-          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"ae42c125df7390c6452617378fd6b20b6fd5b5aa\",\n    \"sourceManifestSha256\": \"f09953193cf0a3ef98e10da732c5160137ee8431bacdf1bf0d982c73507c7626\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
+          "sha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
+          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"735e1fdc4945e0df8ba47f8d657cd204e1b72923\",\n    \"sourceManifestSha256\": \"17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
         }
       ],
       "capture": {
@@ -75200,7 +75438,7 @@
         "orientation": "top-down RGBA8 PNG",
         "audioInput": {
           "assetPath": "parity/inputs/audio-v1.json",
-          "assetSha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
+          "assetSha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
           "frame": 0,
           "updatePolicy": "static-before-frame-1"
         }
@@ -75230,7 +75468,7 @@
       "sourceSha256": "5d3bb7b2e229a71c0cf87873efd57edfea304e90eacbbbbfb8fb9559930db1f9",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/shape/parity-case.json",
         "sha256": "b313615b63b4ad67e5145fdb16aa92edbf7690430ccc825cf6c9eef2d1e1456a"
       },
@@ -75279,15 +75517,15 @@
       "sourceSha256": "e4a20132b477a02900294e14992151889448add00b00be4dc845f87722a35b47",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/spectrum/parity-case.json",
         "sha256": "917aaada7d2c77b12eec9dabda5854769551445191f51fcb5144ed9e35b62255"
       },
       "assets": [
         {
           "path": "parity/inputs/audio-v1.json",
-          "sha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
-          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"ae42c125df7390c6452617378fd6b20b6fd5b5aa\",\n    \"sourceManifestSha256\": \"f09953193cf0a3ef98e10da732c5160137ee8431bacdf1bf0d982c73507c7626\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
+          "sha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
+          "text": "{\n  \"schemaVersion\": 1,\n  \"authority\": {\n    \"repository\": \"https://github.com/noisefactorllc/noisemaker\",\n    \"commit\": \"735e1fdc4945e0df8ba47f8d657cd204e1b72923\",\n    \"sourceManifestSha256\": \"17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6\"\n  },\n  \"sourceAPI\": \"AudioState.setWaveform/setSpectrum\",\n  \"frame\": 0,\n  \"updatePolicy\": \"static-before-frame-1\",\n  \"inputFormat\": \"analyser-uint8\",\n  \"shaderFormat\": \"array<vec4<f32>,32>\",\n  \"sampleCount\": 128,\n  \"normalization\": \"locked AudioState byte/255 rounded to float32\",\n  \"waveformBytes\": [\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203,\n    208,\n    203,\n    198,\n    193,\n    188,\n    183,\n    178,\n    173,\n    168,\n    163,\n    158,\n    153,\n    148,\n    143,\n    138,\n    133,\n    128,\n    123,\n    118,\n    113,\n    108,\n    103,\n    98,\n    93,\n    88,\n    83,\n    78,\n    73,\n    68,\n    63,\n    58,\n    53,\n    48,\n    53,\n    58,\n    63,\n    68,\n    73,\n    78,\n    83,\n    88,\n    93,\n    98,\n    103,\n    108,\n    113,\n    118,\n    123,\n    128,\n    133,\n    138,\n    143,\n    148,\n    153,\n    158,\n    163,\n    168,\n    173,\n    178,\n    183,\n    188,\n    193,\n    198,\n    203\n  ],\n  \"spectrumBytes\": [\n    224,\n    222,\n    220,\n    219,\n    217,\n    216,\n    214,\n    213,\n    211,\n    210,\n    208,\n    207,\n    205,\n    204,\n    202,\n    201,\n    199,\n    198,\n    196,\n    195,\n    193,\n    192,\n    190,\n    189,\n    187,\n    186,\n    184,\n    183,\n    181,\n    180,\n    178,\n    177,\n    175,\n    174,\n    172,\n    171,\n    169,\n    168,\n    166,\n    165,\n    163,\n    162,\n    160,\n    158,\n    157,\n    155,\n    154,\n    152,\n    151,\n    149,\n    148,\n    146,\n    145,\n    143,\n    142,\n    140,\n    139,\n    137,\n    136,\n    134,\n    133,\n    131,\n    130,\n    128,\n    127,\n    125,\n    124,\n    122,\n    121,\n    119,\n    118,\n    116,\n    115,\n    113,\n    112,\n    110,\n    109,\n    107,\n    106,\n    104,\n    103,\n    101,\n    100,\n    98,\n    97,\n    95,\n    93,\n    92,\n    90,\n    89,\n    87,\n    86,\n    84,\n    83,\n    81,\n    80,\n    78,\n    77,\n    75,\n    74,\n    72,\n    71,\n    69,\n    68,\n    66,\n    65,\n    63,\n    62,\n    60,\n    59,\n    57,\n    56,\n    54,\n    53,\n    51,\n    50,\n    48,\n    47,\n    45,\n    44,\n    42,\n    41,\n    39,\n    38,\n    36,\n    35,\n    33,\n    32\n  ],\n  \"waveformF32\": {\n    \"path\": \"audio-v1.waveform.f32le\",\n    \"sha256\": \"1c2dea75185bcd84c97759bda473676620a501adebf6a5e08ff0324a8265df12\",\n    \"bytes\": 512\n  },\n  \"spectrumF32\": {\n    \"path\": \"audio-v1.spectrum.f32le\",\n    \"sha256\": \"0220ad887002ebc284d1ef6beaa3e6a498e47c5eb752001759a67413f1ded501\",\n    \"bytes\": 512\n  }\n}\n"
         }
       ],
       "capture": {
@@ -75303,7 +75541,7 @@
         "orientation": "top-down RGBA8 PNG",
         "audioInput": {
           "assetPath": "parity/inputs/audio-v1.json",
-          "assetSha256": "a78cd84f906950a6f6a83e474a55ad07a890fdbde7dc965ba85c41aca7974077",
+          "assetSha256": "2d330e63c543c4a54802484254150e169a1c0286205fde94223a37f972b51655",
           "frame": 0,
           "updatePolicy": "static-before-frame-1"
         }
@@ -75333,7 +75571,7 @@
       "sourceSha256": "bc2bc03bd393280b4b5defc5a92dd6467d0c98f6c6ebd7109c58ed1c66f4771e",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/subdivide/parity-case.json",
         "sha256": "1fc990d244657d499047dcf5ca50047d7bbabf83e3cb10d429b703304b4b23fe"
       },
@@ -75382,7 +75620,7 @@
       "sourceSha256": "e4d1768771c2b6883553848cdc786821f4941c4a723f4bac1da70a1105e85505",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth/testPattern/parity-case.json",
         "sha256": "53c2b882c71d1ce8e29d838cb673b3d4c1e32e6f8b00ed0d2cbfecda6c73d841"
       },
@@ -75424,7 +75662,7 @@
       "sourceSha256": "56dba8a77591e674c6156e1f4ffc4c93d5e89ab2fd1ff465c041d20b2c496ce6",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth3d/flythrough3d/parity-case.json",
         "sha256": "b76693cac2cdc17168e5893ac8831c169cd5fa416c6a2e41d5c63573cf32af00"
       },
@@ -75469,7 +75707,7 @@
       "sourceSha256": "d40b9b0fc74e88faab64a4f0d02d0249d8dd7b7a6e7e23a92fe9bf828c0f3b83",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth3d/fractal3d/parity-case.json",
         "sha256": "94a9d1d9ba827561600e2d7476300b5491662ebe0b456cf86017ee5f92f2b24b"
       },
@@ -75521,7 +75759,7 @@
       "sourceSha256": "b087101a748749d5065c51b83f60af668262408bc51c54fba3b1b632fb67428f",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth3d/heightmap3d/parity-case.json",
         "sha256": "74b4938614784c41d5923e61327c6e96858d5458bb14adba3304ba0e9ce5634c"
       },
@@ -75567,7 +75805,7 @@
       "sourceSha256": "133908140b828e8964a48aeb0144957c221c20839d92b14601b966e99f8aaccb",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth3d/noise3d/parity-case.json",
         "sha256": "f0b5b5a1ec4df6c18011e997fd32668972d76dc1c7dae0885f1740c0862d5613"
       },
@@ -75611,7 +75849,7 @@
       "sourceSha256": "ac14247885d23743ff515f1746ea48f4c07844364ebc9a4c4ec2db832dd9ea63",
       "origin": {
         "repository": "https://github.com/noisefactorllc/noisemaker",
-        "commit": "ae42c125df7390c6452617378fd6b20b6fd5b5aa",
+        "commit": "735e1fdc4945e0df8ba47f8d657cd204e1b72923",
         "path": "shaders/effects/synth3d/shape3d/parity-case.json",
         "sha256": "3a83fb063fa127681a218056439a6e88a7b0bb177cdb2306d70492c88d105bfa"
       },

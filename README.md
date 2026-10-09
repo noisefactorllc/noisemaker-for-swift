@@ -132,14 +132,14 @@ and blur program.
 ## What works and what does not
 
 - **Full catalog parity on the qualified Mac.** The complete prototype gate passes on Apple M2, macOS
-  14.8.3, Swift 6.0.3, against upstream authority `ae42c125df7390c6452617378fd6b20b6fd5b5aa`. Run
-  `run.bfqnIfZt` captures 4,421 presented PNG samples per backend across 2,900 cases, including all
-  170 timed cases. Results are 2,878 exact and 22 uninformative, with zero near, deferred, skipped,
+  14.8.3, Swift 6.0.3, against upstream authority `735e1fdc4945e0df8ba47f8d657cd204e1b72923`. Run
+  `run.7EfAlDR4` captures 4,427 presented PNG samples per backend across 2,906 cases, including all
+  170 timed cases. Results are 2,885 exact and 21 uninformative, with zero near, deferred, skipped,
   failed, missing or refused cases; all 210 effects have informative evidence. Uninformative cases do
   not count toward effect evidence.
-- **The compiler matches the reference stage by stage.** The complete 2,900-case compiler corpus
-  matches 17,400 pinned source stage hashes.
-- **Native suites.** The CPU suite passes 106 tests and the native Metal suite passes 76 tests on
+- **The compiler matches the reference stage by stage.** The complete 2,906-case compiler corpus
+  matches 17,436 pinned source stage hashes.
+- **Native suites.** The CPU suite passes 106 tests and the native Metal suite passes 83 tests on
   Apple M2, including resource ownership, queued submissions, partial-write history, sampled 3D
   inputs, parameter updates, and recovery. Timed CLI regressions verify complete sample schedules,
   source-order automation arithmetic, and delta time at loop boundaries. The 100-cycle
@@ -148,18 +148,22 @@ and blur program.
   raster artifact. Native builtin and custom OBJ mesh rendering have exact presented-output
   comparisons. Portable storage-texture coverage qualifies the tested single-output numeric-dispatch
   3D subset.
-- **Not qualified yet:** performance, physical iOS and iPadOS, Intel and AMD Macs, and public
+- **Measured performance.** The 19-run Apple M2 matrix covers generators, multipass filters,
+  simulations and geometry at four sizes, plus sustained rendering, resize and in-flight memory.
+  See [architecture section 6](ARCHITECTURE.md#6-performance-and-distribution) for results and limits.
+- **Not qualified yet:** physical iOS and iPadOS, Intel and AMD Macs, and public
   distribution. Runtime features are accepted incrementally, with explicit errors for unsupported
   semantics.
 
-Open work includes [typed-array audio](https://github.com/noisefactorllc/noisemaker-for-swift/issues/8),
-[upstream resampling and mipmap divergences](https://github.com/noisefactorllc/noisemaker-for-swift/issues/9),
-[Portable storage-3D bindings](https://github.com/noisefactorllc/noisemaker-for-swift/issues/10),
-[capture cancellation](https://github.com/noisefactorllc/noisemaker-for-swift/issues/12),
-[performance measurement](https://github.com/noisefactorllc/noisemaker-for-swift/issues/17),
-[iOS and iPadOS](https://github.com/noisefactorllc/noisemaker-for-swift/issues/18),
-[upstream explicit-entry-point storage-texture binding](https://github.com/noisefactorllc/noisemaker/issues/320),
-and [upstream external-upload test backend selection](https://github.com/noisefactorllc/noisemaker/issues/321).
+Typed-array audio has exact informative WebGL2/WebGPU/Metal comparisons with nonzero effective
+sample hashes. Resize checks cover 18 odd-sized and one-dimensional up/downscale cases across
+both feedback halves and ordinary persistent textures, plus six mip levels. Explicit-entry Portable
+storage-3D bindings and capture cancellation are covered by regressions. The source refresh also
+includes heightGrid point/billboard orientation and focal-distance tests.
+
+[Physical iOS and iPadOS qualification](https://github.com/noisefactorllc/noisemaker-for-swift/issues/18)
+remains open; a connected target device is required. The upstream storage-binding and upload-backend
+fixes are published in the locked authority.
 
 ## How it works
 
@@ -203,8 +207,8 @@ python3 tools/package-check.py
 - `scripts/parity-summary` runs the complete corpus, mints fresh WebGPU references, renders native
   candidates, and fails on missing, near, failed, or refused cases and until every effect has
   informative strict or exact evidence. A selected-case invocation reports `PARITY-PROBE`; it cannot
-  qualify the complete family. The full sweep asserts actual WebGPU; the separate external-upload
-  test's WebGL2 fallback is not WebGPU evidence.
+  qualify the complete family. The full sweep asserts actual WebGPU. Upstream external-upload
+  tests now explicitly select and assert each requested backend.
 
 The test entrypoints export the authority locked in `parity/reference.json`. Set `NM_REFERENCE_ROOT`
 to a clean checkout at that commit to use local sources; otherwise the exporter fetches the locked
@@ -213,9 +217,9 @@ and source hashes stay under `.build/reference`. Unknown or altered authority in
 verification. Define counts describe declared samples, not every accepted numeric literal. The
 reference uses locked Playwright 1.63.0 and Chromium 153.0.8010.12, with the native raster artifact
 rebuilt against its Skia revision. The qualification fingerprint of the run above is
-`36fbaa2e6e2f66fdd91552edd5426eeea969de6600e756fe1b7ed303bcd2149d`, unchanged after capture and
+`2a6bc9f07c6123e9635f5555bc25804bfbe49de2f91d2727ef33f8dc78306a79`, unchanged after capture and
 grading; the native executable SHA-256 is
-`e68e56a5f30d9e57e738691501f63798807e0fe4c0b7849ccf3cc48cd0188f96`.
+`f48049d7629732e60c2cd7a7924a2d71344d06d57506bac7d0d839db1db4a82b`.
 
 To repeat the presented marker comparison and the graph probes on a native WebGPU/Metal host:
 

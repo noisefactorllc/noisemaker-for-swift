@@ -148,6 +148,95 @@ struct PersistentResizeGPUTests {
         expectEqual(sha(try raw(output1, queue: queue)), outputHash)
     }
 
+    @Test func persistentOrdinaryTextureKeepsExactPixelsAcrossBothResizeDirections() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
+        let queue = try requireValue(device.makeCommandQueue())
+        var registry = try EffectRegistry.bundled()
+        let sourcePattern = """
+            @fragment fn main(@builtin(position) pixel: vec4<f32>) -> @location(0) vec4<f32> {
+                let x = u32(pixel.x); let y = u32(pixel.y);
+                return vec4<f32>(f32((x * 41u) % 256u) / 255.0,
+                    f32((y * 31u) % 256u) / 255.0,
+                    f32((x * 17u + y * 29u) % 256u) / 255.0, 1.0);
+            }
+            """
+        try registry.registerPortable(definitionJSON: Data(definition.utf8),
+            orderedShaderSources: [("pattern", sourcePattern), ("sample", sample)])
+        let graph = try NoisemakerCompiler(registry: registry).compile(source:
+            "search user\npersistentGraphProbe().write(o0)\nrender(o0)\n")
+        let vertex = registry.defaultVertex
+        func renderer(_ width: Int, _ height: Int) throws -> NoisemakerRenderer {
+            try NoisemakerRenderer(device: device, graph: graph,
+                size: RenderSize(width: width, height: height),
+                defaultVertexWGSL: try requireValue(vertex.field("wgsl")?.stringValue),
+                vertexEntryPoint: try requireValue(vertex.field("entryPoint")?.stringValue),
+                registry: registry)
+        }
+        let sourceHashes = [
+            "5abdf7fa3e92f020fea98692f920b7f282f9ddde44a1fb24a80cb684d1e7026a",
+            "68d723f856b6c8992009dae5ac01bb50a121e021136367394a16e4d8e51aeb9f",
+            "2a52b37a11263d3f90bd5c59225e33a4562affcc2c5e8e710214a5e3e4411a8a",
+            "4affc570b132f0e3709baa93621c9ccf63a8fcfe883322dcd217dd25803bfc53",
+            "c6dccaeebd3faaf44547282fb711c1a826dee4b751e2d887f16c03559cf3f184",
+            "c459347a07bc9dc69dc911fa749815b9e870ce05d2b34bba7c2921cb198bc7ee"
+        ]
+        let resizedHashes = [
+            "9279c5239376c05740dd942e5489b2fcade4ceec57aa6ce553a57ce1496bd910",
+            "862f5f6822d9f5683beaf2577ef70f4b3e5d8fd30445a3994a25f62e8678411d",
+            "0737b96640593bd5450d8218b391bfda29507c2247eef6d59dac439830e0bb89",
+            "9c501fd6cea5958b235479baede61c6eb16f79a29c5917ffa237bd9d20743a1c",
+            "9754aecc9fd947e1b1fe6c13d991f9df7ff1c632658c4146764762a2ea19e822",
+            "dcfc9ac83c9a9214250379a8358a7b17f865b6c1ec26cfe19cea5df077e6104f"
+        ]
+        for (index, sizes) in [
+            (7, 5, 13, 9), (13, 9, 7, 5),
+            (1, 7, 1, 13), (1, 13, 1, 7),
+            (7, 1, 13, 1), (13, 1, 7, 1)
+        ].enumerated() {
+            let (sourceWidth, sourceHeight, targetWidth, targetHeight) = sizes
+            let old = try renderer(sourceWidth, sourceHeight)
+            let firstCommand = try requireValue(queue.makeCommandBuffer())
+            let first = try old.encode(frame: FrameState(time: 0.25, delta: 0, frameIndex: 0),
+                into: firstCommand)
+            firstCommand.commit()
+            firstCommand.waitUntilCompleted()
+            expectEqual(firstCommand.status, .completed)
+            if let error = firstCommand.error { throw error }
+            let source = try raw(try requireValue(first.graphTexture("node_0_patternTex")),
+                queue: queue)
+            expectEqual(sha(source), sourceHashes[index], "source WebGL2/WebGPU bytes")
+            expectTrue(Set(stride(from: 0, to: source.count, by: 4).map {
+                Array(source[$0..<$0+4])
+            }).count > 2, "source pattern must be informative")
+
+            let resized = try renderer(targetWidth, targetHeight)
+            try resized.adoptFeedback(from: old)
+            let secondCommand = try requireValue(queue.makeCommandBuffer())
+            let second = try resized.encode(frame: FrameState(time: 0.25, delta: 0,
+                frameIndex: 1), into: secondCommand)
+            secondCommand.commit()
+            secondCommand.waitUntilCompleted()
+            expectEqual(secondCommand.status, .completed)
+            if let error = secondCommand.error { throw error }
+            let actual = try raw(try requireValue(second.graphTexture("node_0_patternTex")),
+                queue: queue)
+            expectEqual(sha(actual), resizedHashes[index], "resized WebGL2/WebGPU bytes")
+            var expected = Data(count: targetWidth * targetHeight * 4)
+            for y in 0..<targetHeight { for x in 0..<targetWidth {
+                let sx = min(sourceWidth - 1, Int((Float(x) + 0.5) *
+                    Float(sourceWidth) / Float(targetWidth)))
+                let sy = min(sourceHeight - 1, Int((Float(y) + 0.5) *
+                    Float(sourceHeight) / Float(targetHeight)))
+                for channel in 0..<4 {
+                    expected[(y * targetWidth + x) * 4 + channel] =
+                        source[(sy * sourceWidth + sx) * 4 + channel]
+                }
+            } }
+            expectEqual(actual, expected,
+                "persistent ordinary texture \(sourceWidth)x\(sourceHeight) to \(targetWidth)x\(targetHeight)")
+        }
+    }
+
     @Test func ordinaryTextureLoadPreservesDiscardedPixels() throws {
         let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
         let queue = try requireValue(device.makeCommandQueue())

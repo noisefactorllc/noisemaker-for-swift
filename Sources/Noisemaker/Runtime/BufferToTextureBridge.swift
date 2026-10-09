@@ -41,9 +41,12 @@ final class BufferToTextureBridge {
             bufferSizesOffset: 0, immediateSlot: 30)
         let library = try MetalLibraryCache.library(device: device,
             source: translated.source)
-        guard let fragment = library.makeFunction(name: translated.mslEntryPoint) else {
+        guard let fragment = RuntimeBenchmarkProbe.measure("metalFunctionCreateMS", {
+            library.makeFunction(name: translated.mslEntryPoint)
+        }) else {
             throw GraphDiagnostic.missing("buffer-to-texture fragment function")
         }
+        RuntimeBenchmarkProbe.active?.record("metalFunctionCreateCount")
         self.fragment = fragment
         self.needsStorageSize = translated.needsStorageBufferSizes
     }
@@ -62,7 +65,10 @@ final class BufferToTextureBridge {
             descriptor.vertexFunction = vertex
             descriptor.fragmentFunction = fragment
             descriptor.colorAttachments[0].pixelFormat = target.pixelFormat
-            let created = try device.makeRenderPipelineState(descriptor: descriptor)
+            let created = try RuntimeBenchmarkProbe.measure("metalRenderPipelineCompileMS") {
+                try device.makeRenderPipelineState(descriptor: descriptor)
+            }
+            RuntimeBenchmarkProbe.active?.record("metalRenderPipelineCompileCount")
             pipelines[target.pixelFormat] = created
             pipeline = created
         }
@@ -70,6 +76,8 @@ final class BufferToTextureBridge {
         guard let uniform = params.withUnsafeBytes({ bytes in
             bytes.baseAddress.flatMap { device.makeBuffer(bytes: $0, length: bytes.count, options: .storageModeShared) }
         }) else { throw GraphDiagnostic.missing("buffer-to-texture params") }
+        RuntimeBenchmarkProbe.active?.record("bridgeBufferAllocationCount")
+        RuntimeBenchmarkProbe.active?.record("bridgeBufferAllocatedBytes", Double(uniform.allocatedSize))
         let descriptor = MTLRenderPassDescriptor()
         descriptor.colorAttachments[0].texture = target
         descriptor.colorAttachments[0].loadAction = .clear

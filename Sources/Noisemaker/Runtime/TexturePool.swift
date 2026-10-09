@@ -40,6 +40,7 @@ final class TexturePool: @unchecked Sendable {
         lock.lock()
         let epoch = generation
         if var cached = available[key], let texture = cached.popLast() {
+            RuntimeBenchmarkProbe.active?.record("texturePoolReuseCount")
             bytes -= texture.allocatedSize
             if cached.isEmpty { available.removeValue(forKey: key) }
             else { available[key] = cached }
@@ -50,6 +51,8 @@ final class TexturePool: @unchecked Sendable {
         guard let texture = device.makeTexture(descriptor: descriptor) else {
             throw GraphDiagnostic.missing("Metal texture allocation")
         }
+        RuntimeBenchmarkProbe.active?.record("texturePoolAllocationCount")
+        RuntimeBenchmarkProbe.active?.record("texturePoolAllocatedBytes", Double(texture.allocatedSize))
         return TextureLease(texture: texture, pool: self, key: key, generation: epoch)
     }
 

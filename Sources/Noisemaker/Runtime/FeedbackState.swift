@@ -41,6 +41,8 @@ final class FeedbackState: @unchecked Sendable {
                 guard let texture = device.makeTexture(descriptor: descriptor) else {
                     throw GraphDiagnostic.missing("Metal global surface \(physical)")
                 }
+                RuntimeBenchmarkProbe.active?.record("feedbackTextureAllocationCount")
+                RuntimeBenchmarkProbe.active?.record("feedbackTextureAllocatedBytes", Double(texture.allocatedSize))
                 texture.label = physical
                 targets[physical] = texture
             }
@@ -86,6 +88,8 @@ final class FeedbackState: @unchecked Sendable {
             guard let texture = device.makeTexture(descriptor: descriptor) else {
                 throw GraphDiagnostic.missing("Metal persistent texture \(name)")
             }
+            RuntimeBenchmarkProbe.active?.record("feedbackTextureAllocationCount")
+            RuntimeBenchmarkProbe.active?.record("feedbackTextureAllocatedBytes", Double(texture.allocatedSize))
             texture.label = name
             targets[name] = texture
         }

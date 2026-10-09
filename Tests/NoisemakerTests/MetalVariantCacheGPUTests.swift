@@ -4,6 +4,29 @@ import Testing
 
 @Suite(.serialized)
 struct MetalVariantCacheGPUTests {
+    @Test func benchmarkSeparatesMetalPipelineCompilationFromCacheReuse() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
+        let probe = RuntimeBenchmarkProbe()
+        RuntimeBenchmarkProbe.install(probe)
+        defer { RuntimeBenchmarkProbe.install(nil) }
+        let cache = MetalVariantCache(maxFunctions: 4, maxPipelines: 4,
+                                      maxSourceBytes: 64 * 1024)
+        let vertex = try cache.function(device: device, source: source, name: "fullTriangle")
+        let fragment = try cache.function(device: device, source: source, name: "red")
+        let first = try cache.renderPipeline(device: device,
+            descriptor: descriptor(vertex: vertex, fragment: fragment))
+        let second = try cache.renderPipeline(device: device,
+            descriptor: descriptor(vertex: vertex, fragment: fragment))
+        expectTrue(first === second)
+        expectTrue(try cache.function(device: device, source: source, name: "red") === fragment)
+        let samples = probe.drain()
+        expectEqual(samples["metalRenderPipelineCompileCount"], [1])
+        expectEqual(samples["metalRenderPipelineCacheHitCount"], [1])
+        expectEqual(samples["metalFunctionCreateCount"], [1, 1])
+        expectEqual(samples["metalFunctionCacheHitCount"], [1])
+        expectTrue((samples["metalRenderPipelineCompileMS"]?.first ?? -1) >= 0)
+    }
+
     private let source = """
         #include <metal_stdlib>
         using namespace metal;
