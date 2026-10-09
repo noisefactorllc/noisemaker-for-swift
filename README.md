@@ -221,6 +221,11 @@ rebuilt against its Skia revision. The qualification fingerprint of the run abov
 grading; the native executable SHA-256 is
 `f48049d7629732e60c2cd7a7924a2d71344d06d57506bac7d0d839db1db4a82b`.
 
+After this run, the initial-state and binding-oracle manifests were regenerated to update their
+corpus hashes. Their 18 and 13 case payloads were unchanged, and a second live initial-state capture
+passed. This metadata correction leaves the measured corpus and renderer unchanged; the fingerprint
+above identifies the pre-correction run.
+
 To repeat the presented marker comparison and the graph probes on a native WebGPU/Metal host:
 
 ```sh

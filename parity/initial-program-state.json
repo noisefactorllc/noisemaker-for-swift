@@ -5,7 +5,7 @@
     "sourceManifestSha256": "17c57f0809ebad9894fd97a4f80b5dcd325b12c29a71bf2cb8016df649c481d6",
     "licenseSha256": "43a6f2220dbf51b83fdaf43cfa520e34fac2d64669b3403211bcb62f546afe7c"
   },
-  "corpusSha256": "776480a5c5d7576491b178e6578aebe0d3e83bd58aa7e50501f7d73b40d8551d",
+  "corpusSha256": "872ee84050baae3c7bbebe7fb23b0853c7428a5865563f33f076a71586e7d2d6",
   "cases": [
     {
       "id": "curated/blender_bb_only",
