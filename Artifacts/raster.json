@@ -1,13 +1,13 @@
 {
-  "buildFingerprint": "023a1b43e110ecf2bd7789128e481245b03363897e36234d86dd419782cd9824",
-  "chromiumTag": "151.0.7922.34",
+  "buildFingerprint": "d7db42140d25f38073cf0ea20dbd077663b7376ca438d47b43c1b1bbe66f85b7",
+  "chromiumTag": "153.0.8010.12",
   "compiler": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
   "files": {
     "Info.plist": "f033bc28f0d35041cecc27f8de4508de29ba74eb14d21a4c897a6d871ac038b4",
     "LICENSE-skia.txt": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd",
     "macos-arm64/Headers/NoisemakerRaster.h": "278748724702455bf27f424d5e0fdbc27ab6489bcb794867854dabe6c0f4f6f8",
     "macos-arm64/Headers/module.modulemap": "73f8d9a2d82cab6ea832882aa9174e3a8ea5c7acd2634586cc43086698dee65b",
-    "macos-arm64/libCNoisemakerRaster.a": "de2aadec7c620a383929b547cffc94e70d2b5abb1f0cbd07cc181fd449a779c3"
+    "macos-arm64/libCNoisemakerRaster.a": "96f64522498c4bacea63a9ee5222b7d305c04fb0fe04a7abbbdc1355b7764b13"
   },
   "gnArgs": "is_debug = false\nis_official_build = true\ntarget_cpu = \"arm64\"\nskia_use_partition_alloc = false\nskia_enable_ganesh = false\nskia_enable_graphite = false\nskia_use_gl = false\nskia_use_metal = false\nskia_use_harfbuzz = false\nskia_use_icu = false\nskia_use_expat = false\nskia_use_libjpeg_turbo_decode = false\nskia_use_libjpeg_turbo_encode = false\nskia_use_libpng_decode = false\nskia_use_libpng_encode = false\nskia_use_libwebp_decode = false\nskia_use_libwebp_encode = false\nskia_use_wuffs = false\nskia_use_zlib = false\nskia_use_piex = false\nskia_use_perfetto = false\nextra_cflags = [\"-ffile-prefix-map={SOURCE}=.\"]\n",
   "gnSha256": "76c4542d5ad22fc944a5d50f4db5f2ad2ff3792ac48afb08d4415f0da41ce570",
@@ -21,7 +21,7 @@
     "parity/overlays/fibers-default.segments.f64le": "fcd608e9339b7cfdd661c47c087154073b7ecc22d609cf1a74d9703fca904888",
     "parity/overlays/fibers-dense.rgba8": "924c0b6b6555c967cdeec56d1d0ac5639320003d5ad5a1675a007ed297baace2",
     "parity/overlays/fibers-dense.segments.f64le": "687ddc863b717143eb4f3bbaee778b4e9dd3714ca0f2c84b8b91d96003232c60",
-    "parity/overlays/oracle.json": "1782074895fa9119e17b75946b26e6cd26ac76f4e2a004f1300b542f0c1fd5e8",
+    "parity/overlays/oracle.json": "02949f9135f0e4afe6167e7e3e2ca77b4a4d8782386a56774e059b9199726f7b",
     "parity/overlays/scratches-coverage-256.rgba8": "3fbc037f11404b1b06afabdd1b5bd4fcb73dc92541f325b96b0ec46254f17f14",
     "parity/overlays/scratches-coverage-256.segments.f64le": "d8549480ed102c3701960c332c03a02f3c22be5a5f4469f8f1cb876d9d45c54e",
     "parity/overlays/scratches-default.rgba8": "37d21381a7235542a71012aa0d1be6cfa6cda04c13a0f4c4fd461a574bf767be",
@@ -34,18 +34,18 @@
     "parity/overlays/strayHair-default.segments.f64le": "86f8516149bd4ba432a0e14abac11d920aa6f4003488227864a1cd78d3162a1b",
     "parity/overlays/strayHair-dense.rgba8": "0cd4417198851751fb683003c4c22c7eba3bcdc37319a992d01d8ce9529dd0a9",
     "parity/overlays/strayHair-dense.segments.f64le": "66297e4cef5d162dec9f58e8c477aa3e5bac0912af2fa676a958d862d81ad1f9",
-    "parity/reference.json": "da62d81f0a136cba535dc1ba027defc5ded693199aa2d277c5473fb5dff0a39b",
+    "parity/reference.json": "deff3f287f2ab52ac68eb1a69f794fbc834afb529c8aaa70c7ef7754cd1ef9be",
     "tools/build-raster.py": "9c3fafa496e248e11811c968dc88855a6c0afabe352680d1683fd3a24fe218dc",
     "tools/raster-api-test.cpp": "10268cef6e6b343e43abfedab3be15551ba9d13464f7671ae9bdfdf93ee6e487",
     "tools/raster-smoke.cpp": "f8b04b7797b7e46824fd4c9a5eb25b0a19c0ab9bd6dbcab0b41bb6c64a5e50c4",
-    "tools/raster.json": "3da0019ac2f27da531a714fe0eee9f8feff5a942bd321965c6ce684d23af2590"
+    "tools/raster.json": "c3b299085d2d568707efa69ef145e80732bc2dfbcb6d3bc1306b2614ca61364b"
   },
   "licenseSha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd",
-  "observedArchiveSha256": "24a264a43f641d60c18eb2b84fe654e9b4b8b81f326e192abe68e4f464ed1930",
-  "pinnedArchiveSha256": "24a264a43f641d60c18eb2b84fe654e9b4b8b81f326e192abe68e4f464ed1930",
+  "observedArchiveSha256": "9f641e3f23ff3470dd742862697db552ea8bc57b2b7b2054368c91cef4fc42df",
+  "pinnedArchiveSha256": "9f641e3f23ff3470dd742862697db552ea8bc57b2b7b2054368c91cef4fc42df",
   "schemaVersion": 1,
   "sdkVersion": "15.2",
-  "skiaRevision": "0208108c7aed5f4e0faa525cbba52c238005a1ef",
-  "sourceFileCount": 12244,
-  "sourceTreeSha256": "9a2837c512595dd39b4147012601056ad9476707331bac6f018fe642c5d87504"
+  "skiaRevision": "9d07e5bad9e3e21da2426946e589daa647218271",
+  "sourceFileCount": 12288,
+  "sourceTreeSha256": "c2313843d604e3b8256991a1d0ca31d29a62ed6eb81f56578c2d34966ba6698d"
 }

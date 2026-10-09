@@ -75,7 +75,7 @@ def verify_raster(root=ROOT):
             manifest.get('sourceTreeSha256') != spec['sourceTreeSha256'] or \
             manifest.get('gnSha256') != spec['gnSha256'] or \
             manifest.get('licenseSha256') != spec['licenseSha256'] or \
-            manifest.get('sourceFileCount') != 12244:
+            manifest.get('sourceFileCount') != 12288:
         raise RuntimeError('raster artifact source provenance differs from pin')
     oracle = json.loads((root / 'parity/overlays/oracle.json').read_text())
     lock = json.loads((root / 'parity/reference.json').read_text())
