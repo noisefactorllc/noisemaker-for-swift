@@ -286,9 +286,12 @@ enum ShaderCompiler {
         } else if !storageSizes.isEmpty {
             throw GraphDiagnostic.unsupported("pass \(pass.id) render storage output")
         }
+        // The same-run WebGPU reference matches Tint's relaxed Metal math mode
+        // on Apple M4. Keep the pass and its custom vertex stage in that mode.
         let translated = try translator.translate(wgsl: wgsl, entryPoint: pass.entryPoint,
             stage: program.stage, bindings: bindings, bufferSizes: storageSizes,
-            bufferSizesOffset: storageSizes.isEmpty ? nil : 0, immediateSlot: 30)
+            bufferSizesOffset: storageSizes.isEmpty ? nil : 0, immediateSlot: 30,
+            strictMath: false)
         let function = try MetalVariantCache.shared.function(device: device,
             source: translated.source, name: translated.mslEntryPoint)
         let pipeline: PreparedPipeline
@@ -301,7 +304,8 @@ enum ShaderCompiler {
             descriptor.label = pass.id
             if let vertexEntry = program.vertexEntryPoint {
                 let translatedVertex = try translator.translate(wgsl: wgsl,
-                    entryPoint: vertexEntry, stage: .vertex, bindings: bindings)
+                    entryPoint: vertexEntry, stage: .vertex, bindings: bindings,
+                    strictMath: false)
                 let customVertex = try MetalVariantCache.shared.function(device: device,
                     source: translatedVertex.source, name: translatedVertex.mslEntryPoint)
                 descriptor.vertexFunction = customVertex

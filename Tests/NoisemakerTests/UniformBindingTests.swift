@@ -4,6 +4,21 @@ import Testing
 
 @Suite(.serialized)
 struct UniformBindingTests {
+    @Test func testSourceReciprocalGlobalsReachDirectUniformBuffers() throws {
+        let pass = GraphPass(id: "classic", program: "classic", raw: .object([]),
+            inputs: [], outputs: [], uniforms: [], entryPoint: "main", repeatCount: 1)
+        let size = try RenderSize(width: 160, height: 144)
+        let aspect = try UniformPlan.direct(.f32).encode(name: "aspectInv", pass: pass,
+            frame: .zero, size: size)
+        let resolution = try UniformPlan.direct(.vector(.f32, count: 2)).encode(
+            name: "invFullResolution", pass: pass, frame: .zero, size: size)
+        let expectedAspect = withUnsafeBytes(of: Float(0.9).bitPattern.littleEndian) { Array($0) }
+        let expectedX = withUnsafeBytes(of: Float(0.00625).bitPattern.littleEndian) { Array($0) }
+        let expectedY = withUnsafeBytes(of: Float(1.0 / 144.0).bitPattern.littleEndian) { Array($0) }
+        expectEqual(Array(aspect.prefix(4)), expectedAspect)
+        expectEqual(Array(resolution.prefix(8)), expectedX + expectedY)
+    }
+
     @Test func testPackedBytesMatchUpstreamWriter() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let reference = ProcessInfo.processInfo.environment["NM_REFERENCE_EXPORT"].map(URL.init(fileURLWithPath:)) ?? root.appendingPathComponent(".build/reference")

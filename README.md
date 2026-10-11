@@ -49,9 +49,9 @@ It is self-contained: the package runs with no Node.js, Rust, sibling checkout, 
   deployment floor.
 - **Swift 6** or later.
 - **A native Metal device** to render. The compiler and the CPU test suite need no GPU.
-- The qualified configuration is Apple M2, macOS 14.8.3 and Swift 6.0.3 (see
-  [What works and what does not](#what-works-and-what-does-not)). iOS and iPadOS, Intel and AMD Macs,
-  and other Apple platforms are not qualified yet.
+- The current full-catalog pass was on Apple M4, macOS 26.6.2 and Swift 6.3.2. The previous
+  authority lock passed on Apple M2, macOS 14.8.3 and Swift 6.0.3 (see
+  [What works and what does not](#what-works-and-what-does-not)).
 
 ## Install
 
@@ -131,16 +131,21 @@ and blur program.
 
 ## What works and what does not
 
-- **Full catalog parity on the qualified Mac.** The complete prototype gate passes on Apple M2, macOS
+- **Previous full catalog pass.** The complete prototype gate passed on Apple M2, macOS
   14.8.3, Swift 6.0.3, against upstream authority `735e1fdc4945e0df8ba47f8d657cd204e1b72923`. Run
   `run.7EfAlDR4` captures 4,427 presented PNG samples per backend across 2,906 cases, including all
   170 timed cases. Results are 2,885 exact and 21 uninformative, with zero near, deferred, skipped,
   failed, missing or refused cases; all 210 effects have informative evidence. Uninformative cases do
-  not count toward effect evidence.
+  not count toward effect evidence. This run predates the current source lock and raster binary.
+- **Current full catalog gate.** Authority `a3d96b664e32c72095ee325871a0221fa35f320c` passed
+  on Apple M4, macOS 26.6.2 and Swift 6.3.2. Run `run.zJGZikXi` graded 2,885 exact and 21
+  uninformative cases, with zero near, deferred, skipped, failed, missing or refused cases; all 210
+  effects have informative evidence. Tint's relaxed Metal math mode matched the same-run WebGPU
+  output for both pass and custom vertex shaders on this host.
 - **The compiler matches the reference stage by stage.** The complete 2,906-case compiler corpus
   matches 17,436 pinned source stage hashes.
-- **Native suites.** The CPU suite passes 106 tests and the native Metal suite passes 83 tests on
-  Apple M2, including resource ownership, queued submissions, partial-write history, sampled 3D
+- **Native suites.** The CPU suite passes 107 tests and the native Metal suite passes 83 tests on
+  Apple M4, including resource ownership, queued submissions, partial-write history, sampled 3D
   inputs, parameter updates, and recovery. Timed CLI regressions verify complete sample schedules,
   source-order automation arithmetic, and delta time at loop boundaries. The 100-cycle
   compile/render/resize/dispose test passes with Metal validation and retained downstream consumers.
@@ -148,7 +153,7 @@ and blur program.
   raster artifact. Native builtin and custom OBJ mesh rendering have exact presented-output
   comparisons. Portable storage-texture coverage qualifies the tested single-output numeric-dispatch
   3D subset.
-- **Measured performance.** The 19-run Apple M2 matrix covers generators, multipass filters,
+- **Previous measured performance.** The 19-run Apple M2 matrix covers generators, multipass filters,
   simulations and geometry at four sizes, plus sustained rendering, resize and in-flight memory.
   See [architecture section 6](ARCHITECTURE.md#6-performance-and-distribution) for results and limits.
 - **Not qualified yet:** physical iOS and iPadOS, Intel and AMD Macs, and public
@@ -216,12 +221,16 @@ sources into a temporary archive. Generated graphs, stage dumps, shader sources,
 and source hashes stay under `.build/reference`. Unknown or altered authority inputs fail
 verification. Define counts describe declared samples, not every accepted numeric literal. The
 reference uses locked Playwright 1.63.0 and Chromium 153.0.8010.12, with the native raster artifact
-rebuilt against its Skia revision. The qualification fingerprint of the run above is
+rebuilt against its Skia revision. The current passing run's qualification fingerprint is
+`d9e4bbd3cf54970dc478d1f86d090b9413baa111b33186cd7da9229b76841eb6`, unchanged after capture
+and grading; the native executable SHA-256 is
+`c9025d0a5ea7c035fc562e7caf2f2c0adc5e03fcb767c0eff9ddfa0da87305af`.
+The qualification fingerprint of the previous passing run is
 `2a6bc9f07c6123e9635f5555bc25804bfbe49de2f91d2727ef33f8dc78306a79`, unchanged after capture and
 grading; the native executable SHA-256 is
 `f48049d7629732e60c2cd7a7924a2d71344d06d57506bac7d0d839db1db4a82b`.
 
-After this run, the initial-state and binding-oracle manifests were regenerated to update their
+After that previous run, the initial-state and binding-oracle manifests were regenerated to update their
 corpus hashes. Their 18 and 13 case payloads were unchanged, and a second live initial-state capture
 passed. This metadata correction leaves the measured corpus and renderer unchanged; the fingerprint
 above identifies the pre-correction run.

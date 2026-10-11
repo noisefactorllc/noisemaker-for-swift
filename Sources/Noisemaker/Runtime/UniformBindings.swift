@@ -12,7 +12,8 @@ enum UniformPlan {
     case packed(count: Int, [PackedUniformEntry])
 
     private static let globalNames: Set<String> = ["resolution", "fullResolution", "tileOffset",
-        "time", "deltaTime", "frame", "aspect", "aspectRatio", "renderScale", "audioWaveform", "audioSpectrum"]
+        "time", "deltaTime", "frame", "aspect", "aspectRatio", "aspectInv",
+        "invFullResolution", "renderScale", "audioWaveform", "audioSpectrum"]
 
     var requiredNames: Set<String> {
         switch self {
@@ -420,6 +421,8 @@ enum UniformPlan {
         case "deltaTime": return [frame.delta]
         case "frame": return [Double(frame.frameIndex)]
         case "aspect", "aspectRatio": return [Double(size.width) / Double(size.height)]
+        case "aspectInv": return [1.0 / (Double(size.width) / Double(size.height))]
+        case "invFullResolution": return [1.0 / Double(size.width), 1.0 / Double(size.height)]
         case "renderScale": return [1]
         default: return [Double](repeating: 0, count: expectedCount ?? 1)
         }
