@@ -10,7 +10,7 @@ import { exportAuthority, fetchVerifiedArchive } from './export-reference.mjs'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const OUTPUT = join(ROOT, 'parity/invalid-programs.json')
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
-const program = body => `search synth, filter\n${body}\nrender(o0)\n`
+const program = body => `search synth, filter, mixer\n${body}\nrender(o0)\n`
 
 const FIXTURES = [
   ['unknown-effect', 'noiz(seed: 1).write(o0)'],
@@ -25,7 +25,26 @@ const FIXTURES = [
   ['unassigned-variable', 'let v = missing\nnoise(scaleX: v).write(o0)'],
   ['unresolved-enum', 'noise(type: foo.bar).write(o0)'],
   ['read-invalid-surface', 'read(foo).write(o0)'],
-  ['read-inline', 'noise().read(o1).write(o0)']
+  ['read-inline', 'noise().read(o1).write(o0)'],
+  ['string-for-boolean', 'noise(ridges: "yes").write(o0)'],
+  ['undefined-boolean-identifier', 'noise(ridges: maybe).write(o0)'],
+  ['string-for-color', 'solid(color: "red").write(o0)'],
+  ['string-for-vec3', 'noise().celShading(lightDirection: "up").write(o0)'],
+  ['string-for-surface', 'noise().blendMode(tex: "o1").write(o0)'],
+  ['string-for-member', 'noise().channel(channel: "r").write(o0)'],
+  ['unquoted-string-parameter', 'noise().text(style: bogus).write(o0)'],
+  ['number-for-string-parameter', 'noise().text(style: 3).write(o0)'],
+  ['variable-cycle', 'let a1x = b1x\nlet b1x = a1x\nnoise(scaleX: a1x).write(o0)'],
+  ['null-variable', 'let v = null\nnoise(scaleX: v).write(o0)']
+].map(([id, body]) => ({ id, source: program(body) }))
+
+// Programs that the locked compiler accepts. The port may not compile them
+// yet, but it must never report them as invalid.
+const ACCEPTED = [
+  ['unresolved-member-identifier', 'noise().channel(channel: qq).write(o0)'],
+  ['unresolved-member-path', 'noise().channel(channel: foo.bar).write(o0)'],
+  ['color-identifier', 'solid(color: red).write(o0)'],
+  ['surface-identifier', 'noise().blendMode(tex: foo).write(o0)']
 ].map(([id, body]) => ({ id, source: program(body) }))
 
 function runFixture(fixture, api) {
@@ -38,6 +57,13 @@ function runFixture(fixture, api) {
   try { api.compileGraph(fixture.source) } catch (error) { failure = error }
   if (failure?.code !== 'ERR_COMPILATION_FAILED') throw new Error(`${fixture.id} compiled`)
   return { id: fixture.id, source: fixture.source, sourceSha256: sha256(fixture.source), diagnostics }
+}
+
+function acceptFixture(fixture, api) {
+  const validated = api.validate(api.parse(api.lex(fixture.source)))
+  if (validated.diagnostics.some(item => item.severity === 'error')) throw new Error(`${fixture.id} has an error`)
+  api.compileGraph(fixture.source)
+  return { id: fixture.id, source: fixture.source, sourceSha256: sha256(fixture.source) }
 }
 
 async function main() {
@@ -53,14 +79,16 @@ async function main() {
     await exportAuthority(ref, output, lock, !!fetched || !existsSync(join(ref, '.git')))
     const api = await import(pathToFileURL(join(ref, 'shaders/src/index.js')).href)
     const cases = FIXTURES.map(fixture => runFixture(fixture, api))
+    const accepted = ACCEPTED.map(fixture => acceptFixture(fixture, api))
     const oracle = { schemaVersion: 1, authority: { repository: lock.repository, commit: lock.commit,
-      sourceManifestSha256: lock.sourceManifestSha256 }, cases }
+      sourceManifestSha256: lock.sourceManifestSha256 }, cases, accepted }
     const bytes = Buffer.from(JSON.stringify(oracle, null, 2) + '\n')
     if (mode === '--write') writeFileSync(OUTPUT, bytes)
     else if (!existsSync(OUTPUT) || !readFileSync(OUTPUT).equals(bytes)) {
       throw new Error('invalid-program diagnostics differ from pinned source')
     }
-    process.stdout.write(JSON.stringify({ mode, cases: cases.length, sha256: sha256(bytes) }) + '\n')
+    process.stdout.write(JSON.stringify({ mode, cases: cases.length, accepted: accepted.length,
+      sha256: sha256(bytes) }) + '\n')
   } finally {
     fetched?.cleanup()
     rmSync(output, { recursive: true, force: true })

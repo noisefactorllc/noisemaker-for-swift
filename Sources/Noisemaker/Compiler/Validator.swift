@@ -335,6 +335,10 @@ public enum NoisemakerValidator {
                 argSources.append((key, .string("array")))
                 return .array(values)
             }
+            if node.type == "String", ["boolean", "color", "vec3", "vec4", "surface"].contains(type) {
+                report("S001", node, "String literal not allowed for \(type) parameter '\(key)'")
+                return fallback
+            }
             if type == "boolean" {
                 if node.type == "Boolean", let value = node.field("value")?.bool { return .bool(value) }
                 if node.type == "Number", let value = node.field("value")?.number { return .bool(value != 0) }
@@ -344,6 +348,10 @@ public enum NoisemakerValidator {
                 if node.type == "Ident", let name = node.field("name")?.string,
                    Self.stateValues.contains(name), spec.field("choices")?.field(name) == nil {
                     return .object([("fn", .taggedFunction("(state) => !!state[key]"))])
+                }
+                if node.type == "Ident", let name = node.field("name")?.string, !Self.stateValues.contains(name) {
+                    report("S003", node)
+                    return fallback
                 }
                 throw CompilerIncomplete(stage: "validator", detail: "boolean expression for \(opName).\(key)")
             }
@@ -402,9 +410,14 @@ public enum NoisemakerValidator {
             }
             if type == "string" {
                 if node.type == "String", let value = node.field("value") { return value }
-                if node.type == "Ident", let name = node.field("name")?.string,
-                   let choice = spec.field("choices")?.field(name) { return choice }
-                throw CompilerIncomplete(stage: "validator", detail: "string expression for \(opName).\(key)")
+                let choices = spec.field("choices").flatMap { $0.isUndefined || $0.isNull ? nil : $0 }
+                if node.type == "Ident", let name = node.field("name")?.string, let choices {
+                    if let choice = choices.field(name) { return choice }
+                    report("S001", node, "Invalid choice '\(name)' for string parameter '\(key)'")
+                    return fallback
+                }
+                report("S001", node, "String parameter '\(key)' requires a quoted string literal, got \(node.type ?? "undefined")")
+                return fallback
             }
             if node.type == "Oscillator" { return try compileOscillator(node, depth: 0) }
             if let function = functionSource(node) {
@@ -444,11 +457,11 @@ public enum NoisemakerValidator {
                     : "numeric parameter '\(key)' - strings are only valid for type: \"string\" parameters"
                 report("S001", node, "String literal not allowed for \(kind)")
                 return fallback
-            } else if node.type == "Member" {
+            } else if node.type == "Member", type != "member" {
                 let path = node.field("path")?.elements?.compactMap(\.string).joined(separator: ".") ?? ""
                 report("S001", node, "Cannot resolve enum value for '\(key)': '\(path.isEmpty ? "unknown" : path)'")
                 return fallback
-            } else if node.type == "Ident", let name = node.field("name")?.string,
+            } else if node.type == "Ident", type != "member", let name = node.field("name")?.string,
                       !Self.stateValues.contains(name) {
                 report("S003", node)
                 return fallback

@@ -8,8 +8,8 @@
   "cases": [
     {
       "id": "unknown-effect",
-      "source": "search synth, filter\nnoiz(seed: 1).write(o0)\nrender(o0)\n",
-      "sourceSha256": "72d5dec16ffcb2304f6cb65d0b05808e4d9455aaf331a462acd371427483ce94",
+      "source": "search synth, filter, mixer\nnoiz(seed: 1).write(o0)\nrender(o0)\n",
+      "sourceSha256": "8edad71fa0520d46ad2838df50236b65f0ae7775cee9046b4872e6a2f7f386ac",
       "diagnostics": [
         {
           "code": "S001",
@@ -30,8 +30,8 @@
     },
     {
       "id": "unknown-effect-mid-chain",
-      "source": "search synth, filter\nnoise().blurr().write(o0)\nrender(o0)\n",
-      "sourceSha256": "a96ea2cbb7492299b942fe634a86ab2284fee46a79d773374ea4b736ad25918b",
+      "source": "search synth, filter, mixer\nnoise().blurr().write(o0)\nrender(o0)\n",
+      "sourceSha256": "7b95ef47f70241aa746dca8456c4145afbcf842aad020ce0b1465564ecb20dd7",
       "diagnostics": [
         {
           "code": "S001",
@@ -43,8 +43,8 @@
     },
     {
       "id": "unknown-argument",
-      "source": "search synth, filter\nnoise(bogus: 1).write(o0)\nrender(o0)\n",
-      "sourceSha256": "3f1396d07d71ee1613b1e9b2e0728b3603935bad28d22d79c6d63bf0493ee1e5",
+      "source": "search synth, filter, mixer\nnoise(bogus: 1).write(o0)\nrender(o0)\n",
+      "sourceSha256": "fa710ae80020fb0cc8ec6f6a0cd3ef6b7fb65299c2497bc9a382ed38e9c043bb",
       "diagnostics": [
         {
           "code": "S001",
@@ -56,8 +56,8 @@
     },
     {
       "id": "retired-parameter-alias",
-      "source": "search synth, filter\nnoise(xScale: 4).write(o0)\nrender(o0)\n",
-      "sourceSha256": "9d12c512d42842f5f169f027a241b8bb8ab677dfb8f4197caec1d540500598d9",
+      "source": "search synth, filter, mixer\nnoise(xScale: 4).write(o0)\nrender(o0)\n",
+      "sourceSha256": "8231097fa45f8749db65d4fc6a1244720668afbf2b0cbf41d0f122e9eacf3f40",
       "diagnostics": [
         {
           "code": "S001",
@@ -69,8 +69,8 @@
     },
     {
       "id": "filter-at-chain-root",
-      "source": "search synth, filter\nblur().write(o0)\nrender(o0)\n",
-      "sourceSha256": "424628da0873bc485d7bf593c87799826d110cf7d8ad8a4d5862a6e5b5b2c55f",
+      "source": "search synth, filter, mixer\nblur().write(o0)\nrender(o0)\n",
+      "sourceSha256": "eef842026fdfb70fcfa5da8be9d817eb1b475d5ec1464fabc09aa92fc377efff",
       "diagnostics": [
         {
           "code": "S005",
@@ -91,8 +91,8 @@
     },
     {
       "id": "starter-with-input",
-      "source": "search synth, filter\nnoise().noise().write(o0)\nrender(o0)\n",
-      "sourceSha256": "ab7f0a9559907873d3fed18c3bf02ad1efa0797c1b6c2490e3bca6035d51bd4e",
+      "source": "search synth, filter, mixer\nnoise().noise().write(o0)\nrender(o0)\n",
+      "sourceSha256": "350bff25758767c2929512997eca298f2d76ee298b03c739d6f4303bfd3dfd6f",
       "diagnostics": [
         {
           "code": "S005",
@@ -104,8 +104,8 @@
     },
     {
       "id": "missing-write",
-      "source": "search synth, filter\nnoise()\nrender(o0)\n",
-      "sourceSha256": "fd2db7006bb1468d8ca190bf45c2c520a0863819c830b78d47efa5b887ff1ac6",
+      "source": "search synth, filter, mixer\nnoise()\nrender(o0)\n",
+      "sourceSha256": "6ae5c70509f4e98b3006a482a86d89895dfe7d176ddc3f6d28fda93d22204a18",
       "diagnostics": [
         {
           "code": "S001",
@@ -117,8 +117,8 @@
     },
     {
       "id": "string-for-number",
-      "source": "search synth, filter\nnoise(scaleX: \"big\").write(o0)\nrender(o0)\n",
-      "sourceSha256": "d800603f080fa631bfa9badb2f3b120d4551b8b3766a34973554d68069d5726f",
+      "source": "search synth, filter, mixer\nnoise(scaleX: \"big\").write(o0)\nrender(o0)\n",
+      "sourceSha256": "8d0c3aa343c92a1b45f166f59bee1a6d7302bf3013215fe0d887403ecd5ee4ab",
       "diagnostics": [
         {
           "code": "S001",
@@ -130,8 +130,8 @@
     },
     {
       "id": "undefined-identifier",
-      "source": "search synth, filter\nnoise(scaleX: big).write(o0)\nrender(o0)\n",
-      "sourceSha256": "3b199d3cc8122ab379c4cdeb72444cd70f0f43eb90d31a44b954e4b130e1cad2",
+      "source": "search synth, filter, mixer\nnoise(scaleX: big).write(o0)\nrender(o0)\n",
+      "sourceSha256": "d11fdc7c1c2563677bf1e580dde78566457821a22433220398280796cf5320ad",
       "diagnostics": [
         {
           "code": "S003",
@@ -143,8 +143,8 @@
     },
     {
       "id": "unassigned-variable",
-      "source": "search synth, filter\nlet v = missing\nnoise(scaleX: v).write(o0)\nrender(o0)\n",
-      "sourceSha256": "4ccdb39f2eb65ece26347c9d9e23412179be3a6a45a66afb91bc2e5df67449ed",
+      "source": "search synth, filter, mixer\nlet v = missing\nnoise(scaleX: v).write(o0)\nrender(o0)\n",
+      "sourceSha256": "6ccdfe01b68b3d944aa26b55d5a79dc3e310119376f8318101cba12069379276",
       "diagnostics": [
         {
           "code": "S003",
@@ -162,8 +162,8 @@
     },
     {
       "id": "unresolved-enum",
-      "source": "search synth, filter\nnoise(type: foo.bar).write(o0)\nrender(o0)\n",
-      "sourceSha256": "52f8285225fa66717e8d4e68379f3c02fc4f0c473966be85ae6ce7755fe1c525",
+      "source": "search synth, filter, mixer\nnoise(type: foo.bar).write(o0)\nrender(o0)\n",
+      "sourceSha256": "18848fda1063b92abb20c5681e4553e95f0625e7a999ef0fa5db5020320f8f41",
       "diagnostics": [
         {
           "code": "S001",
@@ -175,8 +175,8 @@
     },
     {
       "id": "read-invalid-surface",
-      "source": "search synth, filter\nread(foo).write(o0)\nrender(o0)\n",
-      "sourceSha256": "a94fd2a9324328b2b36dcfc6604c820d1ec88b227234744232a2bdaff5b87a67",
+      "source": "search synth, filter, mixer\nread(foo).write(o0)\nrender(o0)\n",
+      "sourceSha256": "920c314d2236fca471739a0a39ad9069984e6a6cfe01ef6de4c3ae7b354adfc7",
       "diagnostics": [
         {
           "code": "S001",
@@ -200,8 +200,8 @@
     },
     {
       "id": "read-inline",
-      "source": "search synth, filter\nnoise().read(o1).write(o0)\nrender(o0)\n",
-      "sourceSha256": "fed084e08770b5d11076c0e1fc6e6bc6d2b93ce9e18127b9b0167001f66205ad",
+      "source": "search synth, filter, mixer\nnoise().read(o1).write(o0)\nrender(o0)\n",
+      "sourceSha256": "d88338839ecbe2bc14bcbc1cf4842bf8847578f4f88d71201d3672bbeedb6abe",
       "diagnostics": [
         {
           "code": "S001",
@@ -213,6 +213,176 @@
           }
         }
       ]
+    },
+    {
+      "id": "string-for-boolean",
+      "source": "search synth, filter, mixer\nnoise(ridges: \"yes\").write(o0)\nrender(o0)\n",
+      "sourceSha256": "10416b41b36c3425be588a2f8b8a9af18716fd8c96651af0c6eda22529ced099",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String literal not allowed for boolean parameter 'ridges'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "undefined-boolean-identifier",
+      "source": "search synth, filter, mixer\nnoise(ridges: maybe).write(o0)\nrender(o0)\n",
+      "sourceSha256": "58c6fbd6cdbe221c87e3f5f6e1ad4ceb57dcc67a0065578101ddd41a3fdb19af",
+      "diagnostics": [
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'maybe'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "string-for-color",
+      "source": "search synth, filter, mixer\nsolid(color: \"red\").write(o0)\nrender(o0)\n",
+      "sourceSha256": "48d085ae9eb11ec36076089b3d2d5b99979a069f66d8020b0ffc3a0fa56286e7",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String literal not allowed for color parameter 'color'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "string-for-vec3",
+      "source": "search synth, filter, mixer\nnoise().celShading(lightDirection: \"up\").write(o0)\nrender(o0)\n",
+      "sourceSha256": "3e5032103608502d2d45987b1360a16a25d3ead2321753d7b8f370e80fc4f061",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String literal not allowed for vec3 parameter 'lightDirection'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "string-for-surface",
+      "source": "search synth, filter, mixer\nnoise().blendMode(tex: \"o1\").write(o0)\nrender(o0)\n",
+      "sourceSha256": "420ecbb932baf97652c6e95a9a8620762fe59f25d12657d90c9a31738f68fa95",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String literal not allowed for surface parameter 'tex'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "string-for-member",
+      "source": "search synth, filter, mixer\nnoise().channel(channel: \"r\").write(o0)\nrender(o0)\n",
+      "sourceSha256": "c91393d5588a605dff49b801843e46f72710c2d0954a3592587f58cc983d0cb2",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String literal not allowed for member/enum parameter 'channel'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "unquoted-string-parameter",
+      "source": "search synth, filter, mixer\nnoise().text(style: bogus).write(o0)\nrender(o0)\n",
+      "sourceSha256": "58b2da8712ce770dd8c4e7323e1d5071a5160446a7520d979d89ece5656c4bfb",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String parameter 'style' requires a quoted string literal, got Ident",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "number-for-string-parameter",
+      "source": "search synth, filter, mixer\nnoise().text(style: 3).write(o0)\nrender(o0)\n",
+      "sourceSha256": "92e90cecb2f42e6a5276e0f6c7a262d378582d773d083f8614a6626226c13b94",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String parameter 'style' requires a quoted string literal, got Number",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "variable-cycle",
+      "source": "search synth, filter, mixer\nlet a1x = b1x\nlet b1x = a1x\nnoise(scaleX: a1x).write(o0)\nrender(o0)\n",
+      "sourceSha256": "2966cd9760749bebe2d1a27efb9d5d106095cbb5ea74d3fc0e0b72d37b1a1833",
+      "diagnostics": [
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'b1x'",
+          "location": null
+        },
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'a1x'",
+          "location": null
+        },
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'a1x'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "null-variable",
+      "source": "search synth, filter, mixer\nlet v = null\nnoise(scaleX: v).write(o0)\nrender(o0)\n",
+      "sourceSha256": "a69dcd182f1ae9592beb099781b3183224585227695360cec7014fb1c64652f0",
+      "diagnostics": [
+        {
+          "code": "S004",
+          "severity": "error",
+          "message": "Cannot assign null or undefined: 'v'",
+          "location": null
+        },
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'v'",
+          "location": null
+        }
+      ]
+    }
+  ],
+  "accepted": [
+    {
+      "id": "unresolved-member-identifier",
+      "source": "search synth, filter, mixer\nnoise().channel(channel: qq).write(o0)\nrender(o0)\n",
+      "sourceSha256": "b38621dcd92907f0b55e633b895e39efb30e0b4983fe42e29e8c1cd9dec1f0c7"
+    },
+    {
+      "id": "unresolved-member-path",
+      "source": "search synth, filter, mixer\nnoise().channel(channel: foo.bar).write(o0)\nrender(o0)\n",
+      "sourceSha256": "2fc26f5f1fad983bf6f5cc285ff538af41e231ad26be297576de0f724e451558"
+    },
+    {
+      "id": "color-identifier",
+      "source": "search synth, filter, mixer\nsolid(color: red).write(o0)\nrender(o0)\n",
+      "sourceSha256": "73f3cb55b2e561e5b875323fb184371fe5ae33f9b45b55a7c44c8758064472ed"
+    },
+    {
+      "id": "surface-identifier",
+      "source": "search synth, filter, mixer\nnoise().blendMode(tex: foo).write(o0)\nrender(o0)\n",
+      "sourceSha256": "56ce2c7678e129703bdf241fef46c86e7e70e06552b295a43d0cda20403a9e1a"
     }
   ]
 }

@@ -51,7 +51,7 @@ import Testing
         let oracle = try #require(JSONSerialization.jsonObject(with: Data(contentsOf:
             root.appendingPathComponent("parity/invalid-programs.json"))) as? [String: Any])
         let cases = try #require(oracle["cases"] as? [[String: Any]])
-        #expect(cases.count >= 13)
+        #expect(cases.count >= 23)
         let compiler = try NoisemakerCompiler()
         for item in cases {
             let id = try #require(item["id"] as? String)
@@ -72,6 +72,18 @@ import Testing
                 #expect(error.diagnostics == expected, "\(id)")
             } catch {
                 Issue.record("\(id): expected CompilationError, got \(error)")
+            }
+        }
+        let accepted = try #require(oracle["accepted"] as? [[String: Any]])
+        #expect(accepted.count >= 4)
+        for item in accepted {
+            let id = try #require(item["id"] as? String)
+            do {
+                _ = try compiler.compile(source: try #require(item["source"] as? String))
+            } catch let error as CompilationError {
+                Issue.record("\(id): the locked compiler accepts this program, but Swift reported \(error)")
+            } catch {
+                #expect(error is CompilerIncomplete, "\(id): \(error)")
             }
         }
     }
