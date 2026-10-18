@@ -122,6 +122,34 @@ class QualificationFingerprintTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'executable is missing'):
                 fingerprint.browser_bundle(executable, True)
 
+    def test_npm_bin_links_are_recorded_by_target(self):
+        with tempfile.TemporaryDirectory(prefix='nm-node-modules-') as temporary:
+            reference = Path(temporary) / 'reference'
+            modules = reference / 'node_modules'
+            (modules / '.bin').mkdir(parents=True)
+            (modules / 'playwright-core').mkdir()
+            (modules / 'playwright-core/cli.js').write_text('cli one')
+            (modules / 'playwright-core/other.js').write_text('cli two')
+            link = modules / '.bin/playwright-core'
+            link.symlink_to('../playwright-core/cli.js')
+            baseline = fingerprint.tree(reference, 'node_modules', links=True)
+            self.assertEqual(baseline, fingerprint.tree(reference, 'node_modules', links=True))
+            with self.assertRaisesRegex(ValueError, 'contains a symlink'):
+                fingerprint.tree(reference, 'node_modules')
+            link.unlink()
+            link.symlink_to('../playwright-core/other.js')
+            self.assertNotEqual(baseline, fingerprint.tree(reference, 'node_modules', links=True))
+            outside = Path(temporary) / 'outside.js'
+            outside.write_text('outside')
+            link.unlink()
+            link.symlink_to(outside)
+            with self.assertRaisesRegex(ValueError, 'escaping or broken symlink'):
+                fingerprint.tree(reference, 'node_modules', links=True)
+            link.unlink()
+            link.symlink_to('../playwright-core/missing.js')
+            with self.assertRaisesRegex(ValueError, 'escaping or broken symlink'):
+                fingerprint.tree(reference, 'node_modules', links=True)
+
     def test_pillow_grader_code_drift_changes_fingerprint(self):
         with tempfile.TemporaryDirectory(prefix='nm-pillow-grader-') as temporary:
             package = Path(temporary) / 'PIL'

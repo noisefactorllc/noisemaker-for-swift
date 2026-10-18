@@ -21,15 +21,26 @@ def sha256(path):
     return checksum.hexdigest()
 
 
-def tree(root, directory):
+def tree(root, directory, links=False):
     base = root / directory
-    if not base.is_dir():
+    if base.is_symlink() or not base.is_dir():
         raise ValueError(f'missing qualification input directory: {directory}')
     paths = sorted(path for path in base.rglob('*')
                    if '__pycache__' not in path.parts and path.suffix != '.pyc')
-    if any(path.is_symlink() for path in paths):
-        raise ValueError(f'qualification input contains a symlink: {directory}')
-    entries = [[path.relative_to(root).as_posix(), sha256(path)] for path in paths if path.is_file()]
+    entries = []
+    for path in paths:
+        name = path.relative_to(root).as_posix()
+        if path.is_symlink():
+            # npm writes node_modules/.bin links. Record each by its target,
+            # as browser_bundle does, and refuse links that leave the tree.
+            target = path.resolve()
+            if not links:
+                raise ValueError(f'qualification input contains a symlink: {directory}')
+            if not target.is_relative_to(base.resolve()) or not target.exists():
+                raise ValueError(f'qualification input has an escaping or broken symlink: {name}')
+            entries.append([name, 'symlink', os.readlink(path)])
+        elif path.is_file():
+            entries.append([name, sha256(path)])
     encoded = json.dumps(entries, separators=(',', ':'), ensure_ascii=True).encode()
     return {'files': len(entries), 'sha256': hashlib.sha256(encoded).hexdigest()}
 
@@ -120,7 +131,7 @@ def authority_inputs(root, reference_root, browser_identity=None):
         'sourceManifestSha256': manifest_sha,
         'sourceManifestFileSha256': sha256(manifest_path),
         'packageLockSha256': sha256(package_lock),
-        'nodeModules': tree(reference_root, 'node_modules'),
+        'nodeModules': tree(reference_root, 'node_modules', links=True),
         'browser': browser_identity if browser_identity is not None else browser_inputs(reference_root),
     }
 
