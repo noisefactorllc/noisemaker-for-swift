@@ -134,6 +134,44 @@ def test_native_overlays_without_replay(root, renderer, temporary, corpus):
     print('native overlays: all three full-size source host uploads match without reading reference pixel files')
 
 
+def test_dsl_matches_corpus_for_initial_state(root, renderer, temporary, corpus):
+    """nm-render --dsl applies the demo host's initial controls, as the corpus path does."""
+    oracle = json.loads((root / 'parity/initial-program-state.json').read_text())
+    ids = [item['id'] for item in oracle['cases']]
+    assert ids, oracle
+    cases = {item['id']: item for item in corpus['cases']}
+    subset = [cases[case_id] for case_id in ids]
+    corpus_path = temporary / 'initial-state-corpus.json'
+    corpus_path.write_text(json.dumps({'schemaVersion': 1, 'cases': subset}))
+    output = temporary / 'initial-state-corpus'
+    result = subprocess.run([str(renderer), '--corpus', str(corpus_path), '--out-dir', str(output)],
+                            cwd=root, capture_output=True, text=True)
+    if result.returncode:
+        raise AssertionError(f'initial-state corpus render failed: {result.stdout}\n{result.stderr}')
+    records = {record['id']: record for record in
+               json.loads((output / 'candidates.json').read_text())['cases']}
+    for case in subset:
+        capture = case['capture']
+        assert capture['deltaTime'] == 0 and 'runSeconds' not in capture, case['id']
+        record = records[case['id']]
+        assert record['status'] == 'ok', record
+        image = next(item for item in record['images'] if item['frame'] == capture['frames'])
+        program = temporary / 'initial-state.dsl'
+        program.write_text(case['source'])
+        png = temporary / 'initial-state-dsl.png'
+        width, height = capture['size']
+        result = subprocess.run([str(renderer), '--dsl', str(program), '--out', str(png),
+                                 '--width', str(width), '--height', str(height),
+                                 '--time', repr(capture['normalizedTime']),
+                                 '--frames', str(capture['frames'])],
+                                cwd=root, capture_output=True, text=True)
+        if result.returncode:
+            raise AssertionError(f"{case['id']} --dsl failed: {result.stdout}\n{result.stderr}")
+        with Image.open(png) as dsl, Image.open(output / image['path']) as reference:
+            assert dsl.convert('RGBA').tobytes() == reference.convert('RGBA').tobytes(), case['id']
+    print(f'initial program state: --dsl matches the corpus path for {len(subset)} cases')
+
+
 def main():
     root = Path(__file__).resolve().parent.parent
     renderer = Path(os.environ['NM_RENDER_BIN']).resolve()
@@ -161,6 +199,7 @@ def main():
         temporary = Path(directory)
         test_failed_golden_admission(root, renderer, temporary, solid)
         test_native_overlays_without_replay(root, renderer, temporary, corpus)
+        test_dsl_matches_corpus_for_initial_state(root, renderer, temporary, corpus)
         corpus_path = temporary / 'corpus.json'
         output = temporary / 'candidates'
         corpus_path.write_text(json.dumps({'schemaVersion': 1, 'cases': [case]}))

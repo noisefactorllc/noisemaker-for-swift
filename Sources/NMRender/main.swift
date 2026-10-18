@@ -128,7 +128,7 @@ private func run() throws {
     if let path = args.graph {
         graph = try RenderGraph(exportedCaseData: Data(contentsOf: path))
     } else {
-        graph = try compiler!.compile(source: String(contentsOf: args.dsl!, encoding: .utf8))
+        graph = try compiler!.compileForHost(source: String(contentsOf: args.dsl!, encoding: .utf8))
     }
     let size = try RenderSize(width: args.width, height: args.height)
     let vertexWGSL: String?, vertexEntry: String?

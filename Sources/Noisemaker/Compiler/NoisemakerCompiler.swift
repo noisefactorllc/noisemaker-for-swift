@@ -16,6 +16,8 @@ public struct NoisemakerCompiler {
     public init(registry: EffectRegistry) { self.registry = registry }
     public init() throws { registry = try EffectRegistry.bundled() }
 
+    /// Returns the compiler's graph without the demo host's initial control
+    /// values. Hosts that render a program use `compileForHost(source:)`.
     public func compile(source: String) throws -> RenderGraph {
         let stages = try compileStages(source: source)
         let caseData = try makeRenderGraphInput(stages.graph)
