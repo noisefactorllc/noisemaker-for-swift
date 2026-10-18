@@ -70,7 +70,7 @@ struct ParserTests {
                     return
                 }
                 expectEqual(actual.diagnostic, expected, name)
-                expectEqual(actual.localizedDescription, failure["message"] as? String, name)
+                expectEqual(actual.diagnostic.message, failure["message"] as? String, name)
             }
             compared += 1
         }

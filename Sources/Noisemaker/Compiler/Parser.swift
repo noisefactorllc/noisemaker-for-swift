@@ -147,17 +147,19 @@ public struct ParserDiagnostic: Codable, Equatable, Sendable {
     public let span: SourceSpan?
 }
 
-public struct ParserError: Error, Equatable, Sendable, LocalizedError {
+public struct ParserError: Error, Equatable, Sendable, LocalizedError, CustomStringConvertible {
     public let diagnostic: ParserDiagnostic
-    public var errorDescription: String? { diagnostic.message }
+    public var description: String { "\(diagnostic.code) \(diagnostic.severity): \(diagnostic.message)" }
+    public var errorDescription: String? { description }
 }
 
 /// A deliberate boundary for grammar not yet ported. No unsupported construct
 /// is returned as a plausible but incorrect AST node.
-public struct ParserIncomplete: Error, Equatable, Sendable, LocalizedError {
+public struct ParserIncomplete: Error, Equatable, Sendable, LocalizedError, CustomStringConvertible {
     public let detail: String
     public init(_ detail: String) { self.detail = detail }
-    public var errorDescription: String? { "Native parser incomplete: \(detail)" }
+    public var description: String { "Native parser incomplete: \(detail)" }
+    public var errorDescription: String? { description }
 }
 
 public enum NoisemakerParser {

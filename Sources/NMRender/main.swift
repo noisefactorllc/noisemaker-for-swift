@@ -3,6 +3,13 @@ import Foundation
 import Metal
 import Noisemaker
 
+/// A command-line mistake, printed as its own text rather than as a graph error.
+private struct UsageError: Error, LocalizedError {
+    let message: String
+    init(_ message: String) { self.message = message }
+    var errorDescription: String? { message }
+}
+
 private struct Arguments {
     let graph: URL?
     let dsl: URL?
@@ -20,7 +27,7 @@ private struct Arguments {
             let key = input[index]
             guard ["--graph", "--dsl", "--out", "--width", "--height", "--vertex", "--time", "--frames"].contains(key),
                   index + 1 < input.count, values[key] == nil else {
-                throw GraphDiagnostic.invalid("usage: nm-render (--graph case.json | --dsl program.dsl) --out output.png --width 257 --height 129 [--vertex default-vertex.json] [--time 0.25 --frames 8]")
+                throw UsageError("usage: nm-render (--graph case.json | --dsl program.dsl) --out output.png --width 257 --height 129 [--vertex default-vertex.json] [--time 0.25 --frames 8]")
             }
             values[key] = input[index + 1]
             index += 2
@@ -29,7 +36,7 @@ private struct Arguments {
               let output = values["--out"],
               let widthString = values["--width"], let width = Int(widthString),
               let heightString = values["--height"], let height = Int(heightString) else {
-            throw GraphDiagnostic.invalid("exactly one of --graph or --dsl, plus --out, --width and --height are required")
+            throw UsageError("exactly one of --graph or --dsl, plus --out, --width and --height are required")
         }
         self.graph = values["--graph"].map(URL.init(fileURLWithPath:))
         self.dsl = values["--dsl"].map(URL.init(fileURLWithPath:))
@@ -38,7 +45,7 @@ private struct Arguments {
         self.height = height
         guard let time = Double(values["--time"] ?? "0"), time.isFinite,
               let frames = Int(values["--frames"] ?? "1"), (1...4096).contains(frames) else {
-            throw GraphDiagnostic.invalid("--time must be finite and --frames must be 1...4096")
+            throw UsageError("--time must be finite and --frames must be 1...4096")
         }
         self.time = time
         self.frames = frames
@@ -130,7 +137,9 @@ private func run() throws {
     } else {
         graph = try compiler!.compileForHost(source: String(contentsOf: args.dsl!, encoding: .utf8))
     }
-    let size = try RenderSize(width: args.width, height: args.height)
+    let size: RenderSize
+    do { size = try RenderSize(width: args.width, height: args.height) }
+    catch GraphDiagnostic.invalid(let detail) { throw UsageError(detail) }
     let vertexWGSL: String?, vertexEntry: String?
     if let path = args.vertex {
         let vertexJSON = try JSONSerialization.jsonObject(with: Data(contentsOf: path)) as? [String: Any]
@@ -150,11 +159,12 @@ private func run() throws {
     let renderer = try NoisemakerRenderer(device: device, graph: graph, size: size,
         defaultVertexWGSL: vertexWGSL, vertexEntryPoint: vertexEntry,
         registry: compiler?.registry)
+    let inputs = try NativeInputs.prepare(device: device, graph: renderer.graph, size: size)
     var png: Data?
     for index in 0..<args.frames {
         let frame = FrameState(time: args.time, delta: 0, frameIndex: UInt64(index))
         png = try renderFrame(renderer, queue: queue, frame: frame,
-            capture: index == args.frames - 1) ?? png
+            capture: index == args.frames - 1, externalTextures: inputs) ?? png
     }
     guard let png else { throw GraphDiagnostic.missing("final frame readback") }
     try png.write(to: args.output, options: .atomic)
@@ -164,6 +174,6 @@ private func run() throws {
 do {
     try run()
 } catch {
-    fputs("nm-render: \(error)\n", stderr)
+    fputs("nm-render: \(error.localizedDescription)\n", stderr)
     exit(1)
 }

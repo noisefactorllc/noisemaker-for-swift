@@ -45,10 +45,11 @@ public struct LexerDiagnostic: Codable, Equatable, Sendable {
     public let span: SourceSpan
 }
 
-public struct LexerError: Error, Equatable, Sendable, LocalizedError {
+public struct LexerError: Error, Equatable, Sendable, LocalizedError, CustomStringConvertible {
     public let diagnostic: LexerDiagnostic
 
-    public var errorDescription: String? { diagnostic.message }
+    public var description: String { "\(diagnostic.code) \(diagnostic.severity): \(diagnostic.message)" }
+    public var errorDescription: String? { description }
 
     public init(diagnostic: LexerDiagnostic) {
         self.diagnostic = diagnostic

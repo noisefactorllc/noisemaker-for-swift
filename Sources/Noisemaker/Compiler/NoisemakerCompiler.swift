@@ -27,6 +27,7 @@ public struct NoisemakerCompiler {
     public func compileStages(source: String) throws -> NativeCompilationStages {
         let parsed = try NoisemakerParser.parse(source)
         let validated = try NoisemakerValidator.validate(parsed, registry: registry)
+        try CompilationError.check(validated)
         let expanded = try NoisemakerExpander.expand(validated, registry: registry)
         guard let passes = expanded.field("passes")?.arrayValue,
               let programs = expanded.field("programs"),

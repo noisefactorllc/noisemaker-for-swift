@@ -1,7 +1,7 @@
 import Foundation
 import Metal
 
-public enum RenderSubmissionError: Error, Equatable, CustomStringConvertible {
+public enum RenderSubmissionError: Error, Equatable, CustomStringConvertible, LocalizedError {
     case capacityExceeded
     case uncommittedFrame
     case differentCommandQueue
@@ -13,6 +13,8 @@ public enum RenderSubmissionError: Error, Equatable, CustomStringConvertible {
         case .differentCommandQueue: return "A renderer must use one command queue for ordered GPU execution"
         }
     }
+
+    public var errorDescription: String? { description }
 }
 
 /// An already-committed frame. Keep its output lease until downstream GPU use completes.

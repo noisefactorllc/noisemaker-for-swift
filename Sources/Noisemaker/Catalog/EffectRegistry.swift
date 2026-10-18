@@ -10,7 +10,7 @@ public struct CatalogEffect: Sendable {
     public let definition: GraphValue
 }
 
-public enum CatalogError: Error, CustomStringConvertible, Sendable {
+public enum CatalogError: Error, CustomStringConvertible, LocalizedError, Sendable {
     case malformed(String)
     case missingResource
 
@@ -20,6 +20,8 @@ public enum CatalogError: Error, CustomStringConvertible, Sendable {
         case .missingResource: return "Bundled catalog resource is missing"
         }
     }
+
+    public var errorDescription: String? { description }
 }
 
 /// Source-bound effect and validator tables exported from the locked upstream.

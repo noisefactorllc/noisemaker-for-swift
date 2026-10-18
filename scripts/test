@@ -16,6 +16,7 @@ node tools/export-automation.mjs
 node tools/export-worm-traces.mjs --check
 node tools/export-obj-oracle.mjs --check
 node tools/export-param-updates.mjs --check
+node tools/export-diagnostics.mjs --check
 node tools/export-audio-host.mjs --check
 node tools/import-meshes.mjs --check
 node tools/check-overlays.mjs

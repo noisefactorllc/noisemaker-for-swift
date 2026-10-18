@@ -54,9 +54,18 @@ public struct TintTranslation: Sendable {
     public let strictMath: Bool
 }
 
-public enum TintTranslationError: Error, Equatable {
+public enum TintTranslationError: Error, Equatable, CustomStringConvertible, LocalizedError {
     case invalidInput(String)
     case translationFailed(String)
+
+    public var description: String {
+        switch self {
+        case .invalidInput(let detail): return "Invalid shader translation input: \(detail)"
+        case .translationFailed(let detail): return "Shader translation failed: \(detail)"
+        }
+    }
+
+    public var errorDescription: String? { description }
 }
 
 public struct ShaderTranslator: Sendable {

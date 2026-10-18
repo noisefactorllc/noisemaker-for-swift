@@ -134,20 +134,18 @@ def test_native_overlays_without_replay(root, renderer, temporary, corpus):
     print('native overlays: all three full-size source host uploads match without reading reference pixel files')
 
 
-def test_dsl_matches_corpus_for_initial_state(root, renderer, temporary, corpus):
-    """nm-render --dsl applies the demo host's initial controls, as the corpus path does."""
-    oracle = json.loads((root / 'parity/initial-program-state.json').read_text())
-    ids = [item['id'] for item in oracle['cases']]
-    assert ids, oracle
+def dsl_matches_corpus(root, renderer, temporary, corpus, ids, label):
+    """Renders each case with --dsl and with --corpus, and requires equal PNG bytes."""
+    assert ids, label
     cases = {item['id']: item for item in corpus['cases']}
     subset = [cases[case_id] for case_id in ids]
-    corpus_path = temporary / 'initial-state-corpus.json'
+    corpus_path = temporary / f'{label}-corpus.json'
     corpus_path.write_text(json.dumps({'schemaVersion': 1, 'cases': subset}))
-    output = temporary / 'initial-state-corpus'
+    output = temporary / f'{label}-corpus'
     result = subprocess.run([str(renderer), '--corpus', str(corpus_path), '--out-dir', str(output)],
                             cwd=root, capture_output=True, text=True)
     if result.returncode:
-        raise AssertionError(f'initial-state corpus render failed: {result.stdout}\n{result.stderr}')
+        raise AssertionError(f'{label} corpus render failed: {result.stdout}\n{result.stderr}')
     records = {record['id']: record for record in
                json.loads((output / 'candidates.json').read_text())['cases']}
     for case in subset:
@@ -156,9 +154,9 @@ def test_dsl_matches_corpus_for_initial_state(root, renderer, temporary, corpus)
         record = records[case['id']]
         assert record['status'] == 'ok', record
         image = next(item for item in record['images'] if item['frame'] == capture['frames'])
-        program = temporary / 'initial-state.dsl'
+        program = temporary / f'{label}.dsl'
         program.write_text(case['source'])
-        png = temporary / 'initial-state-dsl.png'
+        png = temporary / f'{label}-dsl.png'
         width, height = capture['size']
         result = subprocess.run([str(renderer), '--dsl', str(program), '--out', str(png),
                                  '--width', str(width), '--height', str(height),
@@ -169,7 +167,46 @@ def test_dsl_matches_corpus_for_initial_state(root, renderer, temporary, corpus)
             raise AssertionError(f"{case['id']} --dsl failed: {result.stdout}\n{result.stderr}")
         with Image.open(png) as dsl, Image.open(output / image['path']) as reference:
             assert dsl.convert('RGBA').tobytes() == reference.convert('RGBA').tobytes(), case['id']
-    print(f'initial program state: --dsl matches the corpus path for {len(subset)} cases')
+    print(f'{label}: --dsl matches the corpus path for {len(subset)} cases')
+
+
+def test_dsl_matches_corpus_for_initial_state(root, renderer, temporary, corpus):
+    """nm-render --dsl applies the demo host's initial controls, as the corpus path does."""
+    oracle = json.loads((root / 'parity/initial-program-state.json').read_text())
+    dsl_matches_corpus(root, renderer, temporary, corpus,
+                       [item['id'] for item in oracle['cases']], 'initial-program-state')
+
+
+def test_dsl_prepares_native_inputs(root, renderer, temporary, corpus):
+    """nm-render --dsl prepares the native overlays and the default mesh, as the corpus path does."""
+    dsl_matches_corpus(root, renderer, temporary, corpus,
+                       ['coverage/filter_fibers', 'coverage/filter_scratches',
+                        'coverage/filter_strayHair', 'programs/meshLoaderDefault'], 'native-inputs')
+
+
+def test_cli_errors_are_readable(root, renderer, temporary):
+    """nm-render prints diagnostics as text, with codes and locations where upstream has them."""
+    expected = {
+        'search synth\nnoise(seed: 1.write(o0)\nrender(o0)\n':
+            "nm-render: P002 error: Expect ')' at line 2 col 14\n",
+        'search synth, filter\nnoiz(seed: 1).write(o0)\nrender(o0)\n':
+            "nm-render: S001 error: Unknown effect: 'noiz'; S005 error at line 2 col 15: "
+            "write() requires an input - cannot be first in chain: '[Write]'\n",
+    }
+    program = temporary / 'invalid.dsl'
+    for source, message in expected.items():
+        program.write_text(source)
+        result = subprocess.run([str(renderer), '--dsl', str(program), '--out', str(temporary / 'invalid.png'),
+                                 '--width', '64', '--height', '64'], cwd=root, capture_output=True, text=True)
+        assert (result.returncode, result.stdout, result.stderr) == (1, '', message), result
+    result = subprocess.run([str(renderer), '--help'], cwd=root, capture_output=True, text=True)
+    assert result.returncode == 1 and result.stderr.startswith('nm-render: usage: nm-render '), result
+    program.write_text('search synth\nnoise().write(o0)\nrender(o0)\n')
+    result = subprocess.run([str(renderer), '--dsl', str(program), '--out', str(temporary / 'invalid.png'),
+                             '--width', '0', '--height', '64'], cwd=root, capture_output=True, text=True)
+    assert (result.returncode, result.stderr) == (
+        1, 'nm-render: render size must be 1...16384 in each dimension\n'), result
+    print('nm-render: parse, validator, usage and size errors print as readable text')
 
 
 def main():
@@ -200,6 +237,8 @@ def main():
         test_failed_golden_admission(root, renderer, temporary, solid)
         test_native_overlays_without_replay(root, renderer, temporary, corpus)
         test_dsl_matches_corpus_for_initial_state(root, renderer, temporary, corpus)
+        test_dsl_prepares_native_inputs(root, renderer, temporary, corpus)
+        test_cli_errors_are_readable(root, renderer, temporary)
         corpus_path = temporary / 'corpus.json'
         output = temporary / 'candidates'
         corpus_path.write_text(json.dumps({'schemaVersion': 1, 'cases': [case]}))

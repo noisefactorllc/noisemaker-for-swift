@@ -27,6 +27,33 @@ struct MetalKitBootstrapGPUTests {
         expectEqual(host.renderer.maximumTextureDimension2D, 8_192)
     }
 
+    @Test func sourceInitializerPreparesNativeInputs() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice())
+        let queue = try requireValue(device.makeCommandQueue())
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let corpus = try requireValue(JSONSerialization.jsonObject(with: Data(contentsOf:
+            root.appendingPathComponent("parity/corpus.json"))) as? [String: Any])
+        let cases = try requireValue(corpus["cases"] as? [[String: Any]])
+        for id in ["coverage/filter_fibers", "coverage/filter_scratches",
+                   "coverage/filter_strayHair", "programs/meshLoaderDefault"] {
+            let source = try requireValue(cases.first { $0["id"] as? String == id }?["source"] as? String, id)
+            let view = MTKView(frame: NSRect(x: 0, y: 0, width: 64, height: 64), device: device)
+            view.drawableSize = CGSize(width: 64, height: 64)
+            let host = try NoisemakerViewRenderer(view: view, source: source)
+            let names = host.renderer.graph.externalTextureNames
+            expectTrue(!names.isEmpty, id)
+            let frame = FrameState(time: 0.25, delta: 0, frameIndex: 0)
+            let inputs = try requireValue(host.externalTexturesProvider, id)(frame)
+            expectEqual(Set(inputs.keys), Set(names), id)
+            let command = try requireValue(queue.makeCommandBuffer())
+            _ = try host.renderer.encode(frame: frame, into: command, externalTextures: inputs)
+            command.commit()
+            command.waitUntilCompleted()
+            expectEqual(command.status, .completed, id)
+        }
+    }
+
     @Test func externalPreparationSeesPublishedCapabilityClampedGraph() throws {
         let device = try requireValue(MTLCreateSystemDefaultDevice())
         let view = MTKView(frame: NSRect(x: 0, y: 0, width: 64, height: 64), device: device)

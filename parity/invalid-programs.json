@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "authority": {
+    "repository": "https://github.com/noisefactorllc/noisemaker",
+    "commit": "2f9736ebb6c39be683074edc3a2cd0338a8a0c9a",
+    "sourceManifestSha256": "a3dee41e268c030816b087baf8b7348fb720ec6d00e7c33e46c2ec47a2def1e1"
+  },
+  "cases": [
+    {
+      "id": "unknown-effect",
+      "source": "search synth, filter\nnoiz(seed: 1).write(o0)\nrender(o0)\n",
+      "sourceSha256": "72d5dec16ffcb2304f6cb65d0b05808e4d9455aaf331a462acd371427483ce94",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "Unknown effect: 'noiz'",
+          "location": null
+        },
+        {
+          "code": "S005",
+          "severity": "error",
+          "message": "write() requires an input - cannot be first in chain: '[Write]'",
+          "location": {
+            "line": 2,
+            "column": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "unknown-effect-mid-chain",
+      "source": "search synth, filter\nnoise().blurr().write(o0)\nrender(o0)\n",
+      "sourceSha256": "a96ea2cbb7492299b942fe634a86ab2284fee46a79d773374ea4b736ad25918b",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "Unknown effect: 'blurr'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "unknown-argument",
+      "source": "search synth, filter\nnoise(bogus: 1).write(o0)\nrender(o0)\n",
+      "sourceSha256": "3f1396d07d71ee1613b1e9b2e0728b3603935bad28d22d79c6d63bf0493ee1e5",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "Unknown argument 'bogus' for noise()",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "retired-parameter-alias",
+      "source": "search synth, filter\nnoise(xScale: 4).write(o0)\nrender(o0)\n",
+      "sourceSha256": "9d12c512d42842f5f169f027a241b8bb8ab677dfb8f4197caec1d540500598d9",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "Unknown argument 'xScale' for noise()",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "filter-at-chain-root",
+      "source": "search synth, filter\nblur().write(o0)\nrender(o0)\n",
+      "sourceSha256": "424628da0873bc485d7bf593c87799826d110cf7d8ad8a4d5862a6e5b5b2c55f",
+      "diagnostics": [
+        {
+          "code": "S005",
+          "severity": "error",
+          "message": "Illegal chain structure: 'blur'",
+          "location": null
+        },
+        {
+          "code": "S005",
+          "severity": "error",
+          "message": "write() requires an input - cannot be first in chain: '[Write]'",
+          "location": {
+            "line": 2,
+            "column": 8
+          }
+        }
+      ]
+    },
+    {
+      "id": "starter-with-input",
+      "source": "search synth, filter\nnoise().noise().write(o0)\nrender(o0)\n",
+      "sourceSha256": "ab7f0a9559907873d3fed18c3bf02ad1efa0797c1b6c2490e3bca6035d51bd4e",
+      "diagnostics": [
+        {
+          "code": "S005",
+          "severity": "error",
+          "message": "Illegal chain structure: 'noise'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "missing-write",
+      "source": "search synth, filter\nnoise()\nrender(o0)\n",
+      "sourceSha256": "fd2db7006bb1468d8ca190bf45c2c520a0863819c830b78d47efa5b887ff1ac6",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "Chain must have explicit write() or write3d() target: 'noise'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "string-for-number",
+      "source": "search synth, filter\nnoise(scaleX: \"big\").write(o0)\nrender(o0)\n",
+      "sourceSha256": "d800603f080fa631bfa9badb2f3b120d4551b8b3766a34973554d68069d5726f",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "String literal not allowed for numeric parameter 'scaleX' - strings are only valid for type: \"string\" parameters",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "undefined-identifier",
+      "source": "search synth, filter\nnoise(scaleX: big).write(o0)\nrender(o0)\n",
+      "sourceSha256": "3b199d3cc8122ab379c4cdeb72444cd70f0f43eb90d31a44b954e4b130e1cad2",
+      "diagnostics": [
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'big'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "unassigned-variable",
+      "source": "search synth, filter\nlet v = missing\nnoise(scaleX: v).write(o0)\nrender(o0)\n",
+      "sourceSha256": "4ccdb39f2eb65ece26347c9d9e23412179be3a6a45a66afb91bc2e5df67449ed",
+      "diagnostics": [
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'missing'",
+          "location": null
+        },
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'v'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "unresolved-enum",
+      "source": "search synth, filter\nnoise(type: foo.bar).write(o0)\nrender(o0)\n",
+      "sourceSha256": "52f8285225fa66717e8d4e68379f3c02fc4f0c473966be85ae6ce7755fe1c525",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "Cannot resolve enum value for 'type': 'foo.bar'",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "read-invalid-surface",
+      "source": "search synth, filter\nread(foo).write(o0)\nrender(o0)\n",
+      "sourceSha256": "a94fd2a9324328b2b36dcfc6604c820d1ec88b227234744232a2bdaff5b87a67",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "read() requires a valid surface reference: '[Read]'",
+          "location": {
+            "line": 2,
+            "column": 1
+          }
+        },
+        {
+          "code": "S005",
+          "severity": "error",
+          "message": "write() requires an input - cannot be first in chain: '[Write]'",
+          "location": {
+            "line": 2,
+            "column": 11
+          }
+        }
+      ]
+    },
+    {
+      "id": "read-inline",
+      "source": "search synth, filter\nnoise().read(o1).write(o0)\nrender(o0)\n",
+      "sourceSha256": "fed084e08770b5d11076c0e1fc6e6bc6d2b93ce9e18127b9b0167001f66205ad",
+      "diagnostics": [
+        {
+          "code": "S001",
+          "severity": "error",
+          "message": "read() is a starter node and cannot be chained inline. Use standalone read() to start a new chain.: '[Read]'",
+          "location": {
+            "line": 2,
+            "column": 9
+          }
+        }
+      ]
+    }
+  ]
+}

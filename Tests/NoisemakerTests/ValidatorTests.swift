@@ -30,9 +30,10 @@ import Testing
             #expect(sourceSHA == inventory[name]?["sourceSha256"] as? String)
             let parsed = try NoisemakerParser.parse(source)
             if portableCases.contains(name) {
-                #expect(throws: CompilerIncomplete.self) {
-                    try NoisemakerValidator.validate(parsed, registry: registry)
-                }
+                // The bundled registry lacks these Portable effects, so upstream
+                // reports each one as an unknown effect.
+                let validated = try NoisemakerValidator.validate(parsed, registry: registry)
+                #expect(throws: CompilationError.self) { try CompilationError.check(validated) }
                 continue
             }
             let actual = try NoisemakerValidator.validate(parsed, registry: registry)
@@ -42,5 +43,36 @@ import Testing
         }
         #expect(compared == files.count - portableCases.count)
         #expect(compared >= 9)
+    }
+
+    @Test func invalidProgramsReportLockedDiagnostics() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let oracle = try #require(JSONSerialization.jsonObject(with: Data(contentsOf:
+            root.appendingPathComponent("parity/invalid-programs.json"))) as? [String: Any])
+        let cases = try #require(oracle["cases"] as? [[String: Any]])
+        #expect(cases.count >= 13)
+        let compiler = try NoisemakerCompiler()
+        for item in cases {
+            let id = try #require(item["id"] as? String)
+            let source = try #require(item["source"] as? String)
+            let expected = try #require(item["diagnostics"] as? [[String: Any]]).map { entry in
+                let location = (entry["location"] as? [String: Any]).flatMap { location -> Noisemaker.SourceLocation? in
+                    guard let line = location["line"] as? Int, let column = location["column"] as? Int else { return nil }
+                    return Noisemaker.SourceLocation(line: line, column: column)
+                }
+                return CompilerDiagnostic(code: entry["code"] as? String ?? "",
+                                          severity: entry["severity"] as? String ?? "",
+                                          message: entry["message"] as? String ?? "", location: location)
+            }
+            do {
+                _ = try compiler.compile(source: source)
+                Issue.record("\(id) compiled")
+            } catch let error as CompilationError {
+                #expect(error.diagnostics == expected, "\(id)")
+            } catch {
+                Issue.record("\(id): expected CompilationError, got \(error)")
+            }
+        }
     }
 }

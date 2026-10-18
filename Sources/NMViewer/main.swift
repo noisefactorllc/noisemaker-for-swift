@@ -27,7 +27,7 @@ private final class Viewer: NSObject, NSApplicationDelegate {
             renderer.onError = { error in
                 // The last good graph remains active; surface the diagnostic in the host.
                 window.title = "Noisemaker — \(error.localizedDescription)"
-                fputs("nm-viewer: \(error)\n", stderr)
+                fputs("nm-viewer: \(error.localizedDescription)\n", stderr)
             }
             self.renderer = renderer
             self.window = window
@@ -35,7 +35,7 @@ private final class Viewer: NSObject, NSApplicationDelegate {
             window.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
         } catch {
-            fputs("nm-viewer: \(error)\n", stderr)
+            fputs("nm-viewer: \(error.localizedDescription)\n", stderr)
             exit(1)
         }
     }
@@ -70,7 +70,7 @@ private struct Main {
             application.mainMenu = menu
             withExtendedLifetime(delegate) { application.run() }
         } catch {
-            fputs("nm-viewer: \(error)\n", stderr)
+            fputs("nm-viewer: \(error.localizedDescription)\n", stderr)
             exit(1)
         }
     }

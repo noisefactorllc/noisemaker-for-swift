@@ -236,7 +236,9 @@ extension NoisemakerViewRenderer {
     }
 
     /// Compiles a DSL document and prepares the initial demo ProgramState values
-    /// before any texture dimensions or Metal resources are validated.
+    /// before any texture dimensions or Metal resources are validated. The view
+    /// prepares the package's native inputs (see `NativeInputs`) until a host
+    /// installs its own preparation.
     public convenience init(view: MTKView, source: String, loopDuration: TimeInterval = 10,
                             registry: EffectRegistry? = nil,
                             maximumTextureDimension2D: Int? = nil) throws {
@@ -244,5 +246,10 @@ extension NoisemakerViewRenderer {
         let graph = try NoisemakerCompiler(registry: selectedRegistry).compileForHost(source: source)
         try self.init(view: view, graph: graph, loopDuration: loopDuration,
             registry: selectedRegistry, maximumTextureDimension2D: maximumTextureDimension2D)
+        let device = renderer.device
+        try setExternalTexturesPreparation { graph, size in
+            let textures = try NativeInputs.prepare(device: device, graph: graph, size: size)
+            return { _ in textures }
+        }
     }
 }

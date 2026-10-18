@@ -16,9 +16,18 @@ public struct UniformField: Sendable, Equatable {
     public init(name: String, type: UniformType) { self.name = name; self.type = type }
 }
 
-public enum UniformError: Error, Equatable {
+public enum UniformError: Error, Equatable, CustomStringConvertible, LocalizedError {
     case invalidLayout(String)
     case invalidValue(String)
+
+    public var description: String {
+        switch self {
+        case .invalidLayout(let detail): return "Invalid uniform layout: \(detail)"
+        case .invalidValue(let detail): return "Invalid uniform value: \(detail)"
+        }
+    }
+
+    public var errorDescription: String? { description }
 }
 
 public struct UniformLayout: Sendable {

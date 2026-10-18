@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CompilerIncomplete: Error, LocalizedError, Sendable {
+public struct CompilerIncomplete: Error, LocalizedError, CustomStringConvertible, Sendable {
     public let stage: String
     public let detail: String
 
@@ -9,7 +9,57 @@ public struct CompilerIncomplete: Error, LocalizedError, Sendable {
         self.detail = detail
     }
 
-    public var errorDescription: String? { "Native \(stage) incomplete: \(detail)" }
+    public var description: String { "Native \(stage) incomplete: \(detail)" }
+    public var errorDescription: String? { description }
+}
+
+/// A validator diagnostic with the locked upstream code, severity, message and
+/// location. Upstream gives a location only for read() and write() nodes.
+public struct CompilerDiagnostic: Equatable, Sendable, CustomStringConvertible {
+    public let code: String
+    public let severity: String
+    public let message: String
+    public let location: SourceLocation?
+
+    public init(code: String, severity: String, message: String, location: SourceLocation?) {
+        self.code = code
+        self.severity = severity
+        self.message = message
+        self.location = location
+    }
+
+    public var description: String {
+        let place = location.map { " at line \($0.line) col \($0.column)" } ?? ""
+        return "\(code) \(severity)\(place): \(message)"
+    }
+}
+
+/// An invalid program: the validator reported at least one error. As upstream
+/// compileGraph does, it carries every diagnostic, warnings included.
+public struct CompilationError: Error, LocalizedError, CustomStringConvertible, Sendable {
+    public let diagnostics: [CompilerDiagnostic]
+
+    public init(diagnostics: [CompilerDiagnostic]) { self.diagnostics = diagnostics }
+
+    public var description: String { diagnostics.map(\.description).joined(separator: "; ") }
+    public var errorDescription: String? { description }
+
+    static func check(_ validated: ParserValue) throws {
+        let diagnostics = (validated.field("diagnostics")?.elements ?? []).map { item in
+            let location = item.field("location").flatMap { location -> SourceLocation? in
+                guard let line = location.field("line")?.number,
+                      let column = location.field("column")?.number else { return nil }
+                return SourceLocation(line: Int(line), column: Int(column))
+            }
+            return CompilerDiagnostic(code: item.field("code")?.string ?? "",
+                                      severity: item.field("severity")?.string ?? "",
+                                      message: item.field("message")?.string ?? "",
+                                      location: location)
+        }
+        if diagnostics.contains(where: { $0.severity == "error" }) {
+            throw CompilationError(diagnostics: diagnostics)
+        }
+    }
 }
 
 /// The source-ordered semantic step planner from `lang/validator.js`.
@@ -54,10 +104,25 @@ public enum NoisemakerValidator {
                       let expression = variable.field("expr") else {
                     throw CompilerIncomplete(stage: "validator", detail: "malformed variable declaration")
                 }
-                symbols[name] = try substitute(expression)
+                let value = try substitute(expression)
+                if value.isNull || value.isUndefined || (value.type == "Ident" &&
+                    ["null", "undefined"].contains(value.field("name")?.string ?? "")) {
+                    report("S004", variable)
+                    continue
+                }
+                if value.type == "Ident", let identifier = value.field("name")?.string,
+                   symbols[identifier] == nil, !Self.stateValues.contains(identifier),
+                   registry.validatorOp(identifier) == nil,
+                   !searchOrder.contains(where: { registry.validatorOp("\($0).\(identifier)") != nil }) {
+                    report("S003", value)
+                    continue
+                }
+                symbols[name] = value
             }
             var planned: [ParserValue] = []
-            for statement in plans { planned.append(try compileStatement(statement)) }
+            for statement in plans {
+                if let plan = try compileStatement(statement) { planned.append(plan) }
+            }
             let render = ast.field("render")?.field("name") ?? .null
             var fields: [(String, ParserValue)] = [
                 ("plans", .array(planned)), ("diagnostics", .array(diagnostics)),
@@ -68,12 +133,17 @@ public enum NoisemakerValidator {
             return .object(fields)
         }
 
-        private mutating func compileStatement(_ statement: ParserValue) throws -> ParserValue {
+        private mutating func compileStatement(_ statement: ParserValue) throws -> ParserValue? {
             guard let calls = statement.field("chain")?.elements else {
                 throw CompilerIncomplete(stage: "validator", detail: "branch or non-chain statement")
             }
             let write = statement.field("write")
             let write3d = statement.field("write3d")
+            let present = { (value: ParserValue?) in value.map { !$0.isNull && !$0.isUndefined } ?? false }
+            if !present(write) && !present(write3d) {
+                report("S001", calls.first, "Chain must have explicit write() or write3d() target")
+                return nil
+            }
             guard let write, write.type == "OutputRef", write3d?.isNull != false,
                   let writeName = write.field("name")?.string else {
                 throw CompilerIncomplete(stage: "validator", detail: "chain requires a 2D output write")
@@ -96,12 +166,17 @@ public enum NoisemakerValidator {
             for original in calls {
                 switch original.type {
                 case "Call":
-                    let step = try compileCall(original, current: current, chain: &chain)
+                    guard let step = try compileCall(original, current: current, chain: &chain) else { continue }
                     chain.append(step)
                     current = tempIndex - 1
                 case "Read":
-                    guard current == nil, let surface = toSurface(original.field("surface")) else {
-                        throw CompilerIncomplete(stage: "validator", detail: "invalid read starter")
+                    guard current == nil else {
+                        report("S001", original, "read() is a starter node and cannot be chained inline. Use standalone read() to start a new chain.")
+                        continue
+                    }
+                    guard let surface = toSurface(original.field("surface")) else {
+                        report("S001", original, "read() requires a valid surface reference")
+                        continue
                     }
                     let args = ParserValue.object([("tex", surface)])
                     let step = makeStep(op: "_read", args: args, from: nil, builtin: true,
@@ -109,8 +184,13 @@ public enum NoisemakerValidator {
                     chain.append(step)
                     current = tempIndex - 1
                 case "Write":
-                    guard let input = current, let surface = toSurface(original.field("surface")) else {
-                        throw CompilerIncomplete(stage: "validator", detail: "invalid write surface or input")
+                    guard let surface = toSurface(original.field("surface")) else {
+                        report("S001", original, "write() requires a valid surface reference")
+                        continue
+                    }
+                    guard let input = current else {
+                        report("S005", original, "write() requires an input - cannot be first in chain")
+                        continue
                     }
                     let args = ParserValue.object([("tex", surface)])
                     let step = makeStep(op: "_write", args: args, from: input, builtin: true,
@@ -133,8 +213,12 @@ public enum NoisemakerValidator {
                         }
                         diagnostics.append(.object(fields))
                     }
-                    guard let input = current, let body = original.field("body")?.elements else {
-                        throw CompilerIncomplete(stage: "validator", detail: "subchain requires input and body")
+                    guard let input = current else {
+                        report("S005", original, "subchain() requires an input - cannot be first in chain")
+                        continue
+                    }
+                    guard let body = original.field("body")?.elements else {
+                        throw CompilerIncomplete(stage: "validator", detail: "subchain requires a body")
                     }
                     let args = ParserValue.object([
                         ("name", original.field("name") ?? .null),
@@ -153,8 +237,9 @@ public enum NoisemakerValidator {
             }
         }
 
+        /// Returns nil when upstream skips the call after an error diagnostic.
         private mutating func compileCall(_ original: ParserValue, current: Int?,
-                                          chain: inout [ParserValue]) throws -> ParserValue {
+                                          chain: inout [ParserValue]) throws -> ParserValue? {
             guard let name = original.field("name")?.string,
                   let positional = original.field("args")?.elements else {
                 throw CompilerIncomplete(stage: "validator", detail: "malformed call")
@@ -164,15 +249,19 @@ public enum NoisemakerValidator {
             if let resolved = namespace?.field("resolved")?.string { candidateNames.append("\(resolved).\(name)") }
             let effectiveSearch = namespace?.field("searchOrder")?.elements?.compactMap(\.string) ?? searchOrder
             candidateNames += effectiveSearch.map { "\($0).\(name)" }
-            guard let opName = candidateNames.first(where: { registry.validatorOp($0) != nil }),
-                  let op = registry.validatorOp(opName),
-                  let specs = op.field("args")?.elements else {
-                throw CompilerIncomplete(stage: "validator", detail: "unresolved effect \(name)")
+            guard let opName = candidateNames.first(where: { registry.validatorOp($0) != nil }) else {
+                report("S001", original, "Unknown effect: '\(name)'")
+                return nil
+            }
+            guard let op = registry.validatorOp(opName), let specs = op.field("args")?.elements else {
+                throw CompilerIncomplete(stage: "validator", detail: "malformed validator op \(opName)")
             }
             let starter = registry.isStarter(opName)
             guard starter || current != nil else {
-                throw CompilerIncomplete(stage: "validator", detail: "non-starter effect at chain root: \(opName)")
+                report("S005", original)
+                return nil
             }
+            if starter && current != nil { report("S005", original) }
             let from = starter ? nil : current
             let keyword = original.field("kwargs")
             let keywordFields = keyword?.fields ?? []
@@ -198,7 +287,7 @@ public enum NoisemakerValidator {
                 seen.insert("_skip")
             }
             for field in keywordFields where !seen.contains(field.name) {
-                throw CompilerIncomplete(stage: "validator", detail: "unknown argument \(field.name) for \(opName)")
+                report("S001", field.value, "Unknown argument '\(field.name)' for \(name)()")
             }
             let namespaceSnapshot = try snapshot(namespace)
             var step = makeStep(op: opName, args: .object(args), from: from,
@@ -262,7 +351,7 @@ public enum NoisemakerValidator {
                 let surfaceNode = node.type == "Read" ? node.field("surface") : node
                 if let surface = toSurface(surfaceNode) { return surface }
                 if node.type == "Call" {
-                    let inline = try compileCall(node, current: nil, chain: &chain)
+                    guard let inline = try compileCall(node, current: nil, chain: &chain) else { return fallback }
                     chain.append(inline)
                     guard let index = inline.field("temp")?.number else {
                         throw CompilerIncomplete(stage: "validator", detail: "inline surface has no temporary")
@@ -350,6 +439,19 @@ public enum NoisemakerValidator {
             } else if node.type == "Ident", let name = node.field("name")?.string,
                       let choices = spec.field("choices"), let numeric = choices.field(name)?.number {
                 value = numeric
+            } else if node.type == "String" {
+                let kind = type == "member" ? "member/enum parameter '\(key)'"
+                    : "numeric parameter '\(key)' - strings are only valid for type: \"string\" parameters"
+                report("S001", node, "String literal not allowed for \(kind)")
+                return fallback
+            } else if node.type == "Member" {
+                let path = node.field("path")?.elements?.compactMap(\.string).joined(separator: ".") ?? ""
+                report("S001", node, "Cannot resolve enum value for '\(key)': '\(path.isEmpty ? "unknown" : path)'")
+                return fallback
+            } else if node.type == "Ident", let name = node.field("name")?.string,
+                      !Self.stateValues.contains(name) {
+                report("S003", node)
+                return fallback
             } else {
                 throw CompilerIncomplete(stage: "validator", detail: "numeric expression for \(opName).\(key)")
             }
@@ -376,6 +478,51 @@ public enum NoisemakerValidator {
                 ]))
             }
             return .number(value)
+        }
+
+        private static let defaultDiagnostics: [String: (severity: String, message: String)] = [
+            "S001": ("error", "Unknown identifier"),
+            "S003": ("error", "Variable used before assignment"),
+            "S004": ("error", "Cannot assign null or undefined"),
+            "S005": ("error", "Illegal chain structure")
+        ]
+
+        /// Records a diagnostic as upstream pushDiag does: the message gains the
+        /// node's identifier unless it already names it or quotes anything.
+        private mutating func report(_ code: String, _ node: ParserValue?, _ message: String? = nil) {
+            let defaults = Self.defaultDiagnostics[code]!
+            var text = message ?? defaults.message
+            let identifier = node.flatMap(identifierName)
+            if let identifier, !text.contains(identifier), !text.contains("'") { text += ": '\(identifier)'" }
+            var fields: [(String, ParserValue)] = [
+                ("code", .string(code)), ("message", .string(text)),
+                ("severity", .string(defaults.severity)), ("nodeId", node?.field("id") ?? .undefined)
+            ]
+            if let location = node?.field("loc"), let line = location.field("line")?.number,
+               let column = (location.field("column") ?? location.field("col"))?.number {
+                fields.append(("location", .object([("line", .number(line)), ("column", .number(column))])))
+            }
+            if let identifier { fields.append(("identifier", .string(identifier))) }
+            diagnostics.append(.object(fields))
+        }
+
+        private func identifierName(_ node: ParserValue) -> String? {
+            switch node.type {
+            case "Ident", "Call": return node.field("name")?.string
+            case "Member" where node.field("path")?.elements != nil:
+                return node.field("path")!.elements!.map { $0.string ?? "" }.joined(separator: ".")
+            case "Func" where !(node.field("src")?.string ?? "").isEmpty:
+                let source = Array(node.field("src")!.string!.utf16)
+                return "{\(String(decoding: source.prefix(30), as: UTF16.self))\(source.count > 30 ? "..." : "")}"
+            default: break
+            }
+            for name in ["name", "value"] {
+                guard let value = node.field(name) else { continue }
+                if let text = value.string, !text.isEmpty { return text }
+                if let number = value.number, number != 0, !number.isNaN { return jsNumber(number) }
+                if value.bool == true { return "true" }
+            }
+            return "[\(node.type ?? "unknown")]"
         }
 
         private func jsNumber(_ value: Double) -> String {

@@ -106,6 +106,10 @@ loop time from 0 to 1, and `delta` is the change in that time since the previous
 is frame 300 of a 10-second loop at 60 frames per second, the clock that `NoisemakerViewRenderer`
 uses.
 
+An invalid program throws `CompilationError`. Its `diagnostics` carry the code, severity, message and,
+where the reference compiler gives one, the line and column, as the reference compiler reports them.
+`CompilerIncomplete` marks a program that the reference accepts but this port cannot compile yet.
+
 Every DSL program has the same shape:
 
 - Name the namespaces it uses (`search synth, filter`).
@@ -136,6 +140,12 @@ swift run -c release nm-viewer --dsl program.dsl
 of frames to render before the capture (default 1). `nm-viewer` with no arguments shows a built-in noise
 and blur program.
 
+Both tools generate the `fibers`, `scratches` and `strayHair` overlays and give `meshLoader()` the
+bundled sphere, as `NoisemakerViewRenderer(view:source:)` does. They cannot supply host content: the
+text of `text()`, the image or video of `media()`, or a custom OBJ mesh. A program that needs host
+content stops with a "Missing graph resource" error. Supply those textures from your own host through
+`externalTextures` or `setExternalTexturesPreparation`.
+
 ## What works and what does not
 
 - **Current full catalog gate.** Authority `2f9736ebb6c39be683074edc3a2cd0338a8a0c9a` passed
@@ -150,7 +160,7 @@ and blur program.
   `run.7EfAlDR4`. Each graded 2,885 exact and 21 uninformative of 2,906 cases.
 - **The compiler matches the reference stage by stage.** The complete 2,919-case compiler corpus
   matches 17,514 pinned source stage hashes.
-- **Native suites.** The CPU suite passes 108 tests and the native Metal suite passes 83 tests on
+- **Native suites.** The CPU suite passes 111 tests and the native Metal suite passes 84 tests on
   Apple M4, including resource ownership, queued submissions, partial-write history, sampled 3D
   inputs, parameter updates, and recovery. Timed CLI regressions verify complete sample schedules,
   source-order automation arithmetic, and delta time at loop boundaries. The 100-cycle

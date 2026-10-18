@@ -1,4 +1,6 @@
-public enum GraphDiagnostic: Error, CustomStringConvertible {
+import Foundation
+
+public enum GraphDiagnostic: Error, CustomStringConvertible, LocalizedError {
     case invalid(String)
     case unsupported(String)
     case missing(String)
@@ -10,4 +12,6 @@ public enum GraphDiagnostic: Error, CustomStringConvertible {
         case .missing(let detail): return "Missing graph resource: \(detail)"
         }
     }
+
+    public var errorDescription: String? { description }
 }

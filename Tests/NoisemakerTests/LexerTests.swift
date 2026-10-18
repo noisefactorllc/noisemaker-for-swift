@@ -75,7 +75,7 @@ struct LexerTests {
                     return
                 }
                 expectEqual(actual.diagnostic, expected.diagnostic, item.name)
-                expectEqual(actual.localizedDescription, expected.message, item.name)
+                expectEqual(actual.diagnostic.message, expected.message, item.name)
             }
             compared += 1
         }
