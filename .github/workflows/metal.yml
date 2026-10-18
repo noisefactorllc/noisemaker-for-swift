@@ -65,7 +65,9 @@ jobs:
           set -euo pipefail
           python311="$(realpath "$HOME/.local/bin/python3.11")"
           "$python311" -m venv --copies .build/ci-python
-          .build/ci-python/bin/pip install Pillow
+          echo 'Pillow==13.0.0 --hash=sha256:37290fbef0c73e2d51d594eb78fded7dc7170d1c3ad0a890269e6fd8c8c4e061' \
+            > .build/ci-python/requirements.txt
+          .build/ci-python/bin/pip install --only-binary :all: --require-hashes -r .build/ci-python/requirements.txt
           echo "$PWD/.build/ci-python/bin" >> "$GITHUB_PATH"
 
       - name: Apply the deliberate sampler regression
@@ -106,7 +108,9 @@ jobs:
           set -euo pipefail
           python311="$(realpath "$HOME/.local/bin/python3.11")"
           "$python311" -m venv --copies .build/ci-python
-          .build/ci-python/bin/pip install Pillow
+          echo 'Pillow==13.0.0 --hash=sha256:37290fbef0c73e2d51d594eb78fded7dc7170d1c3ad0a890269e6fd8c8c4e061' \
+            > .build/ci-python/requirements.txt
+          .build/ci-python/bin/pip install --only-binary :all: --require-hashes -r .build/ci-python/requirements.txt
           echo "$PWD/.build/ci-python/bin" >> "$GITHUB_PATH"
 
       - name: Check out the locked authority
