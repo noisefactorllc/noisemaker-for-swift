@@ -231,7 +231,7 @@ python3 tools/package-check.py
   qualify the complete family. The full sweep asserts actual WebGPU. Upstream external-upload
   tests now explicitly select and assert each requested backend.
 - The Native Metal workflow runs `scripts/test-metal` on a native Metal device for each push to
-  `main` that changes a rendering input. Every Sunday at 21:23 UTC it also runs the full
+  `main` that changes a rendering input. Every Sunday at 19:17 UTC it also runs the full
   `scripts/parity-summary` at the head of `main` and keeps the summary and fingerprints as a run
   artifact.
 
