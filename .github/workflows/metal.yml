@@ -1,0 +1,138 @@
+name: Native Metal
+
+# Hosted CI cannot qualify Metal rendering, so this workflow runs on the
+# self-hosted spare-noisemaker-gpu runner (Apple M4). A push to main that
+# changes a rendering input runs scripts/test-metal on the native device. A
+# manual run can add the full scripts/parity-summary at the same SHA, or apply
+# a deliberate sampler regression that the gate must reject. No pull request
+# reaches this runner, and a missing Metal device fails the gate.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Package.swift'
+      - 'Sources/**'
+      - 'Artifacts/**'
+      - 'Tests/**'
+      - 'parity/**'
+      - 'tools/**'
+      - 'scripts/**'
+      - '.github/workflows/metal.yml'
+  workflow_dispatch:
+    inputs:
+      parity:
+        description: Also run the full scripts/parity-summary at this SHA
+        type: boolean
+        default: false
+      regression_probe:
+        description: Make the linear sampler nearest; the gate must fail
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swift-native-metal-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  metal:
+    if: github.ref == 'refs/heads/main'
+    runs-on:
+      group: noisemaker-gpu
+      labels: [noisemaker-gpu]
+    timeout-minutes: 45
+    steps:
+      - name: Require a native Apple-silicon Metal host
+        run: |
+          set -euo pipefail
+          test "$(uname -s)" = Darwin
+          test "$(uname -m)" = arm64
+          system_profiler SPDisplaysDataType | grep -q 'Metal Support: Metal'
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 26
+
+      - name: Install image grader dependency
+        run: |
+          set -euo pipefail
+          python311="$(realpath "$HOME/.local/bin/python3.11")"
+          "$python311" -m venv --copies .build/ci-python
+          .build/ci-python/bin/pip install Pillow
+          echo "$PWD/.build/ci-python/bin" >> "$GITHUB_PATH"
+
+      - name: Apply the deliberate sampler regression
+        if: inputs.regression_probe
+        run: |
+          python3 - <<'EOF'
+          from pathlib import Path
+          path = Path('Sources/Noisemaker/Runtime/NoisemakerRenderer.swift')
+          source = path.read_text()
+          old = ('descriptor.minFilter = .linear\n        descriptor.magFilter = .linear\n'
+                 '        guard let linearSampler')
+          assert source.count(old) == 1, 'sampler regression anchor moved'
+          path.write_text(source.replace(old, old.replace('.linear', '.nearest')))
+          EOF
+          git diff --stat
+
+      - name: Run the native Metal suite
+        run: MTL_DEBUG_LAYER=1 scripts/test-metal
+
+  parity:
+    needs: metal
+    if: github.ref == 'refs/heads/main' && inputs.parity
+    runs-on:
+      group: noisemaker-gpu
+      labels: [noisemaker-gpu]
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 26
+
+      - name: Install image grader dependency
+        run: |
+          set -euo pipefail
+          python311="$(realpath "$HOME/.local/bin/python3.11")"
+          "$python311" -m venv --copies .build/ci-python
+          .build/ci-python/bin/pip install Pillow
+          echo "$PWD/.build/ci-python/bin" >> "$GITHUB_PATH"
+
+      - name: Check out the locked authority
+        run: |
+          set -euo pipefail
+          commit="$(python3 -c "import json; print(json.load(open('parity/reference.json'))['commit'])")"
+          [[ "$commit" =~ ^[0-9a-f]{40}$ ]]
+          reference="$RUNNER_TEMP/noisemaker-reference"
+          rm -rf "$reference"
+          git clone -q https://github.com/noisefactorllc/noisemaker "$reference"
+          git -C "$reference" checkout -q --detach "$commit"
+          npm ci --prefix "$reference" --ignore-scripts --no-audit --no-fund
+          (cd "$reference" && npx playwright install chromium)
+          test "$(git -C "$reference" rev-parse HEAD)" = "$commit"
+          test -z "$(git -C "$reference" status --porcelain)"
+          echo "NM_REFERENCE_ROOT=$reference" >> "$GITHUB_ENV"
+
+      - name: Run full rendered parity
+        run: scripts/parity-summary
+
+      - name: Keep the parity summary and fingerprints
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: parity-summary-${{ github.sha }}
+          path: |
+            .build/parity-full/run.*/*.json
+            .build/parity-full/run.*/bin-path
+          if-no-files-found: error
