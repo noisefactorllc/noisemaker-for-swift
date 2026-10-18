@@ -49,8 +49,8 @@ It is self-contained: the package runs with no Node.js, Rust, sibling checkout, 
   deployment floor.
 - **Swift 6** or later.
 - **A native Metal device** to render. The compiler and the CPU test suite need no GPU.
-- The current full-catalog pass was on Apple M4, macOS 26.6.2 and Swift 6.3.2. The previous
-  authority lock passed on Apple M2, macOS 14.8.3 and Swift 6.0.3 (see
+- The current full-catalog pass was on Apple M4, macOS 26.5 and Swift 6.3.2. Earlier authority
+  locks passed on Apple M4, macOS 26.6.2 and on Apple M2, macOS 14.8.3 (see
   [What works and what does not](#what-works-and-what-does-not)).
 
 ## Install
@@ -138,20 +138,19 @@ and blur program.
 
 ## What works and what does not
 
-- **Previous full catalog pass.** The complete prototype gate passed on Apple M2, macOS
-  14.8.3, Swift 6.0.3, against upstream authority `735e1fdc4945e0df8ba47f8d657cd204e1b72923`. Run
-  `run.7EfAlDR4` captures 4,427 presented PNG samples per backend across 2,906 cases, including all
-  170 timed cases. Results are 2,885 exact and 21 uninformative, with zero near, deferred, skipped,
-  failed, missing or refused cases; all 210 effects have informative evidence. Uninformative cases do
-  not count toward effect evidence. This run predates the current source lock and raster binary.
-- **Current full catalog gate.** Authority `a3d96b664e32c72095ee325871a0221fa35f320c` passed
-  on Apple M4, macOS 26.6.2 and Swift 6.3.2. Run `run.zJGZikXi` graded 2,885 exact and 21
-  uninformative cases, with zero near, deferred, skipped, failed, missing or refused cases; all 210
-  effects have informative evidence. Tint's relaxed Metal math mode matched the same-run WebGPU
-  output for both pass and custom vertex shaders on this host.
-- **The compiler matches the reference stage by stage.** The complete 2,906-case compiler corpus
-  matches 17,436 pinned source stage hashes.
-- **Native suites.** The CPU suite passes 107 tests and the native Metal suite passes 83 tests on
+- **Current full catalog gate.** Authority `2f9736ebb6c39be683074edc3a2cd0338a8a0c9a` passed
+  on Apple M4, macOS 26.5 and Swift 6.3.2 in the native GPU runner's
+  [Native Metal run 39120434492](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/39120434492) at `580cee5`. Of 2,919 cases it graded 2,898 exact and 21
+  uninformative, with zero near, deferred, skipped, failed, missing or refused cases; all 210 effects
+  have informative evidence. Uninformative cases do not count toward effect evidence. Tint's relaxed
+  Metal math mode matched the same-run WebGPU output for both pass and custom vertex shaders.
+- **Previous full catalog gates.** Authority `a3d96b664e32c72095ee325871a0221fa35f320c` passed on
+  Apple M4, macOS 26.6.2 in run `run.zJGZikXi`, and authority
+  `735e1fdc4945e0df8ba47f8d657cd204e1b72923` passed on Apple M2, macOS 14.8.3 and Swift 6.0.3 in run
+  `run.7EfAlDR4`. Each graded 2,885 exact and 21 uninformative of 2,906 cases.
+- **The compiler matches the reference stage by stage.** The complete 2,919-case compiler corpus
+  matches 17,514 pinned source stage hashes.
+- **Native suites.** The CPU suite passes 108 tests and the native Metal suite passes 83 tests on
   Apple M4, including resource ownership, queued submissions, partial-write history, sampled 3D
   inputs, parameter updates, and recovery. Timed CLI regressions verify complete sample schedules,
   source-order automation arithmetic, and delta time at loop boundaries. The 100-cycle
@@ -227,20 +226,15 @@ to a clean checkout at that commit to use local sources; otherwise the exporter 
 sources into a temporary archive. Generated graphs, stage dumps, shader sources, capture protocols
 and source hashes stay under `.build/reference`. Unknown or altered authority inputs fail
 verification. Define counts describe declared samples, not every accepted numeric literal. The
-reference uses locked Playwright 1.63.0 and Chromium 153.0.8010.12, with the native raster artifact
-rebuilt against its Skia revision. The current passing run's qualification fingerprint is
-`d9e4bbd3cf54970dc478d1f86d090b9413baa111b33186cd7da9229b76841eb6`, unchanged after capture
-and grading; the native executable SHA-256 is
-`c9025d0a5ea7c035fc562e7caf2f2c0adc5e03fcb767c0eff9ddfa0da87305af`.
-The qualification fingerprint of the previous passing run is
-`2a6bc9f07c6123e9635f5555bc25804bfbe49de2f91d2727ef33f8dc78306a79`, unchanged after capture and
+reference locks Playwright 1.64.0, whose headless Chromium 156.0.8078.4 mints the WebGPU goldens.
+The native raster artifact is built against the Skia revision of Chromium 153.0.8010.12, and its
+overlay oracle is minted with that Chromium; Chromium 156 produces the same overlay bytes. The
+current passing run's build fingerprint record has SHA-256
+`ba96d5f7d2e2e3a3aba7e6d72c2a72453be9a7a3a2698a2fdf12d75f73f760c5`, unchanged after capture and
 grading; the native executable SHA-256 is
-`f48049d7629732e60c2cd7a7924a2d71344d06d57506bac7d0d839db1db4a82b`.
-
-After that previous run, the initial-state and binding-oracle manifests were regenerated to update their
-corpus hashes. Their 18 and 13 case payloads were unchanged, and a second live initial-state capture
-passed. This metadata correction leaves the measured corpus and renderer unchanged; the fingerprint
-above identifies the pre-correction run.
+`44cca8084611898f3d0b2223061ca5bce335685ef6407a1021ffcb78e4f8e0a7`. The run keeps that record and
+its results as a workflow artifact. The qualification fingerprint of the previous passing run is
+`d9e4bbd3cf54970dc478d1f86d090b9413baa111b33186cd7da9229b76841eb6`.
 
 To repeat the presented marker comparison and the graph probes on a native WebGPU/Metal host:
 
