@@ -14,7 +14,7 @@ Select a native Swift DSL frontend and direct Metal graph executor. Preserve the
 
 This makes the application-facing compiler, resource management and rendering native Swift/Metal, with a C/C++ shader translation dependency. Do not describe it as a pure-Swift implementation. No Rust, wgpu, browser, or JavaScript runtime is required in the proposed shipping path.
 
-Hand-translating the complete catalog to MSL would reduce translation-tool dependency but create a second shader implementation and recurring drift work. Offline-only MSL generation cannot be the whole design, because Portable effects supply WGSL at run time. It can still remove most translation work from the shipping path: task 1 measures the define-variant space of the locked catalog and compares two packagings, runtime translation for everything versus precompiled MSL for the catalog with runtime translation only for Portable effects. Choose from measured package size, startup cost and iOS viability. Either way the Tint route requires an early package-size, licensing, SwiftPM/C++ integration, and Apple-device feasibility gate. The Tint revision is a dependency pin, which Worker Elves may not move, so translator upgrades remain human-led work.
+Hand-translating the complete catalog to MSL would reduce translation-tool dependency but create a second shader implementation and recurring drift work. Offline-only MSL generation cannot be the whole design, because Portable effects supply WGSL at run time. It can still remove most translation work from the shipping path: task 1 measures the define-variant space of the locked catalog and compares two packagings, runtime translation for everything versus precompiled MSL for the catalog with runtime translation only for Portable effects. Choose from measured package size, startup cost and iOS viability. Either way the Tint route requires an early package-size, licensing, SwiftPM/C++ integration, and Apple-device feasibility gate. The Tint revision is a dependency pin, which automation may not move, so translator upgrades remain human-led work.
 
 ### 2.1 Proposed package layout
 
@@ -94,7 +94,7 @@ Each case lands in exactly one family bucket. Exact means identical pixels. Stri
 
 The fixture matrix covers every effect and declared mode, parameter boundaries, compile-time variants, chains, external inputs, resize, repeat, feedback, MRT, points/billboards, mesh/depth, compute WGSL, Portable effects including volume textures, deterministic automation, and errors.
 
-GPU qualification uses actual compatible hardware and the actual target runtime. CPU-only CI may validate syntax, catalog generation, graph equivalence, and reports; it cannot qualify rendering. Scheduled graphics work must use a capability-matched host broker. A job container's missing graphics device is not evidence that fleet GPU access is absent. No fleet jobs, intake recipes, or scheduling are created by this planning task.
+GPU qualification uses actual compatible hardware and the actual target runtime. CPU-only CI may validate syntax, catalog generation, graph equivalence, and reports; it cannot qualify rendering. Scheduled graphics work must use a capability-matched GPU host. A job container's missing graphics device is not evidence that fleet GPU access is absent. No fleet jobs, intake recipes, or scheduling are created by this planning task.
 
 ## 5. Qualification sequence and risks
 

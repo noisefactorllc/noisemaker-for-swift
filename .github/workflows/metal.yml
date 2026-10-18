@@ -1,7 +1,7 @@
 name: Native Metal
 
 # Hosted CI cannot qualify Metal rendering, so this workflow runs on the
-# self-hosted spare-noisemaker-gpu runner (Apple M4). A push to main that
+# self-hosted macOS GPU runner (Apple M4). A push to main that
 # changes a rendering input runs scripts/test-metal on the native device. A
 # manual run can add the full scripts/parity-summary at the same SHA, or apply
 # a deliberate sampler regression that the gate must reject. No pull request
