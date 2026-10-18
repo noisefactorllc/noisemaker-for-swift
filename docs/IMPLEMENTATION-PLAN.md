@@ -60,9 +60,9 @@ Current evidence: the presented marker passes with maximum channel error 0 and S
 
 - [ ] Add multipass blur, distinguishable MRT outputs, repeat loops, sampled feedback traces, mixed texture formats and dimensions.
 - [ ] Implement graph-ordered render/blit/compute encoding, hazard-aware resources, exact load/store/blend/depth state, persistent state and descriptor-keyed pooling.
-- [ ] Choose render versus compute from the WGSL entry points as `webgpu.js` does, and dispatch the catalog's compute WGSL filters with storage buffers, each with its own GPU fixture.
+- [x] Choose render versus compute from the WGSL entry points as `webgpu.js` does, and dispatch the catalog's compute WGSL filters with storage buffers, each with its own GPU fixture.
 - [ ] Implement geometry/points/billboards and Portable volume textures with individual GPU fixtures.
-- [ ] Submit delayed consumers and multiple bounded in-flight frames; assert uniforms and leased outputs cannot be overwritten or recycled early.
+- [x] Submit delayed consumers and multiple bounded in-flight frames; assert uniforms and leased outputs cannot be overwritten or recycled early.
 - [ ] Test wrong-device command buffers, uncommitted/out-of-order encode requests, injected allocation errors, resize during in-flight work and failed graph replacement.
 - [ ] Run `swift test --filter RuntimeGPU` and `swift test --filter LifetimeGPU` with Metal validation enabled on a capable native host.
 
@@ -106,7 +106,7 @@ Current evidence: native lexer/parser tests compare 26 lexical cases and 69 pars
 
 **Proposed files:** `Sources/Noisemaker/Runtime/{ExternalInputs,Parameters,TextInput,MeshInput,PortableEffects}.swift`, `Sources/NoisemakerMetalKit/NoisemakerViewRenderer.swift`, `Examples/MetalViewer/`, `Tests/NoisemakerTests/{HostInput,Portable,RecoveryGPU}Tests.swift`.
 
-**Interface:** host-fed textures and snapshots, live parameters, output leases, `NoisemakerCompiler.registerEffect` for Portable effects, plus an optional MTKView adapter separate from the core renderer.
+**Interface:** host-fed textures and snapshots, live parameters, output leases, `EffectRegistry.registerPortable` for Portable effects, plus an optional MTKView adapter separate from the core renderer.
 
 - [ ] Test per-step media isolation, orientation/alpha, fixed-font text, mesh UV/normals, and audio/MIDI snapshots against reference fixtures.
 - [x] Register Portable effects at run time, translate and render their WGSL, and refuse one without a WGSL program with a diagnostic.
@@ -124,7 +124,7 @@ Current evidence: native lexer/parser tests compare 26 lexical cases and 69 pars
 - [x] Run `scripts/test` and `scripts/parity-summary`, plus the lifetime, recovery and integration gates, on Apple Silicon macOS.
 - [ ] Qualify iOS/iPadOS on physical Metal devices, recording compiler/SDK/deployment floors, memory limits and translator viability; report simulators separately.
 - [ ] Only add Intel/AMD Mac or other Apple-platform support claims after the same evidence exists there.
-- [ ] Benchmark cold/warm shader compilation, CPU/GPU frame cost, memory and in-flight behavior for the architecture's workload matrix.
+- [x] Benchmark cold/warm shader compilation, CPU/GPU frame cost, memory and in-flight behavior for the architecture's workload matrix.
 - [ ] Verify package resources and notices, binary asset handling, and absence of private paths, credentials and generated run output.
 
 **Acceptance:** clean package consumption and complete evidence for each claimed platform. A source-compiling but unrendered platform stays unqualified. Publication and store submission are separate work.

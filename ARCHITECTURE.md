@@ -10,7 +10,7 @@ The scope is the current upstream shader engine: compiler stages, effect definit
 
 ## 2. Selected architecture and alternatives
 
-Select a native Swift DSL frontend and direct Metal graph executor. Preserve the upstream WGSL as source authority and translate it to Metal Shading Language (MSL) with Tint through a narrow C ABI. Mint goldens on upstream WebGPU, which runs the same WGSL; WebGL2 remains Noisemaker's reference backend and decides any disagreement between the two (section 4). The existing Rust GPU port takes the same route (WGSL through Tint, WebGPU goldens) and contains a Tint shim and Metal option/binding work worth studying, but its renderer and historical parity claims are not inherited by this port. [Rust GPU port](../noisemaker-for-rust-gpu/README.md), [Tint C interface](../noisemaker-for-rust-gpu/crates/noisemaker-tint/shim/nm_tint.h), [Dawn and Tint](https://dawn.googlesource.com/dawn/+/HEAD/README.md).
+Select a native Swift DSL frontend and direct Metal graph executor. Preserve the upstream WGSL as source authority and translate it to Metal Shading Language (MSL) with Tint through a narrow C ABI. Mint goldens on upstream WebGPU, which runs the same WGSL; WebGL2 remains Noisemaker's reference backend and decides any disagreement between the two (section 4). The existing Rust GPU port takes the same route (WGSL through Tint, WebGPU goldens) and contains a Tint shim and Metal option/binding work worth studying, but its renderer and historical parity claims are not inherited by this port. [Rust GPU port](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/README.md), [Tint C interface](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/crates/noisemaker-tint/shim/nm_tint.h), [Dawn and Tint](https://dawn.googlesource.com/dawn/+/HEAD/README.md).
 
 This makes the application-facing compiler, resource management and rendering native Swift/Metal, with a C/C++ shader translation dependency. Do not describe it as a pure-Swift implementation. No Rust, wgpu, browser, or JavaScript runtime is required in the proposed shipping path.
 
@@ -34,11 +34,11 @@ Hand-translating the complete catalog to MSL would reduce translation-tool depen
 
 The core imports Metal and Foundation. AppKit/UIKit/SwiftUI/MetalKit belong in optional host targets. A caller-supplied `MTLDevice` fixes resource ownership to one device; offscreen rendering does not require a view.
 
-### 2.2 Proposed public contract
+### 2.2 Public contract
 
-`NoisemakerCompiler.compile(source: String) throws -> RenderGraph` performs native compilation. `NoisemakerCompiler.registerEffect(_ effect: PortableEffect) throws` registers a user-defined Portable effect (definition plus WGSL programs), validated against the public `CanvasRenderer.registerPortableEffect` entry point. This entry point has a distinct admission contract from the internal `effect-validator.js`; native execution capabilities are checked separately. `NoisemakerRenderer(device: MTLDevice, graph: RenderGraph, size: RenderSize) throws` validates and prepares a graph. The renderer is confined to a documented serial executor; mutable graph/GPU state is not implicitly thread-safe.
+`NoisemakerCompiler.compileForHost(source: String) throws -> RenderGraph` compiles a program natively and applies the demo host's initial control values; `compile(source:)` returns the compiler's graph without them, and `compileStages(source:)` exposes the stage values. `EffectRegistry.registerPortable(definitionJSON:shaderSources:)` registers a user-defined Portable effect (definition plus WGSL programs), validated against the public `CanvasRenderer.registerPortableEffect` entry point. This entry point has a distinct admission contract from the internal `effect-validator.js`; native execution capabilities are checked separately. `NoisemakerRenderer(device:graph:size:defaultVertexWGSL:vertexEntryPoint:registry:maximumTextureDimension2D:) throws` validates and prepares a graph. The renderer is confined to a documented serial executor; mutable graph/GPU state is not implicitly thread-safe.
 
-`encode(frame: FrameState, into: MTLCommandBuffer) throws -> OutputLease` encodes without committing or waiting. `OutputLease.texture` is a Metal texture on the renderer's device; the lease retains output resources until the host has completed its downstream GPU use. The command buffer must belong to the same device. A separate convenience `render(frame:) throws -> FrameSubmission` owns submission, bounded in-flight capacity, and completion/error reporting. `setParameter(stepIndex:name:value:)`, `setInput(binding:texture:)`, `resize(to:)`, and `reset()` take effect at documented frame boundaries.
+`encode(frame: FrameState, into: MTLCommandBuffer, externalTextures:) throws -> OutputLease` encodes without committing or waiting. `OutputLease.texture` is a Metal texture on the renderer's device; the lease retains output resources until the host has completed its downstream GPU use. The command buffer must belong to the same device. A separate convenience `render(frame:) throws -> FrameSubmission` owns submission, bounded in-flight capacity, and completion/error reporting. Hosts pass external textures to each `encode` call; the renderer has no separate input setter. A parameter change returns a new graph from `RenderGraph.updatedParameter(stepIndex:name:value:registry:)`. `resetFeedback()` clears persistent state, and `adoptFeedback(from:)` moves completed feedback into the renderer of a replacement graph. `NoisemakerViewRenderer` provides `updateParameter(stepIndex:name:value:)`, `resize(to:)` and `reset()`, which take effect at frame boundaries.
 
 `FrameState` carries explicit time, delta time, frame index, audio/MIDI snapshots, and external input identity. `RenderSize` uses physical pixels. Concurrent uncommitted frame encodes or cross-queue use without an explicit synchronization contract are rejected. Feedback updates are ordered; successful CPU encoding alone does not prove successful GPU execution.
 
@@ -80,7 +80,7 @@ The authority is the upstream Noisemaker commit pinned in `parity/reference.json
 
 The oracle and candidate must not both consume a stale candidate-generated catalog. Export the oracle directly from the locked commit, regenerate the candidate catalog independently, and compare inventories and definitions before comparing output. Source changes invalidate affected evidence. The lock must not hide drift from current upstream or route around a failing product gate.
 
-Use the family entrypoints. `scripts/test` runs every check that needs no GPU against the locked authority: catalog and corpus freshness, compiler stage parity, translator ABI tests that need no device, Portable registration, and the harness unit tests. `scripts/parity-summary` runs the sweep fresh (goldens minted by the reference engine in the same run, candidates rendered from DSL by this port's own compiler, every case graded) and prints one `PARITY-SUMMARY` JSON line with `expected`, `executed`, `exact`, `strict`, `near`, `defer`, `skip`, `fail`, `missing`, `uninformative`, `effects` and `effects_evidenced`. It exits 0 only when no case is near, failing, skipped or missing and every catalog effect has informative exact or strict evidence of its own. Automated gap closure reads this line, so do not substitute a differently shaped report. [Reference definition](../noisemaker-for-rust-gpu/scripts/parity-summary).
+Use the family entrypoints. `scripts/test` runs every check that needs no GPU against the locked authority: catalog and corpus freshness, compiler stage parity, translator ABI tests that need no device, Portable registration, and the harness unit tests. `scripts/parity-summary` runs the sweep fresh (goldens minted by the reference engine in the same run, candidates rendered from DSL by this port's own compiler, every case graded) and prints one `PARITY-SUMMARY` JSON line with `expected`, `executed`, `exact`, `strict`, `near`, `defer`, `skip`, `fail`, `missing`, `uninformative`, `effects` and `effects_evidenced`. It exits 0 only when no case is near, failing, skipped or missing and every catalog effect has informative exact or strict evidence of its own. Automated gap closure reads this line, so do not substitute a differently shaped report. [Reference definition](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/scripts/parity-summary).
 
 Mint goldens on the upstream WebGPU backend, as the Rust GPU port does: the reference engine renders each case in its demo page in Chromium, and the presented surface is the golden. This port executes the same WGSL, so a WebGPU golden separates translation and runtime defects from GLSL-versus-WGSL source differences that this port cannot fix locally. WebGL2 is Noisemaker's reference backend, and upstream WebGPU must match it. When a Swift difference or a suspect golden traces to a WebGPU-versus-WebGL2 divergence, capture the WebGL2 frame for that case, fix the WGSL upstream toward WebGL2, and move the authority lock to the fix. Never change Swift to reproduce a WebGPU divergence, and never switch a case's golden to whichever backend the candidate happens to match.
 
@@ -133,23 +133,23 @@ Propose a Swift Package with isolated C/C++ translation support, plus a macOS re
 
 ## 7. Source references
 
-Read upstream `shaders/src/lang/`, `shaders/src/runtime/{compiler,expander,resources,pipeline,external-input,effect-validator,registry}.js`, `shaders/src/runtime/backends/webgpu.js`, and each effect's `definition.js` and `wgsl/` directory before translating a subsystem. Relative links below assume sibling checkouts; they are engineering references, not shipping package dependencies.
+Read upstream `shaders/src/lang/`, `shaders/src/runtime/{compiler,expander,resources,pipeline,external-input,effect-validator,registry}.js`, `shaders/src/runtime/backends/webgpu.js`, and each effect's `definition.js` and `wgsl/` directory before translating a subsystem. The links below are engineering references, not shipping package dependencies.
 
-- [Upstream graph compiler](../noisemaker/shaders/src/runtime/compiler.js)
-- [Upstream pipeline](../noisemaker/shaders/src/runtime/pipeline.js)
-- [Upstream WebGPU backend](../noisemaker/shaders/src/runtime/backends/webgpu.js)
-- [Family parity entrypoint and buckets](../noisemaker-for-rust-gpu/scripts/parity-summary)
-- [Rust GPU parity method and WebGPU golden minting](../noisemaker-for-rust-gpu/README.md#parity)
-- [Coverage corpus generator](../noisemaker-for-rust-gpu/tools/generate-coverage.mjs)
-- [Qt architecture](../noisemaker-for-qt/ARCHITECTURE.md)
-- [Qt graph normalization contract](../noisemaker-for-qt/docs/GRAPH-JSON-SCHEMA.md)
-- [Godot implementation plan](../noisemaker-for-godot/docs/IMPLEMENTATION-PLAN.md)
+- [Upstream graph compiler](https://github.com/noisefactorllc/noisemaker/blob/main/shaders/src/runtime/compiler.js)
+- [Upstream pipeline](https://github.com/noisefactorllc/noisemaker/blob/main/shaders/src/runtime/pipeline.js)
+- [Upstream WebGPU backend](https://github.com/noisefactorllc/noisemaker/blob/main/shaders/src/runtime/backends/webgpu.js)
+- [Family parity entrypoint and buckets](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/scripts/parity-summary)
+- [Rust GPU parity method and WebGPU golden minting](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/README.md#parity)
+- [Coverage corpus generator](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/tools/generate-coverage.mjs)
+- [Qt architecture](https://github.com/noisefactorllc/noisemaker-for-qt/blob/main/ARCHITECTURE.md)
+- [Qt graph normalization contract](https://github.com/noisefactorllc/noisemaker-for-qt/blob/main/docs/GRAPH-JSON-SCHEMA.md)
+- [Godot implementation plan](https://github.com/noisefactorllc/noisemaker-for-godot/blob/fca9686cbe1478ac20e5d77bab6d11d4d37a95e9/docs/IMPLEMENTATION-PLAN.md)
 
 Sibling documentation records its own historical decisions. Reconfirm them against current source; do not inherit old completion claims, hard-coded catalog counts, blanket texture formats, or host assumptions.
 
 Additional implementation references:
 
-- [Rust Metal/Tint binding integration](../noisemaker-for-rust-gpu/crates/noisemaker-gpu/src/backend/tint.rs)
-- [Rust Tint ownership and options contract](../noisemaker-for-rust-gpu/crates/noisemaker-tint/shim/nm_tint.h)
+- [Rust Metal/Tint binding integration](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/crates/noisemaker-gpu/src/backend/tint.rs)
+- [Rust Tint ownership and options contract](https://github.com/noisefactorllc/noisemaker-for-rust-gpu/blob/main/crates/noisemaker-tint/shim/nm_tint.h)
 - [Apple Metal documentation](https://developer.apple.com/documentation/metal)
 - [Apple Metal textures](https://developer.apple.com/documentation/metal/textures)

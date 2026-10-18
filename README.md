@@ -84,7 +84,7 @@ import Metal
 import Noisemaker
 
 let compiler = try NoisemakerCompiler()
-let graph = try compiler.compile(source: "search synth\nnoise(seed: 1).write(o0)\nrender(o0)\n")
+let graph = try compiler.compileForHost(source: "search synth\nnoise(seed: 1).write(o0)\nrender(o0)\n")
 
 guard let device = MTLCreateSystemDefaultDevice(),
       let queue = device.makeCommandQueue(),
@@ -92,13 +92,19 @@ guard let device = MTLCreateSystemDefaultDevice(),
 
 let renderer = try NoisemakerRenderer(device: device, graph: graph,
                                       size: try RenderSize(width: 512, height: 512))
-let output = try renderer.encode(frame: FrameState(time: 0.5, delta: 1.0 / 60, frameIndex: 30),
+let output = try renderer.encode(frame: FrameState(time: 0.5, delta: 1.0 / 600, frameIndex: 300),
                                  into: command)
 command.commit()
 command.waitUntilCompleted()
 // output.texture is an MTLTexture (rgba16Float) holding the frame.
 // Keep `output` while you use the texture.
 ```
+
+`compileForHost(source:)` applies the program's initial control values, as the reference demo host
+does; `compile(source:)` returns the compiler's graph without them. `FrameState.time` is normalized
+loop time from 0 to 1, and `delta` is the change in that time since the previous frame. The example
+is frame 300 of a 10-second loop at 60 frames per second, the clock that `NoisemakerViewRenderer`
+uses.
 
 Every DSL program has the same shape:
 
@@ -126,7 +132,8 @@ swift run -c release nm-render --dsl program.dsl --out frame.png --width 512 --h
 swift run -c release nm-viewer --dsl program.dsl
 ```
 
-`nm-render` also accepts `--time` and `--frames`. `nm-viewer` with no arguments shows a built-in noise
+`nm-render` also accepts `--time`, the normalized loop time (default 0), and `--frames`, the number
+of frames to render before the capture (default 1). `nm-viewer` with no arguments shows a built-in noise
 and blur program.
 
 ## What works and what does not
@@ -242,8 +249,9 @@ NM_REFERENCE_ROOT=/path/to/locked/noisemaker scripts/parity-marker
 NM_REFERENCE_ROOT=/path/to/locked/noisemaker scripts/parity-graph-probes
 ```
 
-The authority root needs the matching Playwright browser dependencies. It may be a clean locked
-checkout or an exact source archive verified against the recorded source manifest. Outputs and
+The authority root needs the matching Playwright browser dependencies: run `npm ci --ignore-scripts`
+and `npx playwright install chromium` in it. It may be a clean locked checkout or an exact source
+archive verified against the recorded source manifest. Outputs and
 provenance stay in `.build/parity-marker` and `.build/parity-graph-probes`. On Apple M4 the 257×129
 asymmetric marker has maximum channel error 0 and SSIM 1.0 against upstream WebGPU. The oracle
 copies the actual GPUCanvasContext texture after CanvasSink presentation and records the backing

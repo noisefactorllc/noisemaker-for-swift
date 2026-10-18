@@ -14,6 +14,14 @@ public struct RenderSize: Sendable, Equatable {
     }
 }
 
+/// One frame's clock and host inputs.
+///
+/// `time` is normalized loop time: 0 starts the loop and 1 completes it, as
+/// upstream `CanvasRenderer` supplies it. `delta` is the change in that
+/// normalized time since the previous frame, not seconds. For a loop of
+/// `duration` seconds at `fps` frames per second, one frame advances `time`
+/// by `1 / (duration * fps)`; the bundled MetalKit clock uses a 10-second
+/// loop, so at 60 frames per second `delta` is 1/600.
 public struct FrameState: Sendable {
     public let time: Double
     public let delta: Double
