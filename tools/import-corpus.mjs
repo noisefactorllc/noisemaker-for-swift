@@ -10,7 +10,7 @@ import { CASES, captureProtocols, fetchVerifiedArchive, sourceIdentity } from '.
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT = join(ROOT, 'parity/corpus.json')
-const RUST_COMMIT = '61d81dfd1f64294ad3b67ee6c2b49aa5f2ae230a'
+const RUST_COMMIT = '52be689b86f52a50adc32854cd97d2a0434bd78b'
 const QT_COMMIT = 'a572b7c4902918d4f68def112146f312cc689ff9'
 const FAMILIES = ['programs', 'coverage', 'timed', 'curated', 'portable', 'qtPrograms', 'upstream', 'micro']
 const RUST_URL = 'https://github.com/noisefactorllc/noisemaker-for-rust-gpu.git'
@@ -169,7 +169,9 @@ async function makeCorpus() {
     for (const name of readdirSync(directory).filter(name => name.endsWith('.dsl')).sort()) {
       const stem = name.slice(0, -4)
       const path = `parity/${family}/${name}`
-      const assets = readdirSync(directory).filter(other => other.startsWith(`${stem}.`) && other !== name).sort()
+      // Portable effects register from WGSL here; GLSL sidecars serve the WebGL2 ports.
+      const assets = readdirSync(directory).filter(other => other.startsWith(`${stem}.`) && other !== name &&
+        !(family === 'portable' && other.endsWith('.glsl'))).sort()
         .map(other => asset(rust, `parity/${family}/${other}`))
       if (family === 'portable') {
         const def = assets.find(a => a.path.endsWith('.portable.json'))

@@ -175,26 +175,7 @@ public enum NoisemakerValidator {
             }
             let from = starter ? nil : current
             let keyword = original.field("kwargs")
-            var keywordFields = keyword?.fields ?? []
-            let aliases = registry.paramAliases.mapEntries?.first {
-                $0.key.stringValue == opName
-            }?.value.objectFields ?? []
-            for alias in aliases {
-                guard let oldIndex = keywordFields.firstIndex(where: { $0.name == alias.name }),
-                      let newName = alias.value.stringValue else { continue }
-                let oldValue = keywordFields[oldIndex].value
-                if !keywordFields.contains(where: { $0.name == newName }) {
-                    keywordFields.append(ParserField(name: newName, value: oldValue))
-                }
-                keywordFields.remove(at: oldIndex)
-                diagnostics.append(.object([
-                    ("code", .string("S007")),
-                    ("message", .string("param '\(alias.name)' is deprecated, use '\(newName)' instead. Aliases will be removed on 2026-09-01.")),
-                    ("severity", .string("warning")),
-                    ("nodeId", original.field("id") ?? .undefined),
-                    ("identifier", .string(name))
-                ]))
-            }
+            let keywordFields = keyword?.fields ?? []
             var args: [(String, ParserValue)] = []
             var argSources: [(String, ParserValue)] = []
             var seen: Set<String> = []

@@ -229,11 +229,9 @@ export async function exportAuthority(ref, out, lock, verifiedArchive = false) {
   const inventory = []
   const catalogEffects = []
   const enumMerges = [{ source: 'std', value: encode(stdEnums) }]
-  const paramAliasPairs = []
   const effectAliasPairs = []
   const allChoices = {}
   const starterNames = []
-  const { registerParamAliases } = await import(pathToFileURL(join(ref, 'shaders/src/lang/paramAliases.js')).href)
   const { registerEffectAlias } = await import(pathToFileURL(join(ref, 'shaders/src/lang/effectAliases.js')).href)
   const manifest = JSON.parse(readFileSync(join(effectDir, 'manifest.json'), 'utf8'))
   for (const path of paths) {
@@ -272,10 +270,7 @@ export async function exportAuthority(ref, out, lock, verifiedArchive = false) {
         enum: enumPath, enumPath, min: spec.min, max: spec.max, uniform: spec.uniform, choices: spec.choices }
     })
     registerOp(`${ns}.${func}`, { name: func, args })
-    if (def.paramAliases) {
-      registerParamAliases(`${ns}.${func}`, def.paramAliases)
-      paramAliasPairs.push([`${ns}.${func}`, def.paramAliases])
-    }
+    if (def.paramAliases !== undefined) throw new Error(`retired paramAliases in ${ns}/${name}`)
     if (def.hidden && def.deprecatedBy) {
       registerEffectAlias(`${ns}.${func}`, def.deprecatedBy)
       effectAliasPairs.push([`${ns}.${func}`, def.deprecatedBy])
@@ -346,7 +341,6 @@ export async function exportAuthority(ref, out, lock, verifiedArchive = false) {
     mergedEnums: encode(enumModule.default),
     validatorOps: encode(ops),
     starterOps: starterNames,
-    paramAliases: encode(new Map(paramAliasPairs)),
     effectAliases: encode(new Map(effectAliasPairs)),
     paletteTable: encode(paletteTable),
     blitProgram: encode(blitProgram),

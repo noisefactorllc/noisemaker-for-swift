@@ -21,8 +21,7 @@ import Testing
         var registry = try EffectRegistry.bundled()
         let count = registry.effects.count
         let starters = registry.starterOps.count
-        let aliases = registry.paramAliases
-        let invalid = #"{"namespace":"user","func":"rejectedProbe","globals":{"gain":{"type":"float","default":1}},"paramAliases":{"old":"missing"},"passes":[{"program":"probe"}]}"#
+        let invalid = #"{"namespace":"user","func":"rejectedProbe","globals":{"gain":{"type":"float","default":1}},"paramAliases":{"old":"gain"},"passes":[{"program":"probe"}]}"#
         let shader = ["probe": "@fragment fn main() {}"]
         expectThrows(try registry.registerPortable(definitionJSON: Data(invalid.utf8),
                                                    shaderSources: shader)) { error in
@@ -30,7 +29,6 @@ import Testing
         }
         #expect(registry.effects.count == count)
         #expect(registry.starterOps.count == starters)
-        #expect(registry.paramAliases.sameOrderedValue(as: aliases))
         #expect(registry.effect(key: "user.rejectedProbe") == nil)
         #expect(registry.validatorOp("user.rejectedProbe") == nil)
         let valid = #"{"namespace":"user","func":"rejectedProbe","passes":[{"program":"probe"}]}"#
@@ -55,7 +53,7 @@ import Testing
             (base.replacingOccurrences(of: #""outputs":{"color":"outputTex"}"#, with: #""outputs":["outputTex"]"#), shader),
             (base.replacingOccurrences(of: #""gain":{"type":"float","default":1}"#, with: #""gain":1"#), shader),
             (base.replacingOccurrences(of: #""default":1"#, with: #""default":1,"choices":{"bad":"word"}"#), shader),
-            (base.replacingOccurrences(of: #""passes":"#, with: #""paramAliases":{"old":"missing"},"passes":"#), shader),
+            (base.replacingOccurrences(of: #""passes":"#, with: #""paramAliases":{"old":"gain"},"passes":"#), shader),
             (base.replacingOccurrences(of: #""namespace":"user","#, with: #""namespace":"user","toString":1,"#), shader),
             (base.replacingOccurrences(of: #""namespace":"user","#, with: #""namespace":"user","shaders":[],"#), shader),
             (base.replacingOccurrences(of: #""passes":[{"program":"probe","inputs":{},"outputs":{"color":"outputTex"}}]"#,
@@ -66,7 +64,6 @@ import Testing
         var registry = try EffectRegistry.bundled()
         let count = registry.effects.count
         let starters = registry.starterOps
-        let aliases = registry.paramAliases
         let ops = registry.validatorOps
         for (index, item) in rejected.enumerated() {
             expectThrows(try registry.registerPortable(definitionJSON: Data(item.0.utf8),
@@ -75,7 +72,6 @@ import Testing
             }
             #expect(registry.effects.count == count, "rejected case \(index)")
             #expect(registry.starterOps == starters, "rejected case \(index)")
-            #expect(registry.paramAliases.sameOrderedValue(as: aliases), "rejected case \(index)")
             #expect(registry.validatorOps == ops, "rejected case \(index)")
             #expect(registry.effect(key: "user.portableProbe") == nil, "rejected case \(index)")
         }
@@ -173,6 +169,14 @@ import Testing
             compared += 1
         }
         #expect(compared == 12)
+    }
+
+    @Test func retiredParameterAliasesAreUnknownArguments() throws {
+        let compiler = try NoisemakerCompiler()
+        _ = try compiler.compile(source: "search synth\nnoise(scaleX: 4).write(o0)\nrender(o0)\n")
+        expectThrows(try compiler.compile(source: "search synth\nnoise(xScale: 4).write(o0)\nrender(o0)\n")) { error in
+            #expect((error as? CompilerIncomplete)?.detail == "unknown argument xScale for synth.noise")
+        }
     }
 
     @Test func nativeCompilerBuildsRenderableSolidGraph() throws {

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "authority": {
-    "commit": "a3d96b664e32c72095ee325871a0221fa35f320c",
-    "sourceManifestSha256": "62bc775c830edb1a5b0b91064f5337749eaf39ec30a20d35a35b3efe837a5e11"
+    "commit": "2f9736ebb6c39be683074edc3a2cd0338a8a0c9a",
+    "sourceManifestSha256": "a3dee41e268c030816b087baf8b7348fb720ec6d00e7c33e46c2ec47a2def1e1"
   },
-  "corpusSha256": "8a1683e06aa7e3bb6299b47fc5692121875a1b831d3d5b9e5e45b771673beae1",
+  "corpusSha256": "fe4485792ff93d00fca4b316e8f24bfaeeb6a3bcca21b9afa0218b2a627fd3eb",
   "cases": [
     {
       "id": "coverage/filter_crt",
@@ -50,7 +50,7 @@
           "programId": "node_1_crt",
           "selectedEntryPoint": "main",
           "isCompute": true,
-          "resolvedWgslSha256": "3add2567b2b08d3c4a07ca0360c284fd766a9b27b4d4710f70a2f9ccd21c5c94",
+          "resolvedWgslSha256": "20d8f4407d1629553853c6d562b8726beb948f2c6b4923ab627dee7d0e99443f",
           "sourceHasBindings": true,
           "inputs": [
             "inputTex"
@@ -240,26 +240,26 @@
     },
     {
       "id": "coverage/filter_fxaa",
-      "sourceSha256": "16a0f775bbeb3dce1fa736eef4835800f37a84ba458d28ae022964f760c727cc",
+      "sourceSha256": "a5e266d507798d7309e9684b1949149a0fcf3500f95efe020a2cfa503d2b26e2",
       "graphPassCount": 3,
       "passes": [
         {
           "passId": "node_0_pass_0",
-          "programId": "node_0_noise__LOOP_OFFSET_300__NOISE_TYPE_10",
+          "programId": "node_0_pattern",
           "selectedEntryPoint": "main",
           "isCompute": false,
-          "resolvedWgslSha256": "5c48b9c4c796d5509a5c49cb884d8ddad6081b3340d3c8c10f1486c75ae4d326",
+          "resolvedWgslSha256": "49a29c0608ce9dbd7c752ee45b91edbc95305dc2dd35d725cd3fd927846c92cd",
           "sourceHasBindings": true,
           "inputs": [],
           "outputs": [
-            "fragColor"
+            "color"
           ],
           "bindings": [
             {
               "group": 0,
               "binding": 0,
               "type": "uniform",
-              "name": "uniforms",
+              "name": "u",
               "storage": "uniform",
               "typeDecl": "Uniforms"
             }
@@ -269,7 +269,7 @@
               "group": 0,
               "binding": 0,
               "type": "uniform",
-              "name": "uniforms",
+              "name": "u",
               "storage": "uniform",
               "typeDecl": "Uniforms"
             }
@@ -1390,26 +1390,26 @@
     },
     {
       "id": "coverage/filter_smooth",
-      "sourceSha256": "f8727f8f2287ba14a85d4f68097fab3ca2ba36e3f60c0bf09228ff2576977728",
+      "sourceSha256": "7dae1ef43cb18302b460b615a8beaed113e077330601a629076487a2943d4610",
       "graphPassCount": 4,
       "passes": [
         {
           "passId": "node_0_pass_0",
-          "programId": "node_0_modPattern",
+          "programId": "node_0_pattern",
           "selectedEntryPoint": "main",
           "isCompute": false,
-          "resolvedWgslSha256": "d5c62ac1cbce207d61e1e6b1a50968d0ea5248b70047aade58f176f95c5b1443",
+          "resolvedWgslSha256": "49a29c0608ce9dbd7c752ee45b91edbc95305dc2dd35d725cd3fd927846c92cd",
           "sourceHasBindings": true,
           "inputs": [],
           "outputs": [
-            "fragColor"
+            "color"
           ],
           "bindings": [
             {
               "group": 0,
               "binding": 0,
               "type": "uniform",
-              "name": "uniforms",
+              "name": "u",
               "storage": "uniform",
               "typeDecl": "Uniforms"
             }
@@ -1419,7 +1419,7 @@
               "group": 0,
               "binding": 0,
               "type": "uniform",
-              "name": "uniforms",
+              "name": "u",
               "storage": "uniform",
               "typeDecl": "Uniforms"
             }

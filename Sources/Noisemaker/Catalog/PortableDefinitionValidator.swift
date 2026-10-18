@@ -49,16 +49,8 @@ enum PortableDefinitionValidator {
                 }
             }
         }
-        if let aliases = definition.field("paramAliases") {
-            guard let entries = aliases.objectFields else {
-                return "paramAliases must map names to declared globals"
-            }
-            let globals = Set((definition.field("globals")?.objectFields ?? []).map(\.name))
-            for entry in entries {
-                guard let target = entry.value.stringValue, globals.contains(target) else {
-                    return "paramAliases must map names to declared globals"
-                }
-            }
+        if definition.field("paramAliases") != nil {
+            return "paramAliases is no longer supported"
         }
         return nil
     }

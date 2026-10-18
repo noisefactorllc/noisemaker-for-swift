@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "a3d96b664e32c72095ee325871a0221fa35f320c",
-    "sourceManifestSha256": "62bc775c830edb1a5b0b91064f5337749eaf39ec30a20d35a35b3efe837a5e11"
+    "commit": "2f9736ebb6c39be683074edc3a2cd0338a8a0c9a",
+    "sourceManifestSha256": "a3dee41e268c030816b087baf8b7348fb720ec6d00e7c33e46c2ec47a2def1e1"
   },
   "license": {
     "path": "LICENSE",
@@ -19,8 +19,8 @@
       "func": "bitEffects",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/bitEffects/definition.js",
-        "sha256": "b150c3cf04164fa5d26b670088046d3fbbd263a7d3e0e47c65e904f62c35e016",
-        "bytes": 7096
+        "sha256": "323240afffde5cf11f17a2727a7fc501125405b513733b6c605d0b8ce24472eb",
+        "bytes": 7058
       },
       "wgsl": [
         {
@@ -1462,18 +1462,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "openCategories",
             [
               "general",
@@ -1510,8 +1498,8 @@
       "func": "caustic",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/caustic/definition.js",
-        "sha256": "5784fcb276e3864a2bf6365a7bc9dcddc35c72750c88e249388a821e353da721",
-        "bytes": 2970
+        "sha256": "043b2eb91bd22dd0e7026a47e56231976fd59db76d4d04c5e97903d043b1d039",
+        "bytes": 2932
       },
       "wgsl": [
         {
@@ -2219,18 +2207,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -2260,8 +2236,8 @@
       "func": "cellNoise",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/cellNoise/definition.js",
-        "sha256": "71c08afac4579a2ca532b1cec779201ba72e14547bea444dc37f4c89dff4808f",
-        "bytes": 6539
+        "sha256": "d906a7d279a51c4b5143516f988d80138ca07a1a2dc230c506f52de728a1e0df",
+        "bytes": 6451
       },
       "wgsl": [
         {
@@ -3982,26 +3958,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "cellSmooth",
-                  "smooth"
-                ],
-                [
-                  "cellVariation",
-                  "variation"
-                ],
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "passes",
             [
               {
@@ -4073,8 +4029,8 @@
       "func": "cellRefract",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/cellRefract/definition.js",
-        "sha256": "4d8c71fcfa0d66fe9bc2bba06738b0414f3c02aaa866f6a34c6cfcfbb5df8fb1",
-        "bytes": 4256
+        "sha256": "e5fd25d2684cf3e2580f5f64b20340b6c47bb2b33cd515cacac386e4b03c486c",
+        "bytes": 4121
       },
       "wgsl": [
         {
@@ -4853,34 +4809,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "cellSmooth",
-                  "smooth"
-                ],
-                [
-                  "cellVariation",
-                  "variation"
-                ],
-                [
-                  "refractAmt",
-                  "amount"
-                ],
-                [
-                  "refractDir",
-                  "direction"
-                ],
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -4910,8 +4838,8 @@
       "func": "coalesce",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/coalesce/definition.js",
-        "sha256": "765ca5acd12a117c26156cd62e92dcad82dda028f21f3d6cb08e9384c6ee636c",
-        "bytes": 2724
+        "sha256": "e1424d43b375c002f8b8c29bf7ee4d206bcf5cefe1dbcb6a330a6de822331e4b",
+        "bytes": 2689
       },
       "wgsl": [
         {
@@ -5530,18 +5458,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "mixAmt",
-                  "mix"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -6888,8 +6804,8 @@
       "func": "composite",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/composite/definition.js",
-        "sha256": "812ca2226f27d0359729e336ccb51a7f39442915859d3bb5c147a855e4d0ab22",
-        "bytes": 1786
+        "sha256": "e9af4084db388c9ce1993eb893e0e36bfc42ea428c25fc679172a030af5e28f5",
+        "bytes": 1751
       },
       "wgsl": [
         {
@@ -7287,18 +7203,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "mixAmt",
-                  "mix"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -7334,8 +7238,8 @@
       "wgsl": [
         {
           "path": "shaders/effects/classicNoisedeck/effects/wgsl/effects.wgsl",
-          "sha256": "3710f48b36018d19bbe8937db1c3ad31e2ed38a961d4e3701ac9e8db31d51854",
-          "bytes": 20258
+          "sha256": "2254e588c10f1e840cee56c70cd2898a83c0e95ce1cd5cc0d54fa5430c8b8fdd",
+          "bytes": 22840
         }
       ],
       "registrationKeys": [
@@ -8035,7 +7939,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "/*\n * General effects shader (WGSL port).\n * Provides color inversion, emboss, edge, blur, and other effects.\n */\n\n@group(0) @binding(0) var samp: sampler;\n@group(0) @binding(1) var inputTex: texture_2d<f32>;\n@group(0) @binding(2) var<uniform> u: Uniforms;\n\n// EFFECT and FLIP are compile-time consts injected by the runtime via\n// injectDefines (see classicNoisedeck/effects/definition.js\n// `globals.effect.define` / `globals.flip.define`). Same fix as the GLSL\n// backend — collapses the runtime cascade so Dawn constant-folds the variant\n// branches.\nstruct Uniforms {\n    time: f32,\n    deltaTime: f32,\n    frame: i32,\n    _pad0: f32,\n    resolution: vec2f,\n    aspect: f32,\n    // Effect params in definition.js globals order:\n    // (effect was here — now compile-time EFFECT)\n    effectAmt: f32,\n    // (flip was here — now compile-time FLIP)\n    scaleAmt: f32,\n    rotation: f32,\n    offsetX: f32,\n    offsetY: f32,\n    intensity: f32,\n    saturation: f32,\n    aspectInv: f32,\n    invFullResolution: vec2f,\n}\n\nconst PI: f32 = 3.14159265359;\nconst TAU: f32 = 6.28318530718;\n\nfn aspectRatio() -> f32 {\n    return u.resolution.x / u.resolution.y;\n}\n\nfn mapRange(value: f32, inMin: f32, inMax: f32, outMin: f32, outMax: f32) -> f32 {\n    // The final division lowers differently: Dawn computes x * rcp(span)\n    // (approximate reciprocal), ANGLE a correctly-rounded divide, so mapped\n    // values differ by ~1 ulp and knife-edge taps flip. One Newton-Raphson\n    // step pins the reciprocal to the same value on both backends (multiply\n    // and subtract are correctly rounded in both Metal math modes). The clamp\n    // keeps the span*rmul product from fusing into the (2.0 - ...) subtract.\n    let span = inMax - inMin;\n    let rmul = 1.0 / span;\n    let mc = min(max(span * rmul, -1e38), 1e38);\n    return outMin + (outMax - outMin) * ((value - inMin) * (rmul * (2.0 - mc)));\n}\n\n// GLSL mod(): x - y * floor(x / y). WGSL % truncates instead, and its exact\n// remainder differs from this expression when y is not exactly representable.\nfn glslMod(x: f32, y: f32) -> f32 {\n    return x - y * floor(x / y);\n}\n\n// The GLSL maps a full-image coordinate into the input texture as\n// (uv * fullResolution - tileOffset) / textureSize. Untiled, tileOffset is 0\n// and fullResolution is the frame size. The division by the texture size is\n// x * rcp(size), which need not return uv exactly; compute it the same way.\nfn inputCoord(uv: vec2f) -> vec2f {\n    return (uv * u.resolution) / vec2f(textureDimensions(inputTex, 0));\n}\n\n// PCG PRNG\nfn pcg(v_in: vec3u) -> vec3u {\n    var v = v_in * 1664525u + 1013904223u;\n    v.x += v.y * v.z;\n    v.y += v.z * v.x;\n    v.z += v.x * v.y;\n    v ^= v >> vec3u(16u);\n    v.x += v.y * v.z;\n    v.y += v.z * v.x;\n    v.z += v.x * v.y;\n    return v;\n}\n\nfn prng(p: vec3f) -> vec3f {\n    return vec3f(pcg(vec3u(p))) / f32(0xffffffffu);\n}\n\nfn random(p: vec2f) -> f32 {\n    let p2 = vec3f(p, 0.0);\n    return f32(pcg(vec3u(p2)).x) / f32(0xffffffffu);\n}\n\nfn rotate2D(st_in: vec2f, rot: f32) -> vec2f {\n    // min/max clamps pin the evaluation order at every multiply that feeds an\n    // add or the caller's arithmetic: relaxed math contracts those pairs into\n    // fma while standard math double-rounds, and the 1 ulp difference flips\n    // sampler taps. The clamps are value-exact for finite values. The aspect\n    // scalars are CPU-computed uniforms, so neither backend evaluates an\n    // in-shader division here.\n    var st = st_in;\n    st.x *= u.aspect;\n    st.x = min(max(st.x, -1e38), 1e38);\n    let r = mapRange(rot, 0.0, 360.0, 0.0, 2.0);\n    let angle = r * PI;\n    let ox = min(max(0.5 * u.aspect, -1e38), 1e38);\n    st -= vec2f(ox, 0.5);\n    let c = cos(angle);\n    let s = sin(angle);\n    let px = min(max(c * st.x, -1e38), 1e38);\n    let py = min(max(s * st.y, -1e38), 1e38);\n    let qx = min(max(-s * st.x, -1e38), 1e38);\n    let qy = min(max(c * st.y, -1e38), 1e38);\n    st = vec2f(px + py, qx + qy);\n    st += vec2f(ox, 0.5);\n    st.x *= u.aspectInv;\n    st = min(max(st, vec2f(-1e38)), vec2f(1e38));\n    return st;\n}\n\nfn brightnessContrast(color: vec3f) -> vec3f {\n    let bright = mapRange(u.intensity, -100.0, 100.0, -0.4, 0.4);\n    var cont = 1.0;\n    if (u.intensity < 0.0) {\n        cont = mapRange(u.intensity, -100.0, 0.0, 0.5, 1.0);\n    } else {\n        cont = mapRange(u.intensity, 0.0, 100.0, 1.0, 1.5);\n    }\n    return (color - 0.5) * cont + 0.5 + bright;\n}\n\nfn saturateFn(color: vec3f) -> vec3f {\n    let sat = mapRange(u.saturation, -100.0, 100.0, -1.0, 1.0);\n    let avg = (color.r + color.g + color.b) / 3.0;\n    return color - (avg - color) * sat;\n}\n\nfn hsv2rgb(hsv: vec3f) -> vec3f {\n    let h = fract(hsv.x);\n    let s = hsv.y;\n    let v = hsv.z;\n    let c = v * s;\n    let x = c * (1.0 - abs((h * 6.0) - 2.0 * floor((h * 6.0) / 2.0) - 1.0));\n    let m = v - c;\n    var rgb: vec3f;\n    // The GLSL's ranges, including black for a hue outside [0, 1).\n    if (0.0 <= h && h < 1.0/6.0) { rgb = vec3f(c, x, 0.0); }\n    else if (1.0/6.0 <= h && h < 2.0/6.0) { rgb = vec3f(x, c, 0.0); }\n    else if (2.0/6.0 <= h && h < 3.0/6.0) { rgb = vec3f(0.0, c, x); }\n    else if (3.0/6.0 <= h && h < 4.0/6.0) { rgb = vec3f(0.0, x, c); }\n    else if (4.0/6.0 <= h && h < 5.0/6.0) { rgb = vec3f(x, 0.0, c); }\n    else if (5.0/6.0 <= h && h < 1.0) { rgb = vec3f(c, 0.0, x); }\n    else { rgb = vec3f(0.0, 0.0, 0.0); }\n    return rgb + vec3f(m);\n}\n\nfn rgb2hsv(rgb: vec3f) -> vec3f {\n    let maxC = max(rgb.r, max(rgb.g, rgb.b));\n    let minC = min(rgb.r, min(rgb.g, rgb.b));\n    let delta = maxC - minC;\n    var h = 0.0;\n    if (delta != 0.0) {\n        if (maxC == rgb.r) { h = glslMod((rgb.g - rgb.b) / delta, 6.0) / 6.0; }\n        else if (maxC == rgb.g) { h = ((rgb.b - rgb.r) / delta + 2.0) / 6.0; }\n        else { h = ((rgb.r - rgb.g) / delta + 4.0) / 6.0; }\n    }\n    let s = select(0.0, delta / maxC, maxC != 0.0);\n    return vec3f(h, s, maxC);\n}\n\nfn posterize(color: vec3f, levIn: f32) -> vec3f {\n    var lev = levIn;\n    if (lev == 0.0) { return color; }\n    else if (lev == 1.0) { return step(vec3f(0.5), color); }\n    let gamma = 0.65;\n    var c = pow(color, vec3f(gamma));\n    c = floor(c * lev) / lev;\n    return pow(c, vec3f(1.0 / gamma));\n}\n\nfn pixellate(uv_in: vec2f, sizeIn: f32) -> vec3f {\n    var size = sizeIn;\n    if (size < 1.0) { return textureSample(inputTex, samp, inputCoord(uv_in)).rgb; }\n    size *= 4.0;\n    let dx = size * (1.0 / u.resolution.x);\n    let dy = size * (1.0 / u.resolution.y);\n    var uv = uv_in - 0.5;\n    let coord = vec2f(dx * floor(uv.x / dx), dy * floor(uv.y / dy)) + 0.5;\n    return textureSample(inputTex, samp, coord).rgb;\n}\n\nfn desaturate(color: vec3f) -> vec3f {\n    let avg = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;\n    return vec3f(avg);\n}\n\nfn convolve(uv: vec2f, kernel: array<f32, 9>, divide: bool) -> vec3f {\n    let steps = 1.0 / u.resolution;\n    let offsets = array<vec2f, 9>(\n        vec2f(-steps.x, -steps.y), vec2f(0.0, -steps.y), vec2f(steps.x, -steps.y),\n        vec2f(-steps.x, 0.0), vec2f(0.0, 0.0), vec2f(steps.x, 0.0),\n        vec2f(-steps.x, steps.y), vec2f(0.0, steps.y), vec2f(steps.x, steps.y)\n    );\n    var kernelWeight = 0.0;\n    var conv = vec3f(0.0);\n    for (var i = 0; i < 9; i++) {\n        let color = textureSample(inputTex, samp, inputCoord(uv + offsets[i] * u.effectAmt)).rgb;\n        conv += color * kernel[i];\n        kernelWeight += kernel[i];\n    }\n    if (divide) {\n        if (kernelWeight != 0.0) {\n            conv /= kernelWeight;\n        } else {\n            // The edge and derivative kernels sum to zero. The GLSL divides\n            // by that zero weight anyway, and clamp() takes the result to 1\n            // where conv > 0 and to 0 elsewhere. Give that result directly;\n            // WGSL leaves a division by zero indeterminate.\n            conv = select(vec3f(0.0), vec3f(1.0), conv > vec3f(0.0));\n        }\n    }\n    return clamp(conv, vec3f(0.0), vec3f(1.0));\n}\n\nfn derivatives(color: vec3f, uv: vec2f, divide: bool) -> vec3f {\n    let deriv_x = array<f32, 9>(0.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0);\n    let deriv_y = array<f32, 9>(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0);\n    let s1 = convolve(uv, deriv_x, divide);\n    let s2 = convolve(uv, deriv_y, divide);\n    return color * distance(s1, s2);\n}\n\nfn sobel(color: vec3f, uv: vec2f) -> vec3f {\n    let sobel_x = array<f32, 9>(1.0, 0.0, -1.0, 2.0, 0.0, -2.0, 1.0, 0.0, -1.0);\n    let sobel_y = array<f32, 9>(1.0, 2.0, 1.0, 0.0, 0.0, 0.0, -1.0, -2.0, -1.0);\n    let s1 = convolve(uv, sobel_x, false);\n    let s2 = convolve(uv, sobel_y, false);\n    return color * distance(s1, s2);\n}\n\nfn outline(color: vec3f, uv: vec2f) -> vec3f {\n    let sobel_x = array<f32, 9>(1.0, 0.0, -1.0, 2.0, 0.0, -2.0, 1.0, 0.0, -1.0);\n    let sobel_y = array<f32, 9>(1.0, 2.0, 1.0, 0.0, 0.0, 0.0, -1.0, -2.0, -1.0);\n    let s1 = convolve(uv, sobel_x, false);\n    let s2 = convolve(uv, sobel_y, false);\n    return max(color - distance(s1, s2), vec3f(0.0));\n}\n\nfn shadow(color_in: vec3f, uv: vec2f) -> vec3f {\n    let sobel_x = array<f32, 9>(1.0, 0.0, -1.0, 2.0, 0.0, -2.0, 1.0, 0.0, -1.0);\n    let sobel_y = array<f32, 9>(1.0, 2.0, 1.0, 0.0, 0.0, 0.0, -1.0, -2.0, -1.0);\n    var color = rgb2hsv(color_in);\n    let x = convolve(uv, sobel_x, false);\n    let y = convolve(uv, sobel_y, false);\n    let shade_dist = distance(x, y);\n    let highlight = shade_dist * shade_dist;\n    let shade = (1.0 - ((1.0 - color.z) * (1.0 - highlight))) * shade_dist;\n    color = vec3f(color.x, color.y, mix(color.z, shade, 0.75));\n    return hsv2rgb(color);\n}\n\nfn convolutionEffect(color: vec3f, uv: vec2f) -> vec3f {\n    let emboss = array<f32, 9>(-2.0, -1.0, 0.0, -1.0, 1.0, 1.0, 0.0, 1.0, 2.0);\n    let sharpen = array<f32, 9>(-1.0, 0.0, -1.0, 0.0, 5.0, 0.0, -1.0, 0.0, -1.0);\n    let blur = array<f32, 9>(1.0, 2.0, 1.0, 2.0, 4.0, 2.0, 1.0, 2.0, 1.0);\n    let edge2 = array<f32, 9>(-1.0, 0.0, -1.0, 0.0, 4.0, 0.0, -1.0, 0.0, -1.0);\n    let edge3 = array<f32, 9>(-0.875, -0.75, -0.875, -0.75, 5.0, -0.75, -0.875, -0.75, -0.875);\n    let sharpenBlur = array<f32, 9>(-2.0, 2.0, -2.0, 2.0, 1.0, 2.0, -2.0, 2.0, -2.0);\n\n    if (EFFECT == 1) { return convolve(uv, blur, true); }\n    else if (EFFECT == 2) { return derivatives(color, uv, true); }\n    else if (EFFECT == 120) { return clamp(derivatives(color, uv, false) * 2.5, vec3f(0.0), vec3f(1.0)); }\n    else if (EFFECT == 3) { return color * convolve(uv, edge2, true); }\n    else if (EFFECT == 4) { return convolve(uv, emboss, false); }\n    else if (EFFECT == 5) { return outline(color, uv); }\n    else if (EFFECT == 6) { return shadow(color, uv); }\n    else if (EFFECT == 7) { return convolve(uv, sharpen, false); }\n    else if (EFFECT == 8) { return sobel(color, uv); }\n    else if (EFFECT == 9) { return max(color, convolve(uv, edge2, true)); }\n    else if (EFFECT == 300) { return convolve(uv, sharpenBlur, true); }\n    else if (EFFECT == 301) { return convolve(uv, edge3, true); }\n    return color;\n}\n\n// fragCoord is the output pixel. The dither pattern is fixed to the screen,\n// as gl_FragCoord fixes it in the GLSL, while st (the transformed coordinate)\n// picks the sampled block.\nfn cga(color: vec4f, st: vec2f, fragCoord: vec2f) -> vec3f {\n    let amt = mapRange(u.effectAmt, 0.0, 20.0, 0.0, 5.0);\n    if (amt < 0.01) { return color.rgb; }\n    let pixelDensity = amt;\n    let size = 2.0 * pixelDensity;\n    let dSize = 2.0 * size;\n    let amount = u.resolution.x / size;\n    var d = 1.0 / amount;\n    let ar = u.resolution.x / u.resolution.y;\n    let sx = floor(st.x / d) * d;\n    d = ar / amount;\n    let sy = floor(st.y / d) * d;\n    let base = textureSample(inputTex, samp, vec2f(sx, sy));\n    let lum = 0.2126 * base.r + 0.7152 * base.g + 0.0722 * base.b;\n    let o = floor(6.0 * lum);\n    let black = vec3f(0.0);\n    let light = vec3f(85.0, 255.0, 255.0) / 255.0;\n    let dark = vec3f(254.0, 84.0, 255.0) / 255.0;\n    let white = vec3f(1.0);\n    // Levels outside 0..6 (input outside 0..1) keep both colors black, as\n    // the GLSL's zero-initialized c1 and c2 do.\n    var c1 = black;\n    var c2 = black;\n    if (o == 0.0) { c1 = black; c2 = black; }\n    else if (o == 1.0) { c1 = black; c2 = dark; }\n    else if (o == 2.0) { c1 = dark; c2 = dark; }\n    else if (o == 3.0) { c1 = dark; c2 = light; }\n    else if (o == 4.0) { c1 = light; c2 = light; }\n    else if (o == 5.0) { c1 = light; c2 = white; }\n    else if (o == 6.0) { c1 = white; c2 = white; }\n    var result = c1;\n    if (glslMod(fragCoord.x, dSize) > size) {\n        if (glslMod(fragCoord.y, dSize) > size) { result = c1; } else { result = c2; }\n    } else {\n        if (glslMod(fragCoord.y, dSize) > size) { result = c2; } else { result = c1; }\n    }\n    return result;\n}\n\nfn subpixel(st: vec2f, scaleIn: f32) -> vec3f {\n    let scale = mapRange(scaleIn, 0.0, 100.0, 0.0, 10.0);\n    let orig = pixellate(st, 4.0 * scale);\n    var color = orig;\n    let coord = floor(st * u.resolution);\n    let m = glslMod(coord.x, 4.0 * scale);\n    if (glslMod(coord.y, 4.0 * scale) <= scale) {\n        color *= vec3f(0.0);\n    } else if (m <= scale) {\n        color *= vec3f(1.0, 0.0, 0.0);\n    } else if (m <= 2.0 * scale) {\n        color *= vec3f(0.0, 1.0, 0.0);\n    } else if (m <= 3.0 * scale) {\n        color *= vec3f(0.0, 0.0, 1.0);\n    } else {\n        color *= vec3f(0.0);\n    }\n    let factor = clamp(scale * 0.25, 0.0, 1.0);\n    return mix(orig, color, factor);\n}\n\nfn bloom(st: vec2f) -> vec3f {\n    var sum = vec3f(0.0);\n    let orig = textureSample(inputTex, samp, st).rgb;\n    let strength = mapRange(u.effectAmt, 0.0, 20.0, 0.0, 0.25);\n    for (var i = -4; i < 4; i++) {\n        for (var j = -3; j < 3; j++) {\n            sum += textureSample(inputTex, samp, st + vec2f(f32(j), f32(i)) * 0.004).rgb * strength;\n        }\n    }\n    var color: vec3f;\n    if (orig.r < 0.3) { color = sum * sum * 0.012 + orig; }\n    else if (orig.r < 0.5) { color = sum * sum * 0.009 + orig; }\n    else { color = sum * sum * 0.0075 + orig; }\n    return clamp(color, vec3f(0.0), vec3f(1.0));\n}\n\nfn zoomBlur(st: vec2f) -> vec3f {\n    var color = vec3f(0.0);\n    var total = 0.0;\n    let toCenter = st - 0.5;\n    let offset = prng(vec3f(12.9898, 78.233, 151.7182)).x;\n    // Pin the evaluation order of the tap chain: relaxed math reassociates\n    // toCenter * percent * strength as toCenter * (percent * strength), which\n    // shifts tap coordinates by 1 ulp and flips nearest-sampler taps. The\n    // min/max clamps are value-exact for finite values and force both\n    // backends to evaluate fl(fl(toCenter * percent) * strength). The\n    // accumulation clamp keeps the add's operand from being a raw multiply\n    // result, which relaxed math fuses into an fma and standard math\n    // double-rounds.\n    var products: array<vec3f, 41>;\n    for (var t = 0.0; t <= 40.0; t += 1.0) {\n        let percent = (t + offset) / 40.0;\n        let percentSq = min(max(percent * percent, -1e38), 1e38);\n        let weight = 4.0 * (percent - percentSq);\n        let strength = mapRange(u.effectAmt, 0.0, 20.0, 0.0, 1.0);\n        let tapA = toCenter * percent;\n        let tap = min(max(tapA, vec2f(-1e38)), vec2f(1e38)) * strength;\n        let tapB = min(max(tap, vec2f(-1e38)), vec2f(1e38));\n        let tex = textureSample(inputTex, samp, st + tapB);\n        products[u32(t)] = min(max(tex.rgb * weight, vec3f(-1e38)), vec3f(1e38));\n        total += min(max(weight, -1e38), 1e38);\n    }\n    for (var i = 0u; i < 41u; i += 1u) {\n        color += products[i];\n    }\n    // Refine the reciprocal with one Newton-Raphson step: the raw division\n    // lowers differently (Dawn: x * rcp(x), ANGLE: correctly-rounded divide),\n    // and the ~1 ulp difference flips the final 8-bit rounding when the value\n    // sits on an x.5 boundary. Multiply/subtract are correctly rounded in both\n    // Metal math modes, so both backends converge to the same reciprocal. The\n    // min/max clamp pins the inner multiply's order (relaxed math would fuse\n    // it into the subtract as an fma; standard math double-rounds).\n    var r = 1.0 / total;\n    let tr = min(max(total * r, -1e38), 1e38);\n    r = r * (2.0 - tr);\n    return color * r;\n}\n\nfn periodicFunction(p: f32) -> f32 {\n    return mapRange(sin(p * TAU), -1.0, 1.0, 0.0, 1.0);\n}\n\nfn offsets(st: vec2f) -> f32 {\n    return distance(st, vec2f(0.5));\n}\n\n@fragment\nfn main(@builtin(position) fragCoord: vec4f) -> @location(0) vec4f {\n    // Multiply by the CPU-computed reciprocal instead of dividing (see the\n    // invFullResolution declaration): both backends then evaluate the same\n    // correctly-rounded multiply, so the uv chain is bit-identical.\n    var uv = fragCoord.xy * u.invFullResolution;\n\n    // The division by a runtime uniform lowers differently (Dawn: x * rcp(y),\n    // ANGLE: correctly-rounded divide) — a ~1 ulp difference rescales every uv\n    // and flips knife-edge taps. One Newton-Raphson step pins the reciprocal\n    // on both backends; the clamp keeps the scaleAmt*sR product from fusing\n    // into the (2.0 - ...) subtract.\n    let sR = 1.0 / u.scaleAmt;\n    let sC = min(max(u.scaleAmt * sR, -1e38), 1e38);\n    var scale = 100.0 * (sR * (2.0 - sC));\n    if (scale == 0.0) { scale = 1.0; }\n\n    uv = rotate2D(uv, u.rotation);\n    uv -= 0.5;\n    uv *= scale;\n    // Clamp before the add: relaxed math contracts the multiply into the\n    // add as an fma while standard math double-rounds, and the 1 ulp\n    // difference flips sampler taps at x.5 rounding boundaries.\n    uv = min(max(uv, vec2f(-1e38)), vec2f(1e38));\n    uv += 0.5;\n\n    let imageSize = u.resolution;\n    // imageSize is a copy of u.resolution, so resolution/imageSize is a value\n    // divided by itself: ANGLE computes exactly 1.0 while Dawn lowers the\n    // division to x * rcp(x) (~1 ulp off), which shifted the offset map's\n    // arguments and flipped knife-edge sampler taps. Use the exact 1.0.\n    uv.x -= ceil((scale * 0.5) - (0.5 - (1.0 / imageSize.x * scale)));\n    uv.y += ceil((scale * 0.5) + (0.5 - (1.0 / imageSize.y * scale)) - scale);\n    // Pin the offset-shift evaluation order with scalar clamps: the map\n    // result feeds a multiply then a subtract, and relaxed math contracts\n    // that pair into an fma while standard math double-rounds. The clamps\n    // are value-exact for finite values.\n    let shiftXv = min(max(mapRange(u.offsetX, -100.0, 100.0, -scale, scale) * 1.5, -1e38), 1e38);\n    let shiftYv = min(max(mapRange(u.offsetY, -100.0, 100.0, -scale, scale) * 1.5, -1e38), 1e38);\n    uv -= vec2f(shiftXv, shiftYv);\n    uv = fract(uv);\n\n    // flip/mirror. uv.y runs up the frame, so \"up to down\" keeps uv.y > 0.5\n    // and reflects it onto the bottom half.\n    if (FLIP == 1) { uv = 1.0 - uv; }\n    else if (FLIP == 2) { uv.x = 1.0 - uv.x; }\n    else if (FLIP == 3) { uv.y = 1.0 - uv.y; }\n    else if (FLIP == 11) { if (uv.x > 0.5) { uv.x = 1.0 - uv.x; } }\n    else if (FLIP == 12) { if (uv.x < 0.5) { uv.x = 1.0 - uv.x; } }\n    else if (FLIP == 13) { if (uv.y < 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 14) { if (uv.y > 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 15) { if (uv.x > 0.5) { uv.x = 1.0 - uv.x; } if (uv.y < 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 16) { if (uv.x > 0.5) { uv.x = 1.0 - uv.x; } if (uv.y > 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 17) { if (uv.x < 0.5) { uv.x = 1.0 - uv.x; } if (uv.y < 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 18) { if (uv.x < 0.5) { uv.x = 1.0 - uv.x; } if (uv.y > 0.5) { uv.y = 1.0 - uv.y; } }\n\n    var color = textureSample(inputTex, samp, inputCoord(uv));\n\n    if (u.effectAmt != 0.0 && EFFECT != 0) {\n        if (EFFECT == 100) { color = vec4f(pixellate(uv, u.effectAmt), color.a); }\n        else if (EFFECT == 110) { color = vec4f(posterize(color.rgb, u.effectAmt), color.a); }\n        else if (EFFECT == 200) { color = vec4f(cga(color, uv, fragCoord.xy), color.a); }\n        else if (EFFECT == 210) { color = vec4f(subpixel(uv, u.effectAmt), color.a); }\n        else if (EFFECT == 220) { color = vec4f(bloom(uv), color.a); }\n        else if (EFFECT == 230) { color = vec4f(zoomBlur(uv), color.a); }\n        else { color = vec4f(convolutionEffect(color.rgb, uv), color.a); }\n    }\n\n    var c = brightnessContrast(color.rgb);\n    c = saturateFn(c);\n\n    return vec4f(c, color.a);\n}\n"
+                        "/*\n * General effects shader (WGSL port).\n * Provides color inversion, emboss, edge, blur, and other effects.\n */\n\n@group(0) @binding(0) var samp: sampler;\n@group(0) @binding(1) var inputTex: texture_2d<f32>;\n@group(0) @binding(2) var<uniform> u: Uniforms;\n\n// EFFECT and FLIP are compile-time consts injected by the runtime via\n// injectDefines (see classicNoisedeck/effects/definition.js\n// `globals.effect.define` / `globals.flip.define`). Same fix as the GLSL\n// backend — collapses the runtime cascade so Dawn constant-folds the variant\n// branches.\nstruct Uniforms {\n    time: f32,\n    deltaTime: f32,\n    frame: i32,\n    _pad0: f32,\n    resolution: vec2f,\n    aspect: f32,\n    // Effect params in definition.js globals order:\n    // (effect was here — now compile-time EFFECT)\n    effectAmt: f32,\n    // (flip was here — now compile-time FLIP)\n    scaleAmt: f32,\n    rotation: f32,\n    offsetX: f32,\n    offsetY: f32,\n    intensity: f32,\n    saturation: f32,\n    aspectInv: f32,\n    invFullResolution: vec2f,\n    tileOffset: vec2f,\n    fullResolution: vec2f,\n    renderScale: f32,\n}\n\nconst PI: f32 = 3.14159265359;\nconst TAU: f32 = 6.28318530718;\n\nfn aspectRatio() -> f32 {\n    return u.resolution.x / u.resolution.y;\n}\n\nfn mapRange(value: f32, inMin: f32, inMax: f32, outMin: f32, outMax: f32) -> f32 {\n    // The final division lowers differently: Dawn computes x * rcp(span)\n    // (approximate reciprocal), ANGLE a correctly-rounded divide, so mapped\n    // values differ by ~1 ulp and knife-edge taps flip. One Newton-Raphson\n    // step pins the reciprocal to the same value on both backends (multiply\n    // and subtract are correctly rounded in both Metal math modes). The clamp\n    // keeps the span*rmul product from fusing into the (2.0 - ...) subtract.\n    let span = inMax - inMin;\n    let rmul = 1.0 / span;\n    let mc = min(max(span * rmul, -1e38), 1e38);\n    return outMin + (outMax - outMin) * ((value - inMin) * (rmul * (2.0 - mc)));\n}\n\n// GLSL mod(): x - y * floor(x / y). WGSL % truncates instead, and its exact\n// remainder differs from this expression when y is not exactly representable.\nfn glslMod(x: f32, y: f32) -> f32 {\n    return x - y * floor(x / y);\n}\n\n// The GLSL maps a full-image coordinate into the input texture as\n// (uv * fullResolution - tileOffset) / textureSize. Untiled, tileOffset is 0\n// and fullResolution is the frame size. The division by the texture size is\n// x * rcp(size), which need not return uv exactly; compute it the same way.\nfn inputCoord(uv: vec2f) -> vec2f {\n    return (uv * u.fullResolution - u.tileOffset) / vec2f(textureDimensions(inputTex, 0));\n}\n\n// PCG PRNG\nfn pcg(v_in: vec3u) -> vec3u {\n    var v = v_in * 1664525u + 1013904223u;\n    v.x += v.y * v.z;\n    v.y += v.z * v.x;\n    v.z += v.x * v.y;\n    v ^= v >> vec3u(16u);\n    v.x += v.y * v.z;\n    v.y += v.z * v.x;\n    v.z += v.x * v.y;\n    return v;\n}\n\nfn prng(p: vec3f) -> vec3f {\n    return vec3f(pcg(vec3u(p))) / f32(0xffffffffu);\n}\n\nfn random(p: vec2f) -> f32 {\n    let p2 = vec3f(p, 0.0);\n    return f32(pcg(vec3u(p2)).x) / f32(0xffffffffu);\n}\n\nfn rotate2D(st_in: vec2f, rot: f32) -> vec2f {\n    // min/max clamps pin the evaluation order at every multiply that feeds an\n    // add or the caller's arithmetic: relaxed math contracts those pairs into\n    // fma while standard math double-rounds, and the 1 ulp difference flips\n    // sampler taps. The clamps are value-exact for finite values. The aspect\n    // scalars are CPU-computed uniforms, so neither backend evaluates an\n    // in-shader division here.\n    var st = st_in;\n    st.x *= u.aspect;\n    st.x = min(max(st.x, -1e38), 1e38);\n    let r = mapRange(rot, 0.0, 360.0, 0.0, 2.0);\n    let angle = r * PI;\n    let ox = min(max(0.5 * u.aspect, -1e38), 1e38);\n    st -= vec2f(ox, 0.5);\n    let c = cos(angle);\n    let s = sin(angle);\n    let px = min(max(c * st.x, -1e38), 1e38);\n    let py = min(max(s * st.y, -1e38), 1e38);\n    let qx = min(max(-s * st.x, -1e38), 1e38);\n    let qy = min(max(c * st.y, -1e38), 1e38);\n    st = vec2f(px + py, qx + qy);\n    st += vec2f(ox, 0.5);\n    st.x *= u.aspectInv;\n    st = min(max(st, vec2f(-1e38)), vec2f(1e38));\n    return st;\n}\n\nfn brightnessContrast(color: vec3f) -> vec3f {\n    let bright = mapRange(u.intensity, -100.0, 100.0, -0.4, 0.4);\n    var cont = 1.0;\n    if (u.intensity < 0.0) {\n        cont = mapRange(u.intensity, -100.0, 0.0, 0.5, 1.0);\n    } else {\n        cont = mapRange(u.intensity, 0.0, 100.0, 1.0, 1.5);\n    }\n    return (color - 0.5) * cont + 0.5 + bright;\n}\n\nfn saturateFn(color: vec3f) -> vec3f {\n    let sat = mapRange(u.saturation, -100.0, 100.0, -1.0, 1.0);\n    let avg = (color.r + color.g + color.b) / 3.0;\n    return color - (avg - color) * sat;\n}\n\nfn hsv2rgb(hsv: vec3f) -> vec3f {\n    let h = fract(hsv.x);\n    let s = hsv.y;\n    let v = hsv.z;\n    let c = v * s;\n    let x = c * (1.0 - abs((h * 6.0) - 2.0 * floor((h * 6.0) / 2.0) - 1.0));\n    let m = v - c;\n    var rgb: vec3f;\n    // The GLSL's ranges, including black for a hue outside [0, 1).\n    if (0.0 <= h && h < 1.0/6.0) { rgb = vec3f(c, x, 0.0); }\n    else if (1.0/6.0 <= h && h < 2.0/6.0) { rgb = vec3f(x, c, 0.0); }\n    else if (2.0/6.0 <= h && h < 3.0/6.0) { rgb = vec3f(0.0, c, x); }\n    else if (3.0/6.0 <= h && h < 4.0/6.0) { rgb = vec3f(0.0, x, c); }\n    else if (4.0/6.0 <= h && h < 5.0/6.0) { rgb = vec3f(x, 0.0, c); }\n    else if (5.0/6.0 <= h && h < 1.0) { rgb = vec3f(c, 0.0, x); }\n    else { rgb = vec3f(0.0, 0.0, 0.0); }\n    return rgb + vec3f(m);\n}\n\nfn rgb2hsv(rgb: vec3f) -> vec3f {\n    let maxC = max(rgb.r, max(rgb.g, rgb.b));\n    let minC = min(rgb.r, min(rgb.g, rgb.b));\n    let delta = maxC - minC;\n    var h = 0.0;\n    if (delta != 0.0) {\n        if (maxC == rgb.r) { h = glslMod((rgb.g - rgb.b) / delta, 6.0) / 6.0; }\n        else if (maxC == rgb.g) { h = ((rgb.b - rgb.r) / delta + 2.0) / 6.0; }\n        else { h = ((rgb.r - rgb.g) / delta + 4.0) / 6.0; }\n    }\n    let s = select(0.0, delta / maxC, maxC != 0.0);\n    return vec3f(h, s, maxC);\n}\n\nfn posterize(color: vec3f, levIn: f32) -> vec3f {\n    var lev = levIn;\n    if (lev == 0.0) { return color; }\n    else if (lev == 1.0) { return step(vec3f(0.5), color); }\n    let gamma = 0.65;\n    var c = pow(color, vec3f(gamma));\n    c = floor(c * lev) / lev;\n    return pow(c, vec3f(1.0 / gamma));\n}\n\nfn pixellate(uv_in: vec2f, sizeIn: f32) -> vec3f {\n    var size = sizeIn;\n    if (size < 1.0) { return textureSample(inputTex, samp, inputCoord(uv_in)).rgb; }\n    size *= 4.0;\n    // The block grid is anchored to the full image, so its cell size is a\n    // fraction of fullResolution (the tile size under tiling). Untiled the\n    // two resolutions are equal, so this is byte-identical to the previous\n    // resolution-based grid.\n    let dx = size * (1.0 / u.fullResolution.x);\n    let dy = size * (1.0 / u.fullResolution.y);\n    var uv = uv_in - 0.5;\n    let coord = vec2f(dx * floor(uv.x / dx), dy * floor(uv.y / dy)) + 0.5;\n    return textureSample(inputTex, samp, inputCoord(coord)).rgb;\n}\n\nfn desaturate(color: vec3f) -> vec3f {\n    let avg = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;\n    return vec3f(avg);\n}\n\nfn convolve(uv: vec2f, kernel: array<f32, 9>, divide: bool) -> vec3f {\n    // One kernel step is one full-image pixel. Untiled the full resolution\n    // equals the canvas resolution; under tiling the canvas is the tile, so\n    // the tile resolution would double every kernel step.\n    let steps = 1.0 / u.fullResolution;\n    let offsets = array<vec2f, 9>(\n        vec2f(-steps.x, -steps.y), vec2f(0.0, -steps.y), vec2f(steps.x, -steps.y),\n        vec2f(-steps.x, 0.0), vec2f(0.0, 0.0), vec2f(steps.x, 0.0),\n        vec2f(-steps.x, steps.y), vec2f(0.0, steps.y), vec2f(steps.x, steps.y)\n    );\n    var kernelWeight = 0.0;\n    var conv = vec3f(0.0);\n    for (var i = 0; i < 9; i++) {\n        let color = textureSample(inputTex, samp, inputCoord(uv + offsets[i] * u.effectAmt)).rgb;\n        conv += color * kernel[i];\n        kernelWeight += kernel[i];\n    }\n    if (divide) {\n        if (kernelWeight != 0.0) {\n            conv /= kernelWeight;\n        } else {\n            // The edge and derivative kernels sum to zero. The GLSL divides\n            // by that zero weight anyway, and clamp() takes the result to 1\n            // where conv > 0 and to 0 elsewhere. Give that result directly;\n            // WGSL leaves a division by zero indeterminate.\n            conv = select(vec3f(0.0), vec3f(1.0), conv > vec3f(0.0));\n        }\n    }\n    return clamp(conv, vec3f(0.0), vec3f(1.0));\n}\n\nfn derivatives(color: vec3f, uv: vec2f, divide: bool) -> vec3f {\n    let deriv_x = array<f32, 9>(0.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0);\n    let deriv_y = array<f32, 9>(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0);\n    let s1 = convolve(uv, deriv_x, divide);\n    let s2 = convolve(uv, deriv_y, divide);\n    return color * distance(s1, s2);\n}\n\nfn sobel(color: vec3f, uv: vec2f) -> vec3f {\n    let sobel_x = array<f32, 9>(1.0, 0.0, -1.0, 2.0, 0.0, -2.0, 1.0, 0.0, -1.0);\n    let sobel_y = array<f32, 9>(1.0, 2.0, 1.0, 0.0, 0.0, 0.0, -1.0, -2.0, -1.0);\n    let s1 = convolve(uv, sobel_x, false);\n    let s2 = convolve(uv, sobel_y, false);\n    return color * distance(s1, s2);\n}\n\nfn outline(color: vec3f, uv: vec2f) -> vec3f {\n    let sobel_x = array<f32, 9>(1.0, 0.0, -1.0, 2.0, 0.0, -2.0, 1.0, 0.0, -1.0);\n    let sobel_y = array<f32, 9>(1.0, 2.0, 1.0, 0.0, 0.0, 0.0, -1.0, -2.0, -1.0);\n    let s1 = convolve(uv, sobel_x, false);\n    let s2 = convolve(uv, sobel_y, false);\n    return max(color - distance(s1, s2), vec3f(0.0));\n}\n\nfn shadow(color_in: vec3f, uv: vec2f) -> vec3f {\n    let sobel_x = array<f32, 9>(1.0, 0.0, -1.0, 2.0, 0.0, -2.0, 1.0, 0.0, -1.0);\n    let sobel_y = array<f32, 9>(1.0, 2.0, 1.0, 0.0, 0.0, 0.0, -1.0, -2.0, -1.0);\n    var color = rgb2hsv(color_in);\n    let x = convolve(uv, sobel_x, false);\n    let y = convolve(uv, sobel_y, false);\n    let shade_dist = distance(x, y);\n    let highlight = shade_dist * shade_dist;\n    let shade = (1.0 - ((1.0 - color.z) * (1.0 - highlight))) * shade_dist;\n    color = vec3f(color.x, color.y, mix(color.z, shade, 0.75));\n    return hsv2rgb(color);\n}\n\nfn convolutionEffect(color: vec3f, uv: vec2f) -> vec3f {\n    let emboss = array<f32, 9>(-2.0, -1.0, 0.0, -1.0, 1.0, 1.0, 0.0, 1.0, 2.0);\n    let sharpen = array<f32, 9>(-1.0, 0.0, -1.0, 0.0, 5.0, 0.0, -1.0, 0.0, -1.0);\n    let blur = array<f32, 9>(1.0, 2.0, 1.0, 2.0, 4.0, 2.0, 1.0, 2.0, 1.0);\n    let edge2 = array<f32, 9>(-1.0, 0.0, -1.0, 0.0, 4.0, 0.0, -1.0, 0.0, -1.0);\n    let edge3 = array<f32, 9>(-0.875, -0.75, -0.875, -0.75, 5.0, -0.75, -0.875, -0.75, -0.875);\n    let sharpenBlur = array<f32, 9>(-2.0, 2.0, -2.0, 2.0, 1.0, 2.0, -2.0, 2.0, -2.0);\n\n    if (EFFECT == 1) { return convolve(uv, blur, true); }\n    else if (EFFECT == 2) { return derivatives(color, uv, true); }\n    else if (EFFECT == 120) { return clamp(derivatives(color, uv, false) * 2.5, vec3f(0.0), vec3f(1.0)); }\n    else if (EFFECT == 3) { return color * convolve(uv, edge2, true); }\n    else if (EFFECT == 4) { return convolve(uv, emboss, false); }\n    else if (EFFECT == 5) { return outline(color, uv); }\n    else if (EFFECT == 6) { return shadow(color, uv); }\n    else if (EFFECT == 7) { return convolve(uv, sharpen, false); }\n    else if (EFFECT == 8) { return sobel(color, uv); }\n    else if (EFFECT == 9) { return max(color, convolve(uv, edge2, true)); }\n    else if (EFFECT == 300) { return convolve(uv, sharpenBlur, true); }\n    else if (EFFECT == 301) { return convolve(uv, edge3, true); }\n    return color;\n}\n\n// globalCoord is the output pixel's full-image coordinate (the GLSL phase\n// uses gl_FragCoord + tileOffset), while st (the transformed coordinate)\n// picks the sampled block.\nfn cga(color: vec4f, st: vec2f, globalCoord: vec2f) -> vec3f {\n    let amt = mapRange(u.effectAmt, 0.0, 20.0, 0.0, 5.0);\n    if (amt < 0.01) { return color.rgb; }\n    let pixelDensity = amt * u.renderScale;\n    let size = 2.0 * pixelDensity;\n    let dSize = 2.0 * size;\n    // The block grid is anchored to the full image, so the block count uses\n    // the full resolution (the tile resolution under tiling).\n    let amount = u.fullResolution.x / size;\n    var d = 1.0 / amount;\n    // The GLSL takes this ratio from fullResolution, so the block grid keeps\n    // its shape across print tiles.\n    let ar = u.fullResolution.x / u.fullResolution.y;\n    let sx = floor(st.x / d) * d;\n    d = ar / amount;\n    let sy = floor(st.y / d) * d;\n    // The block grid is globally anchored, so the snapped block center is a\n    // full-image coordinate; map it into this tile's input texture.\n    let base = textureSample(inputTex, samp, inputCoord(vec2f(sx, sy)));\n    let lum = 0.2126 * base.r + 0.7152 * base.g + 0.0722 * base.b;\n    let o = floor(6.0 * lum);\n    let black = vec3f(0.0);\n    let light = vec3f(85.0, 255.0, 255.0) / 255.0;\n    let dark = vec3f(254.0, 84.0, 255.0) / 255.0;\n    let white = vec3f(1.0);\n    // Levels outside 0..6 (input outside 0..1) keep both colors black, as\n    // the GLSL's zero-initialized c1 and c2 do.\n    var c1 = black;\n    var c2 = black;\n    if (o == 0.0) { c1 = black; c2 = black; }\n    else if (o == 1.0) { c1 = black; c2 = dark; }\n    else if (o == 2.0) { c1 = dark; c2 = dark; }\n    else if (o == 3.0) { c1 = dark; c2 = light; }\n    else if (o == 4.0) { c1 = light; c2 = light; }\n    else if (o == 5.0) { c1 = light; c2 = white; }\n    else if (o == 6.0) { c1 = white; c2 = white; }\n    var result = c1;\n    // The checker phase is anchored to the full image (tileOffset is 0\n    // untiled), so the pattern does not restart at every tile boundary.\n    if (glslMod(globalCoord.x, dSize) > size) {\n        if (glslMod(globalCoord.y, dSize) > size) { result = c1; } else { result = c2; }\n    } else {\n        if (glslMod(globalCoord.y, dSize) > size) { result = c2; } else { result = c1; }\n    }\n    return result;\n}\n\nfn subpixel(st: vec2f, scaleIn: f32) -> vec3f {\n    // The GLSL scales the stripe width by renderScale for whole-canvas\n    // high-resolution export.\n    let scale = mapRange(scaleIn, 0.0, 100.0, 0.0, 10.0) * u.renderScale;\n    let orig = pixellate(st, 4.0 * scale);\n    var color = orig;\n    // The stripe mask is anchored to the full image in full-image pixels\n    // (equal to tile pixels untiled), so the stripes do not shift or\n    // rescale at tile boundaries.\n    let coord = floor(st * u.fullResolution);\n    let m = glslMod(coord.x, 4.0 * scale);\n    if (glslMod(coord.y, 4.0 * scale) <= scale) {\n        color *= vec3f(0.0);\n    } else if (m <= scale) {\n        color *= vec3f(1.0, 0.0, 0.0);\n    } else if (m <= 2.0 * scale) {\n        color *= vec3f(0.0, 1.0, 0.0);\n    } else if (m <= 3.0 * scale) {\n        color *= vec3f(0.0, 0.0, 1.0);\n    } else {\n        color *= vec3f(0.0);\n    }\n    let factor = clamp(scale * 0.25, 0.0, 1.0);\n    return mix(orig, color, factor);\n}\n\n// Bloom samples a small neighborhood of the full-image coordinate st, so\n// every tap maps through the tile mapping (identity untiled).\nfn bloom(st: vec2f) -> vec3f {\n    var sum = vec3f(0.0);\n    let orig = textureSample(inputTex, samp, inputCoord(st)).rgb;\n    let strength = mapRange(u.effectAmt, 0.0, 20.0, 0.0, 0.25);\n    for (var i = -4; i < 4; i++) {\n        for (var j = -3; j < 3; j++) {\n            sum += textureSample(inputTex, samp, inputCoord(st + vec2f(f32(j), f32(i)) * 0.004)).rgb * strength;\n        }\n    }\n    var color: vec3f;\n    if (orig.r < 0.3) { color = sum * sum * 0.012 + orig; }\n    else if (orig.r < 0.5) { color = sum * sum * 0.009 + orig; }\n    else { color = sum * sum * 0.0075 + orig; }\n    return clamp(color, vec3f(0.0), vec3f(1.0));\n}\n\nfn zoomBlur(st: vec2f) -> vec3f {\n    var color = vec3f(0.0);\n    var total = 0.0;\n    let toCenter = st - 0.5;\n    let offset = prng(vec3f(12.9898, 78.233, 151.7182)).x;\n    // Pin the evaluation order of the tap chain: relaxed math reassociates\n    // toCenter * percent * strength as toCenter * (percent * strength), which\n    // shifts tap coordinates by 1 ulp and flips nearest-sampler taps. The\n    // min/max clamps are value-exact for finite values and force both\n    // backends to evaluate fl(fl(toCenter * percent) * strength). The\n    // accumulation clamp keeps the add's operand from being a raw multiply\n    // result, which relaxed math fuses into an fma and standard math\n    // double-rounds.\n    var products: array<vec3f, 41>;\n    for (var t = 0.0; t <= 40.0; t += 1.0) {\n        let percent = (t + offset) / 40.0;\n        let percentSq = min(max(percent * percent, -1e38), 1e38);\n        let weight = 4.0 * (percent - percentSq);\n        let strength = mapRange(u.effectAmt, 0.0, 20.0, 0.0, 1.0);\n        let tapA = toCenter * percent;\n        let tap = min(max(tapA, vec2f(-1e38)), vec2f(1e38)) * strength;\n        var tapB = min(max(tap, vec2f(-1e38)), vec2f(1e38));\n        // Under tiling, clamp each tap component to an absolute 256 px\n        // budget (as filter/lens and filter/parallax do): the raw\n        // displacement is a fraction of fullResolution, so an unclamped tap\n        // would reach past the fixed 1024 px tile overlap on large prints.\n        // Untiled the clamp is off and the output is byte-identical.\n        if (u.tileOffset.x != 0.0 || u.tileOffset.y != 0.0) {\n            let tapBudget = vec2f(256.0) * u.invFullResolution;\n            tapB = min(max(tapB, -tapBudget), tapBudget);\n        }\n        let tex = textureSample(inputTex, samp, inputCoord(st + tapB));\n        products[u32(t)] = min(max(tex.rgb * weight, vec3f(-1e38)), vec3f(1e38));\n        total += min(max(weight, -1e38), 1e38);\n    }\n    for (var i = 0u; i < 41u; i += 1u) {\n        color += products[i];\n    }\n    // Refine the reciprocal with one Newton-Raphson step: the raw division\n    // lowers differently (Dawn: x * rcp(x), ANGLE: correctly-rounded divide),\n    // and the ~1 ulp difference flips the final 8-bit rounding when the value\n    // sits on an x.5 boundary. Multiply/subtract are correctly rounded in both\n    // Metal math modes, so both backends converge to the same reciprocal. The\n    // min/max clamp pins the inner multiply's order (relaxed math would fuse\n    // it into the subtract as an fma; standard math double-rounds).\n    var r = 1.0 / total;\n    let tr = min(max(total * r, -1e38), 1e38);\n    r = r * (2.0 - tr);\n    return color * r;\n}\n\nfn periodicFunction(p: f32) -> f32 {\n    return mapRange(sin(p * TAU), -1.0, 1.0, 0.0, 1.0);\n}\n\nfn offsets(st: vec2f) -> f32 {\n    return distance(st, vec2f(0.5));\n}\n\n@fragment\nfn main(@builtin(position) fragCoord: vec4f) -> @location(0) vec4f {\n    // The GLSL builds a full-image coordinate (gl_FragCoord.xy + tileOffset)\n    // and scales it by the CPU-computed reciprocal of fullResolution instead\n    // of dividing (see the invFullResolution declaration): both backends then\n    // evaluate the same correctly-rounded multiply, so the uv chain is\n    // bit-identical and every tile maps the same full-image uv.\n    var globalCoord = fragCoord.xy + u.tileOffset;\n    var uv = globalCoord * u.invFullResolution;\n\n    // The division by a runtime uniform lowers differently (Dawn: x * rcp(y),\n    // ANGLE: correctly-rounded divide) — a ~1 ulp difference rescales every uv\n    // and flips knife-edge taps. One Newton-Raphson step pins the reciprocal\n    // on both backends; the clamp keeps the scaleAmt*sR product from fusing\n    // into the (2.0 - ...) subtract.\n    let sR = 1.0 / u.scaleAmt;\n    let sC = min(max(u.scaleAmt * sR, -1e38), 1e38);\n    var scale = 100.0 * (sR * (2.0 - sC));\n    if (scale == 0.0) { scale = 1.0; }\n\n    uv = rotate2D(uv, u.rotation);\n    uv -= 0.5;\n    uv *= scale;\n    // Clamp before the add: relaxed math contracts the multiply into the\n    // add as an fma while standard math double-rounds, and the 1 ulp\n    // difference flips sampler taps at x.5 rounding boundaries.\n    uv = min(max(uv, vec2f(-1e38)), vec2f(1e38));\n    uv += 0.5;\n\n    // The zoom center is anchored to the full image; the tile resolution\n    // would shift it under tiling. Untiled the two are equal.\n    let imageSize = u.fullResolution;\n    // imageSize is a copy of u.fullResolution, so a resolution/imageSize style\n    // self-division would be a value divided by itself: ANGLE computes exactly\n    // 1.0 while Dawn lowers the division to x * rcp(x) (~1 ulp off), which\n    // shifted the offset map's arguments and flipped knife-edge sampler taps.\n    // Use the exact 1.0.\n    uv.x -= ceil((scale * 0.5) - (0.5 - (1.0 / imageSize.x * scale)));\n    uv.y += ceil((scale * 0.5) + (0.5 - (1.0 / imageSize.y * scale)) - scale);\n    // Pin the offset-shift evaluation order with scalar clamps: the map\n    // result feeds a multiply then a subtract, and relaxed math contracts\n    // that pair into an fma while standard math double-rounds. The clamps\n    // are value-exact for finite values.\n    let shiftXv = min(max(mapRange(u.offsetX, -100.0, 100.0, -scale, scale) * 1.5, -1e38), 1e38);\n    let shiftYv = min(max(mapRange(u.offsetY, -100.0, 100.0, -scale, scale) * 1.5, -1e38), 1e38);\n    uv -= vec2f(shiftXv, shiftYv);\n    uv = fract(uv);\n\n    // flip/mirror. uv.y runs up the frame, so \"up to down\" keeps uv.y > 0.5\n    // and reflects it onto the bottom half.\n    if (FLIP == 1) { uv = 1.0 - uv; }\n    else if (FLIP == 2) { uv.x = 1.0 - uv.x; }\n    else if (FLIP == 3) { uv.y = 1.0 - uv.y; }\n    else if (FLIP == 11) { if (uv.x > 0.5) { uv.x = 1.0 - uv.x; } }\n    else if (FLIP == 12) { if (uv.x < 0.5) { uv.x = 1.0 - uv.x; } }\n    else if (FLIP == 13) { if (uv.y < 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 14) { if (uv.y > 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 15) { if (uv.x > 0.5) { uv.x = 1.0 - uv.x; } if (uv.y < 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 16) { if (uv.x > 0.5) { uv.x = 1.0 - uv.x; } if (uv.y > 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 17) { if (uv.x < 0.5) { uv.x = 1.0 - uv.x; } if (uv.y < 0.5) { uv.y = 1.0 - uv.y; } }\n    else if (FLIP == 18) { if (uv.x < 0.5) { uv.x = 1.0 - uv.x; } if (uv.y > 0.5) { uv.y = 1.0 - uv.y; } }\n\n    var color = textureSample(inputTex, samp, inputCoord(uv));\n\n    if (u.effectAmt != 0.0 && EFFECT != 0) {\n        if (EFFECT == 100) { color = vec4f(pixellate(uv, u.effectAmt), color.a); }\n        else if (EFFECT == 110) { color = vec4f(posterize(color.rgb, u.effectAmt), color.a); }\n        else if (EFFECT == 200) { color = vec4f(cga(color, uv, globalCoord), color.a); }\n        else if (EFFECT == 210) { color = vec4f(subpixel(uv, u.effectAmt), color.a); }\n        else if (EFFECT == 220) { color = vec4f(bloom(uv), color.a); }\n        else if (EFFECT == 230) { color = vec4f(zoomBlur(uv), color.a); }\n        else { color = vec4f(convolutionEffect(color.rgb, uv), color.a); }\n    }\n\n    var c = brightnessContrast(color.rgb);\n    c = saturateFn(c);\n\n    return vec4f(c, color.a);\n}\n"
                       ]
                     ]
                   }
@@ -8053,8 +7957,8 @@
       "func": "fractal",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/fractal/definition.js",
-        "sha256": "6cd7b9f7e9111343aff864bbec25a8a7831e55a455b574ab5d46d5114af5bdd8",
-        "bytes": 8095
+        "sha256": "2df62b44832f5f30083b6ba696c1a0da9c5ce23092ac04502795bd94a6bae8b0",
+        "bytes": 7996
       },
       "wgsl": [
         {
@@ -10153,26 +10057,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "fractalType",
-                  "type"
-                ],
-                [
-                  "backgroundColor",
-                  "bgColor"
-                ],
-                [
-                  "backgroundOpacity",
-                  "bgAlpha"
-                ]
-              ]
-            }
-          ],
-          [
             "passes",
             [
               {
@@ -10239,14 +10123,14 @@
       "func": "glitch",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/glitch/definition.js",
-        "sha256": "ca8a87fdcd9debea47daa67a5013df289fab4a5373a34670c38c3863157d913c",
-        "bytes": 2639
+        "sha256": "7220282df29d342c559643e86f3ccda9354bfbe74b2850859b87710bf833b102",
+        "bytes": 2590
       },
       "wgsl": [
         {
           "path": "shaders/effects/classicNoisedeck/glitch/wgsl/glitch.wgsl",
-          "sha256": "5b0c02023d9415cb5939d94c25966f3a2707be1e4451854d0a1d7938e089ae6b",
-          "bytes": 9544
+          "sha256": "edd6637e754fcafc9fc6125dbeff2236d0e8c5c0e94737768894d7620e468e72",
+          "bytes": 9666
         }
       ],
       "registrationKeys": [
@@ -10839,18 +10723,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "aberrationAmt",
-                  "aberration"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -10862,7 +10734,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "// Glitch processor shader.\n// Uses deterministic noise fields to drive scanline shears, snow bursts, and channel offsets.\n// Probability controls are remapped before application so glitch bursts remain inspectable during performances.\n\n@group(0) @binding(0) var samp: sampler;\n@group(0) @binding(1) var inputTex: texture_2d<f32>;\n\nstruct Uniforms {\n    resolution: vec2<f32>,\n    time: f32,\n    seed: i32,\n    aspectLens: f32,\n    xChonk: f32,\n    yChonk: f32,\n    glitchiness: f32,\n    scanlinesAmt: f32,\n    snowAmt: f32,\n    vignetteAmt: f32,\n    aberration: f32,\n    distortion: f32,\n    _pad0: f32,\n    _pad1: f32,\n    _pad2: f32,\n}\n\n@group(0) @binding(2) var<uniform> u: Uniforms;\n\nconst PI: f32 = 3.14159265359;\nconst TAU: f32 = 6.28318530718;\n\n// PCG PRNG - MIT License\nfn pcg(v_in: vec3<u32>) -> vec3<u32> {\n    var v = v_in * 1664525u + 1013904223u;\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    v = v ^ (v >> vec3<u32>(16u));\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    return v;\n}\n\nfn prng(p: vec3<f32>) -> vec3<f32> {\n    return vec3<f32>(pcg(vec3<u32>(u32(p.x), u32(p.y), u32(p.z)))) / f32(0xffffffffu);\n}\n\nfn f(st: vec2<f32>, seed: i32) -> f32 {\n    return prng(vec3<f32>(floor(st), f32(seed))).x;\n}\n\nfn bicubic(p: vec2<f32>, seed: i32) -> f32 {\n    let x = p.x;\n    let y = p.y;\n    let x1 = floor(x);\n    let y1 = floor(y);\n    let x2 = x1 + 1.0;\n    let y2 = y1 + 1.0;\n    let f11 = f(vec2<f32>(x1, y1), seed);\n    let f12 = f(vec2<f32>(x1, y2), seed);\n    let f21 = f(vec2<f32>(x2, y1), seed);\n    let f22 = f(vec2<f32>(x2, y2), seed);\n    let f11x = (f(vec2<f32>(x1 + 1.0, y1), seed) - f(vec2<f32>(x1 - 1.0, y1), seed)) / 2.0;\n    let f12x = (f(vec2<f32>(x1 + 1.0, y2), seed) - f(vec2<f32>(x1 - 1.0, y2), seed)) / 2.0;\n    let f21x = (f(vec2<f32>(x2 + 1.0, y1), seed) - f(vec2<f32>(x2 - 1.0, y1), seed)) / 2.0;\n    let f22x = (f(vec2<f32>(x2 + 1.0, y2), seed) - f(vec2<f32>(x2 - 1.0, y2), seed)) / 2.0;\n    let f11y = (f(vec2<f32>(x1, y1 + 1.0), seed) - f(vec2<f32>(x1, y1 - 1.0), seed)) / 2.0;\n    let f12y = (f(vec2<f32>(x1, y2 + 1.0), seed) - f(vec2<f32>(x1, y2 - 1.0), seed)) / 2.0;\n    let f21y = (f(vec2<f32>(x2, y1 + 1.0), seed) - f(vec2<f32>(x2, y1 - 1.0), seed)) / 2.0;\n    let f22y = (f(vec2<f32>(x2, y2 + 1.0), seed) - f(vec2<f32>(x2, y2 - 1.0), seed)) / 2.0;\n    let f11xy = (f(vec2<f32>(x1 + 1.0, y1 + 1.0), seed) - f(vec2<f32>(x1 + 1.0, y1 - 1.0), seed) - f(vec2<f32>(x1 - 1.0, y1 + 1.0), seed) + f(vec2<f32>(x1 - 1.0, y1 - 1.0), seed)) / 4.0;\n    let f12xy = (f(vec2<f32>(x1 + 1.0, y2 + 1.0), seed) - f(vec2<f32>(x1 + 1.0, y2 - 1.0), seed) - f(vec2<f32>(x1 - 1.0, y2 + 1.0), seed) + f(vec2<f32>(x1 - 1.0, y2 - 1.0), seed)) / 4.0;\n    let f21xy = (f(vec2<f32>(x2 + 1.0, y1 + 1.0), seed) - f(vec2<f32>(x2 + 1.0, y1 - 1.0), seed) - f(vec2<f32>(x2 - 1.0, y1 + 1.0), seed) + f(vec2<f32>(x2 - 1.0, y1 - 1.0), seed)) / 4.0;\n    let f22xy = (f(vec2<f32>(x2 + 1.0, y2 + 1.0), seed) - f(vec2<f32>(x2 + 1.0, y2 - 1.0), seed) - f(vec2<f32>(x2 - 1.0, y2 + 1.0), seed) + f(vec2<f32>(x2 - 1.0, y2 - 1.0), seed)) / 4.0;\n    \n    let Q = mat4x4<f32>(\n        vec4<f32>(f11, f21, f11x, f21x),\n        vec4<f32>(f12, f22, f12x, f22x),\n        vec4<f32>(f11y, f21y, f11xy, f21xy),\n        vec4<f32>(f12y, f22y, f12xy, f22xy)\n    );\n    let S = mat4x4<f32>(\n        vec4<f32>(1.0, 0.0, 0.0, 0.0),\n        vec4<f32>(0.0, 0.0, 1.0, 0.0),\n        vec4<f32>(-3.0, 3.0, -2.0, -1.0),\n        vec4<f32>(2.0, -2.0, 1.0, 1.0)\n    );\n    let T = mat4x4<f32>(\n        vec4<f32>(1.0, 0.0, -3.0, 2.0),\n        vec4<f32>(0.0, 0.0, 3.0, -2.0),\n        vec4<f32>(0.0, 1.0, -2.0, 1.0),\n        vec4<f32>(0.0, 0.0, -1.0, 1.0)\n    );\n    let A = T * Q * S;\n    let t = fract(p.x);\n    let uu = fract(p.y);\n    let tv = vec4<f32>(1.0, t, t * t, t * t * t);\n    let uv = vec4<f32>(1.0, uu, uu * uu, uu * uu * uu);\n    return dot(tv * A, uv);\n}\n\nfn map(value: f32, inMin: f32, inMax: f32, outMin: f32, outMax: f32) -> f32 {\n    return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);\n}\n\nfn periodicFunction(p: f32) -> f32 {\n    return map(sin(p * TAU), -1.0, 1.0, 0.0, 1.0);\n}\n\nfn scanlines(color: vec4<f32>, st: vec2<f32>, resolution: vec2<f32>, scanlinesAmt: f32, time: f32, seed: i32) -> vec4<f32> {\n    let centerDistance = length(vec2<f32>(0.5) - st) * PI * 0.5;\n    let noise = periodicFunction(bicubic(st * 4.0, seed) - time) * map(scanlinesAmt, 0.0, 100.0, 0.0, 0.5);\n    let hatch = (sin(mix(st.y, st.y + noise, pow(centerDistance, 8.0)) * resolution.y * 1.5) + 1.0) * 0.5;\n    var result = color;\n    result = vec4<f32>(mix(color.rgb, color.rgb * hatch, map(scanlinesAmt, 0.0, 100.0, 0.0, 0.5)), color.a);\n    return result;\n}\n\nfn snow(color: vec4<f32>, fragCoord: vec2<f32>, snowAmt: f32, time: f32) -> vec4<f32> {\n    let amt = snowAmt / 100.0;\n    let noise = prng(vec3<f32>(fragCoord, time * 1000.0)).x;\n    \n    let maskNoise = prng(vec3<f32>(fragCoord + 10.0, time * 1000.0)).x;\n    let maskNoiseSparse = clamp(maskNoise - 0.93875, 0.0, 0.06125) * 16.0;\n    \n    var mask: f32;\n    if (amt < 0.5) {\n        mask = mix(0.0, maskNoiseSparse, amt * 2.0);\n    } else {\n        mask = mix(maskNoiseSparse, maskNoise * maskNoise, map(amt, 0.5, 1.0, 0.0, 1.0));\n        if (amt > 0.75) {\n            mask = mix(mask, 1.0, map(amt, 0.75, 1.0, 0.0, 1.0));\n        }\n    }\n    \n    return vec4<f32>(mix(color.rgb, vec3<f32>(noise), mask), color.a);\n}\n\nfn offsets(st: vec2<f32>) -> f32 {\n    return prng(vec3<f32>(floor(st), 0.0)).x;\n}\n\nfn glitch(st_in: vec2<f32>, aspectRatio: f32, time: f32, xChonk: f32, yChonk: f32, glitchiness: f32, aspectLens: f32, distortion: f32, aberration: f32) -> vec4<f32> {\n    var st = st_in;\n    // Zero glitchiness gives zero refraction, so st is unchanged in [0, 1).\n    if (glitchiness != 0.0) {\n        var freq = vec2<f32>(1.0);\n        freq.x = freq.x * map(xChonk, 1.0, 100.0, 50.0, 1.0);\n        freq.y = freq.y * map(yChonk, 1.0, 100.0, 50.0, 1.0);\n    \n        freq = freq * vec2<f32>(periodicFunction(prng(vec3<f32>(floor(st * freq), 0.0)).x - time));\n    \n        let g = map(glitchiness, 0.0, 100.0, 0.0, 1.0);\n    \n        // get drift value from somewhere far away\n        let xDrift = prng(vec3<f32>(floor(st * freq) + 10.0, 0.0)).x * g;\n        let yDrift = prng(vec3<f32>(floor(st * freq) - 10.0, 0.0)).x * g;\n    \n        let sparseness = map(glitchiness, 0.0, 100.0, 8.0, 2.0);\n    \n        // clamp for sparseness\n        let rand = prng(vec3<f32>(floor(st * freq), 0.0)).x;\n        let xOffset = clamp((periodicFunction(rand + xDrift - time) - periodicFunction(xDrift - time) * sparseness) * 4.0, 0.0, 1.0);\n        let yOffset = clamp((periodicFunction(rand + yDrift - time) - periodicFunction(yDrift - time) * sparseness) * 4.0, 0.0, 1.0);\n    \n        let refract = g * 0.125;\n    \n        st.x = fract(st.x + sin(xOffset * TAU) * refract);\n        st.y = fract(st.y + sin(yOffset * TAU) * refract);\n    }\n    \n    // aberration and lensing\n    var diff = vec2<f32>(0.5 - st.x, 0.5 - st.y);\n    if (aspectLens > 0.5) {\n        diff = vec2<f32>(0.5 * aspectRatio, 0.5) - vec2<f32>(st.x * aspectRatio, st.y);\n    }\n    let centerDist = length(diff);\n    \n    var distort: f32 = 0.0;\n    var zoom: f32 = 1.0;\n    if (distortion < 0.0) {\n        distort = map(distortion, -100.0, 0.0, -0.5, 0.0);\n        zoom = map(distortion, -100.0, 0.0, 0.01, 0.0);\n    } else {\n        distort = map(distortion, 0.0, 100.0, 0.0, 0.5);\n        zoom = map(distortion, 0.0, 100.0, 0.0, -0.25);\n    }\n    \n    let lensedCoords = fract((st - diff * zoom) - diff * centerDist * centerDist * distort);\n    \n    let aberrationOffset = map(aberration, 0.0, 100.0, 0.0, 0.05) * centerDist * PI * 0.5;\n    \n    let redOffset = mix(clamp(lensedCoords.x + aberrationOffset, 0.0, 1.0), lensedCoords.x, lensedCoords.x);\n    let red = textureSample(inputTex, samp, vec2<f32>(redOffset, lensedCoords.y));\n    \n    let green = textureSample(inputTex, samp, lensedCoords);\n    \n    let blueOffset = mix(lensedCoords.x, clamp(lensedCoords.x - aberrationOffset, 0.0, 1.0), lensedCoords.x);\n    let blue = textureSample(inputTex, samp, vec2<f32>(blueOffset, lensedCoords.y));\n    \n    return vec4<f32>(red.r, green.g, blue.b, green.a);\n}\n\n@fragment\nfn main(@builtin(position) fragCoord: vec4<f32>) -> @location(0) vec4<f32> {\n    let resolution = u.resolution;\n    let aspectRatio = resolution.x / resolution.y;\n    \n    var uv = fragCoord.xy / resolution;\n    \n    var color = glitch(uv, aspectRatio, u.time, u.xChonk, u.yChonk, u.glitchiness, u.aspectLens, u.distortion, u.aberration);\n    // Zero amounts mix the effect in with weight 0; skip the noise work.\n    if (u.scanlinesAmt != 0.0) {\n        color = scanlines(color, uv, resolution, u.scanlinesAmt, u.time, u.seed);\n    }\n    if (u.snowAmt != 0.0) {\n        color = snow(color, fragCoord.xy, u.snowAmt, u.time);\n    }\n    \n    // vignette\n    if (u.vignetteAmt < 0.0) {\n        color = vec4<f32>(\n            mix(color.rgb * 1.0 - pow(length(vec2<f32>(0.5) - uv) * 1.125, 2.0), color.rgb, map(u.vignetteAmt, -100.0, 0.0, 0.0, 1.0)),\n            max(color.a, length(vec2<f32>(0.5) - uv) * map(u.vignetteAmt, -100.0, 0.0, 1.0, 0.0))\n        );\n    } else {\n        color = vec4<f32>(\n            mix(color.rgb, 1.0 - (1.0 - color.rgb * 1.0 - pow(length(vec2<f32>(0.5) - uv) * 1.125, 2.0)), map(u.vignetteAmt, 0.0, 100.0, 0.0, 1.0)),\n            max(color.a, length(vec2<f32>(0.5) - uv) * map(u.vignetteAmt, -100.0, 0.0, 1.0, 0.0))\n        );\n    }\n    \n    return color;\n}\n"
+                        "// Glitch processor shader.\n// Uses deterministic noise fields to drive scanline shears, snow bursts, and channel offsets.\n// Probability controls are remapped before application so glitch bursts remain inspectable during performances.\n\n@group(0) @binding(0) var samp: sampler;\n@group(0) @binding(1) var inputTex: texture_2d<f32>;\n\nstruct Uniforms {\n    resolution: vec2<f32>,\n    time: f32,\n    seed: i32,\n    aspectLens: f32,\n    xChonk: f32,\n    yChonk: f32,\n    glitchiness: f32,\n    scanlinesAmt: f32,\n    snowAmt: f32,\n    vignetteAmt: f32,\n    aberration: f32,\n    distortion: f32,\n    _pad0: f32,\n    _pad1: f32,\n    _pad2: f32,\n}\n\n@group(0) @binding(2) var<uniform> u: Uniforms;\n\nconst PI: f32 = 3.14159265359;\nconst TAU: f32 = 6.28318530718;\n\n// PCG PRNG - MIT License\nfn pcg(v_in: vec3<u32>) -> vec3<u32> {\n    var v = v_in * 1664525u + 1013904223u;\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    v = v ^ (v >> vec3<u32>(16u));\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    return v;\n}\n\nfn prng(p: vec3<f32>) -> vec3<f32> {\n    return vec3<f32>(pcg(vec3<u32>(u32(p.x), u32(p.y), u32(p.z)))) / f32(0xffffffffu);\n}\n\nfn f(st: vec2<f32>, seed: i32) -> f32 {\n    return prng(vec3<f32>(floor(st), f32(seed))).x;\n}\n\nfn bicubic(p: vec2<f32>, seed: i32) -> f32 {\n    let x = p.x;\n    let y = p.y;\n    let x1 = floor(x);\n    let y1 = floor(y);\n    let x2 = x1 + 1.0;\n    let y2 = y1 + 1.0;\n    let f11 = f(vec2<f32>(x1, y1), seed);\n    let f12 = f(vec2<f32>(x1, y2), seed);\n    let f21 = f(vec2<f32>(x2, y1), seed);\n    let f22 = f(vec2<f32>(x2, y2), seed);\n    let f11x = (f(vec2<f32>(x1 + 1.0, y1), seed) - f(vec2<f32>(x1 - 1.0, y1), seed)) / 2.0;\n    let f12x = (f(vec2<f32>(x1 + 1.0, y2), seed) - f(vec2<f32>(x1 - 1.0, y2), seed)) / 2.0;\n    let f21x = (f(vec2<f32>(x2 + 1.0, y1), seed) - f(vec2<f32>(x2 - 1.0, y1), seed)) / 2.0;\n    let f22x = (f(vec2<f32>(x2 + 1.0, y2), seed) - f(vec2<f32>(x2 - 1.0, y2), seed)) / 2.0;\n    let f11y = (f(vec2<f32>(x1, y1 + 1.0), seed) - f(vec2<f32>(x1, y1 - 1.0), seed)) / 2.0;\n    let f12y = (f(vec2<f32>(x1, y2 + 1.0), seed) - f(vec2<f32>(x1, y2 - 1.0), seed)) / 2.0;\n    let f21y = (f(vec2<f32>(x2, y1 + 1.0), seed) - f(vec2<f32>(x2, y1 - 1.0), seed)) / 2.0;\n    let f22y = (f(vec2<f32>(x2, y2 + 1.0), seed) - f(vec2<f32>(x2, y2 - 1.0), seed)) / 2.0;\n    let f11xy = (f(vec2<f32>(x1 + 1.0, y1 + 1.0), seed) - f(vec2<f32>(x1 + 1.0, y1 - 1.0), seed) - f(vec2<f32>(x1 - 1.0, y1 + 1.0), seed) + f(vec2<f32>(x1 - 1.0, y1 - 1.0), seed)) / 4.0;\n    let f12xy = (f(vec2<f32>(x1 + 1.0, y2 + 1.0), seed) - f(vec2<f32>(x1 + 1.0, y2 - 1.0), seed) - f(vec2<f32>(x1 - 1.0, y2 + 1.0), seed) + f(vec2<f32>(x1 - 1.0, y2 - 1.0), seed)) / 4.0;\n    let f21xy = (f(vec2<f32>(x2 + 1.0, y1 + 1.0), seed) - f(vec2<f32>(x2 + 1.0, y1 - 1.0), seed) - f(vec2<f32>(x2 - 1.0, y1 + 1.0), seed) + f(vec2<f32>(x2 - 1.0, y1 - 1.0), seed)) / 4.0;\n    let f22xy = (f(vec2<f32>(x2 + 1.0, y2 + 1.0), seed) - f(vec2<f32>(x2 + 1.0, y2 - 1.0), seed) - f(vec2<f32>(x2 - 1.0, y2 + 1.0), seed) + f(vec2<f32>(x2 - 1.0, y2 - 1.0), seed)) / 4.0;\n    \n    let Q = mat4x4<f32>(\n        vec4<f32>(f11, f21, f11x, f21x),\n        vec4<f32>(f12, f22, f12x, f22x),\n        vec4<f32>(f11y, f21y, f11xy, f21xy),\n        vec4<f32>(f12y, f22y, f12xy, f22xy)\n    );\n    let S = mat4x4<f32>(\n        vec4<f32>(1.0, 0.0, 0.0, 0.0),\n        vec4<f32>(0.0, 0.0, 1.0, 0.0),\n        vec4<f32>(-3.0, 3.0, -2.0, -1.0),\n        vec4<f32>(2.0, -2.0, 1.0, 1.0)\n    );\n    let T = mat4x4<f32>(\n        vec4<f32>(1.0, 0.0, -3.0, 2.0),\n        vec4<f32>(0.0, 0.0, 3.0, -2.0),\n        vec4<f32>(0.0, 1.0, -2.0, 1.0),\n        vec4<f32>(0.0, 0.0, -1.0, 1.0)\n    );\n    let A = T * Q * S;\n    let t = fract(p.x);\n    let uu = fract(p.y);\n    let tv = vec4<f32>(1.0, t, t * t, t * t * t);\n    let uv = vec4<f32>(1.0, uu, uu * uu, uu * uu * uu);\n    return dot(tv * A, uv);\n}\n\nfn map(value: f32, inMin: f32, inMax: f32, outMin: f32, outMax: f32) -> f32 {\n    return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);\n}\n\nfn periodicFunction(p: f32) -> f32 {\n    return map(sin(p * TAU), -1.0, 1.0, 0.0, 1.0);\n}\n\nfn scanlines(color: vec4<f32>, st: vec2<f32>, resolution: vec2<f32>, scanlinesAmt: f32, time: f32, seed: i32) -> vec4<f32> {\n    let centerDistance = length(vec2<f32>(0.5) - st) * PI * 0.5;\n    let noise = periodicFunction(bicubic(st * 4.0, seed) - time) * map(scanlinesAmt, 0.0, 100.0, 0.0, 0.5);\n    let hatch = (sin(mix(st.y, st.y + noise, pow(centerDistance, 8.0)) * resolution.y * 1.5) + 1.0) * 0.5;\n    var result = color;\n    result = vec4<f32>(mix(color.rgb, color.rgb * hatch, map(scanlinesAmt, 0.0, 100.0, 0.0, 0.5)), color.a);\n    return result;\n}\n\nfn snow(color: vec4<f32>, fragCoord: vec2<f32>, snowAmt: f32, time: f32) -> vec4<f32> {\n    let amt = snowAmt / 100.0;\n    let noise = prng(vec3<f32>(fragCoord, time * 1000.0)).x;\n    \n    let maskNoise = prng(vec3<f32>(fragCoord + 10.0, time * 1000.0)).x;\n    let maskNoiseSparse = clamp(maskNoise - 0.93875, 0.0, 0.06125) * 16.0;\n    \n    var mask: f32;\n    if (amt < 0.5) {\n        mask = mix(0.0, maskNoiseSparse, amt * 2.0);\n    } else {\n        mask = mix(maskNoiseSparse, maskNoise * maskNoise, map(amt, 0.5, 1.0, 0.0, 1.0));\n        if (amt > 0.75) {\n            mask = mix(mask, 1.0, map(amt, 0.75, 1.0, 0.0, 1.0));\n        }\n    }\n    \n    return vec4<f32>(mix(color.rgb, vec3<f32>(noise), mask), color.a);\n}\n\nfn offsets(st: vec2<f32>) -> f32 {\n    return prng(vec3<f32>(floor(st), 0.0)).x;\n}\n\nfn glitch(st_in: vec2<f32>, aspectRatio: f32, time: f32, xChonk: f32, yChonk: f32, glitchiness: f32, aspectLens: f32, distortion: f32, aberration: f32) -> vec4<f32> {\n    var st = st_in;\n    // Zero glitchiness gives zero refraction, so st is unchanged in [0, 1).\n    if (glitchiness != 0.0) {\n        var freq = vec2<f32>(1.0);\n        freq.x = freq.x * map(xChonk, 1.0, 100.0, 50.0, 1.0);\n        freq.y = freq.y * map(yChonk, 1.0, 100.0, 50.0, 1.0);\n    \n        freq = freq * vec2<f32>(periodicFunction(prng(vec3<f32>(floor(st * freq), 0.0)).x - time));\n    \n        let g = map(glitchiness, 0.0, 100.0, 0.0, 1.0);\n    \n        // get drift value from somewhere far away\n        let xDrift = prng(vec3<f32>(floor(st * freq) + 10.0, 0.0)).x * g;\n        let yDrift = prng(vec3<f32>(floor(st * freq) - 10.0, 0.0)).x * g;\n    \n        let sparseness = map(glitchiness, 0.0, 100.0, 8.0, 2.0);\n    \n        // clamp for sparseness\n        let rand = prng(vec3<f32>(floor(st * freq), 0.0)).x;\n        let xOffset = clamp((periodicFunction(rand + xDrift - time) - periodicFunction(xDrift - time) * sparseness) * 4.0, 0.0, 1.0);\n        let yOffset = clamp((periodicFunction(rand + yDrift - time) - periodicFunction(yDrift - time) * sparseness) * 4.0, 0.0, 1.0);\n    \n        let refract = g * 0.125;\n    \n        st.x = fract(st.x + sin(xOffset * TAU) * refract);\n        st.y = fract(st.y + sin(yOffset * TAU) * refract);\n    }\n    \n    // aberration and lensing\n    var diff = vec2<f32>(0.5 - st.x, 0.5 - st.y);\n    if (aspectLens > 0.5) {\n        diff = vec2<f32>(0.5 * aspectRatio, 0.5) - vec2<f32>(st.x * aspectRatio, st.y);\n    }\n    let centerDist = length(diff);\n    \n    var distort: f32 = 0.0;\n    var zoom: f32 = 1.0;\n    if (distortion < 0.0) {\n        distort = map(distortion, -100.0, 0.0, -0.5, 0.0);\n        zoom = map(distortion, -100.0, 0.0, 0.01, 0.0);\n    } else {\n        distort = map(distortion, 0.0, 100.0, 0.0, 0.5);\n        zoom = map(distortion, 0.0, 100.0, 0.0, -0.25);\n    }\n    \n    let lensedCoords = fract((st - diff * zoom) - diff * centerDist * centerDist * distort);\n    \n    let aberrationOffset = map(aberration, 0.0, 100.0, 0.0, 0.05) * centerDist * PI * 0.5;\n    \n    let redOffset = mix(clamp(lensedCoords.x + aberrationOffset, 0.0, 1.0), lensedCoords.x, lensedCoords.x);\n    let red = textureSample(inputTex, samp, vec2<f32>(redOffset, lensedCoords.y));\n    \n    let green = textureSample(inputTex, samp, lensedCoords);\n    \n    let blueOffset = mix(lensedCoords.x, clamp(lensedCoords.x - aberrationOffset, 0.0, 1.0), lensedCoords.x);\n    let blue = textureSample(inputTex, samp, vec2<f32>(blueOffset, lensedCoords.y));\n    \n    return vec4<f32>(red.r, green.g, blue.b, green.a);\n}\n\n@fragment\nfn main(@builtin(position) fragCoord: vec4<f32>) -> @location(0) vec4<f32> {\n    let resolution = u.resolution;\n    let aspectRatio = resolution.x / resolution.y;\n    \n    var uv = fragCoord.xy / resolution;\n    \n    var color = glitch(uv, aspectRatio, u.time, u.xChonk, u.yChonk, u.glitchiness, u.aspectLens, u.distortion, u.aberration);\n    color = vec4<f32>(floor(clamp(color.rgb, vec3<f32>(0.0), vec3<f32>(1.0)) * 255.0 + vec3<f32>(0.5)) / 255.0, color.a);\n    // Zero amounts mix the effect in with weight 0; skip the noise work.\n    if (u.scanlinesAmt != 0.0) {\n        color = scanlines(color, uv, resolution, u.scanlinesAmt, u.time, u.seed);\n    }\n    if (u.snowAmt != 0.0) {\n        color = snow(color, fragCoord.xy, u.snowAmt, u.time);\n    }\n    \n    // vignette\n    if (u.vignetteAmt < 0.0) {\n        color = vec4<f32>(\n            mix(color.rgb * 1.0 - pow(length(vec2<f32>(0.5) - uv) * 1.125, 2.0), color.rgb, map(u.vignetteAmt, -100.0, 0.0, 0.0, 1.0)),\n            max(color.a, length(vec2<f32>(0.5) - uv) * map(u.vignetteAmt, -100.0, 0.0, 1.0, 0.0))\n        );\n    } else {\n        color = vec4<f32>(\n            mix(color.rgb, 1.0 - (1.0 - color.rgb * 1.0 - pow(length(vec2<f32>(0.5) - uv) * 1.125, 2.0)), map(u.vignetteAmt, 0.0, 100.0, 0.0, 1.0)),\n            max(color.a, length(vec2<f32>(0.5) - uv) * map(u.vignetteAmt, -100.0, 0.0, 1.0, 0.0))\n        );\n    }\n    \n    return color;\n}\n"
                       ]
                     ]
                   }
@@ -10880,8 +10752,8 @@
       "func": "kaleido",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/kaleido/definition.js",
-        "sha256": "eddf23acc36c20abc0ce27e7ec53447530ac27c149e5005c9c63a235c9c51f52",
-        "bytes": 4552
+        "sha256": "c64ef8a4f7e2a647ac17180f68c6f0aa5d3ab063289253e99158fe7f80adad97",
+        "bytes": 4496
       },
       "wgsl": [
         {
@@ -11738,22 +11610,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "kaleido",
-                  "sides"
-                ],
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "openCategories",
             [
               "general",
@@ -11790,8 +11646,8 @@
       "func": "lensDistortion",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/lensDistortion/definition.js",
-        "sha256": "f15251c47e41ba543732c13707a4e8682f6cd22ac584536a63a151e0b1d73350",
-        "bytes": 4176
+        "sha256": "61146f19279eda4065b6a9be2bf5074d6825da30bcc19afe1621140b0ad9c68b",
+        "bytes": 4091
       },
       "wgsl": [
         {
@@ -12685,26 +12541,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "aberrationAmt",
-                  "aberration"
-                ],
-                [
-                  "opacity",
-                  "alpha"
-                ],
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -12734,8 +12570,8 @@
       "func": "moodscape",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/moodscape/definition.js",
-        "sha256": "7a946f97917be46fb8baa600e93e82cdfe4ae79764f5f97aaaa6251d14cdbfe1",
-        "bytes": 3991
+        "sha256": "1959c18a7a5e37c4d49003c17baf568eab77028e2f22adacbedee2b01a460dc6",
+        "bytes": 3953
       },
       "wgsl": [
         {
@@ -13648,18 +13484,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -13689,8 +13513,8 @@
       "func": "noise",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/noise/definition.js",
-        "sha256": "092e88cd43e8ff4e28ca2283463299fa788a605f73e6aaa9cb18cf84a3245090",
-        "bytes": 10934
+        "sha256": "b83f448a761f4ee89f4c5d443b53db8274ea11755506c859ab058db3c1777a46",
+        "bytes": 10877
       },
       "wgsl": [
         {
@@ -15913,22 +15737,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "noiseType",
-                  "type"
-                ],
-                [
-                  "loopAmp",
-                  "speed"
-                ]
-              ]
-            }
-          ],
-          [
             "passes",
             [
               {
@@ -15995,8 +15803,8 @@
       "func": "noise3d",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/noise3d/definition.js",
-        "sha256": "639aa24ab634fd7e32d64da3becdee845e2375cbee30c9165dfaeebdce0683a9",
-        "bytes": 3176
+        "sha256": "d5117a382f6e37be5cff19c22a936f37c321d1806f28cc1d685b93de64b9f73f",
+        "bytes": 3116
       },
       "wgsl": [
         {
@@ -16682,22 +16490,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "noiseScale",
-                  "scale"
-                ],
-                [
-                  "noiseType",
-                  "type"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -16727,8 +16519,8 @@
       "func": "refract",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/refract/definition.js",
-        "sha256": "5d515d283373ff94608153b0fffa4d96b1d0c426d6fc58f04dfdee71abb85a30",
-        "bytes": 2109
+        "sha256": "197e2ba660ed85ee537058b7e6308ec389dfe7b0aca27d123756b676d08ef06c",
+        "bytes": 2049
       },
       "wgsl": [
         {
@@ -17208,22 +17000,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "refractDir",
-                  "direction"
-                ],
-                [
-                  "mixAmt",
-                  "mix"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -18564,8 +18340,8 @@
       "func": "shapes",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/shapes/definition.js",
-        "sha256": "7a45cb666fd93068fa4b5379db8e2858d4cf69570e7dd89faa7267aac305a0b2",
-        "bytes": 7502
+        "sha256": "c470149fa594f0a609bcc6eb9be0fabfc74f1718f0e15dc892fbff257782609d",
+        "bytes": 7442
       },
       "wgsl": [
         {
@@ -20271,22 +20047,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "loopAAmp",
-                  "speedA"
-                ],
-                [
-                  "loopBAmp",
-                  "speedB"
-                ]
-              ]
-            }
-          ],
-          [
             "passes",
             [
               {
@@ -20353,8 +20113,8 @@
       "func": "shapes3d",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/shapes3d/definition.js",
-        "sha256": "19b1e98ea690365fe11490d53da839dad86a97cfd135a457cdf7caa3f9d22609",
-        "bytes": 10696
+        "sha256": "d737371045c617e93cded3736b0ca4fb5f4661d2f2b60c78df0ffe8c503091ed",
+        "bytes": 10618
       },
       "wgsl": [
         {
@@ -22840,22 +22600,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "backgroundColor",
-                  "bgColor"
-                ],
-                [
-                  "backgroundOpacity",
-                  "bgAlpha"
-                ]
-              ]
-            }
-          ],
-          [
             "passes",
             [
               {
@@ -22927,8 +22671,8 @@
       "func": "splat",
       "definition": {
         "path": "shaders/effects/classicNoisedeck/splat/definition.js",
-        "sha256": "d2627f94b7925d44c39633fa5d387ecf3c67ec305509ce7cd828705e252642b9",
-        "bytes": 4400
+        "sha256": "5b25fac896ba9d21b3ec15ff18a7a5deaf840dff4a71cb45e72d2c6d90b2cbdc",
+        "bytes": 4234
       },
       "wgsl": [
         {
@@ -23942,42 +23686,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "splatColor",
-                  "color"
-                ],
-                [
-                  "splatCutoff",
-                  "cutoff"
-                ],
-                [
-                  "splatMode",
-                  "mode"
-                ],
-                [
-                  "splatScale",
-                  "scale"
-                ],
-                [
-                  "splatSeed",
-                  "seed"
-                ],
-                [
-                  "splatSpeed",
-                  "speed"
-                ],
-                [
-                  "useSplats",
-                  "enabled"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -25763,8 +25471,8 @@
       "func": "celShading",
       "definition": {
         "path": "shaders/effects/filter/celShading/definition.js",
-        "sha256": "81e7ae7deeb2202a885740b69cf8765e2615cbb26b09fe7c020a87c16cf03b48",
-        "bytes": 3770
+        "sha256": "ebc95e9908ce1399915bfbe055a503bd6692b5251a1b4c58e086bcf74adb7a7d",
+        "bytes": 3703
       },
       "wgsl": [
         {
@@ -26467,22 +26175,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "shadingStrength",
-                  "strength"
-                ],
-                [
-                  "mixAmount",
-                  "mix"
-                ]
-              ]
-            }
-          ],
-          [
             "openCategories",
             [
               "general",
@@ -27097,8 +26789,8 @@
       "func": "chromaticAberration",
       "definition": {
         "path": "shaders/effects/filter/chromaticAberration/definition.js",
-        "sha256": "f2fba24402f374adbbbf17b1c2115ce23248d1244727ed4e1a3953f6d86ceaa4",
-        "bytes": 1113
+        "sha256": "1163971d9894373912aacd4f3d5a543eace59b42f4834ce185751b589581111a",
+        "bytes": 1064
       },
       "wgsl": [
         {
@@ -27299,18 +26991,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "aberrationAmt",
-                  "aberration"
-                ]
-              ]
-            }
           ],
           [
             "defaultProgram",
@@ -30350,8 +30030,8 @@
       "wgsl": [
         {
           "path": "shaders/effects/filter/crt/wgsl/crt.wgsl",
-          "sha256": "3add2567b2b08d3c4a07ca0360c284fd766a9b27b4d4710f70a2f9ccd21c5c94",
-          "bytes": 22190
+          "sha256": "20d8f4407d1629553853c6d562b8726beb948f2c6b4923ab627dee7d0e99443f",
+          "bytes": 22306
         }
       ],
       "registrationKeys": [
@@ -30638,7 +30318,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "// CRT effect - faithful port of Python implementation\n// Applies scanlines, lens warp, chromatic aberration, hue shift, saturation boost, and vignette\n\nconst PI : f32 = 3.14159265358979323846;\nconst TAU : f32 = 6.28318530717958647692;\nconst INV_THREE : f32 = 0.3333333333333333;\n\nstruct CRTParams {\n    size : vec4<f32>,    // (width, height, channels, unused)\n    motion : vec4<f32>,  // (time, speed, seed, unused)\n    extra : vec4<f32>,   // (alpha, unused, unused, unused)\n};\n\n@group(0) @binding(0) var inputTex : texture_2d<f32>;\n@group(0) @binding(1) var<storage, read_write> output_buffer : array<f32>;\n@group(0) @binding(2) var<uniform> params : CRTParams;\n@group(0) @binding(3) var<uniform> tileOffset : vec2<f32>;\n@group(0) @binding(4) var<uniform> fullResolution : vec2<f32>;\n@group(0) @binding(5) var<uniform> renderScale : f32;\n\nfn as_u32(value : f32) -> u32 {\n    return u32(max(value, 0.0));\n}\n\nfn clamp01(value : f32) -> f32 {\n    return clamp(value, 0.0, 1.0);\n}\n\nfn random_scalar(seed : f32) -> f32 {\n    return fract(sin(seed) * 43758.5453123);\n}\n\nfn simplex_random(time : f32, speed : f32) -> f32 {\n    let angle : f32 = time * TAU;\n    let z : f32 = cos(angle) * speed;\n    let w : f32 = sin(angle) * speed;\n    return fract(sin(z * 157.0 + w * 113.0) * 43758.5453);\n}\n\nfn freq_for_shape(base_freq : f32, width : f32, height : f32) -> vec2<f32> {\n    let freq : f32 = max(base_freq, 1.0);\n    let width_safe : f32 = max(width, 1.0);\n    let height_safe : f32 = max(height, 1.0);\n\n    if (abs(width_safe - height_safe) < 1e-5) {\n        return vec2<f32>(freq, freq);\n    }\n\n    if (height_safe < width_safe) {\n        let scaled : f32 = floor(freq * width_safe / height_safe);\n        return vec2<f32>(freq, max(scaled, 1.0));\n    }\n\n    let scaled : f32 = floor(freq * height_safe / width_safe);\n    return vec2<f32>(max(scaled, 1.0), freq);\n}\n\nfn normalized_sine(value : f32) -> f32 {\n    return sin(value) * 0.5 + 0.5;\n}\n\nfn periodic_value(time : f32, value : f32) -> f32 {\n    return normalized_sine((time - value) * TAU);\n}\n\nfn mod289_vec3(x : vec3<f32>) -> vec3<f32> {\n    return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nfn mod289_vec4(x : vec4<f32>) -> vec4<f32> {\n    return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nfn permute(x : vec4<f32>) -> vec4<f32> {\n    return mod289_vec4(((x * 34.0) + 1.0) * x);\n}\n\nfn taylor_inv_sqrt(r : vec4<f32>) -> vec4<f32> {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nfn simplex_noise(v : vec3<f32>) -> f32 {\n    let C : vec2<f32> = vec2<f32>(1.0 / 6.0, 1.0 / 3.0);\n    let D : vec4<f32> = vec4<f32>(0.0, 0.5, 1.0, 2.0);\n\n    let i0 : vec3<f32> = floor(v + dot(v, vec3<f32>(C.y)));\n    let x0 : vec3<f32> = v - i0 + dot(i0, vec3<f32>(C.x));\n\n    let step1 : vec3<f32> = step(vec3<f32>(x0.y, x0.z, x0.x), x0);\n    let l : vec3<f32> = vec3<f32>(1.0) - step1;\n    let i1 : vec3<f32> = min(step1, vec3<f32>(l.z, l.x, l.y));\n    let i2 : vec3<f32> = max(step1, vec3<f32>(l.z, l.x, l.y));\n\n    let x1 : vec3<f32> = x0 - i1 + vec3<f32>(C.x);\n    let x2 : vec3<f32> = x0 - i2 + vec3<f32>(C.y);\n    let x3 : vec3<f32> = x0 - vec3<f32>(D.y);\n\n    let i = mod289_vec3(i0);\n    let p = permute(\n        permute(\n            permute(i.z + vec4<f32>(0.0, i1.z, i2.z, 1.0))\n            + i.y + vec4<f32>(0.0, i1.y, i2.y, 1.0)\n        )\n        + i.x + vec4<f32>(0.0, i1.x, i2.x, 1.0)\n    );\n\n    let n_ : f32 = 0.14285714285714285;\n    let ns : vec3<f32> = n_ * vec3<f32>(D.w, D.y, D.z) - vec3<f32>(D.x, D.z, D.x);\n\n    let j : vec4<f32> = p - 49.0 * floor(p * ns.z * ns.z);\n    let x_ : vec4<f32> = floor(j * ns.z);\n    let y_ : vec4<f32> = floor(j - 7.0 * x_);\n\n    let x = x_ * ns.x + ns.y;\n    let y = y_ * ns.x + ns.y;\n    let h = 1.0 - abs(x) - abs(y);\n\n    let b0 : vec4<f32> = vec4<f32>(x.x, x.y, y.x, y.y);\n    let b1 : vec4<f32> = vec4<f32>(x.z, x.w, y.z, y.w);\n\n    let s0 : vec4<f32> = floor(b0) * 2.0 + 1.0;\n    let s1 : vec4<f32> = floor(b1) * 2.0 + 1.0;\n    let sh : vec4<f32> = -step(h, vec4<f32>(0.0));\n\n    let a0 : vec4<f32> = vec4<f32>(b0.x, b0.z, b0.y, b0.w)\n        + vec4<f32>(s0.x, s0.z, s0.y, s0.w) * vec4<f32>(sh.x, sh.x, sh.y, sh.y);\n    let a1 : vec4<f32> = vec4<f32>(b1.x, b1.z, b1.y, b1.w)\n        + vec4<f32>(s1.x, s1.z, s1.y, s1.w) * vec4<f32>(sh.z, sh.z, sh.w, sh.w);\n\n    let g0 : vec3<f32> = vec3<f32>(a0.x, a0.y, h.x);\n    let g1 : vec3<f32> = vec3<f32>(a0.z, a0.w, h.y);\n    let g2 : vec3<f32> = vec3<f32>(a1.x, a1.y, h.z);\n    let g3 : vec3<f32> = vec3<f32>(a1.z, a1.w, h.w);\n\n    let norm : vec4<f32> = taylor_inv_sqrt(vec4<f32>(\n        dot(g0, g0),\n        dot(g1, g1),\n        dot(g2, g2),\n        dot(g3, g3)\n    ));\n\n    let g0n : vec3<f32> = g0 * norm.x;\n    let g1n : vec3<f32> = g1 * norm.y;\n    let g2n : vec3<f32> = g2 * norm.z;\n    let g3n : vec3<f32> = g3 * norm.w;\n\n    let m0 : f32 = max(0.6 - dot(x0, x0), 0.0);\n    let m1 : f32 = max(0.6 - dot(x1, x1), 0.0);\n    let m2 : f32 = max(0.6 - dot(x2, x2), 0.0);\n    let m3 : f32 = max(0.6 - dot(x3, x3), 0.0);\n\n    let m0sq : f32 = m0 * m0;\n    let m1sq : f32 = m1 * m1;\n    let m2sq : f32 = m2 * m2;\n    let m3sq : f32 = m3 * m3;\n\n    return 42.0 * (\n        m0sq * m0sq * dot(g0n, x0)\n        + m1sq * m1sq * dot(g1n, x1)\n        + m2sq * m2sq * dot(g2n, x2)\n        + m3sq * m3sq * dot(g3n, x3)\n    );\n}\n\nfn wrap_float(value : f32, limit : f32) -> f32 {\n    if (limit <= 0.0) {\n        return 0.0;\n    }\n    var result : f32 = value - floor(value / limit) * limit;\n    if (result < 0.0) {\n        result = result + limit;\n    }\n    return result;\n}\n\nfn singularity_mask(uv : vec2<f32>, width : f32, height : f32) -> f32 {\n    if (width <= 0.0 || height <= 0.0) {\n        return 0.0;\n    }\n\n    let delta : vec2<f32> = abs(uv - vec2<f32>(0.5, 0.5));\n    let aspect : f32 = width / height;\n    let scaled : vec2<f32> = vec2<f32>(delta.x * aspect, delta.y);\n    let max_radius : f32 = length(vec2<f32>(aspect * 0.5, 0.5));\n    if (max_radius <= 0.0) {\n        return 0.0;\n    }\n\n    let normalized : f32 = clamp(length(scaled) / max_radius, 0.0, 1.0);\n    let masked : f32 = sqrt(normalized);\n    return pow(masked, 5.0);\n}\n\nfn animated_simplex_value(uv : vec2<f32>, time : f32, speed : f32) -> f32 {\n    let angle : f32 = time * TAU;\n    let z_base : f32 = cos(angle) * speed;\n    let s : f32 = params.motion.z * 73.0;\n    let base_seed : vec3<f32> = vec3<f32>(17.0 + s, 29.0 + s * 1.1, 47.0 + s * 0.7);\n    let base_noise : f32 = simplex_noise(vec3<f32>(\n        uv.x + base_seed.x,\n        uv.y + base_seed.y,\n        z_base + base_seed.z\n    ));\n    var value : f32 = clamp(base_noise * 0.5 + 0.5, 0.0, 1.0);\n\n    if (speed != 0.0 && time != 0.0) {\n        let time_seed : vec3<f32> = vec3<f32>(\n            base_seed.x + 54.0,\n            base_seed.y + 82.0,\n            base_seed.z + 124.0\n        );\n        let time_noise : f32 = simplex_noise(vec3<f32>(\n            uv.x + time_seed.x,\n            uv.y + time_seed.y,\n            time_seed.z\n        ));\n        let time_value : f32 = clamp(time_noise * 0.5 + 0.5, 0.0, 1.0);\n        let scaled_time : f32 = periodic_value(time, time_value) * speed;\n        value = clamp01(periodic_value(scaled_time, value));\n    }\n\n    return clamp01(value);\n}\n\nfn compute_lens_offsets(\n    sample_pos : vec2<f32>,\n    width : f32,\n    height : f32,\n    freq : vec2<f32>,\n    time : f32,\n    speed : f32,\n    displacement : f32\n) -> vec2<f32> {\n    let width_safe : f32 = max(width, 1.0);\n    let height_safe : f32 = max(height, 1.0);\n    let freq_x : f32 = max(freq.y, 1.0);\n    let freq_y : f32 = max(freq.x, 1.0);\n\n    let wrapped_pos : vec2<f32> = vec2<f32>(\n        wrap_float(sample_pos.x, width_safe),\n        wrap_float(sample_pos.y, height_safe)\n    );\n    let uv : vec2<f32> = vec2<f32>(\n        (wrapped_pos.x / width_safe) * freq_x,\n        (wrapped_pos.y / height_safe) * freq_y\n    );\n\n    let noise_value : f32 = animated_simplex_value(uv, time, speed);\n\n    let uv_centered : vec2<f32> = (wrapped_pos + vec2<f32>(0.5, 0.5)) / vec2<f32>(width_safe, height_safe);\n    let mask : f32 = singularity_mask(uv_centered, width_safe, height_safe);\n    let distortion : f32 = (noise_value * 2.0 - 1.0) * mask;\n    let angle : f32 = distortion * TAU;\n\n    let offsets : vec2<f32> = vec2<f32>(cos(angle), sin(angle))\n        * displacement * vec2<f32>(width_safe, height_safe);\n    return offsets;\n}\n\n// Value noise implementation\nfn fade(value : f32) -> f32 {\n    return value * value * (3.0 - 2.0 * value);\n}\n\nfn fade_vec3(v : vec3<f32>) -> vec3<f32> {\n    return vec3<f32>(fade(v.x), fade(v.y), fade(v.z));\n}\n\nfn lerp(a : f32, b : f32, t : f32) -> f32 {\n    return a + (b - a) * t;\n}\n\nfn hash3(coord : vec3<i32>, seed : f32) -> f32 {\n    let base : vec3<f32> = vec3<f32>(coord);\n    let dot_value : f32 = dot(base, vec3<f32>(12.9898, 78.233, 37.719)) + seed * 0.001;\n    return fract(sin(dot_value) * 43758.5453);\n}\n\nfn value_noise_3d(coord : vec3<f32>, seed : f32) -> f32 {\n    let cell : vec3<i32> = vec3<i32>(floor(coord));\n    let local : vec3<f32> = fract(coord);\n    let smooth_t : vec3<f32> = fade_vec3(local);\n\n    let c000 : f32 = hash3(cell, seed);\n    let c100 : f32 = hash3(cell + vec3<i32>(1, 0, 0), seed);\n    let c010 : f32 = hash3(cell + vec3<i32>(0, 1, 0), seed);\n    let c110 : f32 = hash3(cell + vec3<i32>(1, 1, 0), seed);\n    let c001 : f32 = hash3(cell + vec3<i32>(0, 0, 1), seed);\n    let c101 : f32 = hash3(cell + vec3<i32>(1, 0, 1), seed);\n    let c011 : f32 = hash3(cell + vec3<i32>(0, 1, 1), seed);\n    let c111 : f32 = hash3(cell + vec3<i32>(1, 1, 1), seed);\n\n    let x00 : f32 = lerp(c000, c100, smooth_t.x);\n    let x10 : f32 = lerp(c010, c110, smooth_t.x);\n    let x01 : f32 = lerp(c001, c101, smooth_t.x);\n    let x11 : f32 = lerp(c011, c111, smooth_t.x);\n    let y0 : f32 = lerp(x00, x10, smooth_t.y);\n    let y1 : f32 = lerp(x01, x11, smooth_t.y);\n    return lerp(y0, y1, smooth_t.z);\n}\n\n// Singularity (radial distance from center)\nfn compute_singularity(x : f32, y : f32, width : f32, height : f32) -> f32 {\n    let center_x : f32 = width * 0.5;\n    let center_y : f32 = height * 0.5;\n    let dx : f32 = (x - center_x) / width;\n    let dy : f32 = (y - center_y) / height;\n    return length(vec2<f32>(dx, dy));\n}\n\n// Helper functions for color space conversion and adjustments\nfn wrap_unit(value : f32) -> f32 {\n    var wrapped : f32 = value - floor(value);\n    if (wrapped < 0.0) {\n        wrapped = wrapped + 1.0;\n    }\n    return wrapped;\n}\n\nfn blend_linear(a : f32, b : f32, t : f32) -> f32 {\n    return mix(a, b, clamp(t, 0.0, 1.0));\n}\n\nfn blend_cosine(a : f32, b : f32, value : f32) -> f32 {\n    let clamped : f32 = clamp(value, 0.0, 1.0);\n    let weight : f32 = (1.0 - cos(clamped * PI)) * 0.5;\n    return mix(a, b, weight);\n}\n\nfn clamp_index(value : f32, max_index : f32) -> u32 {\n    if (max_index <= 0.0) {\n        return 0u;\n    }\n    let clamped : f32 = clamp(value, 0.0, max_index);\n    return u32(clamped);\n}\n\nfn rgb_to_hsv(rgb : vec3<f32>) -> vec3<f32> {\n    let c_max : f32 = max(max(rgb.x, rgb.y), rgb.z);\n    let c_min : f32 = min(min(rgb.x, rgb.y), rgb.z);\n    let delta : f32 = c_max - c_min;\n\n    var hue : f32 = 0.0;\n    if (delta > 0.0) {\n        if (c_max == rgb.x) {\n            var segment : f32 = (rgb.y - rgb.z) / delta;\n            if (segment < 0.0) {\n                segment = segment + 6.0;\n            }\n            hue = segment;\n        } else if (c_max == rgb.y) {\n            hue = ((rgb.z - rgb.x) / delta) + 2.0;\n        } else {\n            hue = ((rgb.x - rgb.y) / delta) + 4.0;\n        }\n        hue = wrap_unit(hue / 6.0);\n    }\n\n    let saturation : f32 = select(0.0, delta / c_max, c_max != 0.0);\n    return vec3<f32>(hue, saturation, c_max);\n}\n\nfn hsv_to_rgb(hsv : vec3<f32>) -> vec3<f32> {\n    let h : f32 = hsv.x;\n    let s : f32 = hsv.y;\n    let v : f32 = hsv.z;\n\n    let dh : f32 = h * 6.0;\n    let r_comp : f32 = clamp01(abs(dh - 3.0) - 1.0);\n    let g_comp : f32 = clamp01(-abs(dh - 2.0) + 2.0);\n    let b_comp : f32 = clamp01(-abs(dh - 4.0) + 2.0);\n\n    let one_minus_s : f32 = 1.0 - s;\n    let sr : f32 = s * r_comp;\n    let sg : f32 = s * g_comp;\n    let sb : f32 = s * b_comp;\n\n    let r : f32 = clamp01((one_minus_s + sr) * v);\n    let g : f32 = clamp01((one_minus_s + sg) * v);\n    let b : f32 = clamp01((one_minus_s + sb) * v);\n\n    return vec3<f32>(r, g, b);\n}\n\nfn adjust_hue(color : vec3<f32>, amount : f32) -> vec3<f32> {\n    var hsv : vec3<f32> = rgb_to_hsv(color);\n    hsv.x = wrap_unit(hsv.x + amount);\n    hsv.y = clamp01(hsv.y);\n    hsv.z = clamp01(hsv.z);\n    return clamp(vec3<f32>(hsv_to_rgb(hsv)), vec3<f32>(0.0), vec3<f32>(1.0));\n}\n\nfn adjust_saturation(color : vec3<f32>, amount : f32) -> vec3<f32> {\n    var hsv : vec3<f32> = rgb_to_hsv(color);\n    hsv.y = clamp01(hsv.y * amount);\n    hsv.z = clamp01(hsv.z);\n    return clamp(vec3<f32>(hsv_to_rgb(hsv)), vec3<f32>(0.0), vec3<f32>(1.0));\n}\n\nfn apply_vignette(value : f32, brightness : f32, mask : f32, alpha : f32) -> f32 {\n    let edge_mix : f32 = mix(value, brightness, mask);\n    return mix(value, edge_mix, clamp(alpha, 0.0, 1.0));\n}\n\n// Generate base scanline values (2x1 noise pattern)\nfn get_scanline_base_values(time : f32, speed : f32) -> vec2<f32> {\n    let time_scaled : f32 = time * speed * 0.1;\n    let noise_seed : f32 = 19.37 + params.motion.z * 31.0;\n    let noise0 : f32 = value_noise_3d(vec3<f32>(0.0, 0.0, time_scaled), noise_seed);\n    let noise1 : f32 = value_noise_3d(vec3<f32>(1.0, 0.0, time_scaled), noise_seed);\n    return vec2<f32>(noise0, noise1);\n}\n\n// Get interpolated scanline value for a given y coordinate\n// The scanline pattern is based on Y position to create horizontal lines\nfn get_scanline_value_interpolated(y : f32, height : f32, base_values : vec2<f32>) -> f32 {\n    // Goal: ~500 bars for 1000px image = ~2px per bar, increased by 25% = 2.5px per bar\n    // Each bar alternates between the 2 base values\n    let pixels_per_bar : f32 = 2.5;\n    let y_scaled : f32 = y / pixels_per_bar;\n    let scanline_index : i32 = i32(floor(y_scaled)) % 2;\n    \n    return select(base_values.y, base_values.x, scanline_index == 0);\n}\n\n// Sample scanline with bilinear interpolation at fractional coordinates\nfn sample_scanline_bilinear(sample_x : f32, sample_y : f32, width : f32, height : f32, base_values : vec2<f32>) -> f32 {\n    // Wrap coordinates\n    var wrapped_x : f32 = sample_x - floor(sample_x / width) * width;\n    var wrapped_y : f32 = sample_y - floor(sample_y / height) * height;\n    \n    if (wrapped_x < 0.0) { wrapped_x = wrapped_x + width; }\n    if (wrapped_y < 0.0) { wrapped_y = wrapped_y + height; }\n    \n    wrapped_x = clamp(wrapped_x, 0.0, width - 1.0);\n    wrapped_y = clamp(wrapped_y, 0.0, height - 1.0);\n    \n    // Bilinear interpolation\n    let x0 : f32 = floor(wrapped_x);\n    let y0 : f32 = floor(wrapped_y);\n    let x1 : f32 = min(x0 + 1.0, width - 1.0);\n    let y1 : f32 = min(y0 + 1.0, height - 1.0);\n    \n    let x_fract : f32 = clamp(wrapped_x - x0, 0.0, 1.0);\n    let y_fract : f32 = clamp(wrapped_y - y0, 0.0, 1.0);\n    \n    // Get scanline values at the 4 corners\n    let val_x0_y0 : f32 = get_scanline_value_interpolated(y0, height, base_values);\n    let val_x1_y0 : f32 = get_scanline_value_interpolated(y0, height, base_values);\n    let val_x0_y1 : f32 = get_scanline_value_interpolated(y1, height, base_values);\n    let val_x1_y1 : f32 = get_scanline_value_interpolated(y1, height, base_values);\n    \n    // Bilinear blend\n    let val_y0 : f32 = mix(val_x0_y0, val_x1_y0, x_fract);\n    let val_y1 : f32 = mix(val_x0_y1, val_x1_y1, x_fract);\n    \n    return mix(val_y0, val_y1, y_fract);\n}\n\n@compute @workgroup_size(8, 8, 1)\nfn main(@builtin(global_invocation_id) gid : vec3<u32>) {\n    let width : u32 = as_u32(params.size.x);\n    let height : u32 = as_u32(params.size.y);\n    if (gid.x >= width || gid.y >= height) {\n        return;\n    }\n\n    let alphaVal : f32 = clamp(params.extra.x, 0.0, 1.0);\n    if (alphaVal == 0.0) {\n        let passthrough : vec4<f32> = textureLoad(inputTex, vec2<i32>(i32(gid.x), i32(gid.y)), 0);\n        let pi : u32 = gid.y * width + gid.x;\n        let bi : u32 = pi * 4u;\n        output_buffer[bi + 0u] = passthrough.x;\n        output_buffer[bi + 1u] = passthrough.y;\n        output_buffer[bi + 2u] = passthrough.z;\n        output_buffer[bi + 3u] = passthrough.w;\n        return;\n    }\n\n    // Scale pixel-space dimensions so CRT patterns maintain visual size\n    let rs : f32 = max(renderScale, 1.0);\n    let fullRes : vec2<f32> = select(params.size.xy, fullResolution, fullResolution.x > 0.0);\n    let width_f : f32 = max(fullRes.x / rs, 1.0);\n    let height_f : f32 = max(fullRes.y / rs, 1.0);\n    let time : f32 = params.motion.x;\n    let speed : f32 = params.motion.y;\n    let x : f32 = (f32(gid.x) + tileOffset.x) / rs;\n    let y : f32 = (f32(gid.y) + tileOffset.y) / rs;\n\n    let displacement : f32 = 0.0625;\n    let freq : vec2<f32> = freq_for_shape(2.0, width_f, height_f);\n    let base_offsets : vec2<f32> = compute_lens_offsets(\n        vec2<f32>(x, y),\n        width_f,\n        height_f,\n        freq,\n        time,\n        speed,\n        displacement\n    );\n\n    // Step 2: Sample the procedural scanline texture at the WARPED coordinates.\n    // This correctly applies the lens warp to the scanlines.\n    let scanline_base : vec2<f32> = get_scanline_base_values(time, speed);\n    let scan_value : f32 = sample_scanline_bilinear(x + base_offsets.x, y + base_offsets.y, width_f, height_f, scanline_base);\n\n    // Step 3: Sample the input texture at the ORIGINAL, un-warped coordinates.\n    let base_sample : vec4<f32> = textureLoad(inputTex, vec2<i32>(i32(gid.x), i32(gid.y)), 0);\n    let base_color : vec3<f32> = base_sample.xyz;\n    let alpha : f32 = base_sample.w;\n\n    // Step 4: Blend the original input color with the warped scanlines.\n    var color : vec3<f32> = mix(\n        base_color,\n        (base_color + scan_value) * scan_value,\n        0.5\n    );\n    color = clamp(color, vec3<f32>(0.0), vec3<f32>(1.0));\n    \n    // Step 5: Chromatic aberration, hue shift, saturation, and vignette\n    if (params.size.z >= 2.5) { // channels == 3\n        let seed_base : f32 = 17.0 + params.motion.z * 73.0;\n        let displacement_base : f32 = 0.0125 + random_scalar(seed_base + 0.37) * 0.00625;\n        let simplex_value : f32 = random_scalar(seed_base + 0.73);\n        let displacement_pixels : f32 = displacement_base * width_f * simplex_value;\n        \n        let singularity : f32 = compute_singularity(x, y, width_f, height_f);\n        let aber_mask : f32 = pow(singularity, 3.0);\n        let gradient : f32 = clamp(x / (width_f - 1.0), 0.0, 1.0);\n        \n        let hue_shift : f32 = random_scalar(seed_base + 1.91) * 0.25 - 0.125;\n        \n        // Red channel sample point (aberration shift)\n        var red_x : f32 = min(x + displacement_pixels, width_f - 1.0);\n        red_x = blend_linear(red_x, x, gradient);\n        let red_sample_x : f32 = blend_cosine(x, red_x, aber_mask);\n        \n        let red_sample_global_x : f32 = red_sample_x * renderScale;\n        let red_sample_local_x : f32 = red_sample_global_x - tileOffset.x;\n        let red_base_col : vec3<f32> = textureLoad(inputTex, vec2<i32>(i32(red_sample_local_x), i32(gid.y)), 0).xyz;\n        let red_offsets : vec2<f32> = compute_lens_offsets(\n            vec2<f32>(red_sample_x, y),\n            width_f,\n            height_f,\n            freq,\n            time,\n            speed,\n            displacement\n        );\n        let red_scan_val : f32 = sample_scanline_bilinear(red_sample_x + red_offsets.x, y + red_offsets.y, width_f, height_f, scanline_base);\n        let red_blended : vec3<f32> = mix(red_base_col, (red_base_col + red_scan_val) * red_scan_val, 0.5);\n\n        // Green channel is the original computed color for this pixel\n        let green_blended : vec3<f32> = color;\n\n        // Blue channel sample point (aberration shift)\n        var blue_x : f32 = max(x - displacement_pixels, 0.0);\n        blue_x = blend_linear(x, blue_x, gradient);\n        let blue_sample_x : f32 = blend_cosine(x, blue_x, aber_mask);\n\n        let blue_sample_global_x : f32 = blue_sample_x * renderScale;\n        let blue_sample_local_x : f32 = blue_sample_global_x - tileOffset.x;\n        let blue_base_col : vec3<f32> = textureLoad(inputTex, vec2<i32>(i32(blue_sample_local_x), i32(gid.y)), 0).xyz;\n        let blue_offsets : vec2<f32> = compute_lens_offsets(\n            vec2<f32>(blue_sample_x, y),\n            width_f,\n            height_f,\n            freq,\n            time,\n            speed,\n            displacement\n        );\n        let blue_scan_val : f32 = sample_scanline_bilinear(blue_sample_x + blue_offsets.x, y + blue_offsets.y, width_f, height_f, scanline_base);\n        let blue_blended : vec3<f32> = mix(blue_base_col, (blue_base_col + blue_scan_val) * blue_scan_val, 0.5);\n\n        // Combine, applying hue shift to each component before assembling\n        color = vec3<f32>(\n            adjust_hue(red_blended, hue_shift).r,\n            adjust_hue(green_blended, hue_shift).g,\n            adjust_hue(blue_blended, hue_shift).b\n        );\n        \n        // Restore original hue\n        color = adjust_hue(color, -hue_shift);\n        \n        // Step 6: Saturation boost\n        color = adjust_saturation(color, 1.125);\n        \n        // Step 7: Vignette\n        let vignette_alpha : f32 = random_scalar(seed_base + 3.17) * 0.175;\n        let vignette_mask : f32 = singularity;\n        color.x = apply_vignette(color.x, 0.0, vignette_mask, vignette_alpha);\n        color.y = apply_vignette(color.y, 0.0, vignette_mask, vignette_alpha);\n        color.z = apply_vignette(color.z, 0.0, vignette_mask, vignette_alpha);\n    }\n    \n    // Step 8: Normalize (contrast adjustment around mean)\n    let local_mean : f32 = (color.x + color.y + color.z) * INV_THREE;\n    color = clamp((color - local_mean) * 1.25 + local_mean, vec3<f32>(0.0), vec3<f32>(1.0));\n    \n    // Write output\n    color = mix(base_color, color, alphaVal);\n    let pixel_index : u32 = gid.y * width + gid.x;\n    let base_index : u32 = pixel_index * 4u;\n    output_buffer[base_index + 0u] = color.x;\n    output_buffer[base_index + 1u] = color.y;\n    output_buffer[base_index + 2u] = color.z;\n    output_buffer[base_index + 3u] = base_sample.w;\n}\n"
+                        "// CRT effect - faithful port of Python implementation\n// Applies scanlines, lens warp, chromatic aberration, hue shift, saturation boost, and vignette\n\nconst PI : f32 = 3.14159265358979323846;\nconst TAU : f32 = 6.28318530717958647692;\nconst INV_THREE : f32 = 0.3333333333333333;\n\nstruct CRTParams {\n    size : vec4<f32>,    // (width, height, channels, unused)\n    motion : vec4<f32>,  // (time, speed, seed, unused)\n    extra : vec4<f32>,   // (alpha, unused, unused, unused)\n};\n\n@group(0) @binding(0) var inputTex : texture_2d<f32>;\n@group(0) @binding(1) var<storage, read_write> output_buffer : array<f32>;\n@group(0) @binding(2) var<uniform> params : CRTParams;\n@group(0) @binding(3) var<uniform> tileOffset : vec2<f32>;\n@group(0) @binding(4) var<uniform> fullResolution : vec2<f32>;\n@group(0) @binding(5) var<uniform> renderScale : f32;\n\nfn as_u32(value : f32) -> u32 {\n    return u32(max(value, 0.0));\n}\n\nfn clamp01(value : f32) -> f32 {\n    return clamp(value, 0.0, 1.0);\n}\n\nfn random_scalar(seed : f32) -> f32 {\n    return fract(sin(seed) * 43758.5453123);\n}\n\nfn simplex_random(time : f32, speed : f32) -> f32 {\n    let angle : f32 = time * TAU;\n    let z : f32 = cos(angle) * speed;\n    let w : f32 = sin(angle) * speed;\n    return fract(sin(z * 157.0 + w * 113.0) * 43758.5453);\n}\n\nfn freq_for_shape(base_freq : f32, width : f32, height : f32) -> vec2<f32> {\n    let freq : f32 = max(base_freq, 1.0);\n    let width_safe : f32 = max(width, 1.0);\n    let height_safe : f32 = max(height, 1.0);\n\n    if (abs(width_safe - height_safe) < 1e-5) {\n        return vec2<f32>(freq, freq);\n    }\n\n    if (height_safe < width_safe) {\n        let scaled : f32 = floor(freq * width_safe / height_safe);\n        return vec2<f32>(freq, max(scaled, 1.0));\n    }\n\n    let scaled : f32 = floor(freq * height_safe / width_safe);\n    return vec2<f32>(max(scaled, 1.0), freq);\n}\n\nfn normalized_sine(value : f32) -> f32 {\n    return sin(value) * 0.5 + 0.5;\n}\n\nfn periodic_value(time : f32, value : f32) -> f32 {\n    return normalized_sine((time - value) * TAU);\n}\n\nfn mod289_vec3(x : vec3<f32>) -> vec3<f32> {\n    return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nfn mod289_vec4(x : vec4<f32>) -> vec4<f32> {\n    return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nfn permute(x : vec4<f32>) -> vec4<f32> {\n    return mod289_vec4(((x * 34.0) + 1.0) * x);\n}\n\nfn taylor_inv_sqrt(r : vec4<f32>) -> vec4<f32> {\n    return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nfn simplex_noise(v : vec3<f32>) -> f32 {\n    let C : vec2<f32> = vec2<f32>(1.0 / 6.0, 1.0 / 3.0);\n    let D : vec4<f32> = vec4<f32>(0.0, 0.5, 1.0, 2.0);\n\n    let i0 : vec3<f32> = floor(v + dot(v, vec3<f32>(C.y)));\n    let x0 : vec3<f32> = v - i0 + dot(i0, vec3<f32>(C.x));\n\n    let step1 : vec3<f32> = step(vec3<f32>(x0.y, x0.z, x0.x), x0);\n    let l : vec3<f32> = vec3<f32>(1.0) - step1;\n    let i1 : vec3<f32> = min(step1, vec3<f32>(l.z, l.x, l.y));\n    let i2 : vec3<f32> = max(step1, vec3<f32>(l.z, l.x, l.y));\n\n    let x1 : vec3<f32> = x0 - i1 + vec3<f32>(C.x);\n    let x2 : vec3<f32> = x0 - i2 + vec3<f32>(C.y);\n    let x3 : vec3<f32> = x0 - vec3<f32>(D.y);\n\n    let i = mod289_vec3(i0);\n    let p = permute(\n        permute(\n            permute(i.z + vec4<f32>(0.0, i1.z, i2.z, 1.0))\n            + i.y + vec4<f32>(0.0, i1.y, i2.y, 1.0)\n        )\n        + i.x + vec4<f32>(0.0, i1.x, i2.x, 1.0)\n    );\n\n    let n_ : f32 = 0.14285714285714285;\n    let ns : vec3<f32> = n_ * vec3<f32>(D.w, D.y, D.z) - vec3<f32>(D.x, D.z, D.x);\n\n    let j : vec4<f32> = p - 49.0 * floor(p * ns.z * ns.z);\n    let x_ : vec4<f32> = floor(j * ns.z);\n    let y_ : vec4<f32> = floor(j - 7.0 * x_);\n\n    let x = x_ * ns.x + ns.y;\n    let y = y_ * ns.x + ns.y;\n    let h = 1.0 - abs(x) - abs(y);\n\n    let b0 : vec4<f32> = vec4<f32>(x.x, x.y, y.x, y.y);\n    let b1 : vec4<f32> = vec4<f32>(x.z, x.w, y.z, y.w);\n\n    let s0 : vec4<f32> = floor(b0) * 2.0 + 1.0;\n    let s1 : vec4<f32> = floor(b1) * 2.0 + 1.0;\n    let sh : vec4<f32> = -step(h, vec4<f32>(0.0));\n\n    let a0 : vec4<f32> = vec4<f32>(b0.x, b0.z, b0.y, b0.w)\n        + vec4<f32>(s0.x, s0.z, s0.y, s0.w) * vec4<f32>(sh.x, sh.x, sh.y, sh.y);\n    let a1 : vec4<f32> = vec4<f32>(b1.x, b1.z, b1.y, b1.w)\n        + vec4<f32>(s1.x, s1.z, s1.y, s1.w) * vec4<f32>(sh.z, sh.z, sh.w, sh.w);\n\n    let g0 : vec3<f32> = vec3<f32>(a0.x, a0.y, h.x);\n    let g1 : vec3<f32> = vec3<f32>(a0.z, a0.w, h.y);\n    let g2 : vec3<f32> = vec3<f32>(a1.x, a1.y, h.z);\n    let g3 : vec3<f32> = vec3<f32>(a1.z, a1.w, h.w);\n\n    let norm : vec4<f32> = taylor_inv_sqrt(vec4<f32>(\n        dot(g0, g0),\n        dot(g1, g1),\n        dot(g2, g2),\n        dot(g3, g3)\n    ));\n\n    let g0n : vec3<f32> = g0 * norm.x;\n    let g1n : vec3<f32> = g1 * norm.y;\n    let g2n : vec3<f32> = g2 * norm.z;\n    let g3n : vec3<f32> = g3 * norm.w;\n\n    let m0 : f32 = max(0.6 - dot(x0, x0), 0.0);\n    let m1 : f32 = max(0.6 - dot(x1, x1), 0.0);\n    let m2 : f32 = max(0.6 - dot(x2, x2), 0.0);\n    let m3 : f32 = max(0.6 - dot(x3, x3), 0.0);\n\n    let m0sq : f32 = m0 * m0;\n    let m1sq : f32 = m1 * m1;\n    let m2sq : f32 = m2 * m2;\n    let m3sq : f32 = m3 * m3;\n\n    return 42.0 * (\n        m0sq * m0sq * dot(g0n, x0)\n        + m1sq * m1sq * dot(g1n, x1)\n        + m2sq * m2sq * dot(g2n, x2)\n        + m3sq * m3sq * dot(g3n, x3)\n    );\n}\n\nfn wrap_float(value : f32, limit : f32) -> f32 {\n    if (limit <= 0.0) {\n        return 0.0;\n    }\n    var result : f32 = value - floor(value / limit) * limit;\n    if (result < 0.0) {\n        result = result + limit;\n    }\n    return result;\n}\n\nfn singularity_mask(uv : vec2<f32>, width : f32, height : f32) -> f32 {\n    if (width <= 0.0 || height <= 0.0) {\n        return 0.0;\n    }\n\n    let delta : vec2<f32> = abs(uv - vec2<f32>(0.5, 0.5));\n    let aspect : f32 = width / height;\n    let scaled : vec2<f32> = vec2<f32>(delta.x * aspect, delta.y);\n    let max_radius : f32 = length(vec2<f32>(aspect * 0.5, 0.5));\n    if (max_radius <= 0.0) {\n        return 0.0;\n    }\n\n    let normalized : f32 = clamp(length(scaled) / max_radius, 0.0, 1.0);\n    let masked : f32 = sqrt(normalized);\n    return pow(masked, 5.0);\n}\n\nfn animated_simplex_value(uv : vec2<f32>, time : f32, speed : f32) -> f32 {\n    let angle : f32 = time * TAU;\n    let z_base : f32 = cos(angle) * speed;\n    let s : f32 = params.motion.z * 73.0;\n    let base_seed : vec3<f32> = vec3<f32>(17.0 + s, 29.0 + s * 1.1, 47.0 + s * 0.7);\n    let base_noise : f32 = simplex_noise(vec3<f32>(\n        uv.x + base_seed.x,\n        uv.y + base_seed.y,\n        z_base + base_seed.z\n    ));\n    var value : f32 = clamp(base_noise * 0.5 + 0.5, 0.0, 1.0);\n\n    if (speed != 0.0 && time != 0.0) {\n        let time_seed : vec3<f32> = vec3<f32>(\n            base_seed.x + 54.0,\n            base_seed.y + 82.0,\n            base_seed.z + 124.0\n        );\n        let time_noise : f32 = simplex_noise(vec3<f32>(\n            uv.x + time_seed.x,\n            uv.y + time_seed.y,\n            time_seed.z\n        ));\n        let time_value : f32 = clamp(time_noise * 0.5 + 0.5, 0.0, 1.0);\n        let scaled_time : f32 = periodic_value(time, time_value) * speed;\n        value = clamp01(periodic_value(scaled_time, value));\n    }\n\n    return clamp01(value);\n}\n\nfn compute_lens_offsets(\n    sample_pos : vec2<f32>,\n    width : f32,\n    height : f32,\n    freq : vec2<f32>,\n    time : f32,\n    speed : f32,\n    displacement : f32\n) -> vec2<f32> {\n    let width_safe : f32 = max(width, 1.0);\n    let height_safe : f32 = max(height, 1.0);\n    let freq_x : f32 = max(freq.y, 1.0);\n    let freq_y : f32 = max(freq.x, 1.0);\n\n    let wrapped_pos : vec2<f32> = vec2<f32>(\n        wrap_float(sample_pos.x, width_safe),\n        wrap_float(sample_pos.y, height_safe)\n    );\n    let uv : vec2<f32> = vec2<f32>(\n        (wrapped_pos.x / width_safe) * freq_x,\n        (wrapped_pos.y / height_safe) * freq_y\n    );\n\n    let noise_value : f32 = animated_simplex_value(uv, time, speed);\n\n    let uv_centered : vec2<f32> = (wrapped_pos + vec2<f32>(0.5, 0.5)) / vec2<f32>(width_safe, height_safe);\n    let mask : f32 = singularity_mask(uv_centered, width_safe, height_safe);\n    let distortion : f32 = (noise_value * 2.0 - 1.0) * mask;\n    let angle : f32 = distortion * TAU;\n\n    let offsets : vec2<f32> = vec2<f32>(cos(angle), sin(angle))\n        * displacement * vec2<f32>(width_safe, height_safe);\n    return offsets;\n}\n\n// Value noise implementation\nfn fade(value : f32) -> f32 {\n    return value * value * (3.0 - 2.0 * value);\n}\n\nfn fade_vec3(v : vec3<f32>) -> vec3<f32> {\n    return vec3<f32>(fade(v.x), fade(v.y), fade(v.z));\n}\n\nfn lerp(a : f32, b : f32, t : f32) -> f32 {\n    return a + (b - a) * t;\n}\n\nfn hash3(coord : vec3<i32>, seed : f32) -> f32 {\n    let base : vec3<f32> = vec3<f32>(coord);\n    let dot_value : f32 = dot(base, vec3<f32>(12.9898, 78.233, 37.719)) + seed * 0.001;\n    return fract(sin(dot_value) * 43758.5453);\n}\n\nfn value_noise_3d(coord : vec3<f32>, seed : f32) -> f32 {\n    let cell : vec3<i32> = vec3<i32>(floor(coord));\n    let local : vec3<f32> = fract(coord);\n    let smooth_t : vec3<f32> = fade_vec3(local);\n\n    let c000 : f32 = hash3(cell, seed);\n    let c100 : f32 = hash3(cell + vec3<i32>(1, 0, 0), seed);\n    let c010 : f32 = hash3(cell + vec3<i32>(0, 1, 0), seed);\n    let c110 : f32 = hash3(cell + vec3<i32>(1, 1, 0), seed);\n    let c001 : f32 = hash3(cell + vec3<i32>(0, 0, 1), seed);\n    let c101 : f32 = hash3(cell + vec3<i32>(1, 0, 1), seed);\n    let c011 : f32 = hash3(cell + vec3<i32>(0, 1, 1), seed);\n    let c111 : f32 = hash3(cell + vec3<i32>(1, 1, 1), seed);\n\n    let x00 : f32 = lerp(c000, c100, smooth_t.x);\n    let x10 : f32 = lerp(c010, c110, smooth_t.x);\n    let x01 : f32 = lerp(c001, c101, smooth_t.x);\n    let x11 : f32 = lerp(c011, c111, smooth_t.x);\n    let y0 : f32 = lerp(x00, x10, smooth_t.y);\n    let y1 : f32 = lerp(x01, x11, smooth_t.y);\n    return lerp(y0, y1, smooth_t.z);\n}\n\n// Singularity (radial distance from center)\nfn compute_singularity(x : f32, y : f32, width : f32, height : f32) -> f32 {\n    let center_x : f32 = width * 0.5;\n    let center_y : f32 = height * 0.5;\n    let dx : f32 = (x - center_x) / width;\n    let dy : f32 = (y - center_y) / height;\n    return length(vec2<f32>(dx, dy));\n}\n\n// Helper functions for color space conversion and adjustments\nfn wrap_unit(value : f32) -> f32 {\n    var wrapped : f32 = value - floor(value);\n    if (wrapped < 0.0) {\n        wrapped = wrapped + 1.0;\n    }\n    return wrapped;\n}\n\nfn blend_linear(a : f32, b : f32, t : f32) -> f32 {\n    return mix(a, b, clamp(t, 0.0, 1.0));\n}\n\nfn blend_cosine(a : f32, b : f32, value : f32) -> f32 {\n    let clamped : f32 = clamp(value, 0.0, 1.0);\n    let weight : f32 = (1.0 - cos(clamped * PI)) * 0.5;\n    return mix(a, b, weight);\n}\n\nfn clamp_index(value : f32, max_index : f32) -> u32 {\n    if (max_index <= 0.0) {\n        return 0u;\n    }\n    let clamped : f32 = clamp(value, 0.0, max_index);\n    return u32(clamped);\n}\n\nfn rgb_to_hsv(rgb : vec3<f32>) -> vec3<f32> {\n    let c_max : f32 = max(max(rgb.x, rgb.y), rgb.z);\n    let c_min : f32 = min(min(rgb.x, rgb.y), rgb.z);\n    let delta : f32 = c_max - c_min;\n\n    var hue : f32 = 0.0;\n    if (delta > 0.0) {\n        if (c_max == rgb.x) {\n            var segment : f32 = (rgb.y - rgb.z) / delta;\n            if (segment < 0.0) {\n                segment = segment + 6.0;\n            }\n            hue = segment;\n        } else if (c_max == rgb.y) {\n            hue = ((rgb.z - rgb.x) / delta) + 2.0;\n        } else {\n            hue = ((rgb.x - rgb.y) / delta) + 4.0;\n        }\n        hue = wrap_unit(hue / 6.0);\n    }\n\n    let saturation : f32 = select(0.0, delta / c_max, c_max != 0.0);\n    return vec3<f32>(hue, saturation, c_max);\n}\n\nfn hsv_to_rgb(hsv : vec3<f32>) -> vec3<f32> {\n    let h : f32 = hsv.x;\n    let s : f32 = hsv.y;\n    let v : f32 = hsv.z;\n\n    let dh : f32 = h * 6.0;\n    let r_comp : f32 = clamp01(abs(dh - 3.0) - 1.0);\n    let g_comp : f32 = clamp01(-abs(dh - 2.0) + 2.0);\n    let b_comp : f32 = clamp01(-abs(dh - 4.0) + 2.0);\n\n    let one_minus_s : f32 = 1.0 - s;\n    let sr : f32 = s * r_comp;\n    let sg : f32 = s * g_comp;\n    let sb : f32 = s * b_comp;\n\n    let r : f32 = clamp01((one_minus_s + sr) * v);\n    let g : f32 = clamp01((one_minus_s + sg) * v);\n    let b : f32 = clamp01((one_minus_s + sb) * v);\n\n    return vec3<f32>(r, g, b);\n}\n\nfn adjust_hue(color : vec3<f32>, amount : f32) -> vec3<f32> {\n    var hsv : vec3<f32> = rgb_to_hsv(color);\n    hsv.x = wrap_unit(hsv.x + amount);\n    hsv.y = clamp01(hsv.y);\n    hsv.z = clamp01(hsv.z);\n    return clamp(vec3<f32>(hsv_to_rgb(hsv)), vec3<f32>(0.0), vec3<f32>(1.0));\n}\n\nfn adjust_saturation(color : vec3<f32>, amount : f32) -> vec3<f32> {\n    var hsv : vec3<f32> = rgb_to_hsv(color);\n    hsv.y = clamp01(hsv.y * amount);\n    hsv.z = clamp01(hsv.z);\n    return clamp(vec3<f32>(hsv_to_rgb(hsv)), vec3<f32>(0.0), vec3<f32>(1.0));\n}\n\nfn apply_vignette(value : f32, brightness : f32, mask : f32, alpha : f32) -> f32 {\n    let edge_mix : f32 = mix(value, brightness, mask);\n    return mix(value, edge_mix, clamp(alpha, 0.0, 1.0));\n}\n\n// Generate base scanline values (2x1 noise pattern)\nfn get_scanline_base_values(time : f32, speed : f32) -> vec2<f32> {\n    let time_scaled : f32 = time * speed * 0.1;\n    let noise_seed : f32 = 19.37 + params.motion.z * 31.0;\n    let noise0 : f32 = value_noise_3d(vec3<f32>(0.0, 0.0, time_scaled), noise_seed);\n    let noise1 : f32 = value_noise_3d(vec3<f32>(1.0, 0.0, time_scaled), noise_seed);\n    return vec2<f32>(noise0, noise1);\n}\n\n// Get interpolated scanline value for a given y coordinate\n// The scanline pattern is based on Y position to create horizontal lines\nfn get_scanline_value_interpolated(y : f32, height : f32, base_values : vec2<f32>) -> f32 {\n    // Goal: ~500 bars for 1000px image = ~2px per bar, increased by 25% = 2.5px per bar\n    // Each bar alternates between the 2 base values\n    let pixels_per_bar : f32 = 2.5;\n    let y_scaled : f32 = y / pixels_per_bar;\n    let scanline_index : i32 = i32(floor(y_scaled)) % 2;\n    \n    return select(base_values.y, base_values.x, scanline_index == 0);\n}\n\n// Sample scanline with bilinear interpolation at fractional coordinates\nfn sample_scanline_bilinear(sample_x : f32, sample_y : f32, width : f32, height : f32, base_values : vec2<f32>) -> f32 {\n    // Wrap coordinates\n    var wrapped_x : f32 = sample_x - floor(sample_x / width) * width;\n    var wrapped_y : f32 = sample_y - floor(sample_y / height) * height;\n    \n    if (wrapped_x < 0.0) { wrapped_x = wrapped_x + width; }\n    if (wrapped_y < 0.0) { wrapped_y = wrapped_y + height; }\n    \n    wrapped_x = clamp(wrapped_x, 0.0, width - 1.0);\n    wrapped_y = clamp(wrapped_y, 0.0, height - 1.0);\n    \n    // Bilinear interpolation\n    let x0 : f32 = floor(wrapped_x);\n    let y0 : f32 = floor(wrapped_y);\n    let x1 : f32 = min(x0 + 1.0, width - 1.0);\n    let y1 : f32 = min(y0 + 1.0, height - 1.0);\n    \n    let x_fract : f32 = clamp(wrapped_x - x0, 0.0, 1.0);\n    let y_fract : f32 = clamp(wrapped_y - y0, 0.0, 1.0);\n    \n    // Get scanline values at the 4 corners\n    let val_x0_y0 : f32 = get_scanline_value_interpolated(y0, height, base_values);\n    let val_x1_y0 : f32 = get_scanline_value_interpolated(y0, height, base_values);\n    let val_x0_y1 : f32 = get_scanline_value_interpolated(y1, height, base_values);\n    let val_x1_y1 : f32 = get_scanline_value_interpolated(y1, height, base_values);\n    \n    // Bilinear blend\n    let val_y0 : f32 = mix(val_x0_y0, val_x1_y0, x_fract);\n    let val_y1 : f32 = mix(val_x0_y1, val_x1_y1, x_fract);\n    \n    return mix(val_y0, val_y1, y_fract);\n}\n\n@compute @workgroup_size(8, 8, 1)\nfn main(@builtin(global_invocation_id) gid : vec3<u32>) {\n    let width : u32 = as_u32(params.size.x);\n    let height : u32 = as_u32(params.size.y);\n    if (gid.x >= width || gid.y >= height) {\n        return;\n    }\n\n    let alphaVal : f32 = clamp(params.extra.x, 0.0, 1.0);\n    if (alphaVal == 0.0) {\n        let passthrough : vec4<f32> = textureLoad(inputTex, vec2<i32>(i32(gid.x), i32(gid.y)), 0);\n        let pi : u32 = gid.y * width + gid.x;\n        let bi : u32 = pi * 4u;\n        output_buffer[bi + 0u] = passthrough.x;\n        output_buffer[bi + 1u] = passthrough.y;\n        output_buffer[bi + 2u] = passthrough.z;\n        output_buffer[bi + 3u] = passthrough.w;\n        return;\n    }\n\n    // Scale pixel-space dimensions so CRT patterns maintain visual size\n    let rs : f32 = max(renderScale, 1.0);\n    let fullRes : vec2<f32> = select(params.size.xy, fullResolution, fullResolution.x > 0.0);\n    let width_f : f32 = max(fullRes.x / rs, 1.0);\n    let height_f : f32 = max(fullRes.y / rs, 1.0);\n    let time : f32 = params.motion.x;\n    let speed : f32 = params.motion.y;\n    let x : f32 = (f32(gid.x) + tileOffset.x) / rs;\n    let y : f32 = (f32(gid.y) + tileOffset.y) / rs;\n\n    let displacement : f32 = 0.0625;\n    let freq : vec2<f32> = freq_for_shape(2.0, width_f, height_f);\n    let base_offsets : vec2<f32> = compute_lens_offsets(\n        vec2<f32>(x, y),\n        width_f,\n        height_f,\n        freq,\n        time,\n        speed,\n        displacement\n    );\n\n    // Step 2: Sample the procedural scanline texture at the WARPED coordinates.\n    // This correctly applies the lens warp to the scanlines.\n    let scanline_base : vec2<f32> = get_scanline_base_values(time, speed);\n    let scan_value : f32 = sample_scanline_bilinear(x + base_offsets.x, y + base_offsets.y, width_f, height_f, scanline_base);\n\n    // Step 3: Sample the input texture at the ORIGINAL, un-warped coordinates.\n    let base_sample : vec4<f32> = textureLoad(inputTex, vec2<i32>(i32(gid.x), i32(gid.y)), 0);\n    let base_color : vec3<f32> = base_sample.xyz;\n    let alpha : f32 = base_sample.w;\n\n    // Step 4: Blend the original input color with the warped scanlines.\n    var color : vec3<f32> = mix(\n        base_color,\n        (base_color + scan_value) * scan_value,\n        0.5\n    );\n    color = clamp(color, vec3<f32>(0.0), vec3<f32>(1.0));\n    \n    // Step 5: Chromatic aberration, hue shift, saturation, and vignette\n    if (params.size.z >= 2.5) { // channels == 3\n        let seed_base : f32 = 17.0 + params.motion.z * 73.0;\n        let displacement_base : f32 = 0.0125 + random_scalar(seed_base + 0.37) * 0.00625;\n        let simplex_value : f32 = random_scalar(seed_base + 0.73);\n        let displacement_pixels : f32 = displacement_base * width_f * simplex_value;\n        \n        let singularity : f32 = compute_singularity(x, y, width_f, height_f);\n        let aber_mask : f32 = pow(singularity, 3.0);\n        let gradient : f32 = clamp(x / (width_f - 1.0), 0.0, 1.0);\n        \n        let hue_shift : f32 = random_scalar(seed_base + 1.91) * 0.25 - 0.125;\n        \n        // Red channel sample point (aberration shift)\n        var red_x : f32 = min(x + displacement_pixels, width_f - 1.0);\n        red_x = blend_linear(red_x, x, gradient);\n        let red_sample_x : f32 = blend_cosine(x, red_x, aber_mask);\n        \n        let red_sample_global_x : f32 = red_sample_x * renderScale;\n        let red_sample_local_x : f32 = red_sample_global_x - tileOffset.x;\n        let red_base_col : vec3<f32> = textureLoad(inputTex, vec2<i32>(i32(red_sample_local_x), i32(gid.y)), 0).xyz;\n        let red_offsets : vec2<f32> = compute_lens_offsets(\n            vec2<f32>(red_sample_x, y),\n            width_f,\n            height_f,\n            freq,\n            time,\n            speed,\n            displacement\n        );\n        let red_scan_val : f32 = sample_scanline_bilinear(red_sample_x + red_offsets.x, y + red_offsets.y, width_f, height_f, scanline_base);\n        let red_blended : vec3<f32> = mix(red_base_col, (red_base_col + red_scan_val) * red_scan_val, 0.5);\n\n        // Green channel is the original computed color for this pixel\n        let green_blended : vec3<f32> = color;\n\n        // Blue channel sample point (aberration shift)\n        var blue_x : f32 = max(x - displacement_pixels, 0.0);\n        blue_x = blend_linear(x, blue_x, gradient);\n        let blue_sample_x : f32 = blend_cosine(x, blue_x, aber_mask);\n\n        let blue_sample_global_x : f32 = blue_sample_x * renderScale;\n        let blue_sample_local_x : f32 = blue_sample_global_x - tileOffset.x;\n        let blue_base_col : vec3<f32> = textureLoad(inputTex, vec2<i32>(i32(blue_sample_local_x), i32(gid.y)), 0).xyz;\n        let blue_offsets : vec2<f32> = compute_lens_offsets(\n            vec2<f32>(blue_sample_x, y),\n            width_f,\n            height_f,\n            freq,\n            time,\n            speed,\n            displacement\n        );\n        let blue_scan_val : f32 = sample_scanline_bilinear(blue_sample_x + blue_offsets.x, y + blue_offsets.y, width_f, height_f, scanline_base);\n        let blue_blended : vec3<f32> = mix(blue_base_col, (blue_base_col + blue_scan_val) * blue_scan_val, 0.5);\n\n        // Combine, applying hue shift to each component before assembling\n        color = vec3<f32>(\n            adjust_hue(red_blended, hue_shift).r,\n            adjust_hue(green_blended, hue_shift).g,\n            adjust_hue(blue_blended, hue_shift).b\n        );\n        \n        // Restore original hue\n        color = adjust_hue(color, -hue_shift);\n        \n        // Step 6: Saturation boost\n        color = adjust_saturation(color, 1.125);\n        \n        // Step 7: Vignette\n        let vignette_alpha : f32 = random_scalar(seed_base + 3.17) * 0.175;\n        let vignette_mask : f32 = singularity;\n        color.x = apply_vignette(color.x, 0.0, vignette_mask, vignette_alpha);\n        color.y = apply_vignette(color.y, 0.0, vignette_mask, vignette_alpha);\n        color.z = apply_vignette(color.z, 0.0, vignette_mask, vignette_alpha);\n    }\n    \n    // Step 8: Normalize (contrast adjustment around mean)\n    let local_mean : f32 = (color.x + color.y + color.z) * INV_THREE;\n    color = clamp((color - local_mean) * 1.25 + local_mean, vec3<f32>(0.0), vec3<f32>(1.0));\n    \n    // Write output\n    let effectColor8 = floor(clamp(color, vec3<f32>(0.0), vec3<f32>(1.0)) * 255.0 + vec3<f32>(0.5)) / 255.0;\n    color = mix(base_color, effectColor8, alphaVal);\n    let pixel_index : u32 = gid.y * width + gid.x;\n    let base_index : u32 = pixel_index * 4u;\n    output_buffer[base_index + 0u] = color.x;\n    output_buffer[base_index + 1u] = color.y;\n    output_buffer[base_index + 2u] = color.z;\n    output_buffer[base_index + 3u] = base_sample.w;\n}\n"
                       ]
                     ]
                   }
@@ -31577,8 +31257,8 @@
       "func": "dither",
       "definition": {
         "path": "shaders/effects/filter/dither/definition.js",
-        "sha256": "c4a98ee058e6d34538770bfd6748139094d011dac64d873b8358690005a4d632",
-        "bytes": 2271
+        "sha256": "17d4fd18302f7e37bd68e2255459c74d39d54d05218ec1a0b591712b98dd12b5",
+        "bytes": 2213
       },
       "wgsl": [
         {
@@ -32059,22 +31739,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "ditherType",
-                  "type"
-                ],
-                [
-                  "mixAmount",
-                  "mix"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -33606,8 +33270,8 @@
       "func": "feedback",
       "definition": {
         "path": "shaders/effects/filter/feedback/definition.js",
-        "sha256": "a91c991e66d32c296e90fdf97bf6aefe6dc73072e18248d1330450b500233500",
-        "bytes": 4550
+        "sha256": "10c33c335729ce1f9202c1c62c20db93452e0b1639ecf415ac87b1b162a9f1e7",
+        "bytes": 4486
       },
       "wgsl": [
         {
@@ -34552,22 +34216,6 @@
                       ]
                     ]
                   }
-                ]
-              ]
-            }
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "mixAmt",
-                  "mix"
-                ],
-                [
-                  "aberrationAmt",
-                  "aberration"
                 ]
               ]
             }
@@ -35808,8 +35456,8 @@
       "wgsl": [
         {
           "path": "shaders/effects/filter/glyphMap/wgsl/glyphMap.wgsl",
-          "sha256": "ad280686bf936a6be50c8699d306391cc4341aa92dc18d196642443cf4d5e16a",
-          "bytes": 6271
+          "sha256": "9794c0e8edbee7e02b797bc3a6e8f520d270ee594164859d2c7987a38c4b8b8c",
+          "bytes": 6599
         }
       ],
       "registrationKeys": [
@@ -36069,7 +35717,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "/*\n * Glyph Map effect\n * Converts image to ASCII/glyph art using hardcoded 5x7 glyph bitmaps\n * ordered by density. Each cell maps input brightness to a glyph.\n */\n\nstruct Uniforms {\n    cellSize: i32,\n    seed: i32,\n    colorMode: i32,\n    _pad: i32,\n    renderScale: f32,\n    tileOffset: vec2<f32>,\n    fullResolution: vec2<f32>,\n}\n\n@group(0) @binding(0) var inputSampler: sampler;\n@group(0) @binding(1) var inputTex: texture_2d<f32>;\n@group(0) @binding(2) var<uniform> uniforms: Uniforms;\n\nconst GLYPH_COUNT: i32 = 16;\n\n// PCG PRNG\nfn pcg(seed: vec3<u32>) -> vec3<u32> {\n    var v = seed * 1664525u + 1013904223u;\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    v = v ^ (v >> vec3<u32>(16u));\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    return v;\n}\n\n// Hash for glyph variant selection per cell\nfn hash(p: vec2<f32>) -> f32 {\n    let v = pcg(vec3<u32>(\n        u32(select(-p.x * 2.0 + 1.0, p.x * 2.0, p.x >= 0.0)),\n        u32(select(-p.y * 2.0 + 1.0, p.y * 2.0, p.y >= 0.0)),\n        0u\n    ));\n    return f32(v.x) / f32(0xffffffffu);\n}\n\n// Get one row (5 bits) of a glyph bitmap\n// g: glyph index (0-15), y: row (0-6)\n// Returns the 5-bit row value\nfn glyphRow(g: i32, y: i32) -> i32 {\n    // Glyph 0: space\n    if (g == 0) { return 0; }\n    // Glyph 1: period\n    if (g == 1) {\n        if (y == 5) { return 4; }\n        return 0;\n    }\n    // Glyph 2: colon\n    if (g == 2) {\n        if (y == 1 || y == 5) { return 4; }\n        return 0;\n    }\n    // Glyph 3: dash\n    if (g == 3) {\n        if (y == 3) { return 14; }\n        return 0;\n    }\n    // Glyph 4: plus\n    if (g == 4) {\n        if (y == 1 || y == 2 || y == 4 || y == 5) { return 4; }\n        if (y == 3) { return 14; }\n        return 0;\n    }\n    // Glyph 5: equals\n    if (g == 5) {\n        if (y == 2 || y == 4) { return 14; }\n        return 0;\n    }\n    // Glyph 6: asterisk\n    if (g == 6) {\n        if (y == 1 || y == 5) { return 10; }\n        if (y == 2 || y == 4) { return 4; }\n        if (y == 3) { return 14; }\n        return 0;\n    }\n    // Glyph 7: o\n    if (g == 7) {\n        if (y == 2 || y == 5) { return 14; }\n        if (y == 3 || y == 4) { return 10; }\n        return 0;\n    }\n    // Glyph 8: X\n    if (g == 8) {\n        if (y == 1 || y == 2 || y == 4 || y == 5) { return 10; }\n        if (y == 3) { return 4; }\n        return 0;\n    }\n    // Glyph 9: hash #\n    if (g == 9) {\n        if (y == 1 || y == 3 || y == 5) { return 10; }\n        if (y == 2 || y == 4) { return 31; }\n        return 0;\n    }\n    // Glyph 10: percent %\n    if (g == 10) {\n        if (y == 0) { return 25; }\n        if (y == 1) { return 26; }\n        if (y == 2) { return 4; }\n        if (y == 3) { return 9; }\n        if (y == 4) { return 11; }\n        if (y == 5) { return 19; }\n        return 0;\n    }\n    // Glyph 11: A\n    if (g == 11) {\n        if (y == 0) { return 4; }\n        if (y == 1) { return 10; }\n        if (y == 2) { return 17; }\n        if (y == 3) { return 31; }\n        if (y == 4 || y == 5) { return 17; }\n        return 0;\n    }\n    // Glyph 12: W\n    if (g == 12) {\n        if (y == 0 || y == 1) { return 17; }\n        if (y == 2 || y == 3) { return 21; }\n        if (y == 4) { return 27; }\n        if (y == 5) { return 10; }\n        return 0;\n    }\n    // Glyph 13: M\n    if (g == 13) {\n        if (y == 0) { return 17; }\n        if (y == 1) { return 27; }\n        if (y == 2 || y == 3) { return 21; }\n        if (y == 4 || y == 5) { return 17; }\n        return 0;\n    }\n    // Glyph 14: @\n    if (g == 14) {\n        if (y == 0 || y == 6) { return 14; }\n        if (y == 1) { return 17; }\n        if (y == 2) { return 23; }\n        if (y == 3) { return 21; }\n        if (y == 4) { return 22; }\n        if (y == 5) { return 16; }\n        return 0;\n    }\n    // Glyph 15: full block\n    return 31;\n}\n\n// Return 1.0 if pixel (x, y) is set in glyph g, else 0.0\nfn glyphPixel(g: i32, x: i32, y: i32) -> f32 {\n    let row = glyphRow(g, y);\n    // WGSL requires the right-hand side of `>>` to be a u32 (or vecN<u32>)\n    let bit = (row >> u32(4 - x)) & 1;\n    return f32(bit);\n}\n\n@fragment\nfn main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {\n    let texSize = vec2<f32>(textureDimensions(inputTex));\n    let tileOffset = uniforms.tileOffset;\n    let isTile = length(tileOffset) > 0.0;\n    // Non-tiling path is byte-identical to the previous shader. When tiling,\n    // mirror glsl/glyphMap.glsl: global pixel grid + renderScale-scaled cell\n    // (clamped to 512) so cells align across tiles.\n    var pixelCoord = pos.xy;\n    var cs = max(uniforms.cellSize, 1);\n    if (isTile) {\n        pixelCoord = pos.xy + tileOffset;\n        cs = clamp(i32(f32(uniforms.cellSize) * uniforms.renderScale), 1, 512);\n    }\n    let csf = f32(cs);\n\n    // Which cell are we in?\n    let cellIndex = floor(pixelCoord / csf);\n\n    // Local position within the cell, mapped to 5x7 glyph grid\n    let localPos = fract(pixelCoord / csf);\n    var gx = i32(floor(localPos.x * 5.0));\n    // Glyph row 0 is the top row, while localPos.y runs up the cell.\n    let gy = 6 - clamp(i32(floor(localPos.y * 7.0)), 0, 6);\n    gx = clamp(gx, 0, 4);\n\n    // Sample the center of the cell for brightness\n    let cellCenter = (cellIndex + 0.5) * csf;\n    var sampleUV = cellCenter / texSize;\n    if (isTile) {\n        sampleUV = clamp((cellCenter - tileOffset) / texSize, vec2<f32>(0.0), vec2<f32>(1.0));\n    }\n    let srcColor = textureSample(inputTex, inputSampler, sampleUV);\n\n    // Compute luminance\n    let luma = dot(srcColor.rgb, vec3<f32>(0.299, 0.587, 0.114));\n\n    // Map luminance to glyph index (0 to GLYPH_COUNT-1)\n    var glyphIdx = i32(floor(luma * f32(GLYPH_COUNT)));\n    glyphIdx = clamp(glyphIdx, 0, GLYPH_COUNT - 1);\n\n    // Use seed to rotate/shift glyph selection for variety\n    let cellHash = hash(cellIndex + f32(uniforms.seed) * 0.37);\n    let variant = i32(floor(cellHash * 3.0));\n\n    if (variant == 2 && glyphIdx > 1) {\n        glyphIdx = glyphIdx - 1;\n    }\n\n    // Get the glyph pixel value\n    let glyphVal = glyphPixel(glyphIdx, gx, gy);\n\n    if (uniforms.colorMode > 0) {\n        return vec4<f32>(srcColor.rgb * glyphVal, 1.0);\n    } else {\n        return vec4<f32>(vec3<f32>(glyphVal), 1.0);\n    }\n}\n"
+                        "/*\n * Glyph Map effect\n * Converts image to ASCII/glyph art using hardcoded 5x7 glyph bitmaps\n * ordered by density. Each cell maps input brightness to a glyph.\n */\n\nstruct Uniforms {\n    cellSize: i32,\n    seed: i32,\n    colorMode: i32,\n    _pad: i32,\n    renderScale: f32,\n    tileOffset: vec2<f32>,\n    fullResolution: vec2<f32>,\n}\n\n@group(0) @binding(0) var inputSampler: sampler;\n@group(0) @binding(1) var inputTex: texture_2d<f32>;\n@group(0) @binding(2) var<uniform> uniforms: Uniforms;\n\nconst GLYPH_COUNT: i32 = 16;\n\n// PCG PRNG\nfn pcg(seed: vec3<u32>) -> vec3<u32> {\n    var v = seed * 1664525u + 1013904223u;\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    v = v ^ (v >> vec3<u32>(16u));\n    v.x = v.x + v.y * v.z;\n    v.y = v.y + v.z * v.x;\n    v.z = v.z + v.x * v.y;\n    return v;\n}\n\n// Hash for glyph variant selection per cell\nfn hash(p: vec2<f32>) -> f32 {\n    let v = pcg(vec3<u32>(\n        u32(select(-p.x * 2.0 + 1.0, p.x * 2.0, p.x >= 0.0)),\n        u32(select(-p.y * 2.0 + 1.0, p.y * 2.0, p.y >= 0.0)),\n        0u\n    ));\n    return f32(v.x) / f32(0xffffffffu);\n}\n\n// Get one row (5 bits) of a glyph bitmap\n// g: glyph index (0-15), y: row (0-6)\n// Returns the 5-bit row value\nfn glyphRow(g: i32, y: i32) -> i32 {\n    // Glyph 0: space\n    if (g == 0) { return 0; }\n    // Glyph 1: period\n    if (g == 1) {\n        if (y == 5) { return 4; }\n        return 0;\n    }\n    // Glyph 2: colon\n    if (g == 2) {\n        if (y == 1 || y == 5) { return 4; }\n        return 0;\n    }\n    // Glyph 3: dash\n    if (g == 3) {\n        if (y == 3) { return 14; }\n        return 0;\n    }\n    // Glyph 4: plus\n    if (g == 4) {\n        if (y == 1 || y == 2 || y == 4 || y == 5) { return 4; }\n        if (y == 3) { return 14; }\n        return 0;\n    }\n    // Glyph 5: equals\n    if (g == 5) {\n        if (y == 2 || y == 4) { return 14; }\n        return 0;\n    }\n    // Glyph 6: asterisk\n    if (g == 6) {\n        if (y == 1 || y == 5) { return 10; }\n        if (y == 2 || y == 4) { return 4; }\n        if (y == 3) { return 14; }\n        return 0;\n    }\n    // Glyph 7: o\n    if (g == 7) {\n        if (y == 2 || y == 5) { return 14; }\n        if (y == 3 || y == 4) { return 10; }\n        return 0;\n    }\n    // Glyph 8: X\n    if (g == 8) {\n        if (y == 1 || y == 2 || y == 4 || y == 5) { return 10; }\n        if (y == 3) { return 4; }\n        return 0;\n    }\n    // Glyph 9: hash #\n    if (g == 9) {\n        if (y == 1 || y == 3 || y == 5) { return 10; }\n        if (y == 2 || y == 4) { return 31; }\n        return 0;\n    }\n    // Glyph 10: percent %\n    if (g == 10) {\n        if (y == 0) { return 25; }\n        if (y == 1) { return 26; }\n        if (y == 2) { return 4; }\n        if (y == 3) { return 9; }\n        if (y == 4) { return 11; }\n        if (y == 5) { return 19; }\n        return 0;\n    }\n    // Glyph 11: A\n    if (g == 11) {\n        if (y == 0) { return 4; }\n        if (y == 1) { return 10; }\n        if (y == 2) { return 17; }\n        if (y == 3) { return 31; }\n        if (y == 4 || y == 5) { return 17; }\n        return 0;\n    }\n    // Glyph 12: W\n    if (g == 12) {\n        if (y == 0 || y == 1) { return 17; }\n        if (y == 2 || y == 3) { return 21; }\n        if (y == 4) { return 27; }\n        if (y == 5) { return 10; }\n        return 0;\n    }\n    // Glyph 13: M\n    if (g == 13) {\n        if (y == 0) { return 17; }\n        if (y == 1) { return 27; }\n        if (y == 2 || y == 3) { return 21; }\n        if (y == 4 || y == 5) { return 17; }\n        return 0;\n    }\n    // Glyph 14: @\n    if (g == 14) {\n        if (y == 0 || y == 6) { return 14; }\n        if (y == 1) { return 17; }\n        if (y == 2) { return 23; }\n        if (y == 3) { return 21; }\n        if (y == 4) { return 22; }\n        if (y == 5) { return 16; }\n        return 0;\n    }\n    // Glyph 15: full block\n    return 31;\n}\n\n// Return 1.0 if pixel (x, y) is set in glyph g, else 0.0\nfn glyphPixel(g: i32, x: i32, y: i32) -> f32 {\n    let row = glyphRow(g, y);\n    // WGSL requires the right-hand side of `>>` to be a u32 (or vecN<u32>)\n    let bit = (row >> u32(4 - x)) & 1;\n    return f32(bit);\n}\n\n@fragment\nfn main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {\n    let texSize = vec2<f32>(textureDimensions(inputTex));\n    let tileOffset = uniforms.tileOffset;\n    // Tiling is detected from the full-image size differing from the local\n    // render size. tileOffset alone cannot detect tiling: the origin tile's\n    // offset is (0, 0), the same value the runtime writes when not tiling.\n    let isTile = any(uniforms.fullResolution != texSize);\n    // Non-tiling path is byte-identical to the previous shader. When tiling,\n    // mirror glsl/glyphMap.glsl: global pixel grid + renderScale-scaled cell\n    // (clamped to 512) so cells align across tiles. The renderScale multiply\n    // is unconditional, matching the GLSL at every tile including the origin.\n    var pixelCoord = pos.xy;\n    var cs = max(i32(f32(uniforms.cellSize) * uniforms.renderScale), 1);\n    if (isTile) {\n        pixelCoord = pos.xy + tileOffset;\n        cs = min(cs, 512);\n    }\n    let csf = f32(cs);\n\n    // Which cell are we in?\n    let cellIndex = floor(pixelCoord / csf);\n\n    // Local position within the cell, mapped to 5x7 glyph grid\n    let localPos = fract(pixelCoord / csf);\n    var gx = i32(floor(localPos.x * 5.0));\n    // Glyph row 0 is the top row, while localPos.y runs up the cell.\n    let gy = 6 - clamp(i32(floor(localPos.y * 7.0)), 0, 6);\n    gx = clamp(gx, 0, 4);\n\n    // Sample the center of the cell for brightness\n    let cellCenter = (cellIndex + 0.5) * csf;\n    var sampleUV = cellCenter / texSize;\n    if (isTile) {\n        sampleUV = clamp((cellCenter - tileOffset) / texSize, vec2<f32>(0.0), vec2<f32>(1.0));\n    }\n    let srcColor = textureSample(inputTex, inputSampler, sampleUV);\n\n    // Compute luminance\n    let luma = dot(srcColor.rgb, vec3<f32>(0.299, 0.587, 0.114));\n\n    // Map luminance to glyph index (0 to GLYPH_COUNT-1)\n    var glyphIdx = i32(floor(luma * f32(GLYPH_COUNT)));\n    glyphIdx = clamp(glyphIdx, 0, GLYPH_COUNT - 1);\n\n    // Use seed to rotate/shift glyph selection for variety\n    let cellHash = hash(cellIndex + f32(uniforms.seed) * 0.37);\n    let variant = i32(floor(cellHash * 3.0));\n\n    if (variant == 2 && glyphIdx > 1) {\n        glyphIdx = glyphIdx - 1;\n    }\n\n    // Get the glyph pixel value\n    let glyphVal = glyphPixel(glyphIdx, gx, gy);\n\n    if (uniforms.colorMode > 0) {\n        return vec4<f32>(srcColor.rgb * glyphVal, 1.0);\n    } else {\n        return vec4<f32>(vec3<f32>(glyphVal), 1.0);\n    }\n}\n"
                       ]
                     ]
                   }
@@ -36087,8 +35735,8 @@
       "func": "grade",
       "definition": {
         "path": "shaders/effects/filter/grade/definition.js",
-        "sha256": "26c12a89cc0d5823d8b1db6e11cc49671a4f8bf2d0217bf71eec3ceebd5cc74b",
-        "bytes": 13092
+        "sha256": "ef39c1725776b1b9d6be60c04dd406ca61d8b0799d9052ec76c8452dd64b6325",
+        "bytes": 13030
       },
       "wgsl": [
         {
@@ -38656,18 +38304,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "vignetteHighlightProtect",
-                  "vigHiProtect"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -41005,8 +40641,8 @@
       "func": "historicPalette",
       "definition": {
         "path": "shaders/effects/filter/historicPalette/definition.js",
-        "sha256": "89105b6b564251c0f3dc41fcba536d85e9c5addfad265558de2b9f00ef255015",
-        "bytes": 2497
+        "sha256": "a6c0c749486c7464272c5f907e775243c49c44955c87b32f54e1171cf5bf5b74",
+        "bytes": 2454
       },
       "wgsl": [
         {
@@ -41495,18 +41131,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "paletteIndex",
-                  "index"
-                ]
-              ]
-            }
           ],
           [
             "defaultProgram",
@@ -43728,8 +43352,8 @@
       "func": "lowPoly",
       "definition": {
         "path": "shaders/effects/filter/lowPoly/definition.js",
-        "sha256": "000dd8512f988bb31b931264497fb248a4262af7fe49c207a6df46c29ab32ac2",
-        "bytes": 2871
+        "sha256": "33749fad0c84147403850e755cfca552f57bb5866424e60159b8162606574ce7",
+        "bytes": 2823
       },
       "wgsl": [
         {
@@ -44329,22 +43953,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "freq",
-                  "scale"
-                ],
-                [
-                  "nth",
-                  "mode"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -46444,8 +46052,8 @@
       "func": "octaveWarp",
       "definition": {
         "path": "shaders/effects/filter/octaveWarp/definition.js",
-        "sha256": "de9facc19b98ab5a54226779d7a4c094764b44e0987b531bd1dd4daec7855c42",
-        "bytes": 2334
+        "sha256": "6bfc7c63d0136b1d1e72788ac3b8c01de9c0fc1eb8d90a24e94b6359ac8b02ad",
+        "bytes": 2295
       },
       "wgsl": [
         {
@@ -46925,18 +46533,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "frequency",
-                  "freq"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -48340,8 +47936,8 @@
       "func": "palette",
       "definition": {
         "path": "shaders/effects/filter/palette/definition.js",
-        "sha256": "cc248af8ec5624616bbbe275866baa9159862ccd8c684cc4e1aea4ebedfe87b3",
-        "bytes": 1751
+        "sha256": "05e38f3b9088ec83ae37dc09fcf17c8e345b1de011ec8aa6595e452e41ef25cb",
+        "bytes": 1629
       },
       "wgsl": [
         {
@@ -48698,30 +48294,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "paletteIndex",
-                  "index"
-                ],
-                [
-                  "paletteOffset",
-                  "offset"
-                ],
-                [
-                  "paletteRepeat",
-                  "repeat"
-                ],
-                [
-                  "paletteRotation",
-                  "rotation"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -52715,8 +52287,8 @@
       "func": "prismaticAberration",
       "definition": {
         "path": "shaders/effects/filter/prismaticAberration/definition.js",
-        "sha256": "cf3df5b0ba1128bca919055c012dd2924301fe266b2fa9c0bb7fd232d0c87fa0",
-        "bytes": 1867
+        "sha256": "829fc0d15f2e9a94c7342e08e3fac99a788ba80533fdd38c0b721343aa5fb42c",
+        "bytes": 1818
       },
       "wgsl": [
         {
@@ -53085,18 +52657,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "aberrationAmt",
-                  "aberration"
-                ]
-              ]
-            }
           ],
           [
             "defaultProgram",
@@ -67908,8 +67468,8 @@
       "func": "text",
       "definition": {
         "path": "shaders/effects/filter/text/definition.js",
-        "sha256": "998332565d2209ecb0cefb585691d5964dfe89142c3e4a6a77390a2a4c1bffa3",
-        "bytes": 5531
+        "sha256": "c8dbe507f4cefc05db8c327e67ea779a19ab0ef16e2a844fd1904c3ef68ac575",
+        "bytes": 5434
       },
       "wgsl": [
         {
@@ -68507,26 +68067,6 @@
           [
             "defaultProgram",
             "search filter, synth\n\nperlin(scale: 100)\n  .text()\n  .write(o0)"
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "bgOpacity",
-                  "matteOpacity"
-                ],
-                [
-                  "bgAlpha",
-                  "matteOpacity"
-                ],
-                [
-                  "bgColor",
-                  "matteColor"
-                ]
-              ]
-            }
           ],
           [
             "passes",
@@ -75999,8 +75539,8 @@
       "func": "palette3d",
       "definition": {
         "path": "shaders/effects/filter3d/palette3d/definition.js",
-        "sha256": "2affd727aeb0fdf7b2c60512d85c78fa50c59ad5e45fe32e0a8e8d734f6b4a00",
-        "bytes": 3023
+        "sha256": "070b16496ef076823d52268bb662e44b2a28529251d3bc47a0e8bb94712a58f9",
+        "bytes": 2901
       },
       "wgsl": [
         {
@@ -76536,30 +76076,6 @@
             "inputGeo"
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "paletteIndex",
-                  "index"
-                ],
-                [
-                  "paletteOffset",
-                  "offset"
-                ],
-                [
-                  "paletteRepeat",
-                  "repeat"
-                ],
-                [
-                  "paletteRotation",
-                  "rotation"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -76589,8 +76105,8 @@
       "func": "alphaMask",
       "definition": {
         "path": "shaders/effects/mixer/alphaMask/definition.js",
-        "sha256": "61d313e8ff0b2a88b42ef1931e5755a330d63b71f1ee600d7a184a6f3ff78ed6",
-        "bytes": 1294
+        "sha256": "709fe8f8ab43b87660a4fcf032634c784e96329523346ca5c567959763783274",
+        "bytes": 1259
       },
       "wgsl": [
         {
@@ -76896,18 +76412,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "mixAmt",
-                  "mix"
-                ]
-              ]
-            }
-          ],
-          [
             "defaultProgram",
             "search mixer, synth\n\npolygon(smooth: 0, bgAlpha: 0)\n  .write(o0)\n\n noise(scaleX: 100, scaleY: 100)\n  .alphaMask(tex: read(o0))\n  .write(o1)\n"
           ],
@@ -76941,8 +76445,8 @@
       "func": "applyMode",
       "definition": {
         "path": "shaders/effects/mixer/applyMode/definition.js",
-        "sha256": "43a8a83f711c222bb4e76edddeca0b53847b29a787a3a5c6a425464f07116412",
-        "bytes": 1143
+        "sha256": "00dd6ca8d3b3c7cc71d3f28565892a6b4f4e6c83d39da937ac2780e9a6c62bbd",
+        "bytes": 1108
       },
       "wgsl": [
         {
@@ -77200,18 +76704,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "mixAmt",
-                  "mix"
-                ]
-              ]
-            }
-          ],
-          [
             "defaultProgram",
             "search mixer, synth\n\nnoise(seed: 1, ridges: true)\n.write(o0)\n\nperlin()\n.applyMode(tex: read(o0))\n.write(o1)"
           ],
@@ -77245,8 +76737,8 @@
       "func": "blendMode",
       "definition": {
         "path": "shaders/effects/mixer/blendMode/definition.js",
-        "sha256": "a104a1b93189cdfa2ba12c6dd613c964d58d544b80696411df50d30d36d64f39",
-        "bytes": 1402
+        "sha256": "89708107a41d6c3abe87919cdd40a285c8e7247ba1cdf2369a41ccd6db4b6f95",
+        "bytes": 1367
       },
       "wgsl": [
         {
@@ -77554,18 +77046,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "mixAmt",
-                  "mix"
-                ]
-              ]
-            }
           ],
           [
             "defaultProgram",
@@ -78066,8 +77546,8 @@
       "func": "centerMask",
       "definition": {
         "path": "shaders/effects/mixer/centerMask/definition.js",
-        "sha256": "d218d5ee1439fff76538585a41202edd8131638141973c66c23b95e4146bd32d",
-        "bytes": 1883
+        "sha256": "b3d6600bfdf5f1b99e8d90186b4dfbe6833221214e482b12e7b933a83c33bcde",
+        "bytes": 1848
       },
       "wgsl": [
         {
@@ -78483,18 +77963,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "mixAmt",
-                  "mix"
-                ]
-              ]
-            }
           ],
           [
             "defaultProgram",
@@ -94139,8 +93607,8 @@
       "func": "pointsBillboardRender",
       "definition": {
         "path": "shaders/effects/render/pointsBillboardRender/definition.js",
-        "sha256": "b392ece386e40cbb6d1742a4296ed6c3a57f205b2d1a15f3c451264b8d164181",
-        "bytes": 20293
+        "sha256": "03ac562bd09d8295faa866a1b67a9cbe1ef73355bec51a318153b9d876d8371f",
+        "bytes": 20237
       },
       "wgsl": [
         {
@@ -100491,18 +99959,6 @@
                       ]
                     ]
                   }
-                ]
-              ]
-            }
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "rotationVariation",
-                  "rotationVar"
                 ]
               ]
             }
@@ -107642,8 +107098,8 @@
       "func": "cell",
       "definition": {
         "path": "shaders/effects/synth/cell/definition.js",
-        "sha256": "56dd1e5e2bb817e56a08be21c31898d560bb66e0ee4701398ff275e2a66847ff",
-        "bytes": 2505
+        "sha256": "dca7225a7d2086b84116bac48d986659b854cdf912d9c5c574f925c5e89b7974",
+        "bytes": 2439
       },
       "wgsl": [
         {
@@ -108277,22 +107733,6 @@
                       ]
                     ]
                   }
-                ]
-              ]
-            }
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "cellVariation",
-                  "variation"
-                ],
-                [
-                  "loopAmp",
-                  "speed"
                 ]
               ]
             }
@@ -114364,8 +113804,8 @@
       "func": "mandelbrot",
       "definition": {
         "path": "shaders/effects/synth/mandelbrot/definition.js",
-        "sha256": "736ec7a25d3384d40c64fe8aab9f6d9208ed9f9e8b12070fe09dbdda2c2dfff1",
-        "bytes": 4951
+        "sha256": "d9baee07c1aecb735f106123c599966226f6c3b7238c311216e9a1811e4203f5",
+        "bytes": 4915
       },
       "wgsl": [
         {
@@ -115554,18 +114994,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "poiMode",
-                  "poi"
-                ]
-              ]
-            }
-          ],
-          [
             "openCategories",
             [
               "fractal",
@@ -115602,8 +115030,8 @@
       "func": "media",
       "definition": {
         "path": "shaders/effects/synth/media/definition.js",
-        "sha256": "653cf55e2c7c3a77203b7e57e29b4042560431a454c9da1281a8cadcd3a5e0fa",
-        "bytes": 4720
+        "sha256": "9dd0c2bd5b7ace0fbb29cbfd02f56d4156b9da04a366ed5c6dfcbb45a4020f24",
+        "bytes": 4642
       },
       "wgsl": [
         {
@@ -116438,22 +115866,6 @@
                       ]
                     ]
                   }
-                ]
-              ]
-            }
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "backgroundColor",
-                  "bgColor"
-                ],
-                [
-                  "backgroundOpacity",
-                  "bgAlpha"
                 ]
               ]
             }
@@ -122391,8 +121803,8 @@
       "func": "noise",
       "definition": {
         "path": "shaders/effects/synth/noise/definition.js",
-        "sha256": "b142761e58ad8688705b723bf6df98c7b1dba8b1a88ee4ae7249d44ea8e11285",
-        "bytes": 4750
+        "sha256": "c1f3d5b83ee7fbf4fef2e00f2d943686fed39bffa90d495622df4b2766dc74b9",
+        "bytes": 4657
       },
       "wgsl": [
         {
@@ -123368,30 +122780,6 @@
             }
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "noiseType",
-                  "type"
-                ],
-                [
-                  "loopAmp",
-                  "speed"
-                ],
-                [
-                  "xScale",
-                  "scaleX"
-                ],
-                [
-                  "yScale",
-                  "scaleY"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -123421,8 +122809,8 @@
       "func": "osc2d",
       "definition": {
         "path": "shaders/effects/synth/osc2d/definition.js",
-        "sha256": "55133b7e375797fec335e3947fe97393c941859e15ba9f0d80bc374697356db9",
-        "bytes": 1524
+        "sha256": "dd25fe9db956b53e53c1e4b3dd3054b819ce834b590a4ceed6c544ba0e8e90ae",
+        "bytes": 1485
       },
       "wgsl": [
         {
@@ -123766,18 +123154,6 @@
             ]
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "frequency",
-                  "freq"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -123807,8 +123183,8 @@
       "func": "pattern",
       "definition": {
         "path": "shaders/effects/synth/pattern/definition.js",
-        "sha256": "27d432f0b43dfd59f502c78c212a9a4862ee5b36df749cae677388ac604e72ca",
-        "bytes": 3233
+        "sha256": "8aba5da8dea8cc9d7535fd6c2c8455770f486c608ebd508bb5c765d235c6cd50",
+        "bytes": 3192
       },
       "wgsl": [
         {
@@ -124518,18 +123894,6 @@
                 ]
               }
             ]
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "patternType",
-                  "type"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -149318,8 +148682,8 @@
       "func": "shape",
       "definition": {
         "path": "shaders/effects/synth/shape/definition.js",
-        "sha256": "1c43b037fb030d3b13f2deba88651dd6e1bd9d751ed6d507bd903f29aafee2d1",
-        "bytes": 4692
+        "sha256": "f3f1afad354b2efb5d6263fdf525625c71043eba9326646e29b93f6d4dcf9017",
+        "bytes": 4622
       },
       "wgsl": [
         {
@@ -150277,22 +149641,6 @@
                       ]
                     ]
                   }
-                ]
-              ]
-            }
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "loopAAmp",
-                  "speedA"
-                ],
-                [
-                  "loopBAmp",
-                  "speedB"
                 ]
               ]
             }
@@ -152038,8 +151386,8 @@
       "func": "cell3d",
       "definition": {
         "path": "shaders/effects/synth3d/cell3d/definition.js",
-        "sha256": "457052a5d053dfc5a13520092cd179282e0eb2aa87076b5c2e4f96ea31de88c7",
-        "bytes": 3018
+        "sha256": "05a2636b6a6fc3cd838a94ca46a805a8bcecada88059cddd784246941baf7788",
+        "bytes": 2970
       },
       "wgsl": [
         {
@@ -152607,18 +151955,6 @@
           [
             "outputGeo",
             "geoBuffer"
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "cellVariation",
-                  "variation"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -153567,8 +152903,8 @@
       "func": "flythrough3d",
       "definition": {
         "path": "shaders/effects/synth3d/flythrough3d/definition.js",
-        "sha256": "7478e146c3aff799178d9dce2eabef87014ded0c2ad0802c452e9a1bd226e6e5",
-        "bytes": 4124
+        "sha256": "5f782878261515184d1bfe4de3b970ce268d792a2929d329bebec098a5152de2",
+        "bytes": 4083
       },
       "wgsl": [
         {
@@ -154246,18 +153582,6 @@
             "geoBuffer"
           ],
           [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "fractalType",
-                  "type"
-                ]
-              ]
-            }
-          ],
-          [
             "shaders",
             {
               "$type": "object",
@@ -154287,8 +153611,8 @@
       "func": "fractal3d",
       "definition": {
         "path": "shaders/effects/synth3d/fractal3d/definition.js",
-        "sha256": "a2d1c5846631875e3470fb88880eaad895c3d946c9125b869ad78f64d03a54b7",
-        "bytes": 3924
+        "sha256": "a28c5a76d86955537f61e887669891bb31da4cd55224852d8bded968e9e437eb",
+        "bytes": 3883
       },
       "wgsl": [
         {
@@ -155080,18 +154404,6 @@
           [
             "outputGeo",
             "geoBuffer"
-          ],
-          [
-            "paramAliases",
-            {
-              "$type": "object",
-              "entries": [
-                [
-                  "fractalType",
-                  "type"
-                ]
-              ]
-            }
           ],
           [
             "shaders",
@@ -327008,699 +326320,6 @@
     "synth3d.reactionDiffusion3d",
     "synth3d.shape3d"
   ],
-  "paramAliases": {
-    "$type": "map",
-    "entries": [
-      [
-        "classicNoisedeck.bitEffects",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.caustic",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.cellNoise",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "cellSmooth",
-              "smooth"
-            ],
-            [
-              "cellVariation",
-              "variation"
-            ],
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.cellRefract",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "cellSmooth",
-              "smooth"
-            ],
-            [
-              "cellVariation",
-              "variation"
-            ],
-            [
-              "refractAmt",
-              "amount"
-            ],
-            [
-              "refractDir",
-              "direction"
-            ],
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.coalesce",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "mixAmt",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.composite",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "mixAmt",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.fractal",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "fractalType",
-              "type"
-            ],
-            [
-              "backgroundColor",
-              "bgColor"
-            ],
-            [
-              "backgroundOpacity",
-              "bgAlpha"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.glitch",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "aberrationAmt",
-              "aberration"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.kaleido",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "kaleido",
-              "sides"
-            ],
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.lensDistortion",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "aberrationAmt",
-              "aberration"
-            ],
-            [
-              "opacity",
-              "alpha"
-            ],
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.moodscape",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.noise",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "noiseType",
-              "type"
-            ],
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.noise3d",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "noiseScale",
-              "scale"
-            ],
-            [
-              "noiseType",
-              "type"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.refract",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "refractDir",
-              "direction"
-            ],
-            [
-              "mixAmt",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.shapes",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "loopAAmp",
-              "speedA"
-            ],
-            [
-              "loopBAmp",
-              "speedB"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.shapes3d",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "backgroundColor",
-              "bgColor"
-            ],
-            [
-              "backgroundOpacity",
-              "bgAlpha"
-            ]
-          ]
-        }
-      ],
-      [
-        "classicNoisedeck.splat",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "splatColor",
-              "color"
-            ],
-            [
-              "splatCutoff",
-              "cutoff"
-            ],
-            [
-              "splatMode",
-              "mode"
-            ],
-            [
-              "splatScale",
-              "scale"
-            ],
-            [
-              "splatSeed",
-              "seed"
-            ],
-            [
-              "splatSpeed",
-              "speed"
-            ],
-            [
-              "useSplats",
-              "enabled"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.celShading",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "shadingStrength",
-              "strength"
-            ],
-            [
-              "mixAmount",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.chromaticAberration",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "aberrationAmt",
-              "aberration"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.dither",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "ditherType",
-              "type"
-            ],
-            [
-              "mixAmount",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.feedback",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "mixAmt",
-              "mix"
-            ],
-            [
-              "aberrationAmt",
-              "aberration"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.grade",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "vignetteHighlightProtect",
-              "vigHiProtect"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.historicPalette",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "paletteIndex",
-              "index"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.lowPoly",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "freq",
-              "scale"
-            ],
-            [
-              "nth",
-              "mode"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.octaveWarp",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "frequency",
-              "freq"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.palette",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "paletteIndex",
-              "index"
-            ],
-            [
-              "paletteOffset",
-              "offset"
-            ],
-            [
-              "paletteRepeat",
-              "repeat"
-            ],
-            [
-              "paletteRotation",
-              "rotation"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.prismaticAberration",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "aberrationAmt",
-              "aberration"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter.text",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "bgOpacity",
-              "matteOpacity"
-            ],
-            [
-              "bgAlpha",
-              "matteOpacity"
-            ],
-            [
-              "bgColor",
-              "matteColor"
-            ]
-          ]
-        }
-      ],
-      [
-        "filter3d.palette3d",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "paletteIndex",
-              "index"
-            ],
-            [
-              "paletteOffset",
-              "offset"
-            ],
-            [
-              "paletteRepeat",
-              "repeat"
-            ],
-            [
-              "paletteRotation",
-              "rotation"
-            ]
-          ]
-        }
-      ],
-      [
-        "mixer.alphaMask",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "mixAmt",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "mixer.applyMode",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "mixAmt",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "mixer.blendMode",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "mixAmt",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "mixer.centerMask",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "mixAmt",
-              "mix"
-            ]
-          ]
-        }
-      ],
-      [
-        "render.pointsBillboardRender",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "rotationVariation",
-              "rotationVar"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth.cell",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "cellVariation",
-              "variation"
-            ],
-            [
-              "loopAmp",
-              "speed"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth.mandelbrot",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "poiMode",
-              "poi"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth.media",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "backgroundColor",
-              "bgColor"
-            ],
-            [
-              "backgroundOpacity",
-              "bgAlpha"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth.noise",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "noiseType",
-              "type"
-            ],
-            [
-              "loopAmp",
-              "speed"
-            ],
-            [
-              "xScale",
-              "scaleX"
-            ],
-            [
-              "yScale",
-              "scaleY"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth.osc2d",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "frequency",
-              "freq"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth.pattern",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "patternType",
-              "type"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth.shape",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "loopAAmp",
-              "speedA"
-            ],
-            [
-              "loopBAmp",
-              "speedB"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth3d.cell3d",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "cellVariation",
-              "variation"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth3d.flythrough3d",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "fractalType",
-              "type"
-            ]
-          ]
-        }
-      ],
-      [
-        "synth3d.fractal3d",
-        {
-          "$type": "object",
-          "entries": [
-            [
-              "fractalType",
-              "type"
-            ]
-          ]
-        }
-      ]
-    ]
-  },
   "effectAliases": {
     "$type": "map",
     "entries": []

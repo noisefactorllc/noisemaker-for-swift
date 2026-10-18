@@ -32,7 +32,6 @@ public struct EffectRegistry: Sendable {
     public private(set) var mergedEnums: ParserValue
     public let stdEnums: ParserValue
     let stdEnumsGraph: GraphValue
-    public private(set) var paramAliases: GraphValue
     public let effectAliases: GraphValue
     public let defaultVertex: GraphValue
     public let blitProgram: GraphValue
@@ -55,7 +54,6 @@ public struct EffectRegistry: Sendable {
               let rawOps = root["validatorOps"],
               let rawEnums = root["mergedEnums"],
               let rawStdEnums = root["stdEnums"],
-              let rawParamAliases = root["paramAliases"],
               let rawEffectAliases = root["effectAliases"],
               let rawVertex = root["defaultVertex"],
               let rawBlit = root["blitProgram"],
@@ -69,7 +67,6 @@ public struct EffectRegistry: Sendable {
         mergedEnums = try ParserValue.decodeTagged(rawEnums)
         stdEnums = try ParserValue.decodeTagged(rawStdEnums)
         stdEnumsGraph = try GraphValue.decode(rawStdEnums)
-        paramAliases = try GraphValue.decode(rawParamAliases)
         effectAliases = try GraphValue.decode(rawEffectAliases)
         defaultVertex = try GraphValue.decode(rawVertex)
         blitProgram = try GraphValue.decode(rawBlit)
@@ -212,19 +209,6 @@ public struct EffectRegistry: Sendable {
                                    function: function, starter: starter,
                                    registrationKeys: aliases, definition: definition.value)
         let globals = source.field("globals")?.objectFields ?? []
-        var updatedParamAliases: GraphValue?
-        if let aliases = source.field("paramAliases")?.objectFields {
-            for alias in aliases {
-                guard let target = alias.value.stringValue,
-                      globals.contains(where: { $0.name == target }) else {
-                    throw CatalogError.malformed("Portable parameter alias has no declared target")
-                }
-            }
-            var entries = paramAliases.mapEntries ?? []
-            entries.append(GraphMapEntry(key: .string("user.\(function)"),
-                                         value: .object(aliases)))
-            updatedParamAliases = .map(entries)
-        }
         let args: [ParserValue] = try globals.map { global in
             let spec = global.value
             var opArg: [(String, ParserValue)] = [("name", .string(global.name))]
@@ -246,7 +230,6 @@ public struct EffectRegistry: Sendable {
         effects.append(effect)
         effectsByKey[key] = index
         for alias in aliases { effectsByRegistrationKey[alias] = index }
-        if let updatedParamAliases { paramAliases = updatedParamAliases }
         validatorOps = .object(ops)
         if starter {
             starterOps.append("user.\(function)")

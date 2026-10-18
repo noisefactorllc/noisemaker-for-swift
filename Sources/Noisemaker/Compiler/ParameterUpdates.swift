@@ -17,9 +17,7 @@ public extension RenderGraph {
         var ordinary: [GraphField] = []
         var palettes: [GraphField] = []
         for field in values {
-            let parameter = ParameterUpdater.resolveAlias(field.name, effectKey: effectKey,
-                                                          registry: registry)
-            if effect.definition.field("globals")?.field(parameter)?.field("type")?.stringValue == "palette" {
+            if effect.definition.field("globals")?.field(field.name)?.field("type")?.stringValue == "palette" {
                 palettes.append(field)
             } else {
                 ordinary.append(field)
@@ -48,7 +46,7 @@ public extension RenderGraph {
               matches.allSatisfy({ originalPasses[$0].field("effectKey")?.stringValue == effectKey }) else {
             throw CompilerIncomplete(stage: "parameter update", detail: "step has no single registered effect")
         }
-        let parameterName = ParameterUpdater.resolveAlias(name, effectKey: effectKey, registry: registry)
+        let parameterName = name
         guard let spec = effect.definition.field("globals")?.field(parameterName) else {
             throw CompilerIncomplete(stage: "parameter update", detail: "unknown parameter \(name)")
         }
@@ -142,13 +140,6 @@ enum ParameterUpdater {
         if truthy(value.field("_varRef")) { return true }
         let type = value.field("type")?.stringValue ?? value.field("_ast")?.field("type")?.stringValue
         return ["Oscillator", "Midi", "Audio"].contains(type ?? "")
-    }
-
-    static func resolveAlias(_ name: String, effectKey: String, registry: EffectRegistry) -> String {
-        let aliases = registry.paramAliases.mapEntries?.first {
-            $0.key.stringValue == effectKey
-        }?.value
-        return aliases?.field(name)?.stringValue ?? name
     }
 
     static func convert(_ value: GraphValue, spec: GraphValue,
