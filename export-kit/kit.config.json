@@ -64,7 +64,8 @@
   },
   "compat": {
     "mode": "list",
-    "fromJsonList": "export-kit/compat-effects.json"
+    "fromJsonList": "export-kit/compat-effects.json",
+    "excludeIds": ["filter/text", "synth/media"]
   },
   "engineBytesFrom": ["engine/"]
 }

@@ -1,0 +1,93 @@
+name: Export kit
+
+# Public repo: holds NO deploy credentials. Dispatches the export-kit
+# release workflow, which builds this repo's export kit at this exact
+# SHA and ships it to kits.noisedeck.app.
+
+# A kit is released only after a successful Native Metal run on main whose
+# parity job ran and passed: the weekly schedule, or a workflow_dispatch with
+# the parity input, grades the whole case set on a native Metal GPU. A push
+# runs only the Metal test job, so it releases nothing. A SHA that already
+# carries a kit tag is not released again.
+
+on:
+  workflow_run:
+    workflows: ["Native Metal"]
+    types: [completed]
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: export-kit-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+    steps:
+      - name: Skip a SHA that is already released or was not graded
+        id: released
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          parity=$(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs" --jq '[.jobs[] | select(.name == "parity") | .conclusion][0] // "absent"')
+          if [ "$parity" != "success" ]; then
+            echo "Native Metal run $RUN_ID has parity job conclusion '$parity'; nothing to release."
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          tags=$(git ls-remote --tags "https://github.com/$REPO.git" 'refs/tags/kit-*')
+          if printf '%s\n' "$tags" | awk '$2 ~ /\^\{\}$/ { print $1 }' | grep -qx "$SHA"; then
+            echo "$SHA already carries a kit tag; nothing to release."
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check the release dispatch configuration
+        if: steps.released.outputs.released == 'false'
+        env:
+          RELEASE_REPOSITORY: ${{ secrets.RELEASE_REPOSITORY }}
+          EXPORT_KIT_RELEASE_WORKFLOW: ${{ secrets.EXPORT_KIT_RELEASE_WORKFLOW }}
+        run: |
+          missing=""
+          [ -n "$RELEASE_REPOSITORY" ] || missing="$missing RELEASE_REPOSITORY"
+          [ -n "$EXPORT_KIT_RELEASE_WORKFLOW" ] || missing="$missing EXPORT_KIT_RELEASE_WORKFLOW"
+          if [ -n "$missing" ]; then
+            echo "::error::The release dispatch is not configured. Empty or unset secret(s):$missing"
+            exit 1
+          fi
+
+      - name: Mint release-dispatch token
+        if: steps.released.outputs.released == 'false'
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: Iv23liy6T6BW0BXuZRzx
+          private-key: ${{ secrets.EHSRE_APP_PRIVATE_KEY }}
+          owner: noisefactorllc
+          repositories: ${{ secrets.RELEASE_REPOSITORY }}
+
+      - name: Dispatch the export-kit release
+        if: steps.released.outputs.released == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          RELEASE_REPOSITORY: ${{ secrets.RELEASE_REPOSITORY }}
+          EXPORT_KIT_RELEASE_WORKFLOW: ${{ secrets.EXPORT_KIT_RELEASE_WORKFLOW }}
+        run: |
+          gh workflow run "$EXPORT_KIT_RELEASE_WORKFLOW" \
+            --repo "$GITHUB_REPOSITORY_OWNER/$RELEASE_REPOSITORY" \
+            --ref main \
+            -f kit=swift \
+            -f sha="$SHA"
