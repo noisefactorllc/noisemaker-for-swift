@@ -180,6 +180,41 @@ import Testing
         }
     }
 
+    @Test func parameterAliasCompilesAsItsCanonicalName() throws {
+        let compiler = try NoisemakerCompiler()
+        func passes(_ argument: String) throws -> GraphValue {
+            let source = "search synth, points, render\nsolid().pointsEmit().flow(\(argument): o1).pointsRender().write(o0)\nrender(o0)\n"
+            return try #require(compiler.compileStages(source: source).graph.field("passes"))
+        }
+        #expect(try passes("fieldTex").sameOrderedValue(as: passes("heightTex")))
+    }
+
+    @Test func vectorCallsSetVectorComponents() throws {
+        let compiler = try NoisemakerCompiler()
+        func firstArgument(_ source: String, _ name: String) throws -> ParserValue? {
+            let validated = try compiler.compileStages(source: source).validated
+            return validated.field("plans")?.elements?.first?.field("chain")?.elements?.first?
+                .field("args")?.field(name)
+        }
+        #expect(try firstArgument("search synth\nmedia(imageSize: vec2(256, 128)).write(o0)\nrender(o0)\n",
+                                  "imageSize") == .array([.number(256), .number(128)]))
+        #expect(try firstArgument("search synth\nremap(zone0_bounds: vec4(0.1, 0.2, 0.7, 0.9)).write(o0)\nrender(o0)\n",
+                                  "zone0_bounds") == .array([.number(0.1), .number(0.2), .number(0.7), .number(0.9)]))
+    }
+
+    @Test func portableFuncMustBeCallableFromSearchUser() throws {
+        var registry = try EffectRegistry.bundled()
+        let shader = ["probe": "@fragment fn main() {}"]
+        for name in ["osc", "o1", "read", "let"] {
+            let definition = #"{"namespace":"user","func":"\#(name)","passes":[{"program":"probe"}]}"#
+            expectThrows(try registry.registerPortable(definitionJSON: Data(definition.utf8),
+                                                       shaderSources: shader), name) { error in
+                #expect(error is CatalogError, "\(name)")
+            }
+            #expect(registry.effect(key: "user.\(name)") == nil)
+        }
+    }
+
     @Test func nativeCompilerBuildsRenderableSolidGraph() throws {
         let compiler = try NoisemakerCompiler()
         let source = "search synth\nsolid(color: [0.2, 0.6, 0.9]).write(o0)\nrender(o0)\n"

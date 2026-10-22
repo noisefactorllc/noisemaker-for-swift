@@ -32,11 +32,16 @@ public enum GraphDimension {
                 throw GraphDiagnostic.unsupported("\(context) invalid inputOverride dimension field")
             }
             if let name = value.field("param")?.stringValue,
-               keys.isSubset(of: ["param", "default", "paramDefault", "power", "multiply", "inputOverride"]) {
+               keys.isSubset(of: ["param", "default", "paramDefault", "power", "multiply", "inputOverride",
+                                  "inherit"]) {
                 for key in ["default", "paramDefault", "power", "multiply"] {
                     if let raw = value.field(key), raw.numberValue == nil {
                         throw GraphDiagnostic.unsupported("\(context) invalid \(key) dimension field")
                     }
+                }
+                // The expander reads `inherit`; the size resolves from the scoped parameter.
+                if let inherit = value.field("inherit"), inherit.boolValue == nil {
+                    throw GraphDiagnostic.unsupported("\(context) invalid inherit dimension field")
                 }
                 let baseFallback = value.field("paramDefault")?.numberValue ?? 64
                 let power = value.field("power")?.numberValue ?? 1

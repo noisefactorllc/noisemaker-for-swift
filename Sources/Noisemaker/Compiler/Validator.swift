@@ -81,6 +81,11 @@ public enum NoisemakerValidator {
         var diagnostics: [ParserValue] = []
         var symbols: [String: ParserValue] = [:]
         var searchOrder: [String] = []
+        /// Names of the top-level lets that come after the current statement.
+        var pendingLets: Set<String> = []
+        /// Identifier reads that already have their S003 for a read before the
+        /// let. Upstream keys them by node identity; parser positions are unique.
+        var readsBeforeLet: Set<String> = []
 
         mutating func validate(_ ast: ParserValue) throws -> ParserValue {
             guard ast.type == "Program",
@@ -99,30 +104,24 @@ public enum NoisemakerValidator {
                 throw CompilerIncomplete(stage: "validator", detail: "missing search directive")
             }
             let vars = ast.field("vars")?.elements ?? []
-            for variable in vars {
-                guard variable.type == "VarAssign", let name = variable.field("name")?.string,
-                      let expression = variable.field("expr") else {
-                    throw CompilerIncomplete(stage: "validator", detail: "malformed variable declaration")
+            // Statements compile in order. Each one sees the lets written before
+            // it, and the latest assignment of a name wins. Lets that come after
+            // the last statement are still declared, so their own checks run.
+            var nextVar = 0
+            func declareVarsBefore(_ planIndex: Double, _ validator: inout Validator) throws {
+                while nextVar < vars.count,
+                      (vars[nextVar].hiddenField("planIndex")?.number ?? 0) <= planIndex {
+                    try validator.declareVar(vars[nextVar])
+                    nextVar += 1
                 }
-                let value = try substitute(expression)
-                if value.isNull || value.isUndefined || (value.type == "Ident" &&
-                    ["null", "undefined"].contains(value.field("name")?.string ?? "")) {
-                    report("S004", variable)
-                    continue
-                }
-                if value.type == "Ident", let identifier = value.field("name")?.string,
-                   symbols[identifier] == nil, !Self.stateValues.contains(identifier),
-                   registry.validatorOp(identifier) == nil,
-                   !searchOrder.contains(where: { registry.validatorOp("\($0).\(identifier)") != nil }) {
-                    report("S003", value)
-                    continue
-                }
-                symbols[name] = value
+                validator.pendingLets = Set(vars[nextVar...].compactMap { $0.field("name")?.string })
             }
             var planned: [ParserValue] = []
-            for statement in plans {
+            for (index, statement) in plans.enumerated() {
+                try declareVarsBefore(Double(index), &self)
                 if let plan = try compileStatement(statement) { planned.append(plan) }
             }
+            try declareVarsBefore(.infinity, &self)
             let render = ast.field("render")?.field("name") ?? .null
             var fields: [(String, ParserValue)] = [
                 ("plans", .array(planned)), ("diagnostics", .array(diagnostics)),
@@ -133,10 +132,161 @@ public enum NoisemakerValidator {
             return .object(fields)
         }
 
-        private mutating func compileStatement(_ statement: ParserValue) throws -> ParserValue? {
-            guard let calls = statement.field("chain")?.elements else {
-                throw CompilerIncomplete(stage: "validator", detail: "branch or non-chain statement")
+        private mutating func declareVar(_ variable: ParserValue) throws {
+            guard variable.type == "VarAssign", let name = variable.field("name")?.string,
+                  let expression = variable.field("expr") else {
+                throw CompilerIncomplete(stage: "validator", detail: "malformed variable declaration")
             }
+            let value = try substitute(expression)
+            if value.isNull || value.isUndefined || (value.type == "Ident" &&
+                ["null", "undefined"].contains(value.field("name")?.string ?? "")) {
+                report("S004", variable)
+                return
+            }
+            if value.type == "Ident", let identifier = value.field("name")?.string,
+               symbols[identifier] == nil, !Self.stateValues.contains(identifier),
+               registry.validatorOp(identifier) == nil,
+               !searchOrder.contains(where: { registry.validatorOp("\($0).\(identifier)") != nil }) {
+                report("S003", value)
+                return
+            }
+            symbols[name] = value
+        }
+
+        private func readKey(_ node: ParserValue) -> String? {
+            guard let position = node.sourcePosition, let name = node.field("name")?.string else { return nil }
+            return "\(position.start):\(position.end):\(name)"
+        }
+
+        /// A statement that reads a variable before any let assigns it gets S003
+        /// "Variable used before assignment" at the identifier. Other diagnostics
+        /// for that identifier are not added.
+        private mutating func reportReadsBeforeLet(_ node: ParserValue?) {
+            guard !pendingLets.isEmpty, let node else { return }
+            if let elements = node.elements {
+                for element in elements { reportReadsBeforeLet(element) }
+                return
+            }
+            guard let fields = node.fields else { return }
+            if node.type == "Ident", let name = node.field("name")?.string,
+               pendingLets.contains(name), symbols[name] == nil {
+                if let key = readKey(node), readsBeforeLet.contains(key) { return }
+                var ident: [(String, ParserValue)] = [("type", .string("Ident")), ("name", .string(name))]
+                if let position = node.sourcePosition {
+                    ident.append(("loc", .object([("line", .number(Double(position.line))),
+                                                  ("column", .number(Double(position.column)))])))
+                }
+                report("S003", .object(ident))
+                if let key = readKey(node) { readsBeforeLet.insert(key) }
+                return
+            }
+            for field in fields { reportReadsBeforeLet(field.value) }
+        }
+
+        private mutating func compileStatement(_ statement: ParserValue) throws -> ParserValue? {
+            switch statement.type {
+            case "IfStmt":
+                reportReadsBeforeLet(statement.field("condition"))
+                let condition = try evalCondition(statement.field("condition"))
+                let thenBranch = try compileBlock(statement.field("then"))
+                var elif: [ParserValue] = []
+                for item in statement.field("elif")?.elements ?? [] {
+                    reportReadsBeforeLet(item.field("condition"))
+                    let elifCondition = try evalCondition(item.field("condition"))
+                    elif.append(.object([("cond", elifCondition), ("then", try compileBlock(item.field("then")))]))
+                }
+                let elseBranch = try compileBlock(statement.field("else"))
+                return .object([("type", .string("Branch")), ("cond", condition), ("then", thenBranch),
+                                ("elif", .array(elif)), ("else", elseBranch)])
+            case "Break": return .object([("type", .string("Break"))])
+            case "Continue": return .object([("type", .string("Continue"))])
+            case "Return":
+                var fields: [(String, ParserValue)] = [("type", .string("Return"))]
+                if let value = statement.field("value") {
+                    reportReadsBeforeLet(value)
+                    fields.append(("value", try evalExpr(value)))
+                }
+                return .object(fields)
+            default:
+                return try compileChainStatement(statement)
+            }
+        }
+
+        /// A `let` inside a block applies to the rest of that block only, so a
+        /// block cannot change how statements outside it compile.
+        private mutating func compileBlock(_ body: ParserValue?) throws -> ParserValue {
+            var result: [ParserValue] = []
+            var shadowed: [(String, ParserValue?)] = []
+            for statement in body?.elements ?? [] {
+                if statement.type == "VarAssign" {
+                    if let name = statement.field("name")?.string, !shadowed.contains(where: { $0.0 == name }) {
+                        shadowed.append((name, symbols[name]))
+                    }
+                    try declareVar(statement)
+                    // Kept as the parser node, like the top-level `vars` entries.
+                    result.append(statement)
+                    continue
+                }
+                if let compiled = try compileStatement(statement) { result.append(compiled) }
+            }
+            for (name, previous) in shadowed { symbols[name] = previous }
+            return .array(result)
+        }
+
+        private mutating func evalExpr(_ node: ParserValue) throws -> ParserValue {
+            let expression = try substitute(node)
+            if ["Chain", "Call"].contains(expression.type ?? "") {
+                throw CompilerIncomplete(stage: "validator", detail: "control-flow chain expression")
+            }
+            if expression.type == "Member", let path = expression.field("path")?.elements?.compactMap(\.string),
+               let resolved = resolveEnum(path) {
+                if let number = resolved.number { return .object([("type", .string("Number")), ("value", .number(number))]) }
+                return resolved
+            }
+            return expression
+        }
+
+        /// Upstream toBoolean: a number is true unless it is zero; other values use JS truthiness.
+        private static func truthy(_ value: ParserValue) -> Bool {
+            if let number = value.number { return number != 0 }
+            if let flag = value.bool { return flag }
+            if let text = value.string { return !text.isEmpty }
+            return !value.isNull && !value.isUndefined
+        }
+
+        private mutating func evalCondition(_ node: ParserValue?) throws -> ParserValue {
+            guard let node else { return .bool(false) }
+            let expression = try evalExpr(node)
+            switch expression.type {
+            case "Number": return .bool(Self.truthy(expression.field("value") ?? .undefined))
+            case "Boolean": return .bool(expression.field("value")?.bool == true)
+            case "Func":
+                return .object([("fn", .taggedFunction("(state) => toBoolean(fn(state))"))])
+            case "Ident":
+                guard let name = expression.field("name")?.string else { return .bool(false) }
+                if let symbol = symbols[name] { return try evalCondition(symbol) }
+                if Self.stateValues.contains(name) {
+                    return .object([("fn", .taggedFunction("(state)=>toBoolean(state[key])"))])
+                }
+                report("S003", expression)
+                return .bool(false)
+            case "Member":
+                let path = expression.field("path")?.elements?.compactMap(\.string) ?? []
+                if let resolved = resolveEnum(path) { return .bool(Self.truthy(resolved)) }
+                report("S001", expression, "Unknown enum path: '\(path.isEmpty ? "unknown" : path.joined(separator: "."))'")
+                return .bool(false)
+            case "String", "Color", "ArrayLiteral", "OutputRef", "SourceRef":
+                return .bool(false)
+            default:
+                throw CompilerIncomplete(stage: "validator", detail: "control-flow condition \(expression.type ?? "unknown")")
+            }
+        }
+
+        private mutating func compileChainStatement(_ statement: ParserValue) throws -> ParserValue? {
+            guard let calls = statement.field("chain")?.elements else {
+                throw CompilerIncomplete(stage: "validator", detail: "non-chain statement")
+            }
+            reportReadsBeforeLet(statement.field("chain"))
             let write = statement.field("write")
             let write3d = statement.field("write3d")
             let present = { (value: ParserValue?) in value.map { !$0.isNull && !$0.isUndefined } ?? false }
@@ -264,7 +414,28 @@ public enum NoisemakerValidator {
             if starter && current != nil { report("S005", original) }
             let from = starter ? nil : current
             let keyword = original.field("kwargs")
-            let keywordFields = keyword?.fields ?? []
+            var keywordFields = keyword?.fields ?? []
+            // Resolve deprecated parameter aliases as upstream resolveParamAliases
+            // does: the canonical name keeps its own value, and every alias warns.
+            let aliases = registry.paramAliases.mapEntries?.first {
+                $0.key.stringValue == opName
+            }?.value.objectFields ?? []
+            for alias in aliases {
+                guard let oldIndex = keywordFields.firstIndex(where: { $0.name == alias.name }),
+                      let newName = alias.value.stringValue else { continue }
+                let oldValue = keywordFields[oldIndex].value
+                if !keywordFields.contains(where: { $0.name == newName }) {
+                    keywordFields.append(ParserField(name: newName, value: oldValue))
+                }
+                keywordFields.removeAll { $0.name == alias.name }
+                diagnostics.append(.object([
+                    ("code", .string("S007")),
+                    ("message", .string("param '\(alias.name)' is deprecated, use '\(newName)' instead. Aliases will be removed on 2027-06-01.")),
+                    ("severity", .string("warning")),
+                    ("nodeId", original.field("id") ?? .undefined),
+                    ("identifier", .string(name))
+                ]))
+            }
             var args: [(String, ParserValue)] = []
             var argSources: [(String, ParserValue)] = []
             var seen: Set<String> = []
@@ -343,7 +514,8 @@ public enum NoisemakerValidator {
                 if node.type == "Boolean", let value = node.field("value")?.bool { return .bool(value) }
                 if node.type == "Number", let value = node.field("value")?.number { return .bool(value != 0) }
                 if functionSource(node) != nil {
-                    return .object([("fn", .taggedFunction("(state) => !!fn(state)"))])
+                    // _ast keeps the source text for the unparser.
+                    return .object([("fn", .taggedFunction("(state) => !!fn(state)")), ("_ast", node)])
                 }
                 if node.type == "Ident", let name = node.field("name")?.string,
                    Self.stateValues.contains(name), spec.field("choices")?.field(name) == nil {
@@ -374,6 +546,23 @@ public enum NoisemakerValidator {
                 }
                 return .object([("kind", .string(type == "volume" ? "vol" : "geo")),
                                 ("name", .string(name))])
+            }
+            // vec2(x, y) on a vec2 parameter, and vec4(x, y, z, w) on a vec4
+            // parameter. The loader registers vec4 parameters as `color`; their
+            // default keeps its four components. Any other form, including a
+            // wrong component count, takes the branches below.
+            if node.type == "Call", let callee = node.field("name")?.string,
+               let components = node.field("args")?.elements,
+               components.count == (callee == "vec2" ? 2 : 4),
+               (type == "vec2" && callee == "vec2") ||
+                (type == "color" && callee == "vec4" && fallback.elements?.count == 4) {
+                return .array(components.map { component in
+                    if component.type == "Number", let value = component.field("value")?.number {
+                        return .number(value)
+                    }
+                    report("S002", component, "Argument out of range for '\(key)' in \(callName)()")
+                    return .number(0)
+                })
             }
             if type == "color" || type == "vec3" || type == "vec4" {
                 if node.type == "Color", let value = node.field("value") {
@@ -421,10 +610,12 @@ public enum NoisemakerValidator {
             }
             if node.type == "Oscillator" { return try compileOscillator(node, depth: 0) }
             if let function = functionSource(node) {
+                // _ast keeps the source text for the unparser.
                 return .object([
                     ("fn", .taggedFunction(function)),
                     ("min", spec.field("min") ?? .undefined),
-                    ("max", spec.field("max") ?? .undefined)
+                    ("max", spec.field("max") ?? .undefined),
+                    ("_ast", node)
                 ])
             }
             if node.type == "Ident", let name = node.field("name")?.string,
@@ -495,6 +686,7 @@ public enum NoisemakerValidator {
 
         private static let defaultDiagnostics: [String: (severity: String, message: String)] = [
             "S001": ("error", "Unknown identifier"),
+            "S002": ("warning", "Argument out of range"),
             "S003": ("error", "Variable used before assignment"),
             "S004": ("error", "Cannot assign null or undefined"),
             "S005": ("error", "Illegal chain structure")
@@ -503,6 +695,7 @@ public enum NoisemakerValidator {
         /// Records a diagnostic as upstream pushDiag does: the message gains the
         /// node's identifier unless it already names it or quotes anything.
         private mutating func report(_ code: String, _ node: ParserValue?, _ message: String? = nil) {
+            if let node, let key = readKey(node), readsBeforeLet.contains(key) { return }
             let defaults = Self.defaultDiagnostics[code]!
             var text = message ?? defaults.message
             let identifier = node.flatMap(identifierName)

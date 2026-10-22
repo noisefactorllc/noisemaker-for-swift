@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "2f9736ebb6c39be683074edc3a2cd0338a8a0c9a",
-    "sourceManifestSha256": "a3dee41e268c030816b087baf8b7348fb720ec6d00e7c33e46c2ec47a2def1e1"
+    "commit": "12751c78103ec352bd359a9944bbeac5ad239a4b",
+    "sourceManifestSha256": "793a1235ac61085f2cd91b9cabedc24d6e6f0dfd1fa4e1e4b6f3cdba0d05ea12"
   },
   "cases": [
     {
@@ -361,6 +361,31 @@
           "location": null
         }
       ]
+    },
+    {
+      "id": "read-before-let",
+      "source": "search synth, filter, mixer\nnoise(scaleX: v, scaleY: v).write(o0)\nlet v = 4\nrender(o0)\n",
+      "sourceSha256": "ef5c92616e99ebb464559a527fccf58d90e74aeab45a254d8e8c02e6cf5d17d1",
+      "diagnostics": [
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'v'",
+          "location": {
+            "line": 2,
+            "column": 15
+          }
+        },
+        {
+          "code": "S003",
+          "severity": "error",
+          "message": "Variable used before assignment: 'v'",
+          "location": {
+            "line": 2,
+            "column": 26
+          }
+        }
+      ]
     }
   ],
   "accepted": [
@@ -383,6 +408,39 @@
       "id": "surface-identifier",
       "source": "search synth, filter, mixer\nnoise().blendMode(tex: foo).write(o0)\nrender(o0)\n",
       "sourceSha256": "56ce2c7678e129703bdf241fef46c86e7e70e06552b295a43d0cda20403a9e1a"
+    }
+  ],
+  "expansionFailures": [
+    {
+      "id": "if-block-let-and-comments",
+      "source": "search synth, filter, mixer\nif (1) {\n// lead\nlet q = 2\nnoise(seed: q).write(o0)\n// tail\n}\nrender(o0)\n",
+      "sourceSha256": "22d8869fc3edf14c2991ac4f33cf8bab4d334254a0ac32035de27f98851f9776",
+      "errors": [
+        "The runtime does not yet execute control flow ('if')"
+      ]
+    },
+    {
+      "id": "break-statement",
+      "source": "search synth, filter, mixer\nnoise().write(o0)\nbreak\nrender(o0)\n",
+      "sourceSha256": "64509b8dda9ab28e811949148a1050b7965823b92af6fed4e66648406eb54191",
+      "errors": [
+        "The runtime does not yet execute control flow ('break')"
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "id": "parameter-alias",
+      "source": "search synth, points, render\nsolid().pointsEmit().flow(fieldTex: o1).pointsRender().write(o0)\nrender(o0)\n",
+      "sourceSha256": "b38f4ac5ddfb83ba93b1fc43b55d64ae7319a3a4f3da022f685d1fb51eb5d047",
+      "diagnostics": [
+        {
+          "code": "S007",
+          "severity": "warning",
+          "message": "param 'fieldTex' is deprecated, use 'heightTex' instead. Aliases will be removed on 2027-06-01.",
+          "location": null
+        }
+      ]
     }
   ]
 }

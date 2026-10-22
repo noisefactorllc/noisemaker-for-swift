@@ -1,5 +1,23 @@
 import Foundation
 
+/// A valid program that the expander cannot turn into passes, such as one with
+/// control flow. Upstream compileGraph reports it as ERR_EXPANSION_FAILED.
+public struct ExpansionError: Error, LocalizedError, CustomStringConvertible, Sendable {
+    public let messages: [String]
+
+    public init(messages: [String]) { self.messages = messages }
+
+    public var description: String { messages.joined(separator: "; ") }
+    public var errorDescription: String? { description }
+
+    static func check(_ expanded: GraphValue) throws {
+        let messages = (expanded.field("errors")?.arrayValue ?? []).map {
+            $0.field("message")?.stringValue ?? ""
+        }
+        if !messages.isEmpty { throw ExpansionError(messages: messages) }
+    }
+}
+
 public struct NativeCompilationStages {
     public let parsed: ParserValue
     public let validated: ParserValue
@@ -29,6 +47,7 @@ public struct NoisemakerCompiler {
         let validated = try NoisemakerValidator.validate(parsed, registry: registry)
         try CompilationError.check(validated)
         let expanded = try NoisemakerExpander.expand(validated, registry: registry)
+        try ExpansionError.check(expanded)
         guard let passes = expanded.field("passes")?.arrayValue,
               let programs = expanded.field("programs"),
               let textureSpecs = expanded.field("textureSpecs"),

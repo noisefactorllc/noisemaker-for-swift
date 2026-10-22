@@ -34,6 +34,9 @@ public struct EffectRegistry: Sendable {
     public private(set) var mergedEnums: ParserValue
     public let stdEnums: ParserValue
     let stdEnumsGraph: GraphValue
+    /// Deprecated parameter names of the catalog effects, as upstream
+    /// CanvasRenderer.loadEffect registers them: op name to `{ old: new }`.
+    public let paramAliases: GraphValue
     public let effectAliases: GraphValue
     public let defaultVertex: GraphValue
     public let blitProgram: GraphValue
@@ -56,6 +59,7 @@ public struct EffectRegistry: Sendable {
               let rawOps = root["validatorOps"],
               let rawEnums = root["mergedEnums"],
               let rawStdEnums = root["stdEnums"],
+              let rawParamAliases = root["paramAliases"],
               let rawEffectAliases = root["effectAliases"],
               let rawVertex = root["defaultVertex"],
               let rawBlit = root["blitProgram"],
@@ -69,6 +73,7 @@ public struct EffectRegistry: Sendable {
         mergedEnums = try ParserValue.decodeTagged(rawEnums)
         stdEnums = try ParserValue.decodeTagged(rawStdEnums)
         stdEnumsGraph = try GraphValue.decode(rawStdEnums)
+        paramAliases = try GraphValue.decode(rawParamAliases)
         effectAliases = try GraphValue.decode(rawEffectAliases)
         defaultVertex = try GraphValue.decode(rawVertex)
         blitProgram = try GraphValue.decode(rawBlit)
@@ -143,6 +148,17 @@ public struct EffectRegistry: Sendable {
         try registerPortable(definitionJSON: definitionJSON, orderedShaderSources: ordered)
     }
 
+    /// True when a `search user` program can call `name()` as an effect, as in
+    /// upstream registerPortableEffect. Keywords, surface references and the
+    /// calls that the parser turns into other nodes (osc, read, from, ...) fail.
+    static func parsesAsUserEffectCall(_ name: String) -> Bool {
+        guard let program = try? NoisemakerParser.parse("search user\n\(name)()"),
+              let chain = program.field("plans")?.elements?.first?.field("chain")?.elements else {
+            return false
+        }
+        return chain.count == 1 && chain[0].type == "Call" && chain[0].field("name")?.string == name
+    }
+
     /// Registers Portable WGSL sidecars in their source-defined order.
     public mutating func registerPortable(definitionJSON: Data,
                                            orderedShaderSources: [(String, String)]) throws {
@@ -163,6 +179,9 @@ public struct EffectRegistry: Sendable {
               source.field("namespace") == nil || source.field("namespace")?.stringValue == "user",
               let passes = source.field("passes")?.arrayValue, !passes.isEmpty else {
             throw CatalogError.malformed("invalid Portable identity or passes")
+        }
+        guard Self.parsesAsUserEffectCall(function) else {
+            throw CatalogError.malformed("reserved Portable func \(function)")
         }
         let reserved: Set<String> = ["constructor", "__proto__", "prototype", "toString", "toLocaleString",
                                      "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable",

@@ -87,4 +87,62 @@ import Testing
             }
         }
     }
+
+    @Test func controlFlowProgramsFailExpansionAsLockedUpstream() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let oracle = try #require(JSONSerialization.jsonObject(with: Data(contentsOf:
+            root.appendingPathComponent("parity/invalid-programs.json"))) as? [String: Any])
+        let cases = try #require(oracle["expansionFailures"] as? [[String: Any]])
+        #expect(cases.count >= 2)
+        let compiler = try NoisemakerCompiler()
+        for item in cases {
+            let id = try #require(item["id"] as? String)
+            let source = try #require(item["source"] as? String)
+            let errors = try #require(item["errors"] as? [String])
+            do {
+                _ = try compiler.compile(source: source)
+                Issue.record("\(id) compiled")
+            } catch let error as ExpansionError {
+                #expect(error.messages == errors, "\(id)")
+            } catch {
+                Issue.record("\(id): expected ExpansionError, got \(error)")
+            }
+        }
+    }
+
+    @Test func acceptedProgramsReportLockedWarnings() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let oracle = try #require(JSONSerialization.jsonObject(with: Data(contentsOf:
+            root.appendingPathComponent("parity/invalid-programs.json"))) as? [String: Any])
+        let cases = try #require(oracle["warnings"] as? [[String: Any]])
+        #expect(cases.count >= 1)
+        let compiler = try NoisemakerCompiler()
+        for item in cases {
+            let id = try #require(item["id"] as? String)
+            let source = try #require(item["source"] as? String)
+            let expected = try #require(item["diagnostics"] as? [[String: Any]]).map { entry in
+                let location = (entry["location"] as? [String: Any]).flatMap { location -> Noisemaker.SourceLocation? in
+                    guard let line = location["line"] as? Int, let column = location["column"] as? Int else { return nil }
+                    return Noisemaker.SourceLocation(line: line, column: column)
+                }
+                return CompilerDiagnostic(code: entry["code"] as? String ?? "",
+                                          severity: entry["severity"] as? String ?? "",
+                                          message: entry["message"] as? String ?? "", location: location)
+            }
+            let stages = try compiler.compileStages(source: source)
+            let actual = (stages.validated.field("diagnostics")?.elements ?? []).map { entry in
+                let location = entry.field("location").flatMap { location -> Noisemaker.SourceLocation? in
+                    guard let line = location.field("line")?.number,
+                          let column = location.field("column")?.number else { return nil }
+                    return Noisemaker.SourceLocation(line: Int(line), column: Int(column))
+                }
+                return CompilerDiagnostic(code: entry.field("code")?.string ?? "",
+                                          severity: entry.field("severity")?.string ?? "",
+                                          message: entry.field("message")?.string ?? "", location: location)
+            }
+            #expect(actual == expected, "\(id)")
+        }
+    }
 }

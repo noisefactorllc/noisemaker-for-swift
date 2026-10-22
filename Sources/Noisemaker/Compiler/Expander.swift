@@ -17,6 +17,7 @@ public enum NoisemakerExpander {
         var mediaSteps: [GraphValue] = []
         var mediaStepIds: Set<String> = []
         var lastWrittenSurface: String? = nil
+        var errors: [String] = []
 
         mutating func expand(_ compilation: GraphValue) throws -> GraphValue {
             guard let plans = compilation.field("plans")?.arrayValue else {
@@ -26,22 +27,30 @@ public enum NoisemakerExpander {
                 try expandPlan(plan, index: planIndex)
             }
             let surface = compilation.field("render")?.stringValue ?? lastWrittenSurface
-            guard let surface else {
+            guard surface != nil || !errors.isEmpty else {
                 throw CompilerIncomplete(stage: "expander", detail: "missing render surface")
             }
             return .object([
                 GraphField(name: "passes", value: .array(passes)),
-                GraphField(name: "errors", value: .array([])),
+                GraphField(name: "errors", value: .array(errors.map {
+                    .object([GraphField(name: "message", value: .string($0))])
+                })),
                 GraphField(name: "programs", value: programs.value),
                 GraphField(name: "textureSpecs", value: textureSpecs.value),
-                GraphField(name: "renderSurface", value: .string(surface)),
+                GraphField(name: "renderSurface", value: surface.map { .string($0) } ?? .null),
                 GraphField(name: "mediaSteps", value: .array(mediaSteps))
             ])
         }
 
         private mutating func expandPlan(_ plan: GraphValue, index: Int) throws {
+            // Branch, Break, Continue and Return plans have no chain. The parser
+            // and validator accept them, but the runtime does not execute them.
             guard let steps = plan.field("chain")?.arrayValue else {
-                throw CompilerIncomplete(stage: "expander", detail: "branch plan expansion")
+                let type = plan.field("type")?.stringValue ?? "unknown"
+                let keyword = ["Branch": "if", "Break": "break", "Continue": "continue",
+                               "Return": "return"][type] ?? type
+                errors.append("The runtime does not yet execute control flow ('\(keyword)')")
+                return
             }
             let write = plan.field("write")
             let writeName = write?.field("name")?.stringValue
@@ -295,11 +304,14 @@ public enum NoisemakerExpander {
                         let particleParam = param == "stateSize" && particleID != nil
                             && !texture.name.hasPrefix("global_")
                         let particleTexture = texture.name.hasPrefix("global_") && isParticleTexture(texture.name)
+                            && particleID != nil
                         let suffix = (particleParam || particleTexture) ? particleID! : chainScope
                         let scopedName = param == "volumeSize" ? "volumeSize_\(chainScope)" : "\(param)_\(suffix)"
                         scoped["param"] = .string(scopedName)
                         spec[axis] = scoped.value
-                        scopedParams[param] = .string(scopedName)
+                        // An inherited dimension reads the scope's value and never
+                        // writes this effect's own value over it.
+                        if !truthyInherit(dimension.field("inherit")) { scopedParams[param] = .string(scopedName) }
                     }
                     if let dimension = spec[axis], let param = dimension.field("screenDivide")?.stringValue {
                         var scoped = OrderedObject(dimension)
@@ -328,9 +340,21 @@ public enum NoisemakerExpander {
             return scopedParams
         }
 
+        /// Particle textures, including each behavior's global_<behavior>_base_color,
+        /// are scoped to the current particle pipeline and sized by its stateSize.
         private func isParticleTexture(_ name: String) -> Bool {
-            ["global_xyz", "global_vel", "global_rgba", "global_points_trail",
-             "global_life_data"].contains(name)
+            name.range(of: #"^global_(xyz|vel|rgba|points_trail|life_data|[a-z]+_base_color)$"#,
+                       options: .regularExpression) != nil
+        }
+
+        private func truthyInherit(_ value: GraphValue?) -> Bool {
+            switch value {
+            case .none, .some(.undefined), .some(.null): return false
+            case .some(.bool(let flag)): return flag
+            case .some(.number(let number)): return number != 0 && !number.isNaN
+            case .some(.string(let text)): return !text.isEmpty
+            default: return true
+            }
         }
 
         private func scopeTexture(_ name: String, nodeID: String,

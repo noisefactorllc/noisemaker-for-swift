@@ -17,12 +17,17 @@ public struct ParserValue: Equatable, Sendable {
     fileprivate let storage: Storage
     let sourcePosition: SourcePosition?
     public let subchainArgumentDiagnostics: [ParserDiagnostic]
+    /// Non-enumerable upstream properties, such as a let's `planIndex`. They
+    /// take no part in equality or in the stage encoding.
+    fileprivate let hiddenFields: [ParserField]
 
     fileprivate init(_ storage: Storage, position: SourcePosition? = nil,
-                     subchainArgumentDiagnostics: [ParserDiagnostic] = []) {
+                     subchainArgumentDiagnostics: [ParserDiagnostic] = [],
+                     hiddenFields: [ParserField] = []) {
         self.storage = storage
         self.sourcePosition = position
         self.subchainArgumentDiagnostics = subchainArgumentDiagnostics
+        self.hiddenFields = hiddenFields
     }
 
     public static func == (lhs: Self, rhs: Self) -> Bool { lhs.storage == rhs.storage }
@@ -73,8 +78,13 @@ public struct ParserValue: Equatable, Sendable {
     func adding(_ name: String, _ value: Self) -> Self {
         guard case .object(let fields) = storage else { return self }
         return Self(.object(fields + [ParserField(name: name, value: value)]), position: sourcePosition,
-                    subchainArgumentDiagnostics: subchainArgumentDiagnostics)
+                    subchainArgumentDiagnostics: subchainArgumentDiagnostics, hiddenFields: hiddenFields)
     }
+    func addingHidden(_ name: String, _ value: Self) -> Self {
+        Self(storage, position: sourcePosition, subchainArgumentDiagnostics: subchainArgumentDiagnostics,
+             hiddenFields: hiddenFields.filter { $0.name != name } + [ParserField(name: name, value: value)])
+    }
+    func hiddenField(_ name: String) -> Self? { hiddenFields.first { $0.name == name }?.value }
 
     public func collectSubchainArgumentDiagnostics() -> [ParserDiagnostic] {
         var found = subchainArgumentDiagnostics
@@ -279,7 +289,11 @@ public enum NoisemakerParser {
                 }
                 var statement = try parseStatement()
                 if !leading.isEmpty { statement = statement.adding("leadingComments", .array(leading.map { .string($0) })) }
-                if statement.type == "VarAssign" { vars.append(statement) }
+                if statement.type == "VarAssign" {
+                    // Statement order: the number of plans written before this
+                    // let. Non-enumerable upstream, so the AST shape is unchanged.
+                    vars.append(statement.addingHidden("planIndex", .number(Double(plans.count))))
+                }
                 else { plans.append(statement) }
                 while token.type == "SEMICOLON" { advance() }
             }
@@ -339,9 +353,15 @@ public enum NoisemakerParser {
         private mutating func parseBlock() throws -> [ParserValue] {
             try expect("LBRACE", "Expect '{'")
             var body: [ParserValue] = []
-            while token.type != "RBRACE" {
+            while true {
+                // Comments attach to the next statement, as at top level. Comments
+                // before '}' have no statement; upstream keeps them non-enumerable.
+                let leading = collectComments()
+                if token.type == "RBRACE" { break }
                 if token.type == "EOF" { throw ParserIncomplete("upstream parser does not terminate on EOF inside a block") }
-                body.append(try parseStatement())
+                var statement = try parseStatement()
+                if !leading.isEmpty { statement = statement.adding("leadingComments", .array(leading.map { .string($0) })) }
+                body.append(statement)
                 while token.type == "SEMICOLON" { advance() }
             }
             try expect("RBRACE", "Expect '}'")
@@ -756,7 +776,10 @@ public enum NoisemakerParser {
                     return .object([("type", .string("Member")),
                                     ("path", .array(path.map { .string($0) }))])
                 }
-                return node("Ident", path[0])
+                // Private source position for structured diagnostics; the
+                // public AST shape is unchanged.
+                return .object([("type", .string("Ident")), ("name", .string(path[0]))],
+                               position: found.position)
             case "OUTPUT_REF", "SOURCE_REF", "VOL_REF", "GEO_REF", "XYZ_REF", "VEL_REF", "RGBA_REF", "MESH_REF":
                 advance()
                 guard let type = ["OUTPUT_REF": "OutputRef", "SOURCE_REF": "SourceRef", "VOL_REF": "VolRef",

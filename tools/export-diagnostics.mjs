@@ -35,8 +35,21 @@ const FIXTURES = [
   ['unquoted-string-parameter', 'noise().text(style: bogus).write(o0)'],
   ['number-for-string-parameter', 'noise().text(style: 3).write(o0)'],
   ['variable-cycle', 'let a1x = b1x\nlet b1x = a1x\nnoise(scaleX: a1x).write(o0)'],
-  ['null-variable', 'let v = null\nnoise(scaleX: v).write(o0)']
+  ['null-variable', 'let v = null\nnoise(scaleX: v).write(o0)'],
+  ['read-before-let', 'noise(scaleX: v, scaleY: v).write(o0)\nlet v = 4']
 ].map(([id, body]) => ({ id, source: program(body) }))
+
+// Valid programs that compileGraph rejects with ERR_EXPANSION_FAILED: the
+// runtime does not execute control flow.
+const EXPANSION = [
+  ['if-block-let-and-comments', 'if (1) {\n// lead\nlet q = 2\nnoise(seed: q).write(o0)\n// tail\n}'],
+  ['break-statement', 'noise().write(o0)\nbreak']
+].map(([id, body]) => ({ id, source: program(body) }))
+
+// Programs that the locked compiler accepts with warning diagnostics.
+const WARNINGS = [
+  ['parameter-alias', 'search synth, points, render\nsolid().pointsEmit().flow(fieldTex: o1).pointsRender().write(o0)\nrender(o0)\n']
+].map(([id, source]) => ({ id, source }))
 
 // Programs that the locked compiler accepts. The port may not compile them
 // yet, but it must never report them as invalid.
@@ -56,6 +69,28 @@ function runFixture(fixture, api) {
   let failure = null
   try { api.compileGraph(fixture.source) } catch (error) { failure = error }
   if (failure?.code !== 'ERR_COMPILATION_FAILED') throw new Error(`${fixture.id} compiled`)
+  return { id: fixture.id, source: fixture.source, sourceSha256: sha256(fixture.source), diagnostics }
+}
+
+function expansionFixture(fixture, api) {
+  const validated = api.validate(api.parse(api.lex(fixture.source)))
+  if (validated.diagnostics.length) throw new Error(`${fixture.id} has diagnostics`)
+  let failure = null
+  try { api.compileGraph(fixture.source) } catch (error) { failure = error }
+  if (failure?.code !== 'ERR_EXPANSION_FAILED') throw new Error(`${fixture.id} did not fail expansion`)
+  return { id: fixture.id, source: fixture.source, sourceSha256: sha256(fixture.source),
+    errors: failure.errors.map(item => item.message) }
+}
+
+function warningFixture(fixture, api) {
+  const validated = api.validate(api.parse(api.lex(fixture.source)))
+  const diagnostics = validated.diagnostics.map(item => ({ code: item.code, severity: item.severity,
+    message: item.message, location: item.location ? { line: item.location.line,
+      column: item.location.column } : null }))
+  if (!diagnostics.length || diagnostics.some(item => item.severity !== 'warning')) {
+    throw new Error(`${fixture.id} does not have only warnings`)
+  }
+  api.compileGraph(fixture.source)
   return { id: fixture.id, source: fixture.source, sourceSha256: sha256(fixture.source), diagnostics }
 }
 
@@ -80,15 +115,17 @@ async function main() {
     const api = await import(pathToFileURL(join(ref, 'shaders/src/index.js')).href)
     const cases = FIXTURES.map(fixture => runFixture(fixture, api))
     const accepted = ACCEPTED.map(fixture => acceptFixture(fixture, api))
+    const expansionFailures = EXPANSION.map(fixture => expansionFixture(fixture, api))
+    const warnings = WARNINGS.map(fixture => warningFixture(fixture, api))
     const oracle = { schemaVersion: 1, authority: { repository: lock.repository, commit: lock.commit,
-      sourceManifestSha256: lock.sourceManifestSha256 }, cases, accepted }
+      sourceManifestSha256: lock.sourceManifestSha256 }, cases, accepted, expansionFailures, warnings }
     const bytes = Buffer.from(JSON.stringify(oracle, null, 2) + '\n')
     if (mode === '--write') writeFileSync(OUTPUT, bytes)
     else if (!existsSync(OUTPUT) || !readFileSync(OUTPUT).equals(bytes)) {
       throw new Error('invalid-program diagnostics differ from pinned source')
     }
     process.stdout.write(JSON.stringify({ mode, cases: cases.length, accepted: accepted.length,
-      sha256: sha256(bytes) }) + '\n')
+      expansionFailures: expansionFailures.length, warnings: warnings.length, sha256: sha256(bytes) }) + '\n')
   } finally {
     fetched?.cleanup()
     rmSync(output, { recursive: true, force: true })

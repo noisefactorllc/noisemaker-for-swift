@@ -1,16 +1,16 @@
 {
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "2f9736ebb6c39be683074edc3a2cd0338a8a0c9a",
-    "sourceManifestSha256": "a3dee41e268c030816b087baf8b7348fb720ec6d00e7c33e46c2ec47a2def1e1",
+    "commit": "12751c78103ec352bd359a9944bbeac5ad239a4b",
+    "sourceManifestSha256": "793a1235ac61085f2cd91b9cabedc24d6e6f0dfd1fa4e1e4b6f3cdba0d05ea12",
     "licenseSha256": "43a6f2220dbf51b83fdaf43cfa520e34fac2d64669b3403211bcb62f546afe7c"
   },
-  "corpusSha256": "fe4485792ff93d00fca4b316e8f24bfaeeb6a3bcca21b9afa0218b2a627fd3eb",
+  "corpusSha256": "241f48a1c84b2184a2903d8cb45e08c73f55791f7982801095c7c83156245edc",
   "cases": [
     {
       "id": "curated/blender_bb_only",
       "sourceSha256": "f6c977ead027d4c3734a056e27d9e85dc3f5fa00f1cf80eea8df958aa1e50c95",
-      "graphStageSha256": "2b64c45aedcc605e1bcadf523adbb97897c563add3f6277109eaa058764a9e68",
+      "graphStageSha256": "1caeaca62830bc9d498b13b21419f643e5956ae4b2600dfc066fd9cd07532b1b",
       "graphId": "-wf45fg",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -315,6 +315,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -412,6 +420,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -509,6 +525,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -696,6 +720,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -879,6 +911,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -1070,6 +1110,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -1257,6 +1305,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -1448,6 +1504,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -1635,6 +1699,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -1826,6 +1898,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -2013,6 +2093,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -2204,6 +2292,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -2391,6 +2487,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -2582,6 +2686,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -2769,6 +2881,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -2960,6 +3080,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -3147,6 +3275,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -3338,6 +3474,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -3525,6 +3669,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -3716,6 +3868,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -3903,6 +4063,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -4094,6 +4262,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -4281,6 +4457,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -4472,6 +4656,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -4659,6 +4851,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -4850,6 +5050,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -5039,6 +5247,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -5224,6 +5440,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -5407,6 +5631,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -5598,6 +5830,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -5785,6 +6025,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -5976,6 +6224,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -6161,6 +6417,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -6344,6 +6608,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -6535,6 +6807,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -6722,6 +7002,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -6913,6 +7201,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -7100,6 +7396,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -7291,6 +7595,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "shapeMode",
                 7
               ],
@@ -7478,6 +7790,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "shapeMode",
@@ -7687,6 +8007,38 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "heightTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
@@ -8489,6 +8841,20 @@
           "format": "rgba8"
         },
         {
+          "id": "global_flow_base_color_node_2_read",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
+          "id": "global_flow_base_color_node_2_write",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
           "id": "node_4_depthOrderA",
           "width": 1024,
           "height": 1024,
@@ -8507,7 +8873,7 @@
     {
       "id": "curated/babylonjs_target_particles",
       "sourceSha256": "a9f2bd85900deee042c50297ea10e695529f72bb0cbd2f1b091f77c06422deb2",
-      "graphStageSha256": "38a79d8ff95cc1bd107bd9513b9947122d05f32d1d8951b5e7409e78502af544",
+      "graphStageSha256": "8470dfa1ff69245b82cb96d07f1bea6d7a05a76d1047a7703865eebc8297e023",
       "graphId": "hdqr4e",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -8812,6 +9178,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -8909,6 +9283,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -9006,6 +9388,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -9157,6 +9547,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -9304,6 +9702,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -9455,6 +9861,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -9602,6 +10016,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -9753,6 +10175,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -9900,6 +10330,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -10091,6 +10529,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -10278,6 +10724,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -10473,6 +10927,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -10664,6 +11126,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -10859,6 +11329,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -11050,6 +11528,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -11245,6 +11731,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -11436,6 +11930,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -11631,6 +12133,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -11822,6 +12332,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -12017,6 +12535,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -12208,6 +12734,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -12403,6 +12937,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -12594,6 +13136,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -12789,6 +13339,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -12980,6 +13538,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -13175,6 +13741,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -13366,6 +13940,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -13561,6 +14143,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -13752,6 +14342,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -13947,6 +14545,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -14138,6 +14744,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -14333,6 +14947,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -14526,6 +15148,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -14715,6 +15345,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -14902,6 +15540,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -15097,6 +15743,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -15288,6 +15942,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -15483,6 +16145,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -15672,6 +16342,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -15859,6 +16537,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -16054,6 +16740,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -16245,6 +16939,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -16440,6 +17142,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -16631,6 +17341,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -16826,6 +17544,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -17019,6 +17745,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -17206,6 +17940,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -17403,6 +18145,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -17624,6 +18374,38 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "heightTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
@@ -18533,6 +19315,20 @@
         },
         {
           "id": "global_rgba_node_2_write",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
+          "id": "global_flow_base_color_node_2_read",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
+          "id": "global_flow_base_color_node_2_write",
           "width": 1024,
           "height": 1024,
           "depth": 1,
@@ -21012,7 +21808,7 @@
     {
       "id": "programs/funcBoolean",
       "sourceSha256": "f629d0d49b365f269bb14cfc5572a17c122cd7f5dab1bcb8e435ceeaeada44b5",
-      "graphStageSha256": "a95ce1de8f18c8a5a94862c2e244e9db1c0540990ba282218c0fd6ddfc10e6a3",
+      "graphStageSha256": "9f91ab5b2b0ae2bf9d8ce280f542b58ae31ab761285b3490ef6e8cf1461d542d",
       "graphId": "-fpaxbg",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -21684,7 +22480,7 @@
     {
       "id": "programs/funcHiddenFloat",
       "sourceSha256": "f32e11f2babde233210f5210e1710c9b83b408007a91a0f45a189d8c48ac1c93",
-      "graphStageSha256": "d88337f36b1e53fd64b026eecf4a5c217e1a1fc8497282b78046d65cc7ebb25d",
+      "graphStageSha256": "d3d1caf621c1df772976e7400858171c488de656cb90c1eebe30df170f74a067",
       "graphId": "46amit",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -22254,6 +23050,22 @@
                     [
                       "max",
                       1
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "0.5"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -22927,7 +23739,7 @@
     {
       "id": "programs/funcHiddenParam",
       "sourceSha256": "ad762c8329c28652f642d2a6d2e8e717c41c380185ab2b836e74531ad843f0aa",
-      "graphStageSha256": "31041b84eb3bd545448d7584f8df7689967639692952d8e229beea860a91647a",
+      "graphStageSha256": "842d2b09b953b07e281cad08c4afc23f0fd5fc3bbe03fbf1d60029023c3f235e",
       "graphId": "-dxkgiq",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -23103,6 +23915,22 @@
                     [
                       "max",
                       100
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "3"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -23683,7 +24511,7 @@
     {
       "id": "programs/funcNumeric",
       "sourceSha256": "ba2959306166b6256470ff1026d88489f78a6a7206fdd6251225fde14bb4bc24",
-      "graphStageSha256": "12b4d0a7b195d1d09f941609416872e365ede92b638697dafb3be9aaf3780db2",
+      "graphStageSha256": "73918ee58b33e6743b1d64ac8e449e7ebab3e0aa13ccdd25c990f6bb1bc7d20b",
       "graphId": "-9euyp6",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -23772,6 +24600,22 @@
                     [
                       "max",
                       8
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "Math.sin(time) * 4 + 5"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -23803,6 +24647,22 @@
                     [
                       "max",
                       100
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "seed + 1"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -23838,6 +24698,22 @@
                     [
                       "max",
                       100
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "time"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -23894,6 +24770,22 @@
                     [
                       "max",
                       8
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "Math.sin(time) * 4 + 5"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -23925,6 +24817,22 @@
                     [
                       "max",
                       100
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "seed + 1"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -23960,6 +24868,22 @@
                     [
                       "max",
                       100
+                    ],
+                    [
+                      "_ast",
+                      {
+                        "$type": "object",
+                        "entries": [
+                          [
+                            "type",
+                            "Func"
+                          ],
+                          [
+                            "src",
+                            "time"
+                          ]
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -24630,7 +25554,7 @@
     {
       "id": "programs/hero",
       "sourceSha256": "e0c083445a843a137e76fbba4572c897a6a0b034956253910dd61b9638493e08",
-      "graphStageSha256": "86139c4410be394d9baef3a40f3de16256aae267627f4cb0d8eeee11b0febeab",
+      "graphStageSha256": "2a56e5c26db8f050b7fb876df1524d1b3e7bb6bdbb52ce39a127b296b29f7351",
       "graphId": "h8sk0z",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -24935,6 +25859,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -25032,6 +25964,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -25129,6 +26069,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -25280,6 +26228,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -25427,6 +26383,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -25578,6 +26542,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -25725,6 +26697,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -25876,6 +26856,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -26023,6 +27011,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -26214,6 +27210,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -26401,6 +27405,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -26596,6 +27608,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -26787,6 +27807,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -26982,6 +28010,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -27173,6 +28209,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -27368,6 +28412,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -27559,6 +28611,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -27754,6 +28814,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -27945,6 +29013,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -28140,6 +29216,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -28331,6 +29415,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -28526,6 +29618,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -28717,6 +29817,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -28912,6 +30020,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -29103,6 +30219,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -29298,6 +30422,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -29489,6 +30621,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -29684,6 +30824,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -29875,6 +31023,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -30070,6 +31226,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -30261,6 +31425,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -30456,6 +31628,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -30649,6 +31829,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -30838,6 +32026,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -31025,6 +32221,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -31220,6 +32424,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -31411,6 +32623,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -31606,6 +32826,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -31795,6 +33023,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -31982,6 +33218,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -32177,6 +33421,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -32368,6 +33620,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -32563,6 +33823,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -32754,6 +34022,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -32949,6 +34225,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -33142,6 +34426,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -33329,6 +34621,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -33526,6 +34826,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -35514,6 +36822,38 @@
             "$type": "object",
             "entries": [
               [
+                "heightTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
+              [
                 "stateSize",
                 256
               ],
@@ -36929,6 +38269,20 @@
           "format": "rgba8"
         },
         {
+          "id": "global_flow_base_color_node_2_read",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
+          "id": "global_flow_base_color_node_2_write",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
           "id": "node_5_depthOrderA",
           "width": 1024,
           "height": 1024,
@@ -36947,7 +38301,7 @@
     {
       "id": "curated/blender_int_nobl",
       "sourceSha256": "cb0e7b930f20d081c467d55874e4b1cc208aab2e78635289191efa15b7e8dd9c",
-      "graphStageSha256": "9c1a42b4fa74fb805006cf543b2fca2c2c5b8776a4481cf4f7ca90b6fff61a82",
+      "graphStageSha256": "cafbcc917677e562e82617d253ae291a897ad8626c4b03faf1b9074b6c24ca70",
       "graphId": "9cegyx",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -37252,6 +38606,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -37349,6 +38711,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -37446,6 +38816,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -37597,6 +38975,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -37744,6 +39130,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -37895,6 +39289,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -38042,6 +39444,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -38193,6 +39603,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -38340,6 +39758,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -38531,6 +39957,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -38718,6 +40152,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -38913,6 +40355,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -39104,6 +40554,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -39299,6 +40757,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -39490,6 +40956,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -39685,6 +41159,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -39876,6 +41358,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -40071,6 +41561,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -40262,6 +41760,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -40457,6 +41963,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -40648,6 +42162,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -40843,6 +42365,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -41034,6 +42564,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -41229,6 +42767,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -41420,6 +42966,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -41615,6 +43169,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -41806,6 +43368,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -42001,6 +43571,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -42192,6 +43770,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -42387,6 +43973,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -42578,6 +44172,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -42773,6 +44375,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -42966,6 +44576,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -43155,6 +44773,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -43342,6 +44968,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -43537,6 +45171,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -43728,6 +45370,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -43923,6 +45573,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -44112,6 +45770,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -44299,6 +45965,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -44494,6 +46168,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -44685,6 +46367,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -44880,6 +46570,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -45071,6 +46769,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -45266,6 +46972,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -45457,6 +47171,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -45670,6 +47392,38 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "heightTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
@@ -46554,6 +48308,20 @@
           "format": "rgba8"
         },
         {
+          "id": "global_flow_base_color_node_2_read",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
+          "id": "global_flow_base_color_node_2_write",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
           "id": "node_5_depthOrderA",
           "width": 1024,
           "height": 1024,
@@ -46572,7 +48340,7 @@
     {
       "id": "curated/blender_int_ns",
       "sourceSha256": "32e9b17d0afcaccc7907f2f22c15351ba38f23c7ae77a21bc576e4a0d513486b",
-      "graphStageSha256": "08892074c8657c213ad42668e78b400a53af315aacb65e6e9ee64e16c505f68a",
+      "graphStageSha256": "accfc4f619f8e177ec5d75fca8dc33b57a8268fc74af624f5e915d25a3758992",
       "graphId": "-t3t339",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -46877,6 +48645,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -46974,6 +48750,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -47071,6 +48855,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -47222,6 +49014,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -47369,6 +49169,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -47520,6 +49328,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -47667,6 +49483,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -47818,6 +49642,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 100
               ],
@@ -47965,6 +49797,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -48156,6 +49996,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -48343,6 +50191,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -48538,6 +50394,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -48729,6 +50593,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -48924,6 +50796,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -49115,6 +50995,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -49310,6 +51198,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -49501,6 +51397,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -49696,6 +51600,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -49887,6 +51799,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -50082,6 +52002,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -50273,6 +52201,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -50468,6 +52404,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -50659,6 +52603,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -50854,6 +52806,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -51045,6 +53005,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -51240,6 +53208,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -51431,6 +53407,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -51626,6 +53610,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -51817,6 +53809,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -52012,6 +54012,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -52203,6 +54211,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -52398,6 +54414,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -52591,6 +54615,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -52780,6 +54812,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -52967,6 +55007,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -53162,6 +55210,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -53353,6 +55409,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -53548,6 +55612,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -53737,6 +55809,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -53924,6 +56004,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -54119,6 +56207,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -54310,6 +56406,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -54505,6 +56609,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -54696,6 +56808,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -54891,6 +57011,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -55084,6 +57212,14 @@
                 100
               ],
               [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 0.78
               ],
@@ -55271,6 +57407,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -55468,6 +57612,14 @@
               [
                 "inputWeight",
                 100
+              ],
+              [
+                "fieldActive",
+                0
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -56127,6 +58279,38 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "heightTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
@@ -57185,6 +59369,20 @@
           "format": "rgba8"
         },
         {
+          "id": "global_flow_base_color_node_2_read",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
+          "id": "global_flow_base_color_node_2_write",
+          "width": 1024,
+          "height": 1024,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
           "id": "node_5_depthOrderA",
           "width": 1024,
           "height": 1024,
@@ -57931,7 +60129,7 @@
     {
       "id": "coverage/points_lenia",
       "sourceSha256": "c3f6f4931775b7165e0f05c377c40008989b449dc10af52253aaa2b54f4e8d2a",
-      "graphStageSha256": "ccec5a478dc1be2b20de079072657ba88c9d5319048db1b433605b1cc74b70f6",
+      "graphStageSha256": "0dfe0b02603a73c54e13647e1f5be69714f3fa39c023964fb809ac8d1dac08d1",
       "graphId": "-3rxztm",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -58144,6 +60342,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -58225,6 +60427,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -58306,6 +60512,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -58387,6 +60597,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -58468,6 +60682,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -58549,6 +60767,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -58684,6 +60906,10 @@
                 3.6
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -58815,6 +61041,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -58950,6 +61180,10 @@
                 3.6
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -59081,6 +61315,10 @@
               [
                 "depositAmount",
                 3.6
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -59216,6 +61454,10 @@
                 3.6
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -59342,6 +61584,22 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "muK",
                 25
@@ -59872,6 +62130,20 @@
           "format": "rgba16f"
         },
         {
+          "id": "global_lenia_base_color_node_1_read",
+          "width": 128,
+          "height": 128,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
+          "id": "global_lenia_base_color_node_1_write",
+          "width": 128,
+          "height": 128,
+          "depth": 1,
+          "format": "rgba8"
+        },
+        {
           "id": "global_points_trail_node_1_read",
           "width": 256,
           "height": 256,
@@ -60086,7 +62358,7 @@
     {
       "id": "coverage/points_life",
       "sourceSha256": "cf7ec1ce2ef5b2bbc3570b8f6da900032d2b22d43b6bc35b97ff3d863047c236",
-      "graphStageSha256": "88c505f1c1b89ecb2975a8dd553c1ffcf102b0a249e95a8361c12e36aa5b0081",
+      "graphStageSha256": "b222ced1db67c736609cd63a4568435f44361be18027c815844effad238ad3f8",
       "graphId": "-fitzv1",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -60311,6 +62583,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -60404,6 +62680,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -60497,6 +62777,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -60590,6 +62874,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -60737,6 +63025,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -60880,6 +63172,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -61027,6 +63323,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -61170,6 +63470,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -61317,6 +63621,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -61443,6 +63751,22 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
@@ -62196,7 +64520,7 @@
     {
       "id": "coverage/points_life__boundaryMode_bounce",
       "sourceSha256": "0d1ed059c0c256a69984e51c6e12952af44c6d17395427d56adbf1ee20b4277a",
-      "graphStageSha256": "500fe360ae7c528d30dfc91962981d736d701cc9b171621b8375a0caccfb40ac",
+      "graphStageSha256": "46d724cf51328630c3364e2ae4a16ec321a9b045219d67f182e190d3829be6a7",
       "graphId": "-1mg0i0",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -62421,6 +64745,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -62514,6 +64842,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -62607,6 +64939,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -62700,6 +65036,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -62847,6 +65187,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -62990,6 +65334,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -63137,6 +65485,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -63280,6 +65632,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -63427,6 +65783,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -63553,6 +65913,22 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
@@ -64306,7 +66682,7 @@
     {
       "id": "coverage/points_life__symmetricForces_true",
       "sourceSha256": "d74d5542768e4a4faa7155873ac170cf706275a6246c936f450125fa33bb3ad9",
-      "graphStageSha256": "bb77e766220f61caa411803b9a31795eb8f1c76e9fcb872c74d49b2496f0ff8f",
+      "graphStageSha256": "79fb16ec435743dc6e15b35a6d37714926f605f1f7f982e2763b3566954e7896",
       "graphId": "wj21oa",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -64531,6 +66907,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -64624,6 +67004,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -64717,6 +67101,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -64810,6 +67198,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -64957,6 +67349,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -65100,6 +67496,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -65247,6 +67647,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -65390,6 +67794,10 @@
               [
                 "useTypeColor",
                 false
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -65537,6 +67945,10 @@
                 false
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -65663,6 +68075,22 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
@@ -66416,7 +68844,7 @@
     {
       "id": "coverage/points_life__useTypeColor_true",
       "sourceSha256": "fc09ba6d6762da701057c70da366e68f30bdb45cc7f0cdbf1b084641dcfd7c14",
-      "graphStageSha256": "06486a743935c8a3347764c51bdcf27749c3c377f13cb65c17ca6df3db389aa9",
+      "graphStageSha256": "29b9f76d0c3b86cbab1c63171fab709e0732333a03b6c42845a8fc52be47c04c",
       "graphId": "-pp50ub",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -66641,6 +69069,10 @@
               [
                 "useTypeColor",
                 true
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -66734,6 +69166,10 @@
               [
                 "useTypeColor",
                 true
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -66827,6 +69263,10 @@
               [
                 "useTypeColor",
                 true
+              ],
+              [
+                "diffuseActive",
+                0
               ]
             ]
           },
@@ -66920,6 +69360,10 @@
               [
                 "useTypeColor",
                 true
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -67067,6 +69511,10 @@
                 true
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -67210,6 +69658,10 @@
               [
                 "useTypeColor",
                 true
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -67357,6 +69809,10 @@
                 true
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -67500,6 +69956,10 @@
               [
                 "useTypeColor",
                 true
+              ],
+              [
+                "diffuseActive",
+                0
               ],
               [
                 "density",
@@ -67647,6 +70107,10 @@
                 true
               ],
               [
+                "diffuseActive",
+                0
+              ],
+              [
                 "density",
                 50
               ],
@@ -67773,6 +70237,22 @@
           "values": {
             "$type": "object",
             "entries": [
+              [
+                "diffuseTex",
+                {
+                  "$type": "object",
+                  "entries": [
+                    [
+                      "kind",
+                      "output"
+                    ],
+                    [
+                      "name",
+                      "none"
+                    ]
+                  ]
+                }
+              ],
               [
                 "stateSize",
                 256
