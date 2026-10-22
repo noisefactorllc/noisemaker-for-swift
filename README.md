@@ -149,7 +149,7 @@ content stops with a "Missing graph resource" error. Supply those textures from 
 ## What works and what does not
 
 - **Current full catalog gate.** Authority `2f9736ebb6c39be683074edc3a2cd0338a8a0c9a` passed
-  on Apple M4, macOS 26.5 and Swift 6.3.2 in the native GPU runner's
+  on Apple M4, macOS 26.5 and Swift 6.3.2 in
   [Native Metal run 39120434492](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/39120434492) at `580cee5`. Of 2,919 cases it graded 2,898 exact and 21
   uninformative, with zero near, deferred, skipped, failed, missing or refused cases; all 210 effects
   have informative evidence. Uninformative cases do not count toward effect evidence. Tint's relaxed

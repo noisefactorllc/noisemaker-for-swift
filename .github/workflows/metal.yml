@@ -1,12 +1,12 @@
 name: Native Metal
 
-# Hosted CI cannot qualify Metal rendering, so this workflow runs on the
-# self-hosted macOS GPU runner (Apple M4). A push to main that
+# Hosted CI cannot qualify Metal rendering, so this workflow runs on a
+# native Apple M4 GPU host with macOS. A push to main that
 # changes a rendering input runs scripts/test-metal on the native device. A
 # weekly scheduled run adds the full scripts/parity-summary at the default-branch
 # head. A manual run can add it at the same SHA, or apply a deliberate sampler
 # regression that the gate must reject. No pull request
-# reaches this runner, and a missing Metal device fails the gate.
+# reaches this host, and a missing Metal device fails the gate.
 
 on:
   push:
@@ -44,8 +44,8 @@ jobs:
   metal:
     if: github.ref == 'refs/heads/main'
     runs-on:
-      group: noisemaker-gpu
-      labels: [noisemaker-gpu]
+      group: ${{ vars.GPU_RUNNER_GROUP }}
+      labels: ${{ vars.GPU_RUNNER_LABEL }}
     timeout-minutes: 45
     steps:
       - name: Require a native Apple-silicon Metal host
@@ -94,8 +94,8 @@ jobs:
     needs: metal
     if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || inputs.parity)
     runs-on:
-      group: noisemaker-gpu
-      labels: [noisemaker-gpu]
+      group: ${{ vars.GPU_RUNNER_GROUP }}
+      labels: ${{ vars.GPU_RUNNER_LABEL }}
     timeout-minutes: 150
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
