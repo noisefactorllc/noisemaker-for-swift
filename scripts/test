@@ -2,6 +2,7 @@
 set -eu
 cd "$(dirname "$0")/.."
 node tools/import-catalog.mjs --check
+node tools/generate-kit-compat.mjs --check
 node tools/import-corpus.mjs --check
 node tools/check-corpus-coverage.mjs
 node tools/export-corpus-stages.mjs --check

@@ -1,0 +1,70 @@
+{
+  "configVersion": 1,
+  "id": "swift",
+  "series": "0.1",
+  "shaderSource": "kit",
+  "engineSource": "kit",
+  "pageTemplate": false,
+  "subtrees": [
+    { "from": "Package.swift", "to": "engine/Package.swift" },
+    { "from": "Sources/Noisemaker", "to": "engine/Sources/Noisemaker" },
+    { "from": "Sources/NoisemakerMetalKit", "to": "engine/Sources/NoisemakerMetalKit" },
+    { "from": "Sources/NMRender", "to": "engine/Sources/NMRender" },
+    { "from": "Sources/NMViewer", "to": "engine/Sources/NMViewer" },
+    { "from": "Artifacts/CNoisemakerTint.xcframework", "to": "engine/Artifacts/CNoisemakerTint.xcframework" },
+    { "from": "Artifacts/CNoisemakerRaster.xcframework", "to": "engine/Artifacts/CNoisemakerRaster.xcframework" }
+  ],
+  "licenses": [
+    { "from": "LICENSE", "to": "LICENSES/noisemaker-for-swift-LICENSE.txt" },
+    { "from": "tools/tint/LICENSE-dawn.txt", "to": "LICENSES/Dawn-LICENSE.txt" },
+    { "from": "tools/tint/LICENSE-abseil-cpp.txt", "to": "LICENSES/abseil-cpp-Apache-2.0.txt" },
+    { "from": "tools/tint/LICENSE-spirv-headers.txt", "to": "LICENSES/SPIRV-Headers-LICENSE.txt" },
+    { "from": "tools/raster/LICENSE-skia.txt", "to": "LICENSES/Skia-LICENSE.txt" }
+  ],
+  "requireFiles": [
+    "engine/Package.swift",
+    "engine/Sources/NMRender/main.swift",
+    "engine/Sources/Noisemaker/Resources/catalog.json",
+    "engine/Sources/Noisemaker/Resources/meshes/sphere.obj",
+    "engine/Sources/NoisemakerMetalKit/NoisemakerViewRenderer.swift",
+    "engine/Sources/NMViewer/main.swift",
+    "engine/Tests/NoisemakerTests/KitManifest.swift",
+    "engine/Artifacts/CNoisemakerTint.xcframework/Info.plist",
+    "engine/Artifacts/CNoisemakerTint.xcframework/macos-arm64/libCNoisemakerTint.a",
+    "engine/Artifacts/CNoisemakerTint.xcframework/macos-arm64/Headers/NoisemakerTint.h",
+    "engine/Artifacts/CNoisemakerTint.xcframework/macos-arm64/Headers/module.modulemap",
+    "engine/Artifacts/CNoisemakerRaster.xcframework/Info.plist",
+    "engine/Artifacts/CNoisemakerRaster.xcframework/LICENSE-skia.txt",
+    "engine/Artifacts/CNoisemakerRaster.xcframework/macos-arm64/libCNoisemakerRaster.a",
+    "engine/Artifacts/CNoisemakerRaster.xcframework/macos-arm64/Headers/NoisemakerRaster.h",
+    "engine/Artifacts/CNoisemakerRaster.xcframework/macos-arm64/Headers/module.modulemap",
+    "LICENSES/noisemaker-for-swift-LICENSE.txt",
+    "LICENSES/Dawn-LICENSE.txt",
+    "LICENSES/abseil-cpp-Apache-2.0.txt",
+    "LICENSES/SPIRV-Headers-LICENSE.txt",
+    "LICENSES/Skia-LICENSE.txt"
+  ],
+  "forbidDirs": [
+    "shaders",
+    "engine/.build",
+    "engine/.github",
+    "engine/Sources/CNoisemakerTint",
+    "engine/Sources/CNoisemakerRaster",
+    "engine/parity",
+    "engine/scripts",
+    "engine/tools",
+    "engine/docs"
+  ],
+  "requiredTokens": {
+    "README.template.md": ["NM_PROGRAM_NAME", "NM_EFFECT_LIST", "NM_ENGINE_VERSION"]
+  },
+  "inject": {
+    "type": "dsl-file",
+    "target": "program.dsl"
+  },
+  "compat": {
+    "mode": "list",
+    "fromJsonList": "export-kit/compat-effects.json"
+  },
+  "engineBytesFrom": ["engine/"]
+}
