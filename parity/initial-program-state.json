@@ -1,16 +1,16 @@
 {
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "12751c78103ec352bd359a9944bbeac5ad239a4b",
-    "sourceManifestSha256": "793a1235ac61085f2cd91b9cabedc24d6e6f0dfd1fa4e1e4b6f3cdba0d05ea12",
+    "commit": "32d8d3e6a6dbb3dee2dfbcc8d31bd1c52342eca3",
+    "sourceManifestSha256": "14e3d3aecd51c6adc75254b67ea18b01f8633edd3a3a514160533e41edee3bd7",
     "licenseSha256": "43a6f2220dbf51b83fdaf43cfa520e34fac2d64669b3403211bcb62f546afe7c"
   },
-  "corpusSha256": "241f48a1c84b2184a2903d8cb45e08c73f55791f7982801095c7c83156245edc",
+  "corpusSha256": "bd34b133f130204c34e6a3a76926b910a2b9ac510f753c764167716098db47a1",
   "cases": [
     {
       "id": "curated/blender_bb_only",
       "sourceSha256": "f6c977ead027d4c3734a056e27d9e85dc3f5fa00f1cf80eea8df958aa1e50c95",
-      "graphStageSha256": "1caeaca62830bc9d498b13b21419f643e5956ae4b2600dfc066fd9cd07532b1b",
+      "graphStageSha256": "b0da46d7ae089a74b0a9593cbdb3cf0158fc66498abd01265cbd4dc2c9b4bad0",
       "graphId": "-wf45fg",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -8873,7 +8873,7 @@
     {
       "id": "curated/babylonjs_target_particles",
       "sourceSha256": "a9f2bd85900deee042c50297ea10e695529f72bb0cbd2f1b091f77c06422deb2",
-      "graphStageSha256": "8470dfa1ff69245b82cb96d07f1bea6d7a05a76d1047a7703865eebc8297e023",
+      "graphStageSha256": "a90b40372284d5904ac6a43caff18ce03db690c544366f8460db47831bc5e013",
       "graphId": "hdqr4e",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -25554,7 +25554,7 @@
     {
       "id": "programs/hero",
       "sourceSha256": "e0c083445a843a137e76fbba4572c897a6a0b034956253910dd61b9638493e08",
-      "graphStageSha256": "2a56e5c26db8f050b7fb876df1524d1b3e7bb6bdbb52ce39a127b296b29f7351",
+      "graphStageSha256": "d2e18d779c5ed6e0170c5f7a2eb1cc56b6dbc8e2de3279604b97155760d5cbb8",
       "graphId": "h8sk0z",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -38301,7 +38301,7 @@
     {
       "id": "curated/blender_int_nobl",
       "sourceSha256": "cb0e7b930f20d081c467d55874e4b1cc208aab2e78635289191efa15b7e8dd9c",
-      "graphStageSha256": "cafbcc917677e562e82617d253ae291a897ad8626c4b03faf1b9074b6c24ca70",
+      "graphStageSha256": "c8365831fbe5809af277c50cd80ce94d9356c5959da08995d244536ac61aecdb",
       "graphId": "9cegyx",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -48340,7 +48340,7 @@
     {
       "id": "curated/blender_int_ns",
       "sourceSha256": "32e9b17d0afcaccc7907f2f22c15351ba38f23c7ae77a21bc576e4a0d513486b",
-      "graphStageSha256": "accfc4f619f8e177ec5d75fca8dc33b57a8268fc74af624f5e915d25a3758992",
+      "graphStageSha256": "b7990def837f0f1229c20e5a5a2228a3ebc1eec935555948e5c3861e625a07a4",
       "graphId": "-t3t339",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
@@ -60129,7 +60129,7 @@
     {
       "id": "coverage/points_lenia",
       "sourceSha256": "c3f6f4931775b7165e0f05c377c40008989b449dc10af52253aaa2b54f4e8d2a",
-      "graphStageSha256": "0dfe0b02603a73c54e13647e1f5be69714f3fa39c023964fb809ac8d1dac08d1",
+      "graphStageSha256": "dd54c366418b7828d010c25ced97b1e8fb33a5b2770ba4d0880ca6031e826465",
       "graphId": "-3rxztm",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,

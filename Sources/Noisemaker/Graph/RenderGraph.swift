@@ -668,10 +668,12 @@ public struct RenderGraph {
 
     private static func dimensionParameters(passes: [GraphPass], textures: [GraphTexture]) throws -> [String: Double] {
         var names = Set<String>()
+        var divisors = Set<String>()
         for texture in textures {
             for dimension in [texture.width, texture.height] {
                 switch dimension {
-                case .parameter(let name, _, _, _), .screenDivide(let name, _): names.insert(name)
+                case .parameter(let name, _, _, _, _): names.insert(name)
+                case .screenDivide(let name, _): names.insert(name); divisors.insert(name)
                 default: break
                 }
             }
@@ -679,12 +681,28 @@ public struct RenderGraph {
         var result: [String: Double] = [:]
         for pass in passes {
             for field in pass.uniforms where names.contains(field.name) {
-                guard let number = field.value.numberValue, number.isFinite else {
-                    throw GraphDiagnostic.unsupported("texture dimension parameter \(field.name) is not a finite number")
-                }
                 // Pipeline.collectDefaultUniforms merges pass uniforms in graph order.
                 // Later pass values also govern shared scoped texture dimensions.
-                result[field.name] = number
+                if divisors.contains(field.name) {
+                    guard let number = field.value.numberValue, number.isFinite else {
+                        throw GraphDiagnostic.unsupported("texture dimension parameter \(field.name) is not a finite number")
+                    }
+                    result[field.name] = number
+                    continue
+                }
+                // A parameter dimension reads an undefined or null value as
+                // missing and any other value as JavaScript Number() reads it. A
+                // function or object value is NaN, which the dimension's nonfinite
+                // fallback sizes, as Pipeline.resolveDimension does.
+                switch field.value {
+                case .undefined, .null: result[field.name] = nil
+                case .number(let number): result[field.name] = number
+                case .bool(let flag): result[field.name] = flag ? 1 : 0
+                case .string(let text):
+                    let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                    result[field.name] = trimmed.isEmpty ? 0 : Double(trimmed) ?? .nan
+                default: result[field.name] = .nan
+                }
             }
         }
         return result

@@ -5,7 +5,11 @@ public enum GraphDimension {
     case fixed(Int)
     case percent(Double)
     case scale(factor: Double, minimum: Double?, maximum: Double?)
-    case parameter(name: String, fallback: Double, power: Double, multiply: Double)
+    /// `fallback` sizes a missing parameter. `nonfiniteFallback` sizes a parameter
+    /// whose value is not a finite number, such as a function-valued stateSize:
+    /// the spec's own `default`, else the transformed `paramDefault`.
+    case parameter(name: String, fallback: Double, power: Double, multiply: Double,
+                   nonfiniteFallback: Double)
     case screenDivide(name: String, fallback: Double)
 
     static func decode(_ value: GraphValue, context: String) throws -> GraphDimension {
@@ -54,11 +58,12 @@ public enum GraphDimension {
                 let finalFallback = hasTransform
                     ? (value.field("default")?.numberValue ?? computedFallback)
                     : baseFallback
-                guard finalFallback.isFinite else {
+                let nonfiniteFallback = value.field("default")?.numberValue ?? computedFallback
+                guard finalFallback.isFinite, nonfiniteFallback.isFinite else {
                     throw GraphDiagnostic.unsupported("\(context) nonfinite fallback dimension")
                 }
                 return .parameter(name: name, fallback: finalFallback,
-                    power: power, multiply: multiply)
+                    power: power, multiply: multiply, nonfiniteFallback: nonfiniteFallback)
             }
             if let name = value.field("screenDivide")?.stringValue,
                keys.isSubset(of: ["screenDivide", "default", "inputOverride"]) {
@@ -110,8 +115,15 @@ public enum GraphDimension {
             if let minimum { scaled = max(minimum, scaled) }
             if let maximum { scaled = min(maximum, scaled) }
             value = max(1, scaled)
-        case .parameter(let name, let fallback, let power, let multiply):
-            value = parameters[name].map { Foundation.pow($0 * multiply, power) } ?? fallback
+        case .parameter(let name, let fallback, let power, let multiply, let nonfiniteFallback):
+            // Pipeline.resolveDimension does not evaluate function-valued or
+            // other nonnumeric parameters; they take the nonfinite fallback.
+            if let parameter = parameters[name] {
+                let transformed = Foundation.pow(parameter * multiply, power)
+                value = transformed.isFinite ? transformed : nonfiniteFallback
+            } else {
+                value = fallback
+            }
         case .screenDivide(let name, let fallback):
             let divisor = parameters[name] ?? fallback
             guard divisor > 0 else { throw GraphDiagnostic.unsupported("invalid screen divisor \(name)") }

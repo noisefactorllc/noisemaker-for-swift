@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "12751c78103ec352bd359a9944bbeac5ad239a4b",
-    "sourceManifestSha256": "793a1235ac61085f2cd91b9cabedc24d6e6f0dfd1fa4e1e4b6f3cdba0d05ea12"
+    "commit": "32d8d3e6a6dbb3dee2dfbcc8d31bd1c52342eca3",
+    "sourceManifestSha256": "14e3d3aecd51c6adc75254b67ea18b01f8633edd3a3a514160533e41edee3bd7"
   },
   "license": {
     "path": "LICENSE",
@@ -83716,8 +83716,8 @@
       "func": "attractor",
       "definition": {
         "path": "shaders/effects/points/attractor/definition.js",
-        "sha256": "4637676f8bfe0310648fa999283f415032018adbf0c9f1e047c0afe39e59939a",
-        "bytes": 3923
+        "sha256": "22d6538e6771c6e1d41bf4188f07c4015ea2dce869251c58d850e19303d3dc89",
+        "bytes": 3951
       },
       "wgsl": [
         {
@@ -84166,6 +84166,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -84182,6 +84186,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -84238,8 +84246,8 @@
       "func": "buddhabrot",
       "definition": {
         "path": "shaders/effects/points/buddhabrot/definition.js",
-        "sha256": "36eea77fec3cb378ae48eb9e7e9b9e8e16faed7b7c02e6eb3293c7913034daf3",
-        "bytes": 4334
+        "sha256": "100187e0fbab5e9199b5222698b539094c3661520302b2373ac34bb10f4fa013",
+        "bytes": 4362
       },
       "wgsl": [
         {
@@ -84931,6 +84939,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -84947,6 +84959,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -85069,8 +85085,8 @@
       "func": "dla",
       "definition": {
         "path": "shaders/effects/points/dla/definition.js",
-        "sha256": "eb3f47406d599e120ff3cc1a94925b4247b241b34d979f9e078a63959edbb0cf",
-        "bytes": 6320
+        "sha256": "cfb4d02ecc02c5f82ca2b7b04f4b2ab4be7a8ed1d5cc729037d921971af7810b",
+        "bytes": 6348
       },
       "wgsl": [
         {
@@ -85980,6 +85996,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -85996,6 +86016,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -86120,8 +86144,8 @@
       "func": "flock",
       "definition": {
         "path": "shaders/effects/points/flock/definition.js",
-        "sha256": "e4f387014aaf2a5ba3012e4c479f3f66e544da9c0ef2dbd3d9ddbae7123784b0",
-        "bytes": 5197
+        "sha256": "f451e4e20a66cae92d27c854352e65663e6b39f297e0fe32a08efa4c97f5ea9b",
+        "bytes": 5225
       },
       "wgsl": [
         {
@@ -86946,6 +86970,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -86962,6 +86990,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -87018,8 +87050,8 @@
       "func": "flow",
       "definition": {
         "path": "shaders/effects/points/flow/definition.js",
-        "sha256": "ab5fdc0a67268a7b9ddffaa24deb8ec43cf782151f1abe376569e8517adb5eb2",
-        "bytes": 4885
+        "sha256": "4ef8143c2bb9c71f6874b6b46ff94da0f5686d2e839cd8c0f325c2dbf48b22ae",
+        "bytes": 4913
       },
       "wgsl": [
         {
@@ -87704,6 +87736,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -87720,6 +87756,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -88272,8 +88312,8 @@
       "func": "hydraulic",
       "definition": {
         "path": "shaders/effects/points/hydraulic/definition.js",
-        "sha256": "5cf4d3ca312aee820ab1a833b92d2ca15cfc2ccd590668f101f2fe56b6eab04e",
-        "bytes": 3741
+        "sha256": "2887e38bd985e4da85d4bb4b0da25b13c7b8d37f51f7604d03146c0ea27b8322",
+        "bytes": 3769
       },
       "wgsl": [
         {
@@ -88778,6 +88818,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -88794,6 +88838,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -88850,8 +88898,8 @@
       "func": "lenia",
       "definition": {
         "path": "shaders/effects/points/lenia/definition.js",
-        "sha256": "86a13c3ab2ad38003587cbbf77155f29e2fc465727295a42a80c7816eb4cac08",
-        "bytes": 6342
+        "sha256": "3b77defc4b2dadf1394b8c3f13bf32171519738ba95c5d2c69d1d81492ed762e",
+        "bytes": 6370
       },
       "wgsl": [
         {
@@ -89713,6 +89761,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -89729,6 +89781,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -90916,8 +90972,8 @@
       "func": "physarum",
       "definition": {
         "path": "shaders/effects/points/physarum/definition.js",
-        "sha256": "1c124ba85cf6579f0ebe2b6d298b819006319c889dab248e9dae240efe401811",
-        "bytes": 6067
+        "sha256": "061dd4774ea9d2b0ad5554bdc3a4664fbdac114764f826fe01b17e983f9a7675",
+        "bytes": 6095
       },
       "wgsl": [
         {
@@ -91815,6 +91871,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -91831,6 +91891,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -91943,8 +92007,8 @@
       "func": "physical",
       "definition": {
         "path": "shaders/effects/points/physical/definition.js",
-        "sha256": "8a99bab1a73acf3e9477457d862befb9ab5e33acb3a0d1632cce3f6846ff71bf",
-        "bytes": 4561
+        "sha256": "d79a5afed63343c47d568784936b19dc7b68e9f0a8abc2e5e52881050bf3c9c6",
+        "bytes": 4589
       },
       "wgsl": [
         {
@@ -92573,6 +92637,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }
@@ -92589,6 +92657,10 @@
                             [
                               "inherit",
                               true
+                            ],
+                            [
+                              "default",
+                              256
                             ]
                           ]
                         }

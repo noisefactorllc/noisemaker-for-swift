@@ -1,5 +1,5 @@
 {
-  "buildFingerprint": "4e2a702d14cab32164e86c98db0f20396e750086a0ca4b07ab6424391e110b39",
+  "buildFingerprint": "f823a108e235cf52d1d72c041506bb143d22f276f6f12920ac79b258d2321bfa",
   "chromiumTag": "153.0.8010.12",
   "compiler": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
   "files": {
@@ -21,7 +21,7 @@
     "parity/overlays/fibers-default.segments.f64le": "fcd608e9339b7cfdd661c47c087154073b7ecc22d609cf1a74d9703fca904888",
     "parity/overlays/fibers-dense.rgba8": "924c0b6b6555c967cdeec56d1d0ac5639320003d5ad5a1675a007ed297baace2",
     "parity/overlays/fibers-dense.segments.f64le": "687ddc863b717143eb4f3bbaee778b4e9dd3714ca0f2c84b8b91d96003232c60",
-    "parity/overlays/oracle.json": "45e4ac6f99c7706b67e1c533023c9324b26438e25b1e15d259b28c1bdb3ffb51",
+    "parity/overlays/oracle.json": "17d0e3a4b2dffede510aca9a94b352eaebe7cd35aa67e4559921bd6f48a153d1",
     "parity/overlays/scratches-coverage-256.rgba8": "3fbc037f11404b1b06afabdd1b5bd4fcb73dc92541f325b96b0ec46254f17f14",
     "parity/overlays/scratches-coverage-256.segments.f64le": "d8549480ed102c3701960c332c03a02f3c22be5a5f4469f8f1cb876d9d45c54e",
     "parity/overlays/scratches-default.rgba8": "37d21381a7235542a71012aa0d1be6cfa6cda04c13a0f4c4fd461a574bf767be",
@@ -34,7 +34,7 @@
     "parity/overlays/strayHair-default.segments.f64le": "86f8516149bd4ba432a0e14abac11d920aa6f4003488227864a1cd78d3162a1b",
     "parity/overlays/strayHair-dense.rgba8": "0cd4417198851751fb683003c4c22c7eba3bcdc37319a992d01d8ce9529dd0a9",
     "parity/overlays/strayHair-dense.segments.f64le": "66297e4cef5d162dec9f58e8c477aa3e5bac0912af2fa676a958d862d81ad1f9",
-    "parity/reference.json": "b7a83e10b645dfa61b90e9a33560f3ba5abd7056c654e6e69fa7150ccafa113b",
+    "parity/reference.json": "7c10ed990b4bcf8ad1ba87f5ca4adf06cc9e01f5710afa15c03a7d3472172107",
     "tools/build-raster.py": "9c3fafa496e248e11811c968dc88855a6c0afabe352680d1683fd3a24fe218dc",
     "tools/raster-api-test.cpp": "10268cef6e6b343e43abfedab3be15551ba9d13464f7671ae9bdfdf93ee6e487",
     "tools/raster-smoke.cpp": "f8b04b7797b7e46824fd4c9a5eb25b0a19c0ab9bd6dbcab0b41bb6c64a5e50c4",
