@@ -153,8 +153,17 @@ test('locked export carries exact default vertex and is reproducible', async () 
 })
 
 test('fallback fetches and verifies the pinned commit without a branch or worktree', () => {
-  const localGit = [process.env.NM_REFERENCE_ROOT, resolve('../noisemaker')].find(path =>
-    path && existsSync(join(path, '.git')))
+  // A candidate must be a usable repository holding the pinned commit; a
+  // sandboxed runner may expose an unreadable or partial .git entry.
+  const usable = path => {
+    if (!path || !existsSync(join(path, '.git'))) return false
+    try {
+      execFileSync('git', ['-C', path, 'rev-parse', '--git-dir'], { stdio: 'ignore' })
+      execFileSync('git', ['-C', path, 'cat-file', '-e', `${lock.commit}^{commit}`], { stdio: 'ignore' })
+      return true
+    } catch { return false }
+  }
+  const localGit = [process.env.NM_REFERENCE_ROOT, resolve('../noisemaker')].find(usable)
   const archive = fetchVerifiedArchive(lock, process.env.NM_REFERENCE_GIT_URL || localGit || lock.repository)
   try {
     assert.equal(archive.commit, lock.commit)
