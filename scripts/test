@@ -8,7 +8,9 @@ if [ -n "${NM_CHANGED_FILES:-}" ]; then
   swift=0
   for path in $(printf '%s\n' "$NM_CHANGED_FILES" | tr -d '\r'); do
     case "$path" in
-      parity/*|Sources/Noisemaker/Resources/*|tools/*|Artifacts/*|export-kit/*) oracle=1 ;;
+      parity/*|Sources/Noisemaker/Resources/*|Artifacts/*|export-kit/*) oracle=1; swift=1 ;;
+      tools/*) oracle=1 ;;
+      scripts/*|.nm-test-shards) oracle=1 ;;
       Sources/*|Tests/*|Package.swift) swift=1 ;;
     esac
   done
@@ -16,7 +18,7 @@ if [ -n "${NM_CHANGED_FILES:-}" ]; then
     # Shard 0 holds the CPU oracle and artifact checks; shard 1 the Swift tests.
     case "$NM_SHARD_INDEX" in
       0) swift=0 ;;
-      1) oracle=0; swift=1 ;;
+      1) oracle=0 ;;
     esac
   fi
   if [ "$oracle" = 1 ]; then
