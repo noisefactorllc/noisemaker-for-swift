@@ -1,34 +1,34 @@
 {
   "schemaVersion": 1,
   "authority": {
-    "commit": "321c5f85aa6e74d505a41fb690d1f3c27908301f",
-    "sourceManifestSha256": "54477f3ba6b02a0fa87c96420a9f750b31aad29f669b3d9f7c2fb4110c2a7309"
+    "commit": "d0ed94ae19cca7328bc7d6b28902712a0838e1a9",
+    "sourceManifestSha256": "e53ae80148e0581b2cad1834d694928003722e3ecefc2b7634b9a44e7b515911"
   },
-  "corpusSha256": "aefd430c9a4f459229d96ea589608702968a64831219e93baa06ddbace8ff2e5",
-  "expected": 2920,
+  "corpusSha256": "b6663a155961a9c1177a0d894b420c304328a83305d4e7511c8b56b54bc06eb4",
+  "expected": 2924,
   "stageCounts": {
     "lex": {
-      "ok": 2920,
+      "ok": 2924,
       "error": 0
     },
     "parse": {
-      "ok": 2920,
+      "ok": 2924,
       "error": 0
     },
     "validate": {
-      "ok": 2920,
+      "ok": 2924,
       "error": 0
     },
     "expand": {
-      "ok": 2920,
+      "ok": 2924,
       "error": 0
     },
     "allocate": {
-      "ok": 2920,
+      "ok": 2924,
       "error": 0
     },
     "graph": {
-      "ok": 2920,
+      "ok": 2924,
       "error": 0
     }
   },
@@ -105854,6 +105854,44 @@
       "referencedPrograms": 4
     },
     {
+      "id": "upstream/mixer/cellSplit",
+      "sourceSha256": "2e6378af08f596b79a7b65a0d2c19676ff73fbcf80656d6849fd878dd9f5a6d4",
+      "stages": {
+        "lex": {
+          "status": "ok",
+          "sha256": "356979c8ac6afdc5c9c957cf71e8cdeab72f05e6e4ec171a68e844975659e5d3"
+        },
+        "parse": {
+          "status": "ok",
+          "sha256": "945bdcfb9f3a6811e1ee66256952909ca54a4a87503ce6e34f9e4b621b060e5f"
+        },
+        "validate": {
+          "status": "ok",
+          "sha256": "730f3cc2b649e2eedbfb4230d760fdf33826637277bcb15d57f8a2e0bcea2cbd"
+        },
+        "expand": {
+          "status": "ok",
+          "sha256": "e552acca405e702aed8e9b869ae14737d8dd1e6c28d1fe621af36c567725d245"
+        },
+        "allocate": {
+          "status": "ok",
+          "sha256": "28a586e2b40f7d6aa2d70c3adc57d1f87670a53207c7c3e9d77ae73dca974356"
+        },
+        "graph": {
+          "status": "ok",
+          "sha256": "5f94cae4b13672ca490449f73165ff57d82191670e28b861f033e3590d49a563"
+        }
+      },
+      "graphId": "-9qzscf",
+      "passCount": 5,
+      "effects": [
+        "mixer.cellSplit",
+        "synth.gradient",
+        "synth.noise"
+      ],
+      "referencedPrograms": 4
+    },
+    {
       "id": "upstream/mixer/centerMask",
       "sourceSha256": "a443de9f6d5f211564aa4947f1b016b0406154481bfd766bd3790ad3a7375fe0",
       "stages": {
@@ -106883,6 +106921,78 @@
       "referencedPrograms": 2
     },
     {
+      "id": "upstream/synth/gabor",
+      "sourceSha256": "a120a871997cc727475a26f6af5d06ad1b44c8987496e80eb71f7efc9887865e",
+      "stages": {
+        "lex": {
+          "status": "ok",
+          "sha256": "e0d2471aafa1eb8ff0e5dcc6a18aabcc6d29eda9fe1396f13c89ec8347a3a750"
+        },
+        "parse": {
+          "status": "ok",
+          "sha256": "605a48c56a0f21a10b3bd05276d696486f5888a7c72b66bc6cb3a44f90bed12b"
+        },
+        "validate": {
+          "status": "ok",
+          "sha256": "3aa43367a2f71540def6d936646a3482151eab8a32a70e6b7895320de70a5f87"
+        },
+        "expand": {
+          "status": "ok",
+          "sha256": "d8bc51473b6ed85ce9b46a720909c2f8293fe214cc5f1661d532a88f5d091353"
+        },
+        "allocate": {
+          "status": "ok",
+          "sha256": "558315db8e289a473a225dd66cf2303f6e0c984842f9f7fd8f3524e042fa4012"
+        },
+        "graph": {
+          "status": "ok",
+          "sha256": "65cd62ebc4524b77455102579156121df6ba79efadd28e15c91ab9ceaf556052"
+        }
+      },
+      "graphId": "-egshhd",
+      "passCount": 2,
+      "effects": [
+        "synth.gabor"
+      ],
+      "referencedPrograms": 2
+    },
+    {
+      "id": "upstream/synth/gradient",
+      "sourceSha256": "abcacb6326fbac5e5b0ff9ddc4b2d60496d354bc0d3dfe186e7ecde8939e2b38",
+      "stages": {
+        "lex": {
+          "status": "ok",
+          "sha256": "837fff3e5b2cef4bd544a48ab5c21adfee1101a638fd34f6eaaeaf479ecd185e"
+        },
+        "parse": {
+          "status": "ok",
+          "sha256": "b5a03f1cce7bf951e741d37efbd70001ad0b4bfadb0411d76927554471ae2331"
+        },
+        "validate": {
+          "status": "ok",
+          "sha256": "25a4e174b36268f52b02e27d5c13d86560458c8abf3c36719101b6044c654091"
+        },
+        "expand": {
+          "status": "ok",
+          "sha256": "cca1aa0fd1f317c7bfc423a0c467d330648f42996d5c275617418389fbc2dd3d"
+        },
+        "allocate": {
+          "status": "ok",
+          "sha256": "558315db8e289a473a225dd66cf2303f6e0c984842f9f7fd8f3524e042fa4012"
+        },
+        "graph": {
+          "status": "ok",
+          "sha256": "393b1d9e0a1213bda53acf7195a9b28658df8d68d3ab3ac4b3f7b00c7a64e5b9"
+        }
+      },
+      "graphId": "-hfztv4",
+      "passCount": 2,
+      "effects": [
+        "synth.gradient"
+      ],
+      "referencedPrograms": 2
+    },
+    {
       "id": "upstream/synth/julia",
       "sourceSha256": "d91e5bfe9e5eff4954773a3f4a37b24c727b49e4bad25c0eb8751a3831a838ca",
       "stages": {
@@ -107240,6 +107350,42 @@
       "passCount": 2,
       "effects": [
         "synth.pattern"
+      ],
+      "referencedPrograms": 2
+    },
+    {
+      "id": "upstream/synth/perlin",
+      "sourceSha256": "f41c833c6284cd577bf4c7f5b6bab0e4886a8db0394c882f40b2ac97336590f9",
+      "stages": {
+        "lex": {
+          "status": "ok",
+          "sha256": "8d39b9744136d04761a399464a3a29cf86a47b017d11883521016c345c6d9461"
+        },
+        "parse": {
+          "status": "ok",
+          "sha256": "652e3e59f76ceac5667ee9059e6918eb62dba8e6a6efe4b0814a697188efa4d3"
+        },
+        "validate": {
+          "status": "ok",
+          "sha256": "4b8f262fface17983687d1351a420b0b7a037865c419f69017d2f15d33e5933f"
+        },
+        "expand": {
+          "status": "ok",
+          "sha256": "8dd27bb289ab8b748bced3d1732e8b178204083330c7dbd0bce04332f2a71078"
+        },
+        "allocate": {
+          "status": "ok",
+          "sha256": "558315db8e289a473a225dd66cf2303f6e0c984842f9f7fd8f3524e042fa4012"
+        },
+        "graph": {
+          "status": "ok",
+          "sha256": "ebed68fd8ece52cf09e4ba1c47fb2675ebbf54d7d6c21b98bae57f7e1604e240"
+        }
+      },
+      "graphId": "22tqr8",
+      "passCount": 2,
+      "effects": [
+        "synth.perlin"
       ],
       "referencedPrograms": 2
     },
