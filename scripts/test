@@ -1,6 +1,55 @@
 #!/bin/sh
 set -eu
 cd "$(dirname "$0")/.."
+if [ -n "${NM_CHANGED_FILES:-}" ]; then
+  # Focused mode: run only the checks that exercise the candidate's changed
+  # paths. Without the variable the script below runs the whole suite.
+  oracle=0
+  swift=0
+  for path in $(printf '%s\n' "$NM_CHANGED_FILES" | tr -d '\r'); do
+    case "$path" in
+      parity/*|Sources/Noisemaker/Resources/*|tools/*|Artifacts/*|export-kit/*) oracle=1 ;;
+      Sources/*|Tests/*|Package.swift) swift=1 ;;
+    esac
+  done
+  if [ -n "${NM_SHARD_INDEX:-}" ] && [ -n "${NM_SHARD_COUNT:-}" ]; then
+    # Shard 0 holds the CPU oracle and artifact checks; shard 1 the Swift tests.
+    case "$NM_SHARD_INDEX" in
+      0) swift=0 ;;
+      1) oracle=0; swift=1 ;;
+    esac
+  fi
+  if [ "$oracle" = 1 ]; then
+    node tools/import-catalog.mjs --check
+    node tools/generate-kit-compat.mjs --check
+    node tools/import-corpus.mjs --check
+    node tools/check-corpus-coverage.mjs
+    node tools/export-corpus-stages.mjs --check
+    node tools/export-initial-state.mjs --check
+    node tools/export-binding-oracle.mjs --check
+    node tools/export-reference.mjs
+    node tools/export-surfaces.mjs
+    node tools/export-uniforms.mjs
+    node tools/export-lexer.mjs
+    node tools/export-parser.mjs
+    node tools/export-automation.mjs
+    node tools/export-worm-traces.mjs --check
+    node tools/export-obj-oracle.mjs --check
+    node tools/export-param-updates.mjs --check
+    node tools/export-diagnostics.mjs --check
+    node tools/export-audio-host.mjs --check
+    node tools/import-meshes.mjs --check
+    node tools/check-overlays.mjs
+    node --test tools/export-reference.test.mjs tools/export-worm-traces.test.mjs tools/export-obj-oracle.test.mjs tools/export-param-updates.test.mjs tools/export-audio-host.test.mjs tools/import-meshes.test.mjs tools/check-overlays.test.mjs parity/batch-golden.test.mjs parity/marker-golden.test.mjs parity/merge-goldens.test.mjs
+    python3 -m unittest discover -s tools -p "test_*.py"
+    python3 -m unittest discover -s parity -p "test_*.py"
+    python3 tools/verify-artifact.py
+  fi
+  if [ "$swift" = 1 ]; then
+    swift test --skip 'GPUTests'
+  fi
+  exit 0
+fi
 node tools/import-catalog.mjs --check
 node tools/generate-kit-compat.mjs --check
 node tools/import-corpus.mjs --check
