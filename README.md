@@ -148,13 +148,18 @@ content stops with a "Missing graph resource" error. Supply those textures from 
 
 ## What works and what does not
 
-- **Current full catalog gate.** Authority `2f9736ebb6c39be683074edc3a2cd0338a8a0c9a` passed
-  on Apple M4, macOS 26.5 and Swift 6.3.2 in
-  [Native Metal run 39120434492](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/39120434492) at `580cee5`. Of 2,919 cases it graded 2,898 exact and 21
+- **Current full catalog gate.** Authority `d0ed94ae19cca7328bc7d6b28902712a0838e1a9` passed in
+  [Native Metal run 40225791581](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/40225791581) at `7106337` on 2026-10-25. Of 2,924 cases it graded 2,903 exact and 21
   uninformative, with zero near, deferred, skipped, failed, missing or refused cases; all 210 effects
   have informative evidence. Uninformative cases do not count toward effect evidence. Tint's relaxed
   Metal math mode matched the same-run WebGPU output for both pass and custom vertex shaders.
-- **Previous full catalog gates.** Authority `a3d96b664e32c72095ee325871a0221fa35f320c` passed on
+- **Previous full catalog gates.** Authority `32d8d3e6a6dbb3dee2dfbcc8d31bd1c52342eca3` passed in
+  [Native Metal run 39903944745](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/39903944745)
+  at `b60edbf`, with 2,899 exact and 21 uninformative of 2,920 cases. Authority
+  `2f9736ebb6c39be683074edc3a2cd0338a8a0c9a` passed in
+  [Native Metal run 39120434492](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/39120434492)
+  at `580cee5`, with 2,898 exact and 21 uninformative of 2,919 cases. Authority
+  `a3d96b664e32c72095ee325871a0221fa35f320c` passed on
   Apple M4, macOS 26.6.2 in run `run.zJGZikXi`, and authority
   `735e1fdc4945e0df8ba47f8d657cd204e1b72923` passed on Apple M2, macOS 14.8.3 and Swift 6.0.3 in run
   `run.7EfAlDR4`. Each graded 2,885 exact and 21 uninformative of 2,906 cases.
