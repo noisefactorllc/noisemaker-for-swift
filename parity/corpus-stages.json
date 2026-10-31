@@ -1,34 +1,34 @@
 {
   "schemaVersion": 1,
   "authority": {
-    "commit": "f0ca5193a784070404d6ac640c44b4ae441653f1",
-    "sourceManifestSha256": "85bf645c544f1ca5289bff204acf0c523bce54d371af08c2172b639352ff6035"
+    "commit": "06070900e506b6c8ff6eb7b12d33e6c1bf285108",
+    "sourceManifestSha256": "b40d6a321c5b5f24dd6e507a4b5b8a490b2ff3893ae297787124321d8262f543"
   },
-  "corpusSha256": "c7131a76258cdb02f0110193b0b541e2c8aee431d19133dd48db0480c3af6bd4",
-  "expected": 2924,
+  "corpusSha256": "e5c0f175461fe06ef52ed5b86d1d4ab15c9d5f8a0a0146b1d1902f949200b5d6",
+  "expected": 2926,
   "stageCounts": {
     "lex": {
-      "ok": 2924,
+      "ok": 2926,
       "error": 0
     },
     "parse": {
-      "ok": 2924,
+      "ok": 2926,
       "error": 0
     },
     "validate": {
-      "ok": 2924,
+      "ok": 2926,
       "error": 0
     },
     "expand": {
-      "ok": 2924,
+      "ok": 2926,
       "error": 0
     },
     "allocate": {
-      "ok": 2924,
+      "ok": 2926,
       "error": 0
     },
     "graph": {
-      "ok": 2924,
+      "ok": 2926,
       "error": 0
     }
   },
@@ -102626,6 +102626,43 @@
       "referencedPrograms": 5
     },
     {
+      "id": "upstream/classicNoisedeck/colorLab",
+      "sourceSha256": "17ff4fc752867ee70877a67587063ce61a3fb193ded19eefabc8bf08b87fa6c6",
+      "stages": {
+        "lex": {
+          "status": "ok",
+          "sha256": "2620d3bd240d62ff94f02a8aa6b8a91c13f8f4792e17371a6479bd38c90fabae"
+        },
+        "parse": {
+          "status": "ok",
+          "sha256": "e73c7e1226c230a53343bdec8304451084ef3194854705716bf84dcef777d326"
+        },
+        "validate": {
+          "status": "ok",
+          "sha256": "ec87f52f1424b9b623ad0ecd38b6eddeb7f1aa78394f15f22e4b89d6bb9e49f1"
+        },
+        "expand": {
+          "status": "ok",
+          "sha256": "5dfae27a3a2e5698297405dc7327400ba3ee6aa44469d6c0bd4da4e4dd91ea11"
+        },
+        "allocate": {
+          "status": "ok",
+          "sha256": "a6b7347cbf7de96ee40c01096093643a61c83fc25c3669e732236870ee0c8625"
+        },
+        "graph": {
+          "status": "ok",
+          "sha256": "621cf5f5e4076dc5bbbf63f2143bfc63ae5914b3aaf104b2c25792037e3e0b88"
+        }
+      },
+      "graphId": "riay4a",
+      "passCount": 3,
+      "effects": [
+        "classicNoisedeck.colorLab",
+        "synth.noise"
+      ],
+      "referencedPrograms": 3
+    },
+    {
       "id": "upstream/classicNoisedeck/composite",
       "sourceSha256": "581780b16258a8ada7bd32e6f605d682ed7153dc7066d5e6ede6d97eb80c24ed",
       "stages": {
@@ -105177,6 +105214,43 @@
       "effects": [
         "filter.strayHair",
         "synth.testPattern"
+      ],
+      "referencedPrograms": 3
+    },
+    {
+      "id": "upstream/filter/tetraColorArray",
+      "sourceSha256": "b727c9480972d9de73861abe77b6ececc7b6e43b38207992e256c8b1b7d3f4de",
+      "stages": {
+        "lex": {
+          "status": "ok",
+          "sha256": "01a08f99300a2f5694421e7ff01b278256adc8bfbe2a921f696a6ad3532edd7f"
+        },
+        "parse": {
+          "status": "ok",
+          "sha256": "1dccc78a02b6bb07394481de4c89357b13f130e3f3666d7929826cf325d58ad0"
+        },
+        "validate": {
+          "status": "ok",
+          "sha256": "a0be7f4045f59820ee87f86d46a9a03da6c22e0e450ebb6bdf7bf83e98158c6e"
+        },
+        "expand": {
+          "status": "ok",
+          "sha256": "33729631231357058a105f776dfd595ea6d99bb1ddfe2b3c50996abf289f2828"
+        },
+        "allocate": {
+          "status": "ok",
+          "sha256": "a6b7347cbf7de96ee40c01096093643a61c83fc25c3669e732236870ee0c8625"
+        },
+        "graph": {
+          "status": "ok",
+          "sha256": "1bc4a423a45d9155c1e296f366e8f43a64d226d19043797221b0a800f3c3ef0b"
+        }
+      },
+      "graphId": "j96ave",
+      "passCount": 3,
+      "effects": [
+        "filter.tetraColorArray",
+        "synth.noise"
       ],
       "referencedPrograms": 3
     },

@@ -1,11 +1,11 @@
 {
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "f0ca5193a784070404d6ac640c44b4ae441653f1",
-    "sourceManifestSha256": "85bf645c544f1ca5289bff204acf0c523bce54d371af08c2172b639352ff6035",
+    "commit": "06070900e506b6c8ff6eb7b12d33e6c1bf285108",
+    "sourceManifestSha256": "b40d6a321c5b5f24dd6e507a4b5b8a490b2ff3893ae297787124321d8262f543",
     "licenseSha256": "43a6f2220dbf51b83fdaf43cfa520e34fac2d64669b3403211bcb62f546afe7c"
   },
-  "corpusSha256": "c7131a76258cdb02f0110193b0b541e2c8aee431d19133dd48db0480c3af6bd4",
+  "corpusSha256": "e5c0f175461fe06ef52ed5b86d1d4ab15c9d5f8a0a0146b1d1902f949200b5d6",
   "cases": [
     {
       "id": "curated/blender_bb_only",
@@ -14,7 +14,7 @@
       "graphId": "-wf45fg",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -8877,7 +8877,7 @@
       "graphId": "hdqr4e",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -19357,7 +19357,7 @@
       "graphId": "-l6vrkd",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -20029,7 +20029,7 @@
       "graphId": "-qqnkzc",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -21033,7 +21033,7 @@
       "graphId": "-v8q3mu",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -21044,7 +21044,7 @@
             "entries": [
               [
                 "volumeSize",
-                64
+                128
               ],
               [
                 "scale",
@@ -21072,7 +21072,7 @@
               ],
               [
                 "volumeSize_chain_0",
-                64
+                128
               ]
             ]
           },
@@ -21089,7 +21089,7 @@
             "entries": [
               [
                 "volumeSize",
-                64
+                128
               ],
               [
                 "scale",
@@ -21117,7 +21117,7 @@
               ],
               [
                 "volumeSize_chain_0",
-                64
+                128
               ],
               [
                 "threshold",
@@ -21777,15 +21777,15 @@
         },
         {
           "id": "node_0_volumeCache",
-          "width": 64,
-          "height": 4096,
+          "width": 128,
+          "height": 16384,
           "depth": 1,
           "format": "rgba16f"
         },
         {
           "id": "node_0_geoBuffer",
-          "width": 64,
-          "height": 4096,
+          "width": 128,
+          "height": 16384,
           "depth": 1,
           "format": "rgba16f"
         },
@@ -21812,7 +21812,7 @@
       "graphId": "-fpaxbg",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -22484,7 +22484,7 @@
       "graphId": "46amit",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -23743,7 +23743,7 @@
       "graphId": "-dxkgiq",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -24515,7 +24515,7 @@
       "graphId": "-9euyp6",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -25558,7 +25558,7 @@
       "graphId": "h8sk0z",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -38305,7 +38305,7 @@
       "graphId": "9cegyx",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -48344,7 +48344,7 @@
       "graphId": "-t3t339",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -59405,7 +59405,7 @@
       "graphId": "jyhywl",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -60133,7 +60133,7 @@
       "graphId": "-3rxztm",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -62362,7 +62362,7 @@
       "graphId": "-fitzv1",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -64524,7 +64524,7 @@
       "graphId": "-1mg0i0",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -66686,7 +66686,7 @@
       "graphId": "wj21oa",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
@@ -68848,7 +68848,7 @@
       "graphId": "-pp50ub",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,
-      "maxTextureDimension2D": 8192,
+      "maxTextureDimension2D": 16384,
       "passes": [
         {
           "id": "node_0_pass_0",
