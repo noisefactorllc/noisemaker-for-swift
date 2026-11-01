@@ -1,5 +1,5 @@
 {
-  "buildFingerprint": "5ffbef6d5731819f5509609208093f4e10fab64b6cb355402e6322a62ebc6bd7",
+  "buildFingerprint": "4f0c98a10dc869a3bd0f2999fffbac260ebffd41224c9b66dd1a7876b6ab1949",
   "chromiumTag": "153.0.8010.12",
   "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
   "files": {
@@ -21,7 +21,7 @@
     "parity/overlays/fibers-default.segments.f64le": "fcd608e9339b7cfdd661c47c087154073b7ecc22d609cf1a74d9703fca904888",
     "parity/overlays/fibers-dense.rgba8": "924c0b6b6555c967cdeec56d1d0ac5639320003d5ad5a1675a007ed297baace2",
     "parity/overlays/fibers-dense.segments.f64le": "687ddc863b717143eb4f3bbaee778b4e9dd3714ca0f2c84b8b91d96003232c60",
-    "parity/overlays/oracle.json": "f3a491f0aa7f511c3a691c310b6389330ad44d3089cbb511425ac9f27b09890a",
+    "parity/overlays/oracle.json": "45fd68f66203278b5b10748e53774d989515c74784ee72589bdbd4eeeec4177b",
     "parity/overlays/scratches-coverage-256.rgba8": "3fbc037f11404b1b06afabdd1b5bd4fcb73dc92541f325b96b0ec46254f17f14",
     "parity/overlays/scratches-coverage-256.segments.f64le": "d8549480ed102c3701960c332c03a02f3c22be5a5f4469f8f1cb876d9d45c54e",
     "parity/overlays/scratches-default.rgba8": "37d21381a7235542a71012aa0d1be6cfa6cda04c13a0f4c4fd461a574bf767be",
@@ -34,14 +34,14 @@
     "parity/overlays/strayHair-default.segments.f64le": "86f8516149bd4ba432a0e14abac11d920aa6f4003488227864a1cd78d3162a1b",
     "parity/overlays/strayHair-dense.rgba8": "0cd4417198851751fb683003c4c22c7eba3bcdc37319a992d01d8ce9529dd0a9",
     "parity/overlays/strayHair-dense.segments.f64le": "66297e4cef5d162dec9f58e8c477aa3e5bac0912af2fa676a958d862d81ad1f9",
-    "parity/reference.json": "e8c825e7fd7e9746a9f00215e4c868c9e8a6813bcb32fac40ce09a80258c1c94",
+    "parity/reference.json": "24ef6f3a0d42db4580e69c2767de1488dc22fa751059f19317f0089f1ab4742b",
     "tools/build-raster.py": "9c3fafa496e248e11811c968dc88855a6c0afabe352680d1683fd3a24fe218dc",
     "tools/raster-api-test.cpp": "10268cef6e6b343e43abfedab3be15551ba9d13464f7671ae9bdfdf93ee6e487",
     "tools/raster-smoke.cpp": "f8b04b7797b7e46824fd4c9a5eb25b0a19c0ab9bd6dbcab0b41bb6c64a5e50c4",
     "tools/raster.json": "c3b299085d2d568707efa69ef145e80732bc2dfbcb6d3bc1306b2614ca61364b"
   },
   "licenseSha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd",
-  "observedArchiveSha256": "7135901a4e0b666f5f159c513d747d4bb172f83242c44d11f7be7cfd9308e064",
+  "observedArchiveSha256": "4291386f76da64b327a475beb3cadce47b3e6bbd8e1bbd6bbf753c84fd18efb7",
   "pinnedArchiveSha256": "9f641e3f23ff3470dd742862697db552ea8bc57b2b7b2054368c91cef4fc42df",
   "schemaVersion": 1,
   "sdkVersion": "26.5",

@@ -1,11 +1,11 @@
 {
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "06070900e506b6c8ff6eb7b12d33e6c1bf285108",
-    "sourceManifestSha256": "b40d6a321c5b5f24dd6e507a4b5b8a490b2ff3893ae297787124321d8262f543",
+    "commit": "67d6e44c750e4f9bebb34f88645b934e3b933a84",
+    "sourceManifestSha256": "b61712b6f6684bd673ac4c7bafb21c99c46fb46f26ee18be8ade03b4962fcd8d",
     "licenseSha256": "43a6f2220dbf51b83fdaf43cfa520e34fac2d64669b3403211bcb62f546afe7c"
   },
-  "corpusSha256": "e5c0f175461fe06ef52ed5b86d1d4ab15c9d5f8a0a0146b1d1902f949200b5d6",
+  "corpusSha256": "69fa36aac34e3c00c1ffd56a0c9fa0425c6c87bd5579a173ecf757debb3f886c",
   "cases": [
     {
       "id": "curated/blender_bb_only",
