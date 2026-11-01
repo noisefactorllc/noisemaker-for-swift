@@ -148,12 +148,16 @@ content stops with a "Missing graph resource" error. Supply those textures from 
 
 ## What works and what does not
 
-- **Current full catalog gate.** Authority `d0ed94ae19cca7328bc7d6b28902712a0838e1a9` passed in
-  [Native Metal run 40225791581](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/40225791581) at `7106337` on 2026-10-25. Of 2,924 cases it graded 2,903 exact and 21
+- **Current full catalog gate.** Authority `06070900e506b6c8ff6eb7b12d33e6c1bf285108` passed on
+  Apple M4 in native run `7vgjQ5Al` at `f265f9475fda688fbe6236f1a5e51674c81c868c` on 2026-11-01.
+  Of 2,926 cases it graded 2,905 exact and 21
   uninformative, with zero near, deferred, skipped, failed, missing or refused cases; all 210 effects
   have informative evidence. Uninformative cases do not count toward effect evidence. Tint's relaxed
   Metal math mode matched the same-run WebGPU output for both pass and custom vertex shaders.
-- **Previous full catalog gates.** Authority `32d8d3e6a6dbb3dee2dfbcc8d31bd1c52342eca3` passed in
+- **Previous full catalog gates.** Authority `d0ed94ae19cca7328bc7d6b28902712a0838e1a9` passed in
+  [Native Metal run 40225791581](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/40225791581)
+  at `7106337` on 2026-10-25, with 2,903 exact and 21 uninformative of 2,924 cases. Authority
+  `32d8d3e6a6dbb3dee2dfbcc8d31bd1c52342eca3` passed in
   [Native Metal run 39903944745](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/39903944745)
   at `b60edbf`, with 2,899 exact and 21 uninformative of 2,920 cases. Authority
   `2f9736ebb6c39be683074edc3a2cd0338a8a0c9a` passed in
@@ -163,9 +167,9 @@ content stops with a "Missing graph resource" error. Supply those textures from 
   Apple M4, macOS 26.6.2 in run `run.zJGZikXi`, and authority
   `735e1fdc4945e0df8ba47f8d657cd204e1b72923` passed on Apple M2, macOS 14.8.3 and Swift 6.0.3 in run
   `run.7EfAlDR4`. Each graded 2,885 exact and 21 uninformative of 2,906 cases.
-- **The compiler matches the reference stage by stage.** The complete 2,919-case compiler corpus
-  matches 17,514 pinned source stage hashes.
-- **Native suites.** The CPU suite passes 111 tests and the native Metal suite passes 84 tests on
+- **The compiler matches the reference stage by stage.** The complete 2,926-case compiler corpus
+  matches 17,556 pinned source stage hashes.
+- **Native suites.** The CPU suite passes 118 tests and the native Metal suite passes 84 tests on
   Apple M4, including resource ownership, queued submissions, partial-write history, sampled 3D
   inputs, parameter updates, and recovery. Timed CLI regressions verify complete sample schedules,
   source-order automation arithmetic, and delta time at loop boundaries. The 100-cycle
@@ -245,14 +249,18 @@ to a clean checkout at that commit to use local sources; otherwise the exporter 
 sources into a temporary archive. Generated graphs, stage dumps, shader sources, capture protocols
 and source hashes stay under `.build/reference`. Unknown or altered authority inputs fail
 verification. Define counts describe declared samples, not every accepted numeric literal. The
-reference locks Playwright 1.64.0, whose headless Chromium 156.0.8078.4 mints the WebGPU goldens.
+reference locks Playwright 1.64.1, whose headless Chromium 156.0.8078.4 mints the WebGPU goldens.
 The native raster artifact is built against the Skia revision of Chromium 153.0.8010.12, and its
 overlay oracle is minted with that Chromium; Chromium 156 produces the same overlay bytes. The
 current passing run's build fingerprint record has SHA-256
-`ba96d5f7d2e2e3a3aba7e6d72c2a72453be9a7a3a2698a2fdf12d75f73f760c5`, unchanged after capture and
+`0d10b447a034eec166778020ec7f2d12ac6109eab40e43906d01badab522f705`, unchanged after capture and
 grading; the native executable SHA-256 is
-`44cca8084611898f3d0b2223061ca5bce335685ef6407a1021ffcb78e4f8e0a7`. The run keeps that record and
-its results as a workflow artifact. The qualification fingerprint of the previous passing run is
+`870ce33bb3b063338e9fb45f8c81fc8e4bb70d83b9ca85ea4901761ab318c889`. The native run retains its
+source-bound captures, logs, results and fingerprint records. The qualification fingerprint of
+previous Native Metal run 40225791581 is
+`ba96d5f7d2e2e3a3aba7e6d72c2a72453be9a7a3a2698a2fdf12d75f73f760c5`; its executable SHA-256 is
+`44cca8084611898f3d0b2223061ca5bce335685ef6407a1021ffcb78e4f8e0a7`. That run keeps its results as a
+workflow artifact. The earlier passing run's qualification fingerprint is
 `d9e4bbd3cf54970dc478d1f86d090b9413baa111b33186cd7da9229b76841eb6`.
 
 To repeat the presented marker comparison and the graph probes on a native WebGPU/Metal host:
