@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "67d6e44c750e4f9bebb34f88645b934e3b933a84",
-    "sourceManifestSha256": "b61712b6f6684bd673ac4c7bafb21c99c46fb46f26ee18be8ade03b4962fcd8d"
+    "commit": "71771987158d6a2583b50d68ea4ded90dd461548",
+    "sourceManifestSha256": "4276eefc904d16997e11efb4295a1e3069c1967d61608e063f59db45cc2f1ec7"
   },
   "license": {
     "path": "LICENSE",
@@ -125779,8 +125779,8 @@
       "wgsl": [
         {
           "path": "shaders/effects/synth/polygon/wgsl/shape.wgsl",
-          "sha256": "ce95447bc7437b6cf5e6f51213d16fcd00af00c287c4bf138d00634e250c7977",
-          "bytes": 2172
+          "sha256": "90be8e9503691352a9b89c1e97c751d72e765e9fe63a7c119b61813654b4730d",
+          "bytes": 2335
         }
       ],
       "registrationKeys": [
@@ -126270,7 +126270,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "// WGSL version – WebGPU\n@group(0) @binding(0) var<uniform> resolution: vec2<f32>;\n@group(0) @binding(1) var<uniform> aspect: f32;\n@group(0) @binding(2) var<uniform> sides: i32;\n@group(0) @binding(3) var<uniform> radius: f32;\n@group(0) @binding(4) var<uniform> smoothing: f32;\n@group(0) @binding(5) var<uniform> rotation: f32;\n@group(0) @binding(6) var<uniform> fgColor: vec3<f32>;\n@group(0) @binding(7) var<uniform> fgAlpha: f32;\n@group(0) @binding(8) var<uniform> bgColor: vec3<f32>;\n@group(0) @binding(9) var<uniform> bgAlpha: f32;\n@group(0) @binding(10) var<uniform> tileOffset: vec2<f32>;\n@group(0) @binding(11) var<uniform> fullResolution: vec2<f32>;\n\nconst PI: f32 = 3.14159265359;\n\n/* Regular polygon distance field built from polar math; draws a soft-edged shape. */\nfn polygon(st: vec2<f32>, sides: f32) -> f32 {\n  let a = atan2(st.y, st.x) + 3.14159265;\n  let r = 6.2831853 / sides;\n  return cos(floor(0.5 + a / r) * r - a) * length(st);\n}\n\n@fragment\nfn main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {\n  let globalCoord = position.xy + tileOffset;\n  var st = globalCoord / fullResolution;\n  st = (st - vec2<f32>(0.5, 0.5)) * 2.0;\n  st.x *= aspect;\n  // Apply rotation\n  let c = cos(rotation * PI / 180.0);\n  let s = sin(rotation * PI / 180.0);\n  st = vec2<f32>(st.x * c - st.y * s, st.x * s + st.y * c);\n  let sidesF = f32(max(sides, 3));\n  // Rotate triangle so vertex points up\n  if (sides == 3) {\n      st = vec2<f32>(st.y, -st.x);\n  }\n  // Normalize by inradius so all shapes have consistent size\n  let d = polygon(st, sidesF) / cos(PI / sidesF);\n  let m = smoothstep(radius, radius - smoothing, d);\n  \n  // fgAlpha scales foreground visibility, bgAlpha scales background visibility\n  let fgMask = m * fgAlpha;\n  let bgMask = (1.0 - m) * bgAlpha;\n  let totalAlpha = fgMask + bgMask;\n  \n  // Compute color as weighted blend (for non-zero alpha)\n  var outColor: vec3<f32>;\n  if (totalAlpha > 0.0) {\n      outColor = (fgColor * fgMask + bgColor * bgMask) / totalAlpha;\n  } else {\n      outColor = vec3<f32>(0.0);\n  }\n  \n  // Output premultiplied alpha for correct compositing\n  return vec4<f32>(outColor * totalAlpha, totalAlpha);\n}\n"
+                        "// WGSL version – WebGPU\n@group(0) @binding(0) var<uniform> resolution: vec2<f32>;\n@group(0) @binding(1) var<uniform> aspect: f32;\n@group(0) @binding(2) var<uniform> sides: i32;\n@group(0) @binding(3) var<uniform> radius: f32;\n@group(0) @binding(4) var<uniform> smoothing: f32;\n@group(0) @binding(5) var<uniform> rotation: f32;\n@group(0) @binding(6) var<uniform> fgColor: vec3<f32>;\n@group(0) @binding(7) var<uniform> fgAlpha: f32;\n@group(0) @binding(8) var<uniform> bgColor: vec3<f32>;\n@group(0) @binding(9) var<uniform> bgAlpha: f32;\n@group(0) @binding(10) var<uniform> tileOffset: vec2<f32>;\n@group(0) @binding(11) var<uniform> fullResolution: vec2<f32>;\n\nconst PI: f32 = 3.14159265359;\n\n/* Regular polygon distance field built from polar math; draws a soft-edged shape. */\nfn polygon(st: vec2<f32>, sides: f32) -> f32 {\n  let a = atan2(st.y, st.x) + 3.14159265;\n  let r = 6.2831853 / sides;\n  return cos(floor(0.5 + a / r) * r - a) * length(st);\n}\n\n@fragment\nfn main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {\n  let globalCoord = position.xy + tileOffset;\n  var st = globalCoord / fullResolution;\n  st = (st - vec2<f32>(0.5, 0.5)) * 2.0;\n  st.x *= aspect;\n  // Apply rotation\n  let c = cos(rotation * PI / 180.0);\n  let s = sin(rotation * PI / 180.0);\n  st = vec2<f32>(st.x * c - st.y * s, st.x * s + st.y * c);\n  let sidesF = f32(max(sides, 3));\n  // Rotate triangle so vertex points up\n  if (sides == 3) {\n      st = vec2<f32>(st.y, -st.x);\n  }\n  // Normalize by inradius so all shapes have consistent size\n  let d = polygon(st, sidesF) / cos(PI / sidesF);\n  // Zero smoothing is a hard edge. smoothstep() with equal edges is\n  // undefined, and WebGPU drew that case inverted.\n  let m = select(f32(d < radius), smoothstep(radius, radius - smoothing, d), smoothing > 0.0);\n  \n  // fgAlpha scales foreground visibility, bgAlpha scales background visibility\n  let fgMask = m * fgAlpha;\n  let bgMask = (1.0 - m) * bgAlpha;\n  let totalAlpha = fgMask + bgMask;\n  \n  // Compute color as weighted blend (for non-zero alpha)\n  var outColor: vec3<f32>;\n  if (totalAlpha > 0.0) {\n      outColor = (fgColor * fgMask + bgColor * bgMask) / totalAlpha;\n  } else {\n      outColor = vec3<f32>(0.0);\n  }\n  \n  // Output premultiplied alpha for correct compositing\n  return vec4<f32>(outColor * totalAlpha, totalAlpha);\n}\n"
                       ]
                     ]
                   }
