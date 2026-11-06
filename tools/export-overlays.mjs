@@ -39,7 +39,7 @@ async function generate(ref, lock) {
   process.env.SHADE_GLOBALS_PREFIX = '__noisemaker'
   process.env.SHADE_HEADLESS = process.env.SHADE_HEADLESS ?? '1'
   const { BrowserSession } = await import(pathToFileURL(harness).href)
-  const session = new BrowserSession({ backend: 'webgpu' })
+  const session = new BrowserSession({ backend: 'webgpu', blankPage: true })
   await session.setup()
   try {
     const page = session.page
