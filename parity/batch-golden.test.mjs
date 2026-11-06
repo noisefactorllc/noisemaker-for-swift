@@ -224,8 +224,8 @@ test('parity-summary forwards termination to its active native child', { timeout
     const captureScript = join(temp, 'native.cjs')
     writeFileSync(captureScript, `
       const fs = require('node:fs')
-      fs.writeFileSync(process.env.NM_TEST_NATIVE_PID, String(process.pid))
       process.on('SIGTERM', () => { fs.writeFileSync(process.env.NM_TEST_NATIVE_CLOSED, 'yes'); process.exit(143) })
+      fs.writeFileSync(process.env.NM_TEST_NATIVE_PID, String(process.pid))
       setInterval(() => {}, 1000)
     `)
     const native = join(temp, 'nm-render')
@@ -267,8 +267,8 @@ for (const [signal, expectedExit] of [['SIGINT', 130], ['SIGTERM', 143]]) test(`
     const captureScript = join(temp, 'capture.cjs')
     writeFileSync(captureScript, `
       const fs = require('node:fs')
-      fs.writeFileSync(process.env.NM_TEST_GOLDEN_PID, String(process.pid))
       process.on('SIGTERM', () => { fs.writeFileSync(process.env.NM_TEST_GOLDEN_CLOSED, 'yes'); process.exit(143) })
+      fs.writeFileSync(process.env.NM_TEST_GOLDEN_PID, String(process.pid))
       setInterval(() => {}, 1000)
     `)
     fake('node', `case "$1" in parity/batch-golden.mjs) exec "$NM_TEST_NODE_BIN" "$NM_TEST_CAPTURE_SCRIPT";; esac\nexit 0`)
