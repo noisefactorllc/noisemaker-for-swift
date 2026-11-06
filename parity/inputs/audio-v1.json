@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "8395d1da1bb2e787e9c8319b739dcf5bcda1cfb4",
-    "sourceManifestSha256": "38e594ccca29df105671617f016ce02c4a8c72af2cb11380e60eb87c2935c00e"
+    "commit": "6f98d26ab84f17ba7fb154bb74252d6362736f89",
+    "sourceManifestSha256": "7854529ee316e44dd2e824daffdc8587c862e7324b2aa738ee56e28da9a7879a"
   },
   "sourceAPI": "AudioState.setWaveform/setSpectrum",
   "frame": 0,
