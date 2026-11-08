@@ -265,4 +265,58 @@ import Testing
         #expect(media.expanded.field("passes")?.arrayValue?[0].field("inputs")?
             .field("imageTex")?.stringValue == "imageTex_step_0")
     }
+
+    /// Source test_stateful_instances.js: each stateful effect instance in a
+    /// chain owns its state texture and its zoom sizing parameter. The first
+    /// instance keeps the legacy chain-scoped identifiers.
+    @Test func statefulChainInstancesOwnTheirStateAndSizing() throws {
+        let compiler = try NoisemakerCompiler()
+        let source = "search synth, mixer\n" +
+            "reactionDiffusion(zoom: x4).blendMode(tex: reactionDiffusion(zoom: x16)).write(o0)\n" +
+            "render(o0)\n"
+        let graph = try compiler.compile(source: source)
+        let states = graph.textures.map(\.key)
+            .filter { $0.hasPrefix("global_rd_state_chain_0") }.sorted()
+        expectEqual(states.count, 2)
+        expectTrue(states.contains("global_rd_state_chain_0"))
+        expectTrue(states.contains { $0.hasPrefix("global_rd_state_chain_0_node_") })
+        let sizes = states.compactMap { key -> (String, GraphDimension)? in
+            let texture = graph.textures.first { $0.key == key }
+            return texture.map { (key, $0.width) }
+        }
+        for (key, width) in sizes {
+            guard case .screenDivide(let name, _) = width else {
+                continue
+            }
+            let expectedZoom: Double
+            if key == "global_rd_state_chain_0" {
+                expectEqual(name, "zoom_chain_0")
+                expectedZoom = 4
+                expectEqual(try width.resolve(screen: 1024, parameters: graph.dimensionParameters), 256)
+            } else {
+                expectTrue(name.hasPrefix("zoom_chain_0_node_"))
+                expectedZoom = 16
+                expectEqual(try width.resolve(screen: 1024, parameters: graph.dimensionParameters), 64)
+            }
+            // Every pass of the owning instance scopes zoom to this parameter.
+            for pass in graph.passes where pass.raw.field("effectFunc")?.stringValue == "reactionDiffusion" {
+                guard let scoped = pass.raw.field("scopedParams")?.field("zoom")?.stringValue else {
+                    continue
+                }
+                if scoped == name {
+                    expectEqual(pass.uniforms.first { $0.name == scoped }?.value.numberValue, expectedZoom)
+                }
+            }
+        }
+        expectEqual(graph.dimensionParameters["zoom_chain_0"], 4)
+        expectEqual(graph.dimensionParameters.first { $0.key.hasPrefix("zoom_chain_0_node_") }?.value, 16)
+    }
+
+    @Test func singleStatefulInstanceKeepsLegacyIdentifiers() throws {
+        let compiler = try NoisemakerCompiler()
+        let source = "search synth\nreactionDiffusion(zoom: x8).write(o0)\nrender(o0)\n"
+        let graph = try compiler.compile(source: source)
+        expectTrue(graph.textures.map(\.key).contains("global_rd_state_chain_0"))
+        expectEqual(graph.dimensionParameters["zoom_chain_0"], 8)
+    }
 }

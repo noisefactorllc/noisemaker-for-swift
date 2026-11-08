@@ -64,6 +64,11 @@ public enum NoisemakerExpander {
             var particleID: String? = nil
             var lastInlineWrite: String? = nil
             var pipelineUniforms = OrderedObject()
+            // Private-state scoping of the chain: a global_ texture that only one
+            // effect names and that effect writes is that effect's private state.
+            let globalTextureUsers = collectGlobalTextureUsers(steps: steps)
+            var seenEffects: Set<String> = []
+            var sizeParamOwners: [String: String] = [:]
             for (stepIndex, step) in steps.enumerated() {
                 guard let op = step.field("op")?.stringValue,
                       let number = step.field("temp")?.numberValue,
@@ -124,11 +129,28 @@ public enum NoisemakerExpander {
                     currentInputVel = nil
                     currentInputRgba = nil
                 }
+                // Preserve legacy IDs for the first instance. Repeated private state
+                // gets a node suffix; cooperating effects retain the shared chain scope.
+                let instanceScope = seenEffects.contains(effect.key) ? "\(scope)_\(nodeID)" : scope
+                seenEffects.insert(effect.key)
+                var ownedTextures = Set((definition.field("textures")?.objectFields ?? []).map(\.name))
+                ownedTextures.formUnion((definition.field("textures3d")?.objectFields ?? []).map(\.name))
+                for pass in definition.field("passes")?.arrayValue ?? [] {
+                    for output in pass.field("outputs")?.objectFields ?? [] {
+                        if let value = output.value.stringValue { ownedTextures.insert(value) }
+                    }
+                }
+                // Read-only globals can be external uploads, whose bindings retain chain IDs.
+                let context = ScopeContext(chainScope: scope, instanceScope: instanceScope,
+                                           ownedTextures: ownedTextures,
+                                           globalTextureUsers: globalTextureUsers,
+                                           particleID: particleID, nodeID: nodeID)
                 let defines = try compileDefines(definition: definition, arguments: arguments)
                 let suffix = try defineSuffix(defines)
                 try collectPrograms(definition: definition, nodeID: nodeID, suffix: suffix, defines: defines)
-                let scopedParams = try collectTextures(definition: definition, nodeID: nodeID,
-                                                       chainScope: scope, particleID: particleID)
+                let scopedParams = try collectTextures(definition: definition,
+                                                       context: context,
+                                                       sizeParamOwners: &sizeParamOwners)
                 if let from = step.field("from")?.numberValue {
                     guard let index = Int(exactly: from), index >= 0 else {
                         throw CompilerIncomplete(stage: "expander", detail: "invalid input step index")
@@ -155,7 +177,7 @@ public enum NoisemakerExpander {
                                               particleID: particleID,
                                               inheritsVolumeSize: inheritsVolumeSize,
                                               pipelineUniforms: &pipelineUniforms,
-                                              chainScope: scope, defineSuffix: suffix,
+                                              context: context, defineSuffix: suffix,
                                               scopedParams: scopedParams,
                                               isLastStep: stepIndex == steps.count - 1,
                                               isLastPass: passIndex == effectPasses.count - 1,
@@ -171,7 +193,7 @@ public enum NoisemakerExpander {
                         }
                         currentInput = textureMap["node_\(index)_out"]
                     } else if outputName.hasPrefix("global_") {
-                        currentInput = "\(outputName)_\(scope)"
+                        currentInput = scopeTexture(outputName, context: context)
                     } else {
                         currentInput = "\(nodeID)_\(outputName)"
                     }
@@ -179,12 +201,12 @@ public enum NoisemakerExpander {
                 }
                 if let output = definition.field("outputTex3d")?.stringValue {
                     if output != "inputTex3d" { currentInput3d = output.hasPrefix("global_")
-                        ? "\(output)_\(scope)" : "\(nodeID)_\(output)" }
+                        ? scopeTexture(output, context: context) : "\(nodeID)_\(output)" }
                     textureMap["\(nodeID)_out3d"] = currentInput3d
                 }
                 if let output = definition.field("outputGeo")?.stringValue {
                     if output != "inputGeo" { currentInputGeo = output.hasPrefix("global_")
-                        ? "\(output)_\(scope)" : "\(nodeID)_\(output)" }
+                        ? scopeTexture(output, context: context) : "\(nodeID)_\(output)" }
                     textureMap["\(nodeID)_outGeo"] = currentInputGeo
                 }
                 for (property, suffix) in [("outputXyz", "Xyz"), ("outputVel", "Vel"),
@@ -197,7 +219,7 @@ public enum NoisemakerExpander {
                     default: existing = currentInputRgba
                     }
                     let resolved = output == "input\(suffix)" ? existing
-                        : scopeTexture(output, nodeID: nodeID, chainScope: scope, particleID: particleID)
+                        : scopeTexture(output, context: context)
                     textureMap["\(nodeID)_out\(suffix)"] = resolved
                     switch suffix {
                     case "Xyz": currentInputXyz = resolved
@@ -288,12 +310,74 @@ public enum NoisemakerExpander {
             }
         }
 
-        private mutating func collectTextures(definition: GraphValue, nodeID: String,
-                                              chainScope: String, particleID: String?) throws -> OrderedObject {
+        /// Scoping of one chain step: shared chain state, this step's private
+        /// state, and the textures it owns.
+        private struct ScopeContext {
+            let chainScope: String
+            let instanceScope: String
+            let ownedTextures: Set<String>
+            let globalTextureUsers: [String: Int]
+            let particleID: String?
+            let nodeID: String
+
+            func isPrivateGlobal(_ texName: String) -> Bool {
+                ownedTextures.contains(texName) && globalTextureUsers[texName] == 1
+            }
+        }
+
+        /// Count the distinct chain effects that reference each global_ texture.
+        private func collectGlobalTextureUsers(steps: [GraphValue]) -> [String: Int] {
+            var seen: Set<String> = []
+            var users: [String: Int] = [:]
+            for step in steps {
+                guard step.field("builtin")?.boolValue != true,
+                      step.field("args")?.field("_skip")?.boolValue != true,
+                      let op = step.field("op")?.stringValue,
+                      let effect = registry.effect(key: op),
+                      seen.insert(effect.key).inserted else { continue }
+                let definition = effect.definition
+                var refs: [String?] = (definition.field("textures")?.objectFields ?? [])
+                    .map { Optional($0.name) }
+                refs += (definition.field("textures3d")?.objectFields ?? []).map { Optional($0.name) }
+                for global in definition.field("globals")?.objectFields ?? [] {
+                    refs.append(global.value.field("default")?.stringValue)
+                }
+                for key in ["outputTex", "outputTex3d", "outputGeo", "outputXyz", "outputVel", "outputRgba"] {
+                    refs.append(definition.field(key)?.stringValue)
+                }
+                for pass in definition.field("passes")?.arrayValue ?? [] {
+                    for mapping in pass.field("inputs")?.objectFields ?? [] {
+                        refs.append(mapping.value.stringValue)
+                    }
+                    for mapping in pass.field("outputs")?.objectFields ?? [] {
+                        refs.append(mapping.value.stringValue)
+                    }
+                }
+                for ref in Set(refs.compactMap({ $0 })).filter({ $0.hasPrefix("global_") }) {
+                    users[ref, default: 0] += 1
+                }
+            }
+            return users
+        }
+
+        /// The first node to size private state from a param keeps the legacy
+        /// chain-scoped name; any other node, of the same or another effect, gets its own.
+        private func claimSizeParam(_ scopedParam: String, isPrivate: Bool, nodeID: String,
+                                    sizeParamOwners: inout [String: String]) -> String {
+            let owner = sizeParamOwners[scopedParam]
+            if owner == nil { sizeParamOwners[scopedParam] = nodeID }
+            return isPrivate && owner != nil && owner != nodeID
+                ? "\(scopedParam)_\(nodeID)" : scopedParam
+        }
+
+        private mutating func collectTextures(definition: GraphValue, context: ScopeContext,
+                                              sizeParamOwners: inout [String: String]) throws -> OrderedObject {
             var scopedParams = OrderedObject()
+            let nodeID = context.nodeID
+            let chainScope = context.chainScope
+            let particleID = context.particleID
             for texture in definition.field("textures")?.objectFields ?? [] {
-                let key = scopeTexture(texture.name, nodeID: nodeID,
-                                       chainScope: chainScope, particleID: particleID)
+                let key = scopeTexture(texture.name, context: context)
                 guard texture.value.objectFields != nil else {
                     throw CompilerIncomplete(stage: "expander", detail: "texture \(key) has no spec")
                 }
@@ -305,8 +389,20 @@ public enum NoisemakerExpander {
                             && !texture.name.hasPrefix("global_")
                         let particleTexture = texture.name.hasPrefix("global_") && isParticleTexture(texture.name)
                             && particleID != nil
-                        let suffix = (particleParam || particleTexture) ? particleID! : chainScope
-                        let scopedName = param == "volumeSize" ? "volumeSize_\(chainScope)" : "\(param)_\(suffix)"
+                        let suffix = particleTexture ? particleID! : chainScope
+                        let isPrivateTex = !texture.name.hasPrefix("global_")
+                            || context.isPrivateGlobal(texture.name)
+                        let scopedName: String
+                        if param == "volumeSize" {
+                            scopedName = "volumeSize_\(chainScope)"
+                        } else if particleParam {
+                            scopedName = "\(param)_\(particleID!)"
+                        } else if particleTexture || truthyInherit(dimension.field("inherit")) {
+                            scopedName = "\(param)_\(suffix)"
+                        } else {
+                            scopedName = claimSizeParam("\(param)_\(suffix)", isPrivate: isPrivateTex,
+                                                        nodeID: nodeID, sizeParamOwners: &sizeParamOwners)
+                        }
                         scoped["param"] = .string(scopedName)
                         spec[axis] = scoped.value
                         // An inherited dimension reads the scope's value and never
@@ -315,9 +411,15 @@ public enum NoisemakerExpander {
                     }
                     if let dimension = spec[axis], let param = dimension.field("screenDivide")?.stringValue {
                         var scoped = OrderedObject(dimension)
-                        let suffix = isParticleTexture(texture.name) && particleID != nil
-                            ? particleID! : chainScope
-                        let scopedName = "\(param)_\(suffix)"
+                        let scopedName: String
+                        if isParticleTexture(texture.name), let particleID {
+                            scopedName = "\(param)_\(particleID)"
+                        } else {
+                            let isPrivateTex = !texture.name.hasPrefix("global_")
+                                || context.isPrivateGlobal(texture.name)
+                            scopedName = claimSizeParam("\(param)_\(chainScope)", isPrivate: isPrivateTex,
+                                                        nodeID: nodeID, sizeParamOwners: &sizeParamOwners)
+                        }
                         scoped["screenDivide"] = .string(scopedName)
                         spec[axis] = scoped.value
                         scopedParams[param] = .string(scopedName)
@@ -328,8 +430,7 @@ public enum NoisemakerExpander {
             // Source expander appends authored 3D specs after 2D textures and
             // marks each with is3D. Keep this order for graph-stage parity.
             for texture in definition.field("textures3d")?.objectFields ?? [] {
-                let key = scopeTexture(texture.name, nodeID: nodeID,
-                                       chainScope: chainScope, particleID: particleID)
+                let key = scopeTexture(texture.name, context: context)
                 guard texture.value.objectFields != nil else {
                     throw CompilerIncomplete(stage: "expander", detail: "texture \(key) has no spec")
                 }
@@ -357,13 +458,14 @@ public enum NoisemakerExpander {
             }
         }
 
-        private func scopeTexture(_ name: String, nodeID: String,
-                                  chainScope: String, particleID: String?) -> String {
+        private func scopeTexture(_ name: String, context: ScopeContext) -> String {
             if name.hasPrefix("global_") {
-                if isParticleTexture(name), let particleID { return "\(name)_\(particleID)" }
-                return "\(name)_\(chainScope)"
+                if isParticleTexture(name), let particleID = context.particleID {
+                    return "\(name)_\(particleID)"
+                }
+                return "\(name)_\(context.isPrivateGlobal(name) ? context.instanceScope : context.chainScope)"
             }
-            return "\(nodeID)_\(name)"
+            return "\(context.nodeID)_\(name)"
         }
 
         private mutating func updatePipelineUniforms(definition: GraphValue, arguments: [GraphField],
@@ -423,7 +525,7 @@ public enum NoisemakerExpander {
                                          currentInputRgba: String?, particleID: String?,
                                          inheritsVolumeSize: Bool,
                                          pipelineUniforms: inout OrderedObject,
-                                         chainScope: String, defineSuffix: String,
+                                         context: ScopeContext, defineSuffix: String,
                                          scopedParams: OrderedObject,
                                          isLastStep: Bool, isLastPass: Bool,
                                          writeName: String?, writeKind: String?,
@@ -527,13 +629,12 @@ public enum NoisemakerExpander {
                                        currentInputXyz: currentInputXyz,
                                        currentInputVel: currentInputVel,
                                        currentInputRgba: currentInputRgba,
-                                       particleID: particleID,
                                        arguments: arguments, effect: effect, nodeID: nodeID,
-                                       chainScope: chainScope, writeName: writeName,
+                                       context: context, writeName: writeName,
                                        writeKind: writeKind, stepIndex: temp,
                                        effectName: effectName)
             let outputs = try mapOutputs(passDefinition.field("outputs"), nodeID: nodeID,
-                                         chainScope: chainScope, particleID: particleID,
+                                         context: context,
                                          lastStep: isLastStep,
                                          lastPass: isLastPass, writeName: writeName)
             for scoped in scopedParams.fields {
@@ -569,9 +670,9 @@ public enum NoisemakerExpander {
         private mutating func mapInputs(_ inputSpec: GraphValue?, currentInput: String?,
                                currentInput3d: String?, currentInputGeo: String?,
                                currentInputXyz: String?, currentInputVel: String?,
-                               currentInputRgba: String?, particleID: String?,
+                               currentInputRgba: String?,
                                arguments: [GraphField], effect: CatalogEffect, nodeID: String,
-                               chainScope: String, writeName: String?, writeKind: String?,
+                               context: ScopeContext, writeName: String?, writeKind: String?,
                                stepIndex: Int, effectName: String) throws -> GraphValue {
             var inputs = OrderedObject()
             for input in inputSpec?.objectFields ?? [] {
@@ -623,8 +724,7 @@ public enum NoisemakerExpander {
                     } else if let name = argument.stringValue { value = name }
                     else { throw CompilerIncomplete(stage: "expander", detail: "texture argument \(reference)") }
                 } else if reference.hasPrefix("global_") {
-                    value = scopeTexture(reference, nodeID: nodeID,
-                                         chainScope: chainScope, particleID: particleID)
+                    value = scopeTexture(reference, context: context)
                 }
                 else if reference == "outputTex" { value = "\(nodeID)_out" }
                 else { value = "\(nodeID)_\(reference)" }
@@ -634,7 +734,8 @@ public enum NoisemakerExpander {
         }
 
         private mutating func mapOutputs(_ outputSpec: GraphValue?, nodeID: String,
-                                         chainScope: String, particleID: String?, lastStep: Bool,
+                                         context: ScopeContext,
+                                         lastStep: Bool,
                                          lastPass: Bool, writeName: String?) throws -> GraphValue {
             var outputs = OrderedObject()
             for output in outputSpec?.objectFields ?? [] {
@@ -650,8 +751,7 @@ public enum NoisemakerExpander {
                     textureMap["\(nodeID)_out"] = virtual
                     textureMap[virtual] = virtual
                 } else if reference.hasPrefix("global_") {
-                    virtual = scopeTexture(reference, nodeID: nodeID,
-                                           chainScope: chainScope, particleID: particleID)
+                    virtual = scopeTexture(reference, context: context)
                 }
                 else { virtual = "\(nodeID)_\(reference)" }
                 outputs[output.name] = .string(virtual)
