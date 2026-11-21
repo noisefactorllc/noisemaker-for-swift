@@ -168,8 +168,8 @@ content stops with a "Missing graph resource" error. Supply those textures from 
   Apple M4, macOS 26.6.2 in run `run.zJGZikXi`, and authority
   `735e1fdc4945e0df8ba47f8d657cd204e1b72923` passed on Apple M2, macOS 14.8.3 and Swift 6.0.3 in run
   `run.7EfAlDR4`. Each graded 2,885 exact and 21 uninformative of 2,906 cases.
-- **The compiler matches the reference stage by stage.** The complete 2,926-case compiler corpus
-  matches 17,556 pinned source stage hashes.
+- **The compiler matches the reference stage by stage.** The complete compiler corpus
+  matches its pinned source stage hashes.
 - **Native suites.** The CPU suite passes, and the native Metal suite passes 84 tests on
   Apple M4, including resource ownership, queued submissions, partial-write history, sampled 3D
   inputs, parameter updates, and recovery. Timed CLI regressions verify complete sample schedules,
