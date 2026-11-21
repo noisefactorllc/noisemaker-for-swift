@@ -148,13 +148,14 @@ content stops with a "Missing graph resource" error. Supply those textures from 
 
 ## What works and what does not
 
-- **Current full catalog gate.** Authority `06070900e506b6c8ff6eb7b12d33e6c1bf285108` passed on
+- **Full catalog gate at an earlier authority.** Authority `06070900e506b6c8ff6eb7b12d33e6c1bf285108` passed on
   Apple M4 in native run `7vgjQ5Al` at `f265f9475fda688fbe6236f1a5e51674c81c868c` on 2026-11-01.
   Of 2,926 cases it graded 2,905 exact and 21
   uninformative, with zero near, deferred, skipped, failed, missing or refused cases; all 210 effects
-  have informative evidence. Uninformative cases do not count toward effect evidence. Tint's relaxed
-  Metal math mode matched the same-run WebGPU output for both pass and custom vertex shaders.
-- **Previous full catalog gates.** Authority `d0ed94ae19cca7328bc7d6b28902712a0838e1a9` passed in
+  had informative evidence. Uninformative cases do not count toward effect evidence. Tint's relaxed
+  Metal math mode matched the same-run WebGPU output for both pass and custom vertex shaders. No full
+  catalog gate at the authority now pinned in `parity/reference.json` is recorded here.
+- **Older full catalog gates.** Authority `d0ed94ae19cca7328bc7d6b28902712a0838e1a9` passed in
   [Native Metal run 40225791581](https://github.com/noisefactorllc/noisemaker-for-swift/actions/runs/40225791581)
   at `7106337` on 2026-10-25, with 2,903 exact and 21 uninformative of 2,924 cases. Authority
   `32d8d3e6a6dbb3dee2dfbcc8d31bd1c52342eca3` passed in
@@ -169,7 +170,7 @@ content stops with a "Missing graph resource" error. Supply those textures from 
   `run.7EfAlDR4`. Each graded 2,885 exact and 21 uninformative of 2,906 cases.
 - **The compiler matches the reference stage by stage.** The complete 2,926-case compiler corpus
   matches 17,556 pinned source stage hashes.
-- **Native suites.** The CPU suite passes 118 tests and the native Metal suite passes 84 tests on
+- **Native suites.** The CPU suite passes, and the native Metal suite passes 84 tests on
   Apple M4, including resource ownership, queued submissions, partial-write history, sampled 3D
   inputs, parameter updates, and recovery. Timed CLI regressions verify complete sample schedules,
   source-order automation arithmetic, and delta time at loop boundaries. The 100-cycle
