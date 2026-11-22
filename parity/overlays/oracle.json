@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "b631fc2c37d75f4cedbdc5e760486f7ecd3a2ca8",
-    "sourceManifestSha256": "96876df962e71c322d5d2cbc103bb1f364e8f47c2089086407e737a9b777a3e0"
+    "commit": "7f3721e973944db9a680bc7048b2c3a5b49c9d8a",
+    "sourceManifestSha256": "592fc2e43985722a494f71f5166891e12b082a171025715442d479091fb46382"
   },
   "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
   "format": {
