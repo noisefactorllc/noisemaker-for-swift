@@ -123,18 +123,20 @@ struct HeightGridOrientationGPUTests {
             """
             search synth, points, render
             solid(color: #ffffff).pointsEmit(stateSize: x64, layout: center, resetState: true)
-              .heightGrid(gridScale: 64, heightScale: 0, heightOffset: 12)
+              .heightGrid(gridScale: 53, heightScale: 0, heightOffset: 10)
               .pointsBillboardRender(viewMode: perspective, density: 0.001, intensity: 0, inputIntensity: 0, shapeMode: square, pointSize: 8, depositOpacity: 100, rotateX: 0, rotateY: 0, rotateZ: 0, viewScale: 1, posX: 0, posY: 0, \(camera), \(focus)).write(o0)
             render(o0)
             """
         }
-        // Slot zero is (-31.5, 12, +31.5), so the camera at Z=80 sees
-        // depth 48.5. These expected screen pixels are hand-derived from the
+        // This 160 by 144 frame makes the grid 53 wide and 47.7 deep
+        // (gridScale times the frame's height over its width), so slot zero is
+        // (-26.0859375, 10, +23.47734375) and the camera at Z=80 sees depth
+        // 56.52265625. These expected screen pixels are hand-derived from the
         // perspective transform for the 160 by 144 viewport.
         for (label, camera, expected) in [
-            ("default", "posZ: 0, fieldOfView: 90", (33, 54)),
-            ("wide", "posZ: 0, fieldOfView: 115", (50, 60)),
-            ("forward", "posZ: 15, fieldOfView: 90", (12, 46))
+            ("default", "posZ: 0, fieldOfView: 90", (46, 59)),
+            ("wide", "posZ: 0, fieldOfView: 115", (58, 63)),
+            ("forward", "posZ: 15, fieldOfView: 90", (34, 54))
         ] {
             let image = try capture(source(camera), width: width, height: height)
             let pixels = image.litPositions()
@@ -146,9 +148,9 @@ struct HeightGridOrientationGPUTests {
             #expect(abs(centerY - Double(expected.1)) <= 1.5,
                 "\(label): projected Y \(centerY), expected \(expected.1)")
         }
-        let focused = try capture(source("posZ: 0, fieldOfView: 90", "aperture: 12, focalDistance: 48.5"),
+        let focused = try capture(source("posZ: 0, fieldOfView: 90", "aperture: 12, focalDistance: 56.52265625"),
             width: width, height: height)
-        let defocused = try capture(source("posZ: 0, fieldOfView: 90", "aperture: 12, focalDistance: 111.5"),
+        let defocused = try capture(source("posZ: 0, fieldOfView: 90", "aperture: 12, focalDistance: 103.47734375"),
             width: width, height: height)
         let focusedPixels = focused.litPositions()
         let defocusedPixels = defocused.litPositions()

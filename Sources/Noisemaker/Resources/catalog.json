@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "7f3721e973944db9a680bc7048b2c3a5b49c9d8a",
-    "sourceManifestSha256": "592fc2e43985722a494f71f5166891e12b082a171025715442d479091fb46382"
+    "commit": "75027859fbb9016880152d5155ef8221fb71a558",
+    "sourceManifestSha256": "c8d3035457d22cdeef893f4407cedfefacb2f292faa1ca764942e2c4a5d658ae"
   },
   "license": {
     "path": "LICENSE",
@@ -87834,8 +87834,8 @@
       "wgsl": [
         {
           "path": "shaders/effects/points/heightGrid/wgsl/agent.wgsl",
-          "sha256": "192fe39d51e1752025cc905067b35b1ae7f74d6ae7bb9af22d92950c49979e24",
-          "bytes": 1553
+          "sha256": "2ef73250979265c77c0c1a0b9b2f9ba97fdd06ff5ce9e321f6bced73ee6ab7eb",
+          "bytes": 1975
         },
         {
           "path": "shaders/effects/points/heightGrid/wgsl/passthrough.wgsl",
@@ -88282,7 +88282,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "struct Uniforms {\n    gridScale: f32,\n    heightScale: f32,\n    heightOffset: f32,\n}\nstruct Outputs {\n    @location(0) outXYZ: vec4f,\n    @location(1) outVel: vec4f,\n    @location(2) outRGBA: vec4f,\n}\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var xyzTex: texture_2d<f32>;\n@group(0) @binding(2) var velTex: texture_2d<f32>;\n@group(0) @binding(3) var heightTex: texture_2d<f32>;\n@group(0) @binding(4) var heightSampler: sampler;\n@group(0) @binding(5) var diffuseTex: texture_2d<f32>;\n@group(0) @binding(6) var diffuseSampler: sampler;\n\n// MRT state update, with the same slot identity as pointsEmit on each backend.\n@fragment\nfn main(@builtin(position) fragCoord: vec4f) -> Outputs {\n    let coord = vec2i(fragCoord.xy);\n    let stateSize = textureDimensions(xyzTex, 0);\n    let uv = (vec2f(coord) + 0.5) / vec2f(stateSize);\n    // Match the surface texel coordinates to the particle slot coordinates.\n    let imageUV = uv;\n    let heightColor = textureSampleLevel(heightTex, heightSampler, imageUV, 0.0).rgb;\n    let elevation = dot(heightColor, vec3f(0.2126, 0.7152, 0.0722));\n    // The image's top row lies at -Z, so a view from above along -Y with\n    // screen right on +X shows the image as authored, not mirrored.\n    return Outputs(\n        vec4f((uv.x - 0.5) * u.gridScale,\n            elevation * u.heightScale + u.heightOffset,\n            (0.5 - uv.y) * u.gridScale, 1.0),\n        vec4f(0.0, 0.0, 0.0, textureLoad(velTex, coord, 0).w),\n        textureSampleLevel(diffuseTex, diffuseSampler, imageUV, 0.0)\n    );\n}\n"
+                        "struct Uniforms {\n    gridScale: f32,\n    heightScale: f32,\n    heightOffset: f32,\n    aspectInv: f32,\n}\nstruct Outputs {\n    @location(0) outXYZ: vec4f,\n    @location(1) outVel: vec4f,\n    @location(2) outRGBA: vec4f,\n}\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var xyzTex: texture_2d<f32>;\n@group(0) @binding(2) var velTex: texture_2d<f32>;\n@group(0) @binding(3) var heightTex: texture_2d<f32>;\n@group(0) @binding(4) var heightSampler: sampler;\n@group(0) @binding(5) var diffuseTex: texture_2d<f32>;\n@group(0) @binding(6) var diffuseSampler: sampler;\n\n// MRT state update, with the same slot identity as pointsEmit on each backend.\n@fragment\nfn main(@builtin(position) fragCoord: vec4f) -> Outputs {\n    let coord = vec2i(fragCoord.xy);\n    let stateSize = textureDimensions(xyzTex, 0);\n    let uv = (vec2f(coord) + 0.5) / vec2f(stateSize);\n    // Match the surface texel coordinates to the particle slot coordinates.\n    let imageUV = uv;\n    let heightColor = textureSampleLevel(heightTex, heightSampler, imageUV, 0.0).rgb;\n    let elevation = dot(heightColor, vec3f(0.2126, 0.7152, 0.0722));\n    // The grid is gridScale wide, and as deep as the frame's shape makes it.\n    // Every surface has the frame's shape, so what is drawn on the grid keeps\n    // its proportions. aspectInv is the frame's height over its width. It is\n    // computed outside the shader, so both backends multiply by one value,\n    // and on a square frame it is exactly 1.\n    let gridDepth = u.gridScale * u.aspectInv;\n    // The image's top row lies at -Z, so a view from above along -Y with\n    // screen right on +X shows the image as authored, not mirrored.\n    return Outputs(\n        vec4f((uv.x - 0.5) * u.gridScale,\n            elevation * u.heightScale + u.heightOffset,\n            (0.5 - uv.y) * gridDepth, 1.0),\n        vec4f(0.0, 0.0, 0.0, textureLoad(velTex, coord, 0).w),\n        textureSampleLevel(diffuseTex, diffuseSampler, imageUV, 0.0)\n    );\n}\n"
                       ]
                     ]
                   }
