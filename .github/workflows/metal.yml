@@ -10,7 +10,7 @@ name: Native Metal
 
 on:
   push:
-    branches: [main]
+    branches: [main, 2.x]
     paths:
       - 'Package.swift'
       - 'Sources/**'
@@ -42,7 +42,7 @@ concurrency:
 
 jobs:
   metal:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/2.x'
     runs-on:
       group: ${{ vars.GPU_RUNNER_GROUP }}
       labels: ${{ vars.GPU_RUNNER_LABEL }}
@@ -92,7 +92,7 @@ jobs:
 
   parity:
     needs: metal
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || inputs.parity)
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/2.x') && (github.event_name == 'schedule' || inputs.parity)
     runs-on:
       group: ${{ vars.GPU_RUNNER_GROUP }}
       labels: ${{ vars.GPU_RUNNER_LABEL }}

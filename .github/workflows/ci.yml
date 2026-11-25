@@ -1,7 +1,7 @@
 name: Swift package
 on:
   push:
-    branches: [main]
+    branches: [main, 2.x]
     paths-ignore:
       - '*.md'
       - 'docs/**'
