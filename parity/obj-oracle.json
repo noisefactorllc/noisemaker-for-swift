@@ -2,13 +2,17 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "478f94eae7ebe34116dfc661ac52b373b884008b",
-    "sourceManifestSha256": "a335fe11b865dede6f01b5ee7a93d3436acaa94a3ff9006394079b240deb7f34"
+    "commit": "24250c8c69610017b1413ccb9dc29a627663a790",
+    "sourceManifestSha256": "ae5ea5c917c4284120c147d8bb76f20b264cd2fe56c61eeb2740a7a17ac3d91c"
   },
   "implementation": {
     "path": "shaders/src/runtime/obj-parser.js",
-    "sha256": "d91dee80ee19cbff1f1a7651c108a3e20921c4b89ab2c90dd173129f6253b693",
-    "bytes": 10807
+    "sha256": "464d37ef905d3d9cd1639de56b911b2dcea302c0242d2ab542010836c4de71b8",
+    "bytes": 8422,
+    "geometry": {
+      "path": "shaders/src/geometry/geometry.js",
+      "sha256": "e6e2a90aa0488dfdbdee321bfd2f985fbddbce2f9d68bf52c5a2d3b2688ca719"
+    }
   },
   "packing": {
     "builtinTextureWidth": 256,
@@ -4717,6 +4721,1073 @@
             0
           ]
         }
+      }
+    }
+  ],
+  "geometryCases": [
+    {
+      "id": "repeated-indices",
+      "attributes": {
+        "positions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "normals": [
+          0,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "uvs": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "indices": [
+          1,
+          0,
+          1
+        ]
+      },
+      "dimensions": {
+        "texWidth": 2,
+        "texHeight": 2
+      },
+      "vertexCount": 2,
+      "triangleCount": 1,
+      "indices": [
+        1,
+        0,
+        1
+      ],
+      "expanded": {
+        "positions": {
+          "length": 9,
+          "encoding": "float32-little-endian",
+          "sha256": "0d8d6a4eee43c781382c46a134578ea8fdd9bd89e91a2fc36a0e777e7287a783",
+          "head": [
+            4,
+            5,
+            6,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "tail": [
+            4,
+            5,
+            6,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "values": [
+            4,
+            5,
+            6,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "normals": {
+          "length": 9,
+          "encoding": "float32-little-endian",
+          "sha256": "199376f7e1286a07757563a2d9b363599ae0843fef8b54e104545caedc5e0a2a",
+          "head": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "tail": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "values": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ]
+        },
+        "uvs": {
+          "length": 6,
+          "encoding": "float32-little-endian",
+          "sha256": "09077defc4c33f4fd0f089ecbd6bd86b6ec9d11723c3889ae1484292cb77004c",
+          "head": [
+            1,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          "tail": [
+            1,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          "values": [
+            1,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      "packed": {
+        "positions": {
+          "length": 16,
+          "encoding": "float32-little-endian",
+          "sha256": "c454dfb1bdacb840d3fcc53fb427cef18c81950971b12e7be2068bd8027b8069",
+          "head": [
+            4,
+            5,
+            6,
+            1,
+            1,
+            2,
+            3,
+            1,
+            4,
+            5,
+            6,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            4,
+            5,
+            6,
+            1,
+            1,
+            2,
+            3,
+            1,
+            4,
+            5,
+            6,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            4,
+            5,
+            6,
+            1,
+            1,
+            2,
+            3,
+            1,
+            4,
+            5,
+            6,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "normals": {
+          "length": 16,
+          "encoding": "float32-little-endian",
+          "sha256": "714222a3ea9ebc506c3b34a25756b82cf59389db7e5f8e8721867cb779448857",
+          "head": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "uvs": {
+          "length": 16,
+          "encoding": "float32-little-endian",
+          "sha256": "4fd2077790c07d3911d803dd940d3350ebce62c6aabb46794ce7381886493dd5",
+          "head": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "vertexCount": 3
+      }
+    },
+    {
+      "id": "missing-uvs",
+      "attributes": {
+        "positions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "normals": [
+          0,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "indices": [
+          1,
+          0,
+          1
+        ]
+      },
+      "dimensions": {
+        "texWidth": 2,
+        "texHeight": 2
+      },
+      "vertexCount": 2,
+      "triangleCount": 1,
+      "indices": [
+        1,
+        0,
+        1
+      ],
+      "expanded": {
+        "positions": {
+          "length": 9,
+          "encoding": "float32-little-endian",
+          "sha256": "0d8d6a4eee43c781382c46a134578ea8fdd9bd89e91a2fc36a0e777e7287a783",
+          "head": [
+            4,
+            5,
+            6,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "tail": [
+            4,
+            5,
+            6,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "values": [
+            4,
+            5,
+            6,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "normals": {
+          "length": 9,
+          "encoding": "float32-little-endian",
+          "sha256": "199376f7e1286a07757563a2d9b363599ae0843fef8b54e104545caedc5e0a2a",
+          "head": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "tail": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "values": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ]
+        },
+        "uvs": {
+          "length": 6,
+          "encoding": "float32-little-endian",
+          "sha256": "9d908ecfb6b256def8b49a7c504e6c889c4b0e41fe6ce3e01863dd7b61a20aa0",
+          "head": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "packed": {
+        "positions": {
+          "length": 16,
+          "encoding": "float32-little-endian",
+          "sha256": "c454dfb1bdacb840d3fcc53fb427cef18c81950971b12e7be2068bd8027b8069",
+          "head": [
+            4,
+            5,
+            6,
+            1,
+            1,
+            2,
+            3,
+            1,
+            4,
+            5,
+            6,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            4,
+            5,
+            6,
+            1,
+            1,
+            2,
+            3,
+            1,
+            4,
+            5,
+            6,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            4,
+            5,
+            6,
+            1,
+            1,
+            2,
+            3,
+            1,
+            4,
+            5,
+            6,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "normals": {
+          "length": 16,
+          "encoding": "float32-little-endian",
+          "sha256": "714222a3ea9ebc506c3b34a25756b82cf59389db7e5f8e8721867cb779448857",
+          "head": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "uvs": {
+          "length": 16,
+          "encoding": "float32-little-endian",
+          "sha256": "f5a5fd42d16a20302798ef6ed309979b43003d2320d9f0e8ea9831a92759fb4b",
+          "head": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "vertexCount": 3
+      }
+    },
+    {
+      "id": "out-of-bounds",
+      "attributes": {
+        "positions": [
+          1,
+          2,
+          3
+        ],
+        "normals": [],
+        "indices": [
+          4
+        ]
+      },
+      "dimensions": {
+        "texWidth": 1,
+        "texHeight": 1
+      },
+      "vertexCount": 1,
+      "triangleCount": 0.3333333333333333,
+      "indices": [
+        4
+      ],
+      "expanded": {
+        "positions": {
+          "length": 3,
+          "encoding": "float32-little-endian",
+          "sha256": "79a48569b1efb0d9bf9bacd0c802a2d672630bdb412759ea5d35e15042b7116f",
+          "head": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ],
+          "tail": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ],
+          "values": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ]
+        },
+        "normals": {
+          "length": 3,
+          "encoding": "float32-little-endian",
+          "sha256": "79a48569b1efb0d9bf9bacd0c802a2d672630bdb412759ea5d35e15042b7116f",
+          "head": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ],
+          "tail": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ],
+          "values": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ]
+        },
+        "uvs": {
+          "length": 2,
+          "encoding": "float32-little-endian",
+          "sha256": "f11eb073fe28d18bec7a158f1bf03036144c1bc49d82faab3ad757b742618460",
+          "head": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ],
+          "tail": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ],
+          "values": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            }
+          ]
+        }
+      },
+      "packed": {
+        "positions": {
+          "length": 4,
+          "encoding": "float32-little-endian",
+          "sha256": "0b34b5c878e640df31f8f07014f5c265d9f4cf24d27a6d14f5a74c3c30f31151",
+          "head": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            1
+          ],
+          "tail": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            1
+          ],
+          "values": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            1
+          ]
+        },
+        "normals": {
+          "length": 4,
+          "encoding": "float32-little-endian",
+          "sha256": "d91d60402c16deedb09c6792ca95a038512eab48c558ea9b6557760fccbaae43",
+          "head": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            0
+          ],
+          "tail": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            0
+          ],
+          "values": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            0
+          ]
+        },
+        "uvs": {
+          "length": 4,
+          "encoding": "float32-little-endian",
+          "sha256": "25e9f6e33ce96d7c5b41082c3b43d541afff2d088815ce3c39d7967bbc83364c",
+          "head": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            0,
+            0
+          ],
+          "tail": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            0,
+            0
+          ],
+          "values": [
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            {
+              "$type": "number",
+              "value": "NaN"
+            },
+            0,
+            0
+          ]
+        },
+        "vertexCount": 1
+      }
+    },
+    {
+      "id": "empty-geometry",
+      "attributes": {
+        "positions": [],
+        "normals": [],
+        "indices": []
+      },
+      "dimensions": {
+        "texWidth": 1,
+        "texHeight": 1
+      },
+      "vertexCount": 0,
+      "triangleCount": 0,
+      "indices": [],
+      "expanded": {
+        "positions": {
+          "length": 0,
+          "encoding": "float32-little-endian",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "head": [],
+          "tail": [],
+          "values": []
+        },
+        "normals": {
+          "length": 0,
+          "encoding": "float32-little-endian",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "head": [],
+          "tail": [],
+          "values": []
+        },
+        "uvs": {
+          "length": 0,
+          "encoding": "float32-little-endian",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "head": [],
+          "tail": [],
+          "values": []
+        }
+      },
+      "packed": {
+        "positions": {
+          "length": 4,
+          "encoding": "float32-little-endian",
+          "sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+          "head": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "normals": {
+          "length": 4,
+          "encoding": "float32-little-endian",
+          "sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+          "head": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "uvs": {
+          "length": 4,
+          "encoding": "float32-little-endian",
+          "sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+          "head": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "tail": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "values": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "vertexCount": 0
       }
     }
   ]

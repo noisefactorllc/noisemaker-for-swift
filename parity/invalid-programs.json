@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "478f94eae7ebe34116dfc661ac52b373b884008b",
-    "sourceManifestSha256": "a335fe11b865dede6f01b5ee7a93d3436acaa94a3ff9006394079b240deb7f34"
+    "commit": "24250c8c69610017b1413ccb9dc29a627663a790",
+    "sourceManifestSha256": "ae5ea5c917c4284120c147d8bb76f20b264cd2fe56c61eeb2740a7a17ac3d91c"
   },
   "cases": [
     {
@@ -15,7 +15,10 @@
           "code": "S001",
           "severity": "error",
           "message": "Unknown effect: 'noiz'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 1
+          }
         },
         {
           "code": "S005",
@@ -37,7 +40,10 @@
           "code": "S001",
           "severity": "error",
           "message": "Unknown effect: 'blurr'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 9
+          }
         }
       ]
     },
@@ -50,7 +56,10 @@
           "code": "S001",
           "severity": "error",
           "message": "Unknown argument 'bogus' for noise()",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 14
+          }
         }
       ]
     },
@@ -63,7 +72,10 @@
           "code": "S001",
           "severity": "error",
           "message": "Unknown argument 'xScale' for noise()",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 15
+          }
         }
       ]
     },
@@ -76,7 +88,10 @@
           "code": "S005",
           "severity": "error",
           "message": "Illegal chain structure: 'blur'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 1
+          }
         },
         {
           "code": "S005",
@@ -98,7 +113,10 @@
           "code": "S005",
           "severity": "error",
           "message": "Illegal chain structure: 'noise'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 9
+          }
         }
       ]
     },
@@ -111,7 +129,10 @@
           "code": "S001",
           "severity": "error",
           "message": "Chain must have explicit write() or write3d() target: 'noise'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 1
+          }
         }
       ]
     },
@@ -124,7 +145,10 @@
           "code": "S001",
           "severity": "error",
           "message": "String literal not allowed for numeric parameter 'scaleX' - strings are only valid for type: \"string\" parameters",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 15
+          }
         }
       ]
     },
@@ -223,7 +247,10 @@
           "code": "S001",
           "severity": "error",
           "message": "String literal not allowed for boolean parameter 'ridges'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 15
+          }
         }
       ]
     },
@@ -249,7 +276,10 @@
           "code": "S001",
           "severity": "error",
           "message": "String literal not allowed for color parameter 'color'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 14
+          }
         }
       ]
     },
@@ -262,7 +292,10 @@
           "code": "S001",
           "severity": "error",
           "message": "String literal not allowed for vec3 parameter 'lightDirection'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 36
+          }
         }
       ]
     },
@@ -275,7 +308,10 @@
           "code": "S001",
           "severity": "error",
           "message": "String literal not allowed for surface parameter 'tex'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 24
+          }
         }
       ]
     },
@@ -288,7 +324,10 @@
           "code": "S001",
           "severity": "error",
           "message": "String literal not allowed for member/enum parameter 'channel'",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 26
+          }
         }
       ]
     },
@@ -314,7 +353,10 @@
           "code": "S001",
           "severity": "error",
           "message": "String parameter 'style' requires a quoted string literal, got Number",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 21
+          }
         }
       ]
     },
@@ -438,7 +480,10 @@
           "code": "S007",
           "severity": "warning",
           "message": "param 'fieldTex' is deprecated, use 'heightTex' instead. Aliases will be removed on 2027-06-01.",
-          "location": null
+          "location": {
+            "line": 2,
+            "column": 22
+          }
         }
       ]
     }

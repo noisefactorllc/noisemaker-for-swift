@@ -176,7 +176,8 @@ import Testing
         _ = try compiler.compile(source: "search synth\nnoise(scaleX: 4).write(o0)\nrender(o0)\n")
         expectThrows(try compiler.compile(source: "search synth\nnoise(xScale: 4).write(o0)\nrender(o0)\n")) { error in
             #expect((error as? CompilationError)?.diagnostics == [CompilerDiagnostic(code: "S001",
-                severity: "error", message: "Unknown argument 'xScale' for noise()", location: nil)])
+                severity: "error", message: "Unknown argument 'xScale' for noise()",
+                location: Noisemaker.SourceLocation(line: 2, column: 15))])
         }
     }
 

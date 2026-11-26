@@ -1,11 +1,11 @@
 {
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "478f94eae7ebe34116dfc661ac52b373b884008b",
-    "sourceManifestSha256": "a335fe11b865dede6f01b5ee7a93d3436acaa94a3ff9006394079b240deb7f34",
+    "commit": "24250c8c69610017b1413ccb9dc29a627663a790",
+    "sourceManifestSha256": "ae5ea5c917c4284120c147d8bb76f20b264cd2fe56c61eeb2740a7a17ac3d91c",
     "licenseSha256": "43a6f2220dbf51b83fdaf43cfa520e34fac2d64669b3403211bcb62f546afe7c"
   },
-  "corpusSha256": "fef29d85e5b7662ff7ff0ad0e51b2745661435be02f7409a8e2eea195926ed51",
+  "corpusSha256": "4db8f487e780a638a9bd78da4e560d7306ef104deb43ebf8ea330c202977c6cf",
   "cases": [
     {
       "id": "curated/blender_bb_only",
@@ -21029,7 +21029,7 @@
     {
       "id": "coverage/synth3d_noise3d__volumeSize_x128",
       "sourceSha256": "e746853b2df1309e94209940209458523fffc5ae2794039aabeb5f53d34b5002",
-      "graphStageSha256": "586259b29d1443d867cdcff654cf8bb43380eddbc12c895de50e22277c143433",
+      "graphStageSha256": "40ae7570e836ef718445c2e857756c7d4a0acd8b210e75e30855f35911eb4803",
       "graphId": "-v8q3mu",
       "backend": "WebGPU",
       "hostStepApplyCount": 1,

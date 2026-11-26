@@ -265,9 +265,12 @@ struct GraphTests {
             """
         let graph = try NoisemakerCompiler().compile(source: source)
         expectTrue(graph.textures.contains(where: { $0.key == "node_1_geoBuffer" }))
-        expectTrue(graph.passes.contains(where: { pass in
+        expectFalse(graph.passes.contains(where: { pass in
             pass.inputs.contains(where: { $0.value.stringValue == "node_1_geoBuffer" })
         }))
+        let render = try requireValue(graph.passes.first(where: { $0.id == "node_2_pass_0" }))
+        expectEqual(render.inputs.map(\.key), ["volumeCache"])
+        expectEqual(render.inputs.first?.value.stringValue, "global_flow3d_blended_chain_0")
         expectFalse(graph.passes.contains(where: { pass in
             pass.outputs.contains(where: { $0.value.stringValue == "node_1_geoBuffer" })
         }))

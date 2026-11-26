@@ -3,6 +3,22 @@ import Testing
 @testable import Noisemaker
 
 @Suite(.serialized) struct ResourceAllocatorTests {
+    @Test func unwrittenPipelineAliasesReleaseUpstreamOnce() throws {
+        var reader = pass(inputs: [("one", "node_1_inputColor"), ("two", "node_1_inputTex")],
+                          outputs: [("color", "node_1_out")])
+        reader = .object((reader.objectFields ?? []) + [GraphField(name: "nodeId", value: .string("node_1"))])
+        let result = try ResourceAllocator.allocate(passes: [
+            pass(inputs: [], outputs: [("color", "node_0_out")]), reader,
+            pass(inputs: [], outputs: [("color", "node_2_out")])
+        ])
+        #expect(entries(result).map { $0.1 } == ["phys_0", "phys_1", "phys_0"])
+        let written = try ResourceAllocator.allocate(passes: [
+            pass(inputs: [], outputs: [("color", "node_0_out"), ("local", "node_1_inputColor")]), reader,
+            pass(inputs: [], outputs: [("color", "node_2_out")])
+        ])
+        #expect(entries(written).map { $0.1 } == ["phys_0", "phys_1", "phys_2", "phys_1"])
+    }
+
     @Test func lockedUpstreamCaseAllocations() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()

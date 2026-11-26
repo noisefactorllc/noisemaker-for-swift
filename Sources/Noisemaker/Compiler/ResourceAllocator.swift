@@ -26,7 +26,22 @@ public enum ResourceAllocator {
             let outputs = try textureNames(pass.field("outputs"), context: "pass \(index) outputs")
             inputsByPass.append(inputs)
             outputsByPass.append(outputs)
-            for texture in inputs + outputs where !texture.isEmpty && !texture.hasPrefix("global_") {
+        }
+        let written = Set(outputsByPass.flatMap { $0 })
+        var aliases: [String: String] = [:]
+        for (index, pass) in passes.enumerated() {
+            guard let node = pass.field("nodeId")?.stringValue, !node.isEmpty else { continue }
+            for texture in inputsByPass[index] where !written.contains(texture) && aliases[texture] == nil {
+                guard texture == "\(node)_inputTex" || texture == "\(node)_inputColor" else { continue }
+                let upstream = outputsByPass[..<index].reversed().lazy.flatMap { $0 }.first {
+                    $0 != "\(node)_out" && $0.range(of: #"^node_[0-9]+_out$"#, options: .regularExpression) != nil
+                }
+                if let upstream { aliases[texture] = upstream }
+            }
+        }
+        inputsByPass = inputsByPass.map { $0.map { aliases[$0] ?? $0 } }
+        for index in passes.indices {
+            for texture in inputsByPass[index] + outputsByPass[index] where !texture.isEmpty && !texture.hasPrefix("global_") {
                 if var live = lifetime[texture] {
                     live.end = index
                     lifetime[texture] = live

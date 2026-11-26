@@ -10,6 +10,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const REPOSITORY = 'https://github.com/noisefactorllc/noisemaker'
 export const CASES = {
+  stableElementIds: 'search synth, filter\nnoise(_id: "noise_1", seed: 1).blur(_id: "blur_2").write(o0, _id: "output")\nrender(o0)\n',
+  stableStoredFilter: 'search synth, filter\nlet soft = blur(radiusX: 2); noise(seed: 1).soft(radiusY: 3).write(o0)\nrender(o0)\n',
+  stableArgumentComments: 'search synth\nsolid(color: [/* red */ 0.2, 0.6, 0.9, /* end */]).write(o0)\nrender(o0)\n',
   solid: 'search synth\nsolid(color: [0.2, 0.6, 0.9]).write(o0)\nrender(o0)\n',
   resourceHeavy: 'search synth, render\nsolid().pointsEmit(stateSize: 128, seed: 1).pointsBillboardRender().write(o0)\nrender(o0)\n',
   compute: 'search synth, filter\nnoise(seed: 1).grain().write(o0)\nrender(o0)\n',
@@ -39,6 +42,21 @@ const PORTABLE_CASES = {
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
 const own = (v, key) => Object.prototype.hasOwnProperty.call(v, key)
+
+// Scene programs are outside the stable port contract. Only their empty
+// compiler metadata may be omitted from an ordinary effect graph.
+export function stableGraph(graph) {
+  if (graph._isScene !== false || graph.sceneIR !== null ||
+      !graph.sceneVolumeAtlasScopes || Array.isArray(graph.sceneVolumeAtlasScopes) ||
+      Object.keys(graph.sceneVolumeAtlasScopes).length !== 0) {
+    throw new Error('experimental scene data in stable graph oracle')
+  }
+  const result = { ...graph, compiledAt: { $type: 'volatile-timestamp' } }
+  delete result._isScene
+  delete result.sceneIR
+  delete result.sceneVolumeAtlasScopes
+  return result
+}
 
 // All objects use ordered entry pairs; special values have explicit tags. No
 // JSON.stringify omission or accidental Map-to-empty-object conversion.
@@ -378,9 +396,8 @@ export async function exportAuthority(ref, out, lock, verifiedArchive = false) {
     const executionGraphId = compileGraph(source.trim()).id
     // compiledAt is wall-clock metadata, not an execution input. Keep its
     // position and omission explicit so stage dumps are byte reproducible.
-    const stableGraph = { ...graph, compiledAt: { $type: 'volatile-timestamp' } }
     const stages = { source, lex: fullTokenView(tokens), parse: encode(ast), validate: encode(validated),
-      expand: encode(expanded), allocate: encode(allocated), graph: encode(stableGraph) }
+      expand: encode(expanded), allocate: encode(allocated), graph: encode(stableGraph(graph)) }
     const programs = {}
     for (const [id, spec] of Object.entries(graph.programs || {})) {
       if (!spec.wgsl) throw new Error(`${name}: ${id} has no WGSL source`)

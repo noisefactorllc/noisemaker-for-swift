@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { encode, exportAuthority, fetchVerifiedArchive, fullTokenView } from './export-reference.mjs'
+import { encode, exportAuthority, fetchVerifiedArchive, fullTokenView, stableGraph } from './export-reference.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT = join(ROOT, 'parity/corpus-stages.json')
@@ -67,7 +67,7 @@ function stagesFor(source, api, includePayload = false) {
   if (!allocated) return { stages }
   const graph = take('graph', () => {
     const graph = api.compileGraph(source)
-    return { ...graph, compiledAt: { $type: 'volatile-timestamp' } }
+    return stableGraph(graph)
   })
   if (!graph) return { stages }
   return { stages, graphId: graph.id, passCount: graph.passes.length,

@@ -10,6 +10,10 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const lock = JSON.parse(readFileSync(join(root, 'parity/reference.json'), 'utf8'))
 const sha256 = value => createHash('sha256').update(value).digest('hex')
 const cases = [
+  ['element ids with positionals', 'search synth\nnoise(2, _id: "generator").write(o0, _id: "output")'],
+  ['leading element id', 'search synth\nnoise(_id: "generator", 2).write(o0)'],
+  ['argument and array comments', 'search synth\nsolid(color: [/* start */ 1, 0, 0, /* end */],).write(o0)'],
+  ['read and write3d ids', 'search synth3d\nread3d(vol0, geo0, _id: "input").render3d().write3d(vol1, geo1, _id: "output")'],
   ['empty missing search', ''],
   ['basic chain', 'search synth\nnoise(seed: 1).grain().write(o0)\nrender(o0)'],
   ['search multiple namespaces', 'search synth, filter, mixer\nnoise().write(o0)'],

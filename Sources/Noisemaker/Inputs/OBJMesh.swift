@@ -1,11 +1,34 @@
 import Foundation
 
-/// De-indexed triangle data with the source OBJ parser's winding and normals.
+/// Indexed mesh data with the source OBJ parser's winding and normals.
 public struct OBJMesh: Sendable {
     public let positions: [Float]
     public let normals: [Float]
     public let uvs: [Float]
+    public let indices: [UInt32]
     public var vertexCount: Int { positions.count / 3 }
+    public var triangleCount: Double { Double(indices.count) / 3 }
+
+    public init(positions: [Float], normals: [Float], uvs: [Float] = [], indices: [UInt32]? = nil) {
+        self.positions = positions
+        self.normals = normals
+        self.uvs = uvs.isEmpty ? [Float](repeating: 0, count: positions.count / 3 * 2) : uvs
+        self.indices = indices ?? (0..<(positions.count / 3)).map(UInt32.init)
+    }
+
+    public func deindexed() throws -> OBJMesh {
+        guard indices.count <= 4_000_000 else { throw GraphDiagnostic.invalid("mesh exceeds four million expanded vertices") }
+        func expand(_ values: [Float], width: Int) -> [Float] {
+            indices.flatMap { index in
+                (0..<width).map { component in
+                    let offset = Int(index) * width + component
+                    return values.indices.contains(offset) ? values[offset] : .nan
+                }
+            }
+        }
+        return OBJMesh(positions: expand(positions, width: 3), normals: expand(normals, width: 3),
+                       uvs: expand(uvs, width: 2))
+    }
 
     public static func parse(_ text: String) throws -> OBJMesh {
         guard text.utf8.count <= 64 * 1024 * 1024 else { throw GraphDiagnostic.invalid("OBJ input exceeds 64 MiB") }
@@ -97,20 +120,23 @@ public struct OBJMesh: Sendable {
         }
     }
 
-    public func pack(size: RenderSize) throws -> PackedMesh {
+    public func pack(size requested: RenderSize? = nil) throws -> PackedMesh {
+        let width = max(1, Int(ceil(sqrt(Double(indices.count)))))
+        let size = try requested ?? RenderSize(width: width, height: max(1, (indices.count + width - 1) / width))
         let count = size.width * size.height
         guard count <= 4_000_000 else { throw GraphDiagnostic.invalid("mesh texture exceeds four million vertices") }
-        let used = min(vertexCount,count)
+        let mesh = try deindexed()
+        let used = min(mesh.vertexCount,count)
         var positionData = [Float](repeating:0,count:count*4)
         var normalData = positionData, uvData = positionData
         for vertex in 0..<used {
             for component in 0..<3 {
-                positionData[vertex*4+component] = positions[vertex*3+component]
-                normalData[vertex*4+component] = normals[vertex*3+component]
+                positionData[vertex*4+component] = mesh.positions[vertex*3+component]
+                normalData[vertex*4+component] = mesh.normals[vertex*3+component]
             }
             positionData[vertex*4+3] = 1
-            uvData[vertex*4] = uvs[vertex*2]
-            uvData[vertex*4+1] = uvs[vertex*2+1]
+            uvData[vertex*4] = mesh.uvs[vertex*2]
+            uvData[vertex*4+1] = mesh.uvs[vertex*2+1]
         }
         return PackedMesh(size:size,positions:positionData,normals:normalData,uvs:uvData,vertexCount:used)
     }

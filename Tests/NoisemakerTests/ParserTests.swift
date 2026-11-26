@@ -4,6 +4,21 @@ import Testing
 
 @Suite(.serialized)
 struct ParserTests {
+    @Test func stableCallMetadataAndArgumentComments() throws {
+        let ast = try NoisemakerParser.parse("search synth\nnoise(/* seed */ 2, _id: /* id */ \"noise_1\",).write(o0, _id: \"output\")")
+        let chain = try #require(ast.field("plans")?.elements?.first?.field("chain")?.elements)
+        let call = try #require(chain.first)
+        #expect(call.field("loc")?.field("line")?.number == 2)
+        #expect(call.field("args")?.elements?.first?.field("loc")?.field("col")?.number == 18)
+        #expect(call.field("kwargs")?.field("_id")?.field("value")?.string == "noise_1")
+        #expect(chain.last?.field("_id")?.field("value")?.string == "output")
+        _ = try NoisemakerParser.parse("search synth\nnoise(_id: \"first\", 2).write(o0)")
+        _ = try NoisemakerParser.parse("search synth\nsolid(color: [/* red */ 1, 0, 0, /* end */]).write(o0)")
+        for source in ["noise(2, speed: 1)", "noise(seed: 2, 1)", "noise(_id: \"id\", 2, speed: 1)"] {
+            #expect(throws: ParserError.self) { try NoisemakerParser.parse("search synth\n\(source).write(o0)") }
+        }
+    }
+
     private struct Lock: Decodable {
         let commit: String
         let sourceManifestSha256: String

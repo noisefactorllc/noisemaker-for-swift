@@ -4,6 +4,56 @@ import Testing
 @testable import Noisemaker
 
 @Suite(.serialized) struct ValidatorTests {
+    @Test func stableElementIdsStayOutOfUniforms() throws {
+        let compiler = try NoisemakerCompiler()
+        let stages = try compiler.compileStages(source: "search synth, filter\nnoise(_id: \"noise_1\", seed: 1).blur(_id: \"blur_2\").write(o0, _id: \"output\")")
+        let chain = try #require(stages.validated.field("plans")?.elements?.first?.field("chain")?.elements)
+        #expect(chain.map { $0.field("args")?.field("_id")?.string } == ["noise_1", "blur_2", "output"])
+        for pass in stages.expanded.field("passes")?.arrayValue ?? [] {
+            #expect(pass.field("uniforms")?.field("_id") == nil)
+        }
+        for value in ["\"9bad\"", "\"ébad\"", "5", "label"] {
+            let invalid = try compiler.compileStages(source: "search synth\nlet label = \"valid\"; noise(_id: \(value)).write(o0)")
+            #expect(invalid.validated.field("plans")?.elements?.first?.field("chain")?.elements?.first?.field("args")?.field("_id") == nil)
+        }
+    }
+
+    @Test func storedColorAndCallSiteKeywordsBindByIndex() throws {
+        var registry = try EffectRegistry.bundled()
+        let definition = #"{"name":"RGB Probe","namespace":"user","func":"rgbProbe","starter":true,"globals":{"r":{"type":"float","default":0},"g":{"type":"float","default":0},"b":{"type":"float","default":0}},"passes":[{"name":"main","program":"main","inputs":{},"outputs":{"fragColor":"outputTex"}}],"shaders":{"main":{}}}"#
+        try registry.registerPortable(definitionJSON: Data(definition.utf8), shaderSources: ["main": "@fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(1.0); }"])
+        let compiler = NoisemakerCompiler(registry: registry)
+        let source = "search user\nlet colored = rgbProbe(#804020); colored(r: 0.25).write(o0)"
+        let stages = try compiler.compileStages(source: source)
+        let chain = try #require(stages.validated.field("plans")?.elements?.first?.field("chain")?.elements)
+        let args = try #require(chain.first?.field("args"))
+        #expect(args.field("r")?.number == 0.25)
+        #expect(args.field("g")?.number == Double(64) / 255)
+        #expect(args.field("b")?.number == Double(32) / 255)
+    }
+
+    @Test func storedKeywordPreventsCallSiteColorSplat() throws {
+        var registry = try EffectRegistry.bundled()
+        let definition = #"{"name":"RGBA Probe","namespace":"user","func":"rgbaProbe","starter":false,"globals":{"r":{"type":"float","default":1},"g":{"type":"float","default":1},"b":{"type":"float","default":1},"a":{"type":"float","default":0.9},"x":{"type":"float","default":0}},"passes":[{"name":"main","program":"main","inputs":{},"outputs":{"fragColor":"outputTex"}}],"shaders":{"main":{}}}"#
+        try registry.registerPortable(definitionJSON: Data(definition.utf8), shaderSources: ["main": "@fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(1.0); }"])
+        let compiler = NoisemakerCompiler(registry: registry)
+        let source = "search synth, user\nlet colored = rgbaProbe(x: 0.3); noise().colored(#804020).write(o0)"
+        let stages = try compiler.compileStages(source: source)
+        let chain = try #require(stages.validated.field("plans")?.elements?.first?.field("chain")?.elements)
+        let args = try #require(chain.first { $0.field("op")?.string == "user.rgbaProbe" }?.field("args"))
+        for name in ["r", "g", "b"] { #expect(args.field(name)?.number == 1) }
+        #expect(args.field("a")?.number == 0.9)
+        #expect(args.field("x")?.number == 0.3)
+        let diagnostics = try #require(stages.validated.field("diagnostics")?.elements)
+        #expect(diagnostics == [.object([
+            ("code", .string("S002")),
+            ("message", .string("Argument out of range for 'r' in rgbaProbe()")),
+            ("severity", .string("warning")), ("nodeId", .undefined),
+            ("location", .object([("line", .number(2)), ("column", .number(50))])),
+            ("identifier", .string("0.5019607843137255,0.25098039215686274,0.12549019607843137,1"))
+        ])])
+    }
+
     @Test func lockedCatalogValidationStages() throws {
         let registry = try EffectRegistry.bundled()
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()

@@ -80,6 +80,14 @@ public struct ParserValue: Equatable, Sendable {
         return Self(.object(fields + [ParserField(name: name, value: value)]), position: sourcePosition,
                     subchainArgumentDiagnostics: subchainArgumentDiagnostics, hiddenFields: hiddenFields)
     }
+    func setting(_ name: String, _ value: Self) -> Self {
+        guard case .object(var fields) = storage else { return self }
+        if let index = fields.firstIndex(where: { $0.name == name }) {
+            fields[index] = ParserField(name: name, value: value)
+        } else { fields.append(ParserField(name: name, value: value)) }
+        return Self(.object(fields), position: sourcePosition,
+                    subchainArgumentDiagnostics: subchainArgumentDiagnostics, hiddenFields: hiddenFields)
+    }
     func addingHidden(_ name: String, _ value: Self) -> Self {
         Self(storage, position: sourcePosition, subchainArgumentDiagnostics: subchainArgumentDiagnostics,
              hiddenFields: hiddenFields.filter { $0.name != name } + [ParserField(name: name, value: value)])
@@ -239,6 +247,9 @@ public enum NoisemakerParser {
             var comments: [String] = []
             while token.type == "COMMENT" { comments.append(advance().lexeme) }
             return comments
+        }
+        private mutating func skipComments() {
+            while token.type == "COMMENT" { advance() }
         }
         private static let expressionStarts: Set<String> = [
             "PLUS", "MINUS", "NUMBER", "HEX", "FUNC", "STRING", "IDENT", "OUTPUT_REF",
@@ -461,8 +472,11 @@ public enum NoisemakerParser {
                 } else {
                     throw error("P005", "write() requires an explicit surface reference (e.g., o0, o1, xyz0, vel0, rgba0, mesh0, none) at line \(token.line) col \(token.col)", token)
                 }
+                let id = try parseWriteId()
                 try expect("RPAREN", "Expect ')'")
-                return .object([("type", .string("Write")), ("surface", surface), ("loc", loc(nameToken))])
+                var result = ParserValue.object([("type", .string("Write")), ("surface", surface), ("loc", loc(nameToken))])
+                if let id { result = result.adding("_id", id) }
+                return result
             }
             if token.type == "WRITE3D" {
                 advance()
@@ -478,11 +492,25 @@ public enum NoisemakerParser {
                     throw error("P005", "Expected geo reference in write3d() at line \(token.line) col \(token.col)", token)
                 }
                 let geo = node(geoType, advance().lexeme)
+                let id = try parseWriteId()
                 try expect("RPAREN", "Expect ')'")
-                return .object([("type", .string("Write3D")), ("tex3d", tex3d),
+                var result = ParserValue.object([("type", .string("Write3D")), ("tex3d", tex3d),
                                 ("geo", geo), ("loc", loc(nameToken))])
+                if let id { result = result.adding("_id", id) }
+                return result
             }
             throw error("P005", "Expected write or write3d at line \(nameToken.line) col \(nameToken.col)", nameToken)
+        }
+
+        private mutating func parseWriteId() throws -> ParserValue? {
+            guard token.type == "COMMA", look(1)?.type == "IDENT", look(1)?.lexeme == "_id",
+                  look(2)?.type == "COLON" else { return nil }
+            advance(); advance(); advance()
+            skipComments()
+            if !Self.expressionStarts.contains(token.type) {
+                throw error("P001", "Expected expression after '=' at line \(token.line) col \(token.col)", token)
+            }
+            return try parseAdditive()
         }
 
         private mutating func parseSubchainCall() throws -> ParserValue {
@@ -569,17 +597,22 @@ public enum NoisemakerParser {
             var args: [ParserValue] = []
             var kwargs: [(String, ParserValue)] = []
             var keyword = false
+            var parameterKeyword = false
             var positional = false
             let allowMixed = nameToken.lexeme == "midi" || nameToken.lexeme == "audio"
+            skipComments()
             if token.type != "RPAREN" {
                 while true {
+                    skipComments()
                     if token.type == "IDENT" && look(1)?.type == "COLON" {
-                        if positional && !allowMixed {
+                        if positional && !allowMixed && token.lexeme != "_id" {
                             throw error("P007", "Cannot mix positional and keyword arguments at line \(token.line) col \(token.col)", token)
                         }
                         keyword = true
                         let key = advance().lexeme
+                        if key != "_id" { parameterKeyword = true }
                         try expect("COLON", "Expect ':'")
+                        skipComments()
                         if !Self.expressionStarts.contains(token.type) {
                             throw error("P001", "Expected expression after '=' at line \(token.line) col \(token.col)", token)
                         }
@@ -587,20 +620,22 @@ public enum NoisemakerParser {
                         if let existing = kwargs.firstIndex(where: { $0.0 == key }) { kwargs[existing].1 = value }
                         else { kwargs.append((key, value)) }
                     } else {
-                        if keyword && !allowMixed {
+                        if parameterKeyword && !allowMixed {
                             throw error("P007", "Cannot mix positional and keyword arguments at line \(token.line) col \(token.col)", token)
                         }
                         positional = true
                         args.append(try parseAdditive())
                     }
+                    skipComments()
                     if token.type != "COMMA" { break }
                     advance()
+                    skipComments()
                     if token.type == "RPAREN" { break }
                 }
             }
             try expect("RPAREN", "Expect ')'")
             var fields: [(String, ParserValue)] = [("type", .string("Call")), ("name", .string(nameToken.lexeme)),
-                                                   ("args", .array(args))]
+                                                   ("args", .array(args)), ("loc", loc(nameToken))]
             if keyword { fields.append(("kwargs", .object(kwargs))) }
             let call = ParserValue.object(fields)
             if nameToken.lexeme == "from" { return try transformFrom(call, args, kwargs, nameToken) }
@@ -624,6 +659,7 @@ public enum NoisemakerParser {
                     kwargs.first(where: { $0.0 == "_skip" })?.1.field("value")?.bool == true {
                     result = result.adding("_skip", .bool(true))
                 }
+                if let id = kwargs.first(where: { $0.0 == "_id" })?.1 { result = result.adding("_id", id) }
                 return result
             }
             if nameToken.lexeme == "read3d" {
@@ -635,6 +671,7 @@ public enum NoisemakerParser {
                     kwargs.first(where: { $0.0 == "_skip" })?.1.field("value")?.bool == true {
                     result = result.adding("_skip", .bool(true))
                 }
+                if let id = kwargs.first(where: { $0.0 == "_id" })?.1 { result = result.adding("_id", id) }
                 return result
             }
             return call
@@ -648,7 +685,8 @@ public enum NoisemakerParser {
                 let lhs = try toNumber(value)
                 let rhs = try toNumber(right)
                 value = .object([("type", .string("Number")),
-                                 ("value", .number(op == "PLUS" ? lhs + rhs : lhs - rhs))])
+                                 ("value", .number(op == "PLUS" ? lhs + rhs : lhs - rhs)),
+                                 ("loc", value.field("loc") ?? .undefined)])
             }
             return value
         }
@@ -661,7 +699,8 @@ public enum NoisemakerParser {
                 let lhs = try toNumber(value)
                 let rhs = try toNumber(right)
                 value = .object([("type", .string("Number")),
-                                 ("value", .number(op == "STAR" ? lhs * rhs : lhs / rhs))])
+                                 ("value", .number(op == "STAR" ? lhs * rhs : lhs / rhs)),
+                                 ("loc", value.field("loc") ?? .undefined)])
             }
             return value
         }
@@ -671,7 +710,8 @@ public enum NoisemakerParser {
             if token.type == "MINUS" {
                 advance()
                 let value = try parseUnary()
-                return .object([("type", .string("Number")), ("value", .number(-(try toNumber(value))))])
+                return .object([("type", .string("Number")), ("value", .number(-(try toNumber(value)))),
+                                ("loc", value.field("loc") ?? .undefined)])
             }
             return try parsePrimary()
         }
@@ -708,10 +748,10 @@ public enum NoisemakerParser {
                     throw ParserIncomplete("NUMBER token has an invalid numeric lexeme")
                 }
                 advance()
-                return .object([("type", .string("Number")), ("value", .number(value))])
+                return .object([("type", .string("Number")), ("value", .number(value)), ("loc", loc(found))])
             case "STRING":
                 advance()
-                return .object([("type", .string("String")), ("value", .string(found.lexeme))])
+                return .object([("type", .string("String")), ("value", .string(found.lexeme)), ("loc", loc(found))])
             case "HEX":
                 let hex = Array(found.lexeme.utf16)
                 guard [4, 7, 9].contains(hex.count), hex.first == 35,
@@ -736,13 +776,19 @@ public enum NoisemakerParser {
                 let blue = try pair(width * 2, width) / 255
                 return .object([("type", .string("Color")), ("value", .array([
                     .number(red), .number(green), .number(blue), .number(alpha)
-                ]))])
+                ])), ("loc", loc(found))])
             case "LBRACKET":
                 advance()
                 var elements: [ParserValue] = []
+                skipComments()
                 if token.type != "RBRACKET" {
                     elements.append(try parseAdditive())
-                    while token.type == "COMMA" { advance(); elements.append(try parseAdditive()) }
+                    skipComments()
+                    while token.type == "COMMA" {
+                        advance(); skipComments()
+                        if token.type == "RBRACKET" { break }
+                        elements.append(try parseAdditive()); skipComments()
+                    }
                 }
                 if token.type != "RBRACKET" {
                     throw error("P001", "Expected ']' at line \(token.line) col \(token.col)", token)
@@ -751,12 +797,12 @@ public enum NoisemakerParser {
                 return .object([("type", .string("ArrayLiteral")), ("elements", .array(elements)),
                                 ("loc", loc(found))], position: found.position)
             case "FUNC": advance(); return .object([("type", .string("Func")), ("src", .string(found.lexeme))])
-            case "TRUE": advance(); return .object([("type", .string("Boolean")), ("value", .bool(true))])
-            case "FALSE": advance(); return .object([("type", .string("Boolean")), ("value", .bool(false))])
+            case "TRUE": advance(); return .object([("type", .string("Boolean")), ("value", .bool(true)), ("loc", loc(found))])
+            case "FALSE": advance(); return .object([("type", .string("Boolean")), ("value", .bool(false)), ("loc", loc(found))])
             case "IDENT":
                 if found.lexeme == "Math" && look(1)?.type == "DOT" && look(2)?.lexeme == "PI" {
                     advance(); advance(); advance()
-                    return .object([("type", .string("Number")), ("value", .number(.pi))])
+                    return .object([("type", .string("Number")), ("value", .number(.pi)), ("loc", loc(found))])
                 }
                 if look(1)?.type == "LPAREN" || hasCallAfterDot(current) {
                     let chain = try parseChain(expression: true)

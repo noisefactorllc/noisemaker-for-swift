@@ -141,17 +141,26 @@ enum UniformPlan {
     }
 
     private static func parseStructure(named name: String, source: String, program: String) throws -> [UniformField] {
+        let comments = try NSRegularExpression(pattern: #"(?s)/\*.*?\*/|//[^\n]*"#)
+        let cleaned = comments.stringByReplacingMatches(in: source,
+            range: NSRange(location: 0, length: (source as NSString).length), withTemplate: " ")
         let escaped = NSRegularExpression.escapedPattern(for: name)
-        let regex = try NSRegularExpression(pattern: #"\bstruct\s+"# + escaped + #"\s*\{([^}]*)\}"#)
-        let ns = source as NSString
-        guard let match = regex.firstMatch(in: source, range: NSRange(location: 0, length: ns.length)) else {
+        let regex = try NSRegularExpression(pattern: #"\bstruct\s+"# + escaped + #"\s*\{"#)
+        let ns = cleaned as NSString
+        guard let match = regex.firstMatch(in: cleaned, range: NSRange(location: 0, length: ns.length)) else {
             throw GraphDiagnostic.unsupported("program \(program) missing uniform struct \(name)")
         }
-        let body = ns.substring(with: match.range(at: 1))
-        let comments = try NSRegularExpression(pattern: #"(?s)/\*.*?\*/|//[^\n]*"#)
-        let bodyWithoutComments = comments.stringByReplacingMatches(in: body,
-            range: NSRange(location: 0, length: (body as NSString).length), withTemplate: "")
-        let declarations = splitFields(bodyWithoutComments)
+        let start = match.range.location + match.range.length
+        var end = start, depth = 1
+        while end < ns.length && depth > 0 {
+            if ns.character(at: end) == 123 { depth += 1 }
+            if ns.character(at: end) == 125 { depth -= 1 }
+            end += 1
+        }
+        guard depth == 0 else {
+            throw GraphDiagnostic.unsupported("program \(program) unterminated uniform struct \(name)")
+        }
+        let declarations = splitFields(ns.substring(with: NSRange(location: start, length: end - start - 1)))
         guard !declarations.isEmpty else {
             throw GraphDiagnostic.unsupported("program \(program) empty uniform struct \(name)")
         }

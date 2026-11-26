@@ -190,7 +190,7 @@ def test_cli_errors_are_readable(root, renderer, temporary):
         'search synth\nnoise(seed: 1.write(o0)\nrender(o0)\n':
             "nm-render: P002 error: Expect ')' at line 2 col 14\n",
         'search synth, filter\nnoiz(seed: 1).write(o0)\nrender(o0)\n':
-            "nm-render: S001 error: Unknown effect: 'noiz'; S005 error at line 2 col 15: "
+            "nm-render: S001 error at line 2 col 1: Unknown effect: 'noiz'; S005 error at line 2 col 15: "
             "write() requires an input - cannot be first in chain: '[Write]'\n",
     }
     program = temporary / 'invalid.dsl'
@@ -313,9 +313,8 @@ def main():
             assert image.convert('RGBA').getpixel((8, 4)) == (255, 255, 255, 255), samples[800]
         print('timed saw boundary: source-order frame 800 is white')
 
-        # Execute the pinned Pipeline.render deltaTime behavior across two
-        # normalized-time wraps. lastTime == 0 forces a zero delta on the
-        # frame immediately following each wrap (completed frames 601/1201).
+        # The pinned Pipeline.render preserves elapsed normalized time through
+        # a wrap and treats zero as a valid previous time.
         delta_definition = json.dumps({
             'name': 'Delta Echo', 'namespace': 'user', 'func': 'deltaEcho',
             'starter': True, 'globals': {},
@@ -356,8 +355,8 @@ def main():
         delta_records = json.loads((delta_output / 'candidates.json').read_text())['cases']
         assert len(delta_records) == 1 and delta_records[0]['status'] == 'ok', delta_records
         delta_samples = {image['frame']: image for image in delta_records[0]['images']}
-        expected_pixels = {600: 255, 601: 0, 602: 255, 1200: 255,
-                           1201: 0, 1202: 255, 1800: 255}
+        expected_pixels = {600: 255, 601: 255, 602: 255, 1200: 255,
+                           1201: 255, 1202: 255, 1800: 255}
         assert set(delta_samples) == set(expected_pixels), delta_samples
         actual_pixels = {}
         for frame, sample in delta_samples.items():

@@ -6,7 +6,7 @@ import { appendFileSync, cpSync, existsSync, mkdtempSync, readFileSync, readdirS
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { encode, fullTokenView, countDefineVariants, captureProtocols, fetchVerifiedArchive, sourceIdentity } from './export-reference.mjs'
+import { encode, fullTokenView, countDefineVariants, captureProtocols, fetchVerifiedArchive, sourceIdentity, stableGraph } from './export-reference.mjs'
 
 const lock = JSON.parse(readFileSync('parity/reference.json', 'utf8'))
 let sharedArchive
@@ -16,6 +16,19 @@ function referenceRoot() {
   return sharedArchive.root
 }
 after(() => sharedArchive?.cleanup())
+
+test('stable graph omits only empty experimental metadata and the wall clock', () => {
+  const graph = { id: 'source', passes: [{ id: 'effect' }], _isScene: false,
+    sceneIR: null, sceneVolumeAtlasScopes: {}, mediaSteps: [], compiledAt: 1 }
+  assert.deepEqual(stableGraph(graph), { id: 'source', passes: graph.passes,
+    mediaSteps: [], compiledAt: { $type: 'volatile-timestamp' } })
+  assert.equal(graph.compiledAt, 1)
+  for (const change of [{ _isScene: true }, { sceneIR: {} },
+    { sceneVolumeAtlasScopes: { volumeSize: { size: 64 } } },
+    { sceneVolumeAtlasScopes: null }, { sceneVolumeAtlasScopes: [] }]) {
+    assert.throws(() => stableGraph({ ...graph, ...change }), /experimental scene data/)
+  }
+})
 
 test('encoding preserves order, maps, undefined, functions, and special numbers', () => {
   const value = { z: undefined, a: new Map([['two', 2], ['one', 1]]), fn: (x) => x + 1, nan: NaN }
@@ -180,7 +193,6 @@ test('authority refuses an untracked shader helper or effect', () => {
     }
     execFileSync('git', ['init', '-b', 'main', root], { stdio: 'ignore' })
     execFileSync('git', ['-C', root, 'add', 'LICENSE', 'package.json', 'share/palettes.json', 'share/meshes', 'shaders/src', 'shaders/effects', 'demo/shaders', 'vendor/shade-mcp/harness'])
-    execFileSync('git', ['-C', root, 'add', '-f', 'demo/shaders/img/.DS_Store'])
     execFileSync('git', ['-C', root, '-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-m', 'authority fixture'], { stdio: 'ignore' })
     const localLock = { ...lock, commit: execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim() }
     assert.equal(sourceIdentity(root, localLock), localLock.commit)

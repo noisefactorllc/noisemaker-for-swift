@@ -104,9 +104,9 @@ private struct CorpusCapture {
         if timed {
             let normalized = (Double(index + 1) / 600).truncatingRemainder(dividingBy: 1)
             let previous = (Double(index) / 600).truncatingRemainder(dividingBy: 1)
-            var delta = previous > 0 ? normalized - previous : 0
+            var delta = index > 0 ? normalized - previous : 0
             if delta < 0 {
-                delta = 1.0 / 60.0 / 10.0
+                delta += 1
             }
             return FrameState(time: normalized, delta: delta, frameIndex: UInt64(index),
                 inputs: inputs, hostUniforms: hostUniforms)

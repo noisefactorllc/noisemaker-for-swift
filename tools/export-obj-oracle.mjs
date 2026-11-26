@@ -8,6 +8,7 @@ import { encode, fetchVerifiedArchive, sourceIdentity } from './export-reference
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const SOURCE_PATH = 'shaders/src/runtime/obj-parser.js'
+const GEOMETRY_PATH = 'shaders/src/geometry/geometry.js'
 const MESH_DIR = 'share/meshes'
 const hash = bytes => createHash('sha256').update(bytes).digest('hex')
 
@@ -38,9 +39,9 @@ function floatRecord(values, full) {
   return result
 }
 
-function snapshot(parseOBJ, packMeshDataForTextures, source, width, height, full = false) {
+function snapshot(parseOBJ, source, width, height, full = false) {
   const mesh = parseOBJ(source.text)
-  const packed = packMeshDataForTextures(mesh.positions, mesh.normals, mesh.uvs, width, height)
+  const packed = mesh.toPackedTextures(width, height)
   if (mesh.positions.length !== mesh.vertexCount * 3 || mesh.normals.length !== mesh.vertexCount * 3 ||
       mesh.uvs.length !== mesh.vertexCount * 2 || packed.vertexCount !== Math.min(mesh.vertexCount, width * height)) {
     throw new Error('locked OBJ parser returned inconsistent mesh lengths')
@@ -56,23 +57,41 @@ function snapshot(parseOBJ, packMeshDataForTextures, source, width, height, full
 async function generate(ref, lock) {
   sourceIdentity(ref, lock)
   const sourceBytes = readFileSync(join(ref, SOURCE_PATH))
-  const { parseOBJ, packMeshDataForTextures } = await import(pathToFileURL(join(ref, SOURCE_PATH)).href)
+  const { parseOBJ } = await import(pathToFileURL(join(ref, SOURCE_PATH)).href)
+  const { Geometry, meshTextureSize } = await import(pathToFileURL(join(ref, GEOMETRY_PATH)).href)
+  const geometryCases = [
+    { id: 'repeated-indices', positions: [1,2,3,4,5,6], normals: [0,0,1,0,1,0], uvs: [0,1,1,0], indices: [1,0,1] },
+    { id: 'missing-uvs', positions: [1,2,3,4,5,6], normals: [0,0,1,0,1,0], indices: [1,0,1] },
+    { id: 'out-of-bounds', positions: [1,2,3], normals: [], indices: [4] },
+    { id: 'empty-geometry', positions: [], normals: [], indices: [] }
+  ].map(({ id, ...attributes }) => {
+    const geometry = new Geometry(attributes)
+    const dimensions = meshTextureSize(geometry.indices.length)
+    const expanded = geometry.deindex()
+    const packed = geometry.toPackedTextures(dimensions.texWidth, dimensions.texHeight)
+    return { id, attributes, dimensions, vertexCount: geometry.vertexCount,
+      triangleCount: geometry.triangleCount, indices: Array.from(geometry.indices),
+      expanded: Object.fromEntries(['positions','normals','uvs'].map(key => [key, floatRecord(expanded[key], true)])),
+      packed: { positions: floatRecord(packed.positionData, true), normals: floatRecord(packed.normalData, true),
+        uvs: floatRecord(packed.uvData, true), vertexCount: packed.vertexCount } }
+  })
   const names = readdirSync(join(ref, MESH_DIR)).filter(name => /^[A-Za-z0-9_-]+\.obj$/.test(name)).sort()
   if (names.length !== 7) throw new Error(`expected seven locked OBJ meshes, found ${names.length}`)
   const builtins = names.map(name => {
     const bytes = readFileSync(join(ref, MESH_DIR, name))
-    return { id: name.slice(0, -4), ...snapshot(parseOBJ, packMeshDataForTextures,
+    return { id: name.slice(0, -4), ...snapshot(parseOBJ,
       { path: `${MESH_DIR}/${name}`, sha256: hash(bytes), bytes: bytes.length, text: bytes.toString('utf8') },
       256, 256) }
   }).map(item => { delete item.source.text; return item })
   const edgeCases = EDGE_CASES.map(item => ({ id: item.id,
-    ...snapshot(parseOBJ, packMeshDataForTextures,
+    ...snapshot(parseOBJ,
       { text: item.text, sha256: hash(Buffer.from(item.text)) }, item.width, item.height, true) }))
   const result = { schemaVersion: 1, authority: { repository: lock.repository, commit: lock.commit,
     sourceManifestSha256: lock.sourceManifestSha256 },
-  implementation: { path: SOURCE_PATH, sha256: hash(sourceBytes), bytes: sourceBytes.length },
+  implementation: { path: SOURCE_PATH, sha256: hash(sourceBytes), bytes: sourceBytes.length,
+    geometry: { path: GEOMETRY_PATH, sha256: hash(readFileSync(join(ref, GEOMETRY_PATH))) } },
   packing: { builtinTextureWidth: 256, builtinTextureHeight: 256, format: 'rgba32float-arrays' },
-  builtins, edgeCases }
+  builtins, edgeCases, geometryCases }
   return Buffer.from(JSON.stringify(result, null, 2) + '\n')
 }
 

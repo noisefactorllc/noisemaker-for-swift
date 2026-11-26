@@ -4,6 +4,19 @@ import Testing
 
 @Suite(.serialized)
 struct UniformBindingTests {
+    @Test func structCommentsDoNotTerminateOrInventFields() throws {
+        let source = """
+        // struct Uniforms { fake: vec4<f32>, }
+        struct Uniforms {
+          /* closing brace } and opening brace { */ gain: f32,
+          // } another fake terminator
+          direction: vec3<f32>,
+        }
+        """
+        let plan = try UniformPlan.parse(type: "Uniforms", wgsl: source, layout: nil, program: "comments")
+        #expect(plan.requiredNames == ["gain", "direction"])
+    }
+
     @Test func testSourceReciprocalGlobalsReachDirectUniformBuffers() throws {
         let pass = GraphPass(id: "classic", program: "classic", raw: .object([]),
             inputs: [], outputs: [], uniforms: [], entryPoint: "main", repeatCount: 1)

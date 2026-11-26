@@ -494,6 +494,7 @@ public enum NoisemakerExpander {
                 controlled.insert(mode)
             }
             for argument in arguments {
+                if argument.name == "_id" { continue }
                 if argument.value.field("kind")?.stringValue != nil { continue }
                 let spec = globals.first(where: { $0.name == argument.name })?.value
                 let uniform = spec?.field("uniform")?.stringValue ?? argument.name

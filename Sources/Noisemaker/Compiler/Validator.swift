@@ -14,7 +14,7 @@ public struct CompilerIncomplete: Error, LocalizedError, CustomStringConvertible
 }
 
 /// A validator diagnostic with the locked upstream code, severity, message and
-/// location. Upstream gives a location only for read() and write() nodes.
+/// location.
 public struct CompilerDiagnostic: Equatable, Sendable, CustomStringConvertible {
     public let code: String
     public let severity: String
@@ -124,7 +124,7 @@ public enum NoisemakerValidator {
             try declareVarsBefore(.infinity, &self)
             let render = ast.field("render")?.field("name") ?? .null
             var fields: [(String, ParserValue)] = [
-                ("plans", .array(planned)), ("diagnostics", .array(diagnostics)),
+                ("plans", dropMarks(.array(planned))), ("diagnostics", .array(diagnostics)),
                 ("render", render), ("vars", .array(vars)),
                 ("searchNamespaces", .array(searchOrder.map { .string($0) }))
             ]
@@ -328,7 +328,7 @@ public enum NoisemakerValidator {
                         report("S001", original, "read() requires a valid surface reference")
                         continue
                     }
-                    let args = ParserValue.object([("tex", surface)])
+                    let args = keepElementId(original.field("_id"), in: .object([("tex", surface)]))
                     let step = makeStep(op: "_read", args: args, from: nil, builtin: true,
                                         comments: original.field("leadingComments"))
                     chain.append(step)
@@ -342,7 +342,7 @@ public enum NoisemakerValidator {
                         report("S005", original, "write() requires an input - cannot be first in chain")
                         continue
                     }
-                    let args = ParserValue.object([("tex", surface)])
+                    let args = keepElementId(original.field("_id"), in: .object([("tex", surface)]))
                     let step = makeStep(op: "_write", args: args, from: input, builtin: true,
                                         comments: original.field("leadingComments"))
                     chain.append(step)
@@ -390,11 +390,12 @@ public enum NoisemakerValidator {
         /// Returns nil when upstream skips the call after an error diagnostic.
         private mutating func compileCall(_ original: ParserValue, current: Int?,
                                           chain: inout [ParserValue]) throws -> ParserValue? {
-            guard let name = original.field("name")?.string,
-                  let positional = original.field("args")?.elements else {
+            let call = resolveCall(original)
+            guard let name = call.field("name")?.string,
+                  let positional = call.field("args")?.elements else {
                 throw CompilerIncomplete(stage: "validator", detail: "malformed call")
             }
-            let namespace = original.field("namespace")
+            let namespace = call.field("namespace")
             var candidateNames: [String] = []
             if let resolved = namespace?.field("resolved")?.string { candidateNames.append("\(resolved).\(name)") }
             let effectiveSearch = namespace?.field("searchOrder")?.elements?.compactMap(\.string) ?? searchOrder
@@ -413,7 +414,7 @@ public enum NoisemakerValidator {
             }
             if starter && current != nil { report("S005", original) }
             let from = starter ? nil : current
-            let keyword = original.field("kwargs")
+            let keyword = call.field("kwargs")
             var keywordFields = keyword?.fields ?? []
             // Resolve deprecated parameter aliases as upstream resolveParamAliases
             // does: the canonical name keeps its own value, and every alias warns.
@@ -428,30 +429,53 @@ public enum NoisemakerValidator {
                     keywordFields.append(ParserField(name: newName, value: oldValue))
                 }
                 keywordFields.removeAll { $0.name == alias.name }
-                diagnostics.append(.object([
-                    ("code", .string("S007")),
-                    ("message", .string("param '\(alias.name)' is deprecated, use '\(newName)' instead. Aliases will be removed on 2027-06-01.")),
-                    ("severity", .string("warning")),
-                    ("nodeId", original.field("id") ?? .undefined),
-                    ("identifier", .string(name))
-                ]))
+                report("S007", call, "param '\(alias.name)' is deprecated, use '\(newName)' instead. Aliases will be removed on 2027-06-01.")
             }
             var args: [(String, ParserValue)] = []
             var argSources: [(String, ParserValue)] = []
             var seen: Set<String> = []
+            let byIndex = keyword == nil || call.field("positionalsByIndex") != nil
+            let splatLimit = call.field("positionalsByIndex")?.field("colorSplatLimit")?.number ?? .infinity
+            var cursor = 0
+            var splat: [String: ParserValue] = [:]
             for (index, spec) in specs.enumerated() {
                 guard let key = spec.field("name")?.string,
                       let type = spec.field("type")?.string else {
                     throw CompilerIncomplete(stage: "validator", detail: "invalid argument spec for \(opName)")
                 }
+                if byIndex { cursor = index }
                 let keywordNode = keywordFields.first(where: { $0.name == key })?.value
-                let sourceNode = keywordNode ?? (index < positional.count ? positional[index] : nil)
+                if Double(cursor) < splatLimit, type != "color", key == "r", index + 2 < specs.count,
+                   specs[index + 1].field("name")?.string == "g", specs[index + 2].field("name")?.string == "b",
+                   cursor < positional.count {
+                    let color = try substitute(positional[cursor])
+                    if color.type == "Color", let values = color.field("value")?.elements, values.count >= 3 {
+                        cursor += 1
+                        splat = ["r": values[0], "g": values[1], "b": values[2]]
+                    }
+                }
+                if keywordNode == nil, let component = splat[key] {
+                    args.append((key, component)); continue
+                }
+                var sourceNode = keywordNode
+                if sourceNode == nil, cursor < positional.count {
+                    sourceNode = positional[cursor]; cursor += 1
+                }
                 let node = try sourceNode.map { try substitute($0) }
                 if keywordNode != nil { seen.insert(key) }
+                if node?.type == "Chain", let calls = node?.field("chain")?.elements,
+                   calls.contains(where: { $0.type != "Call" }) {
+                    report("S001", calls.first, "Chain for argument '\(key)' in \(name)() may contain only effect calls")
+                    args.append((key, .null)); continue
+                }
                 let value = try resolveArgument(node, key: key, type: type, spec: spec,
                                                 callName: name, opName: opName,
                                                 argSources: &argSources, chain: &chain)
                 args.append((key, value))
+            }
+            if let id = keywordFields.first(where: { $0.name == "_id" })?.value {
+                if let kept = keepElementId(id, in: .object([])).field("_id") { args.append(("_id", kept)) }
+                seen.insert("_id")
             }
             if let skip = keywordFields.first(where: { $0.name == "_skip" })?.value {
                 args.append(("_skip", .bool(skip.type == "Boolean" && skip.field("value")?.bool == true)))
@@ -460,11 +484,18 @@ public enum NoisemakerValidator {
             for field in keywordFields where !seen.contains(field.name) {
                 report("S001", field.value, "Unknown argument '\(field.name)' for \(name)()")
             }
+            if byIndex { cursor = specs.count }
+            if cursor < positional.count {
+                report("S009", positional[cursor], "Too many positional arguments for \(name)(): '\(name)' takes \(specs.count)")
+            }
             let namespaceSnapshot = try snapshot(namespace)
             var step = makeStep(op: opName, args: .object(args), from: from,
                                 builtin: false, comments: original.field("leadingComments"),
                                 namespace: namespaceSnapshot)
-            if keyword != nil { step = step.adding("rawKwargs", .object(keywordFields.map { ($0.name, $0.value) })) }
+            if let raw = original.field("kwargs") {
+                let merged = symbols[original.field("name")?.string ?? ""]?.type == "Call"
+                step = step.adding("rawKwargs", merged ? raw : .object(keywordFields.map { ($0.name, $0.value) }))
+            }
             if !argSources.isEmpty { step = step.adding("argSources", .object(argSources)) }
             return step
         }
@@ -584,15 +615,8 @@ public enum NoisemakerValidator {
                     }
                     return .array(values)
                 }
-                if type == "color", node.type == "Number",
-                   let number = node.field("value")?.number {
-                    diagnostics.append(.object([
-                        ("code", .string("S002")),
-                        ("message", .string("Argument out of range for '\(key)' in \(callName)()")),
-                        ("severity", .string("warning")),
-                        ("nodeId", node.field("id") ?? .undefined),
-                        ("identifier", .string(jsNumber(number)))
-                    ]))
+                if type == "color", node.type == "Number", node.field("value")?.number != nil {
+                    report("S002", node, "Argument out of range for '\(key)' in \(callName)()")
                     return fallback
                 }
                 throw CompilerIncomplete(stage: "validator", detail: "color/vector expression for \(opName).\(key)")
@@ -656,6 +680,9 @@ public enum NoisemakerValidator {
                       !Self.stateValues.contains(name) {
                 report("S003", node)
                 return fallback
+            } else if node.type == "Color", type != "member" {
+                report("S002", node, "Argument out of range for '\(key)' in \(callName)()")
+                return fallback
             } else {
                 throw CompilerIncomplete(stage: "validator", detail: "numeric expression for \(opName).\(key)")
             }
@@ -663,23 +690,7 @@ public enum NoisemakerValidator {
             if let minimum = spec.field("min")?.number { value = max(value, minimum) }
             if let maximum = spec.field("max")?.number { value = min(value, maximum) }
             if value != originalValue {
-                let identifier: String
-                if node.type == "Member", let path = node.field("path")?.elements?.compactMap(\.string) {
-                    identifier = path.joined(separator: ".")
-                } else if let name = node.field("name")?.string {
-                    identifier = name
-                } else if let number = node.field("value")?.number, number != 0 {
-                    identifier = jsNumber(number)
-                } else {
-                    identifier = "[\(node.type ?? "unknown")]"
-                }
-                diagnostics.append(.object([
-                    ("code", .string("S002")),
-                    ("message", .string("Argument out of range for '\(key)' in \(callName)() (got \(jsNumber(originalValue)), clamped to \(jsNumber(value)))")),
-                    ("severity", .string("warning")),
-                    ("nodeId", node.field("id") ?? .undefined),
-                    ("identifier", .string(identifier))
-                ]))
+                report("S002", node, "Argument out of range for '\(key)' in \(callName)() (got \(jsNumber(originalValue)), clamped to \(jsNumber(value)))")
             }
             return .number(value)
         }
@@ -689,7 +700,9 @@ public enum NoisemakerValidator {
             "S002": ("warning", "Argument out of range"),
             "S003": ("error", "Variable used before assignment"),
             "S004": ("error", "Cannot assign null or undefined"),
-            "S005": ("error", "Illegal chain structure")
+            "S005": ("error", "Illegal chain structure"),
+            "S007": ("warning", "Deprecated parameter alias"),
+            "S009": ("warning", "Too many positional arguments")
         ]
 
         /// Records a diagnostic as upstream pushDiag does: the message gains the
@@ -717,6 +730,11 @@ public enum NoisemakerValidator {
             case "Ident", "Call": return node.field("name")?.string
             case "Member" where node.field("path")?.elements != nil:
                 return node.field("path")!.elements!.map { $0.string ?? "" }.joined(separator: ".")
+            case "Color":
+                if let values = node.field("value")?.elements,
+                   values.allSatisfy({ $0.number != nil }) {
+                    return values.compactMap(\.number).map(jsNumber).joined(separator: ",")
+                }
             case "Func" where !(node.field("src")?.string ?? "").isEmpty:
                 let source = Array(node.field("src")!.string!.utf16)
                 return "{\(String(decoding: source.prefix(30), as: UTF16.self))\(source.count > 30 ? "..." : "")}"
@@ -789,15 +807,81 @@ public enum NoisemakerValidator {
             return value
         }
 
-        private func substitute(_ node: ParserValue) throws -> ParserValue {
-            guard node.type == "Ident", let name = node.field("name")?.string,
-                  let symbol = symbols[name] else { return node }
-            // Full cycle reporting is a later validator increment. Refuse a
-            // self-reference rather than allowing recursive compilation.
-            guard symbol != node else {
-                throw CompilerIncomplete(stage: "validator", detail: "cyclic symbol \(name)")
+        private func keepElementId(_ node: ParserValue?, in args: ParserValue) -> ParserValue {
+            guard let node, node.type == "String", node.field("_varRef") == nil,
+                  let id = node.field("value")?.string,
+                  id.range(of: #"^[A-Za-z][A-Za-z0-9_]*$"#, options: .regularExpression) != nil else { return args }
+            return args.setting("_id", .string(id))
+        }
+
+        private func resolveCall(_ call: ParserValue) -> ParserValue {
+            guard let name = call.field("name")?.string, let stored = symbols[name] else { return call }
+            if stored.type == "Ident", let name = stored.field("name") { return call.setting("name", name) }
+            guard stored.type == "Call" else { return call }
+            let storedArgs = stored.field("args")?.elements ?? []
+            let args = storedArgs + (call.field("args")?.elements ?? [])
+            var kwargs = stored.field("kwargs")
+            if let fields = call.field("kwargs")?.fields {
+                kwargs = kwargs ?? .object([])
+                for field in fields { kwargs = kwargs?.setting(field.name, field.value) }
             }
-            return symbol.adding("_varRef", .string(name))
+            var result = ParserValue.object([("type", .string("Call")),
+                ("name", stored.field("name") ?? .undefined), ("args", .array(args))])
+            func writtenMixed(_ value: ParserValue) -> Bool {
+                value.field("positionalsByIndex") == nil && !(value.field("args")?.elements ?? []).isEmpty &&
+                    !(value.field("kwargs")?.fields ?? []).isEmpty
+            }
+            if kwargs != nil, !args.isEmpty, !writtenMixed(stored), !writtenMixed(call) {
+                let boundKeyword = (stored.field("kwargs")?.fields ?? []).contains { !["_skip", "_id"].contains($0.name) }
+                let limit = boundKeyword ? stored.field("positionalsByIndex")?.field("colorSplatLimit") ?? .number(Double(storedArgs.count)) : .number(Double(args.count))
+                result = result.adding("positionalsByIndex", .object([("colorSplatLimit", limit)]))
+            }
+            if let loc = call.field("loc") ?? stored.field("loc") { result = result.adding("loc", loc) }
+            if let kwargs { result = result.adding("kwargs", kwargs) }
+            if let namespace = call.field("namespace") ?? stored.field("namespace") { result = result.adding("namespace", namespace) }
+            return result
+        }
+
+        private func substitute(_ node: ParserValue, resolving: Set<String> = []) throws -> ParserValue {
+            if node.type == "Ident", let name = node.field("name")?.string, let symbol = symbols[name] {
+                guard !resolving.contains(name), symbol != node else {
+                    throw CompilerIncomplete(stage: "validator", detail: "cyclic symbol \(name)")
+                }
+                return try substitute(symbol, resolving: resolving.union([name])).setting("_varRef", .string(name))
+            }
+            if node.type == "Chain", let calls = node.field("chain")?.elements {
+                return .object([("type", .string("Chain")), ("chain", .array(try calls.map { try substitute($0, resolving: resolving) }))])
+            }
+            if node.type == "Call" {
+                var mapped = ParserValue.object([("type", .string("Call")),
+                    ("name", node.field("name") ?? .undefined),
+                    ("args", .array(try (node.field("args")?.elements ?? []).map { try substitute($0, resolving: resolving) }))])
+                for key in ["loc", "positionalsByIndex"] {
+                    if let value = node.field(key) { mapped = mapped.adding(key, value) }
+                }
+                if let kwargs = node.field("kwargs")?.fields {
+                    mapped = mapped.adding("kwargs", .object(try kwargs.map { ($0.name, try substitute($0.value, resolving: resolving)) }))
+                }
+                return resolveCall(mapped)
+            }
+            let automationFields: [String: [String]] = [
+                "Oscillator": ["oscType", "min", "max", "speed", "offset", "seed"],
+                "Midi": ["channel", "mode", "min", "max", "sensitivity", "name", "id"],
+                "Audio": ["band", "min", "max"]
+            ]
+            if let fields = automationFields[node.type ?? ""] {
+                var result = node
+                for key in fields { result = result.setting(key, try substitute(node.field(key) ?? .undefined, resolving: resolving)) }
+                return result
+            }
+            return node
+        }
+
+        private func dropMarks(_ node: ParserValue) -> ParserValue {
+            if let elements = node.elements { return .array(elements.map(dropMarks)) }
+            guard let fields = node.fields else { return node }
+            return .object(fields.filter { node.type != "Call" || $0.name != "positionalsByIndex" }
+                .map { ($0.name, dropMarks($0.value)) })
         }
 
         private func toSurface(_ node: ParserValue?) -> ParserValue? {
