@@ -578,15 +578,15 @@ public enum NoisemakerValidator {
                 return .object([("kind", .string(type == "volume" ? "vol" : "geo")),
                                 ("name", .string(name))])
             }
-            // vec2(x, y) on a vec2 parameter, and vec4(x, y, z, w) on a vec4
-            // parameter. The loader registers vec4 parameters as `color`; their
-            // default keeps its four components. Any other form, including a
-            // wrong component count, takes the branches below.
+            // Color constructors preserve the supplied components,
+            // independently of the parameter's default length.
+            // Invalid constructor arity takes the branches below.
             if node.type == "Call", let callee = node.field("name")?.string,
                let components = node.field("args")?.elements,
-               components.count == (callee == "vec2" ? 2 : 4),
+               components.count == (callee == "vec2" ? 2 : callee == "vec3" ? 3 : 4),
                (type == "vec2" && callee == "vec2") ||
-                (type == "color" && callee == "vec4" && fallback.elements?.count == 4) {
+                (type == "color" && node.field("kwargs") == nil &&
+                    (callee == "vec3" || callee == "vec4")) {
                 return .array(components.map { component in
                     if component.type == "Number", let value = component.field("value")?.number {
                         return .number(value)
@@ -606,20 +606,24 @@ public enum NoisemakerValidator {
                    node.field("name")?.string == type,
                    let components = node.field("args")?.elements,
                    components.count == (type == "vec3" ? 3 : 4) {
-                    var values: [ParserValue] = []
-                    for component in components {
-                        guard component.type == "Number", let value = component.field("value")?.number else {
-                            throw CompilerIncomplete(stage: "validator", detail: "nonnumeric \(type) component")
+                    return .array(components.map { component in
+                        if component.type == "Number", let value = component.field("value")?.number {
+                            return .number(value)
                         }
-                        values.append(.number(value))
-                    }
-                    return .array(values)
+                        report("S002", component, "Argument out of range for '\(key)' in \(callName)()")
+                        return .number(0)
+                    })
                 }
                 if type == "color", node.type == "Number", node.field("value")?.number != nil {
                     report("S002", node, "Argument out of range for '\(key)' in \(callName)()")
                     return fallback
                 }
-                throw CompilerIncomplete(stage: "validator", detail: "color/vector expression for \(opName).\(key)")
+                // An identifier takes the default without a diagnostic, as
+                // upstream does; every other rejected form reports the same
+                // out-of-range diagnostic and takes the default.
+                if node.type == "Ident" { return fallback }
+                report("S002", node, "Argument out of range for '\(key)' in \(callName)()")
+                return fallback
             }
             if type == "string" {
                 if node.type == "String", let value = node.field("value") { return value }

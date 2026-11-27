@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "authority": {
-    "commit": "5596e69fd6e3b9014e9df0f8674e10e70c332e11",
-    "sourceManifestSha256": "e8c98c6e68984d91253e328d7ee468999a9f7b96584679d98e510d3c78473100"
+    "commit": "688794aca5998d9573afa5601c2b9b023c896007",
+    "sourceManifestSha256": "bc8c42499ed0fa9bc45e9d24ae5e2115bc11ed41d4683c27979f4d8dd9e6bc62"
   },
-  "corpusSha256": "55cb9ebfe5b88b5b8cce6a48ab9f619e1b193fe047f4b1deaa499d2f9408f286",
+  "corpusSha256": "5bc9543496ca75e10e9180425b7f02b7515ddade39269099948f1f3596d05bfd",
   "expected": 2936,
   "stageCounts": {
     "lex": {

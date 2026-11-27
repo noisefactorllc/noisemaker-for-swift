@@ -341,6 +341,54 @@ import Testing
                                   "zone0_bounds") == .array([.number(0.1), .number(0.2), .number(0.7), .number(0.9)]))
     }
 
+    /// Source test-unparser.mjs: a color constructor preserves its supplied
+    /// components like the matching array literal, independently of the
+    /// parameter's default length. Invalid constructor arity reports the
+    /// out-of-range diagnostic and takes the default.
+    @Test func colorConstructorsPreserveTheirComponentsLikeArrayLiterals() throws {
+        let compiler = try NoisemakerCompiler()
+        func colorArgument(_ call: String) throws -> (ParserValue?, [String]) {
+            let validated = try compiler.compileStages(source:
+                "search synth, filter\n\(call).write(o0)\nrender(o0)\n").validated
+            let plans = try #require(validated.field("plans")?.elements)
+            let value = plans.flatMap { $0.field("chain")?.elements ?? [] }
+                .last { $0.field("args")?.field("color") != nil }?
+                .field("args")?.field("color")
+            let codes = (validated.field("diagnostics")?.elements ?? []).compactMap { $0.field("code")?.string }
+            return (value, codes)
+        }
+        for (call, expected) in [
+            ("solid(color: [0.3, 0.2, 0.25])", [0.3, 0.2, 0.25]),
+            ("solid(color: vec3(0.3, 0.2, 0.25))", [0.3, 0.2, 0.25]),
+            ("solid(color: [0.3, 0.2, 0.25, 0.4])", [0.3, 0.2, 0.25, 0.4]),
+            ("solid(color: vec4(0.3, 0.2, 0.25, 0.4))", [0.3, 0.2, 0.25, 0.4]),
+            ("solid().tint(color: [0.3, 0.2, 0.25])", [0.3, 0.2, 0.25]),
+            ("solid().tint(color: vec3(0.3, 0.2, 0.25))", [0.3, 0.2, 0.25]),
+            ("solid().tint(color: [0.3, 0.2, 0.25, 0.4])", [0.3, 0.2, 0.25, 0.4]),
+            ("solid().tint(color: vec4(0.3, 0.2, 0.25, 0.4))", [0.3, 0.2, 0.25, 0.4])
+        ] {
+            let (value, codes) = try colorArgument(call)
+            #expect(codes.isEmpty, Comment(rawValue: call))
+            #expect(value == .array(expected.map(ParserValue.number)), Comment(rawValue: call))
+        }
+        for (call, fallback) in [
+            ("solid(color: vec2(0.3, 0.2))", [0.5, 0.5, 0.5]),
+            ("solid(color: vec3(0.3, 0.2))", [0.5, 0.5, 0.5]),
+            ("solid(color: vec3(0.3, 0.2, 0.25, 0.4))", [0.5, 0.5, 0.5]),
+            ("solid(color: vec4(0.3, 0.2, 0.25))", [0.5, 0.5, 0.5]),
+            ("solid(color: vec4(0.3, 0.2, 0.25, 0.4, 1))", [0.5, 0.5, 0.5]),
+            ("solid().tint(color: vec2(0.3, 0.2))", [1, 1, 1]),
+            ("solid().tint(color: vec3(0.3, 0.2))", [1, 1, 1]),
+            ("solid().tint(color: vec3(0.3, 0.2, 0.25, 0.4))", [1, 1, 1]),
+            ("solid().tint(color: vec4(0.3, 0.2, 0.25))", [1, 1, 1]),
+            ("solid().tint(color: vec4(0.3, 0.2, 0.25, 0.4, 1))", [1, 1, 1])
+        ] {
+            let (value, codes) = try colorArgument(call)
+            #expect(codes == ["S002"], Comment(rawValue: call))
+            #expect(value == .array(fallback.map(ParserValue.number)), Comment(rawValue: call))
+        }
+    }
+
     @Test func portableFuncMustBeCallableFromSearchUser() throws {
         var registry = try EffectRegistry.bundled()
         let shader = ["probe": "@fragment fn main() {}"]
