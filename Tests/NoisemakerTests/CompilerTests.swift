@@ -341,10 +341,6 @@ import Testing
                                   "zone0_bounds") == .array([.number(0.1), .number(0.2), .number(0.7), .number(0.9)]))
     }
 
-    /// Source test-unparser.mjs: a color constructor preserves its supplied
-    /// components like the matching array literal, independently of the
-    /// parameter's default length. Invalid constructor arity reports the
-    /// out-of-range diagnostic and takes the default.
     @Test func colorConstructorsPreserveTheirComponentsLikeArrayLiterals() throws {
         let compiler = try NoisemakerCompiler()
         func colorArgument(_ call: String) throws -> (ParserValue?, [String]) {

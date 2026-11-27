@@ -578,9 +578,6 @@ public enum NoisemakerValidator {
                 return .object([("kind", .string(type == "volume" ? "vol" : "geo")),
                                 ("name", .string(name))])
             }
-            // Color constructors preserve the supplied components,
-            // independently of the parameter's default length.
-            // Invalid constructor arity takes the branches below.
             if node.type == "Call", let callee = node.field("name")?.string,
                let components = node.field("args")?.elements,
                components.count == (callee == "vec2" ? 2 : callee == "vec3" ? 3 : 4),
@@ -618,9 +615,6 @@ public enum NoisemakerValidator {
                     report("S002", node, "Argument out of range for '\(key)' in \(callName)()")
                     return fallback
                 }
-                // An identifier takes the default without a diagnostic, as
-                // upstream does; every other rejected form reports the same
-                // out-of-range diagnostic and takes the default.
                 if node.type == "Ident" { return fallback }
                 report("S002", node, "Argument out of range for '\(key)' in \(callName)()")
                 return fallback
