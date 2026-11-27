@@ -6,7 +6,7 @@ import Testing
 
 @Suite(.serialized)
 struct PortableStorageVolumeGPUTests {
-    private let definition = #"{"name":"Storage 3D Probe","namespace":"user","func":"storage3dProbe","starter":true,"textures3d":{"volume":{"width":8,"height":8,"depth":8,"format":"rgba8unorm"}},"passes":[{"name":"fill","type":"compute","program":"fill","workgroups":[2,2,2],"storageTextures":{"volumeOut":"node_0_volume"}},{"name":"show","program":"show","inputs":{"volTex":"volume"},"outputs":{"fragColor":"outputTex"}}]}"#
+    private let definition = #"{"name":"Storage 3D Probe","namespace":"user","func":"storage3dProbe","starter":true,"textures3d":{"volume":{"width":8,"height":8,"depth":8,"format":"rgba8unorm"}},"passes":[{"name":"fill","type":"compute","program":"fill","workgroups":[2,2,2],"storageTextures":{"volumeOut":"volume"}},{"name":"show","program":"show","inputs":{"volTex":"volume"},"outputs":{"fragColor":"outputTex"}}]}"#
     private let fill = """
         @group(0) @binding(0) var volumeOut: texture_storage_3d<rgba8unorm, write>;
         @compute @workgroup_size(4, 4, 4)
@@ -108,7 +108,7 @@ struct PortableStorageVolumeGPUTests {
 
     @Test func storageComputeSamplesThreeDimensionalInput() throws {
         let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
-        let samplingDefinition = #"{"name":"Storage 3D Probe","namespace":"user","func":"storage3dProbe","starter":true,"textures3d":{"source":{"width":8,"height":8,"depth":8,"format":"rgba8unorm","filter":"linear"},"volume":{"width":8,"height":8,"depth":8,"format":"rgba8unorm"}},"passes":[{"name":"fill","type":"compute","program":"fill","inputs":{"seedTex":"source"},"workgroups":[2,2,2],"storageTextures":{"volumeOut":"node_0_volume"}},{"name":"show","program":"show","inputs":{"volTex":"volume"},"outputs":{"fragColor":"outputTex"}}]}"#
+        let samplingDefinition = #"{"name":"Storage 3D Probe","namespace":"user","func":"storage3dProbe","starter":true,"textures3d":{"source":{"width":8,"height":8,"depth":8,"format":"rgba8unorm","filter":"linear"},"volume":{"width":8,"height":8,"depth":8,"format":"rgba8unorm"}},"passes":[{"name":"fill","type":"compute","program":"fill","inputs":{"seedTex":"source"},"workgroups":[2,2,2],"storageTextures":{"volumeOut":"volume"}},{"name":"show","program":"show","inputs":{"volTex":"volume"},"outputs":{"fragColor":"outputTex"}}]}"#
         let samplingFill = """
             @group(0) @binding(0) var seedTex: texture_3d<f32>;
             @group(0) @binding(1) var seedSampler: sampler;

@@ -761,7 +761,8 @@ public final class NoisemakerRenderer {
             }
             resolved = output.width * output.height
         } else if requested == "input" ||
-                    (mode == "triangles" && (requested == "auto" || count?.numberValue == 0)) {
+                    (mode == "triangles" &&
+                     (requested == "auto" || requested == "screen" || count?.numberValue == 0)) {
             let preferred = mode == "triangles"
                 ? ["meshPositions", "inputTex"] : ["xyzTex", "inputTex"]
             if let texture = preferred.compactMap({ targets.inputs[$0] }).first {

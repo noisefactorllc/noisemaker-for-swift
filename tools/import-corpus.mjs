@@ -67,6 +67,21 @@ function asset(root, path) {
   return { path, sha256: hash(bytes), text: bytes.toString('utf8') }
 }
 
+export function authoredInputAssets(definition, readAsset) {
+  const meshes = definition.meshInputs || []
+  if (meshes.length > 1 || meshes.some(mesh => mesh.mesh !== 'mesh0')) {
+    throw new Error('authored mesh input requires the supported mesh0 host surface')
+  }
+  const assets = meshes.map(mesh => readAsset(mesh.path))
+  if (definition.midiInputs?.length) {
+    const messages = definition.midiInputs.flatMap(input => input.notes.map(note =>
+      [0x90 | (note.channel - 1), note.key, note.velocity]))
+    const text = JSON.stringify({ messages }, null, 2) + '\n'
+    assets.push({ path: 'authored-inputs.midi.json', sha256: hash(Buffer.from(text)), text })
+  }
+  return assets
+}
+
 function parityFiles(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap(item => {
     const path = join(directory, item.name)
@@ -235,7 +250,8 @@ async function makeCorpus() {
     const [, , namespace, name] = path.split('/')
     cases.push(entry(`upstream/${namespace}/${name}`, definition.dsl,
       { repository: lock.repository, commit: lock.commit, path, sha256: hash(original) },
-      'upstream', [], { upstreamCase: definition, claimedEffects: definition.effects || [] }))
+      'upstream', authoredInputAssets(definition, path => asset(upstream, path)),
+      { upstreamCase: definition, claimedEffects: definition.effects || [] }))
   }
   for (const [name, source] of Object.entries(CASES)) {
     const assets = (MICRO_ASSETS[name] || []).map(file => asset(ROOT, `parity/${file}`))
@@ -322,4 +338,6 @@ async function main() {
     sha256: hash(readFileSync(OUT)) }) + '\n')
 }
 
-main().catch(error => { process.stderr.write(`${error?.stack || String(error)}\n`); process.exitCode = 1 })
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch(error => { process.stderr.write(`${error?.stack || String(error)}\n`); process.exitCode = 1 })
+}

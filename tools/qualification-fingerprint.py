@@ -91,6 +91,21 @@ process.stdout.write(path);
     return browser_bundle(result.stdout, headless)
 
 
+def verify_browser_dependencies(reference_root, package_lock):
+    packages = json.loads(package_lock.read_text()).get('packages', {})
+    for name in ('@playwright/test', 'playwright', 'playwright-core'):
+        locked = packages.get(f'node_modules/{name}', {}).get('version')
+        if not isinstance(locked, str) or not locked:
+            raise ValueError(f'reference browser dependency is not locked: {name}')
+        installed_path = reference_root / 'node_modules' / name / 'package.json'
+        if not installed_path.is_file():
+            raise ValueError(f'reference browser dependency is missing: {name}')
+        installed = json.loads(installed_path.read_text()).get('version')
+        if installed != locked:
+            raise ValueError(f'reference browser dependency differs from lock: {name} '
+                             f'(locked {locked}, installed {installed})')
+
+
 def authority_inputs(root, reference_root, browser_identity=None):
     root, reference_root = Path(root), Path(reference_root).resolve()
     lock = json.loads((root / 'parity/reference.json').read_text())
@@ -126,6 +141,7 @@ def authority_inputs(root, reference_root, browser_identity=None):
     package_lock = reference_root / 'package-lock.json'
     if not package_lock.is_file():
         raise ValueError('reference browser dependency lock is missing')
+    verify_browser_dependencies(reference_root, package_lock)
     return {
         'root': str(reference_root),
         'sourceManifestSha256': manifest_sha,

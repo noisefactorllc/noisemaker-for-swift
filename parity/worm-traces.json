@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "24250c8c69610017b1413ccb9dc29a627663a790",
-    "sourceManifestSha256": "ae5ea5c917c4284120c147d8bb76f20b264cd2fe56c61eeb2740a7a17ac3d91c"
+    "commit": "5596e69fd6e3b9014e9df0f8674e10e70c332e11",
+    "sourceManifestSha256": "e8c98c6e68984d91253e328d7ee468999a9f7b96584679d98e510d3c78473100"
   },
   "source": {
     "path": "shaders/src/cpu/wormTracer.js",

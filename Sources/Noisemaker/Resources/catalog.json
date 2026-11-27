@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "authority": {
     "repository": "https://github.com/noisefactorllc/noisemaker",
-    "commit": "24250c8c69610017b1413ccb9dc29a627663a790",
-    "sourceManifestSha256": "ae5ea5c917c4284120c147d8bb76f20b264cd2fe56c61eeb2740a7a17ac3d91c"
+    "commit": "5596e69fd6e3b9014e9df0f8674e10e70c332e11",
+    "sourceManifestSha256": "e8c98c6e68984d91253e328d7ee468999a9f7b96584679d98e510d3c78473100"
   },
   "license": {
     "path": "LICENSE",
@@ -74118,8 +74118,8 @@
       "func": "flow3d",
       "definition": {
         "path": "shaders/effects/filter3d/flow3d/definition.js",
-        "sha256": "6b47b65aa97bca7d383675630cb8f7a56c36cae473e11ac0b4e8810b449bf71a",
-        "bytes": 7794
+        "sha256": "300e4d17ec8a3c0962c2619d8b246890a73eb299fc497cbe5cee7bbc69b70f6a",
+        "bytes": 7562
       },
       "wgsl": [
         {
@@ -74807,10 +74807,6 @@
                               [
                                 "default",
                                 32
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -74831,10 +74827,6 @@
                               [
                                 "default",
                                 1024
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -74908,10 +74900,6 @@
                               [
                                 "default",
                                 32
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -74932,10 +74920,6 @@
                               [
                                 "default",
                                 1024
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -75009,10 +74993,6 @@
                               [
                                 "default",
                                 32
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -75033,10 +75013,6 @@
                               [
                                 "default",
                                 1024
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -75118,10 +75094,6 @@
                               [
                                 "default",
                                 32
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -75142,10 +75114,6 @@
                               [
                                 "default",
                                 1024
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -75543,8 +75511,8 @@
       "func": "palette3d",
       "definition": {
         "path": "shaders/effects/filter3d/palette3d/definition.js",
-        "sha256": "070b16496ef076823d52268bb662e44b2a28529251d3bc47a0e8bb94712a58f9",
-        "bytes": 2901
+        "sha256": "ddb490265034ecd5b5ed80e3196201e1d37d96ecf85851d798fb89621275cb2c",
+        "bytes": 2843
       },
       "wgsl": [
         {
@@ -75952,10 +75920,6 @@
                               [
                                 "default",
                                 64
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -75976,10 +75940,6 @@
                               [
                                 "default",
                                 4096
-                              ],
-                              [
-                                "inputOverride",
-                                "inputTex3d"
                               ]
                             ]
                           }
@@ -84205,6 +84165,18 @@
             }
           ],
           [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
+          ],
+          [
             "shaders",
             {
               "$type": "object",
@@ -85020,6 +84992,18 @@
                 ]
               ]
             }
+          ],
+          [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
           ],
           [
             "openCategories",
@@ -86055,6 +86039,18 @@
             }
           ],
           [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
+          ],
+          [
             "paramAliases",
             {
               "$type": "object",
@@ -87009,6 +87005,18 @@
             }
           ],
           [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
+          ],
+          [
             "shaders",
             {
               "$type": "object",
@@ -87773,6 +87781,18 @@
                 ]
               ]
             }
+          ],
+          [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
           ],
           [
             "paramAliases",
@@ -88857,6 +88877,18 @@
             }
           ],
           [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
+          ],
+          [
             "shaders",
             {
               "$type": "object",
@@ -89838,6 +89870,18 @@
                 ]
               ]
             }
+          ],
+          [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
           ],
           [
             "shaders",
@@ -90919,6 +90963,18 @@
             }
           ],
           [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
+          ],
+          [
             "shaders",
             {
               "$type": "object",
@@ -91930,6 +91986,18 @@
             }
           ],
           [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
+          ],
+          [
             "paramAliases",
             {
               "$type": "object",
@@ -92676,6 +92744,18 @@
             }
           ],
           [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
+          ],
+          [
             "shaders",
             {
               "$type": "object",
@@ -93141,8 +93221,8 @@
       "wgsl": [
         {
           "path": "shaders/effects/render/meshLoader/wgsl/preview.wgsl",
-          "sha256": "7478c9c8b2da695ded20cdd7be850747b2ab5a4454a8af94245c95bb3761acac",
-          "bytes": 1020
+          "sha256": "ee94e8a8a52bd754221b2f03f6cc02d264dad2328c28bf14e75f6158d836d9b9",
+          "bytes": 1384
         }
       ],
       "registrationKeys": [
@@ -93317,7 +93397,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "// Preview mesh data as visualization\n\nstruct Uniforms {\n    resolution: vec2<f32>,\n    tileOffset: vec2<f32>,\n    fullResolution: vec2<f32>,\n    renderScale: f32,\n};\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var positionsTex: texture_2d<f32>;\n@group(0) @binding(2) var positionsSampler: sampler;\n@group(0) @binding(3) var normalsTex: texture_2d<f32>;\n@group(0) @binding(4) var normalsSampler: sampler;\n\n@fragment\nfn main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {\n    let uv = (position.xy + u.tileOffset) / u.fullResolution;\n    \n    // Sample mesh textures using UV coordinates\n    let pos = textureSample(positionsTex, positionsSampler, uv);\n    let normal = textureSample(normalsTex, normalsSampler, uv);\n    \n    var color: vec3<f32>;\n    if (uv.x < 0.5) {\n        // Position visualization\n        color = pos.xyz * 0.5 + 0.5;\n    } else {\n        // Normal visualization\n        color = normal.xyz * 0.5 + 0.5;\n    }\n    \n    return vec4<f32>(color, 1.0);\n}\n"
+                        "// Preview mesh data as visualization\n\nstruct Uniforms {\n    resolution: vec2<f32>,\n    tileOffset: vec2<f32>,\n    fullResolution: vec2<f32>,\n    renderScale: f32,\n};\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var positionsTex: texture_2d<f32>;\n@group(0) @binding(2) var positionsSampler: sampler;\n@group(0) @binding(3) var normalsTex: texture_2d<f32>;\n@group(0) @binding(4) var normalsSampler: sampler;\n\n@fragment\nfn main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {\n    let fullRes = select(u.resolution, u.fullResolution, u.fullResolution.x > 0.0);\n    let globalUV = (position.xy + u.tileOffset) / fullRes;\n    let positionsUV = position.xy / vec2<f32>(textureDimensions(positionsTex));\n    let normalsUV = position.xy / vec2<f32>(textureDimensions(normalsTex));\n    \n    // Match WebGL2's preview sampling: address the packed mesh textures by\n    // their own dimensions rather than scaling them across the output frame.\n    let pos = textureSample(positionsTex, positionsSampler, positionsUV);\n    let normal = textureSample(normalsTex, normalsSampler, normalsUV);\n    \n    var color: vec3<f32>;\n    if (globalUV.x < 0.5) {\n        // Position visualization\n        color = pos.xyz * 0.5 + 0.5;\n    } else {\n        // Normal visualization\n        color = normal.xyz * 0.5 + 0.5;\n    }\n    \n    return vec4<f32>(color, 1.0);\n}\n"
                       ]
                     ]
                   }
@@ -101937,6 +102017,18 @@
                 ]
               ]
             }
+          ],
+          [
+            "outputXyz",
+            "global_xyz"
+          ],
+          [
+            "outputVel",
+            "global_vel"
+          ],
+          [
+            "outputRgba",
+            "global_rgba"
           ],
           [
             "shaders",
@@ -148478,8 +148570,8 @@
         },
         {
           "path": "shaders/effects/synth/roll/wgsl/roll.wgsl",
-          "sha256": "d3ef27f11f88d4d163231f8c0e55df33c2d1718d03d1a57072a0e9f0d9aad870",
-          "bytes": 2193
+          "sha256": "a83b2a8d393a39a8c2837889cb7fb88a4cad343363ffdd691d3fedaeb011cb34",
+          "bytes": 2358
         }
       ],
       "registrationKeys": [
@@ -148815,7 +148907,7 @@
                     "entries": [
                       [
                         "wgsl",
-                        "@group(0) @binding(0) var<uniform> resolution: vec2<f32>;\n@group(0) @binding(1) var<uniform> deltaTime: f32;\n@group(0) @binding(2) var<uniform> lineColor: vec3<f32>;\n@group(0) @binding(3) var<uniform> gain: f32;\n@group(0) @binding(4) var<uniform> speed: f32;\n@group(0) @binding(5) var feedbackSampler: sampler;\n@group(0) @binding(6) var feedbackTex: texture_2d<f32>;\n@group(0) @binding(7) var noteGridSampler: sampler;\n@group(0) @binding(8) var noteGridTex: texture_2d<f32>;\n\n@fragment\nfn main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {\n    let uv = pos.xy / resolution;\n\n    // Scroll feedback right (notes enter at left)\n    let scrollAmount = speed * deltaTime * 0.5;\n    let scrollUv = vec2<f32>(max(uv.x - scrollAmount, 0.0), uv.y);\n    var prev = textureSample(feedbackTex, feedbackSampler, scrollUv) * 0.997;\n    prev *= step(0.0, uv.x - scrollAmount);\n\n    // 16 MIDI channels as horizontal swim lanes\n    let laneF = uv.y * 16.0;\n    let channel = i32(floor(laneF));\n    let laneLocal = fract(laneF);\n\n    // Each lane maps to MIDI keys 36-84 (C2-C6, 4 octaves)\n    let keyLow = 36;\n    let keyRange = 48;\n    let keyExact = f32(keyLow) + laneLocal * f32(keyRange);\n    let key = i32(floor(keyExact));\n\n    // Sample note grid with fixed spread for visibility\n    var maxVel = 0.0;\n    for (var dk = -2; dk <= 2; dk++) {\n        let k = clamp(key + dk, 0, 127);\n        let gridUv = vec2<f32>((f32(k) + 0.5) / 128.0, (f32(channel) + 0.5) / 16.0);\n        let noteData = textureSample(noteGridTex, noteGridSampler, gridUv);\n        if (noteData.g > 0.5) {\n            maxVel = max(maxVel, noteData.r);\n        }\n    }\n\n    // Write new note data at the left edge\n    let edgeWidth = 4.0 / resolution.x;\n    var noteVal = 0.0;\n    if (uv.x < edgeWidth && maxVel > 0.0) {\n        noteVal = maxVel * gain;\n    }\n\n    // Lane separator lines\n    var laneSep = 0.0;\n    let laneEdge = fract(uv.y * 16.0);\n    if (laneEdge < 0.02 || laneEdge > 0.98) {\n        laneSep = 0.2;\n    }\n\n    let prevBright = max(prev.r, max(prev.g, prev.b));\n    let brightness = max(prevBright, max(noteVal, laneSep));\n    let col = lineColor * brightness;\n\n    return vec4<f32>(col, 1.0);\n}\n"
+                        "@group(0) @binding(0) var<uniform> resolution: vec2<f32>;\n@group(0) @binding(1) var<uniform> deltaTime: f32;\n@group(0) @binding(2) var<uniform> lineColor: vec3<f32>;\n@group(0) @binding(3) var<uniform> gain: f32;\n@group(0) @binding(4) var<uniform> speed: f32;\n@group(0) @binding(5) var feedbackSampler: sampler;\n@group(0) @binding(6) var feedbackTex: texture_2d<f32>;\n@group(0) @binding(7) var noteGridSampler: sampler;\n@group(0) @binding(8) var noteGridTex: texture_2d<f32>;\n\n@fragment\nfn main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {\n    let uv = pos.xy / resolution;\n\n    // Scroll feedback right (notes enter at left)\n    let scrollAmount = speed * deltaTime * 0.5;\n    let scrollUv = vec2<f32>(max(uv.x - scrollAmount, 0.0), uv.y);\n    var prev = textureSample(feedbackTex, feedbackSampler, scrollUv) * 0.997;\n    prev *= step(0.0, uv.x - scrollAmount);\n\n    // 16 MIDI channels as horizontal swim lanes\n    let laneF = uv.y * 16.0;\n    let channel = i32(floor(laneF));\n    let laneLocal = fract(laneF);\n\n    // Each lane maps to MIDI keys 36-84 (C2-C6, 4 octaves)\n    let keyLow = 36;\n    let keyRange = 48;\n    let keyExact = f32(keyLow) + laneLocal * f32(keyRange);\n    let key = i32(floor(keyExact));\n\n    // Sample every key covered by this lane pixel, matching WebGL2.\n    var maxVel = 0.0;\n    let lanePixels = resolution.y / 16.0;\n    let keysPerPixel = f32(keyRange) / lanePixels;\n    let spread = max(1, i32(ceil(keysPerPixel)));\n    for (var dk = -spread; dk <= spread; dk++) {\n        let k = clamp(key + dk, 0, 127);\n        let gridUv = vec2<f32>((f32(k) + 0.5) / 128.0, (f32(channel) + 0.5) / 16.0);\n        let noteData = textureSample(noteGridTex, noteGridSampler, gridUv);\n        if (noteData.g > 0.5) {\n            maxVel = max(maxVel, noteData.r);\n        }\n    }\n\n    // Write new note data at the left edge\n    let edgeWidth = 4.0 / resolution.x;\n    var noteVal = 0.0;\n    if (uv.x < edgeWidth && maxVel > 0.0) {\n        noteVal = maxVel * gain;\n    }\n\n    // Lane separator lines\n    var laneSep = 0.0;\n    let laneEdge = fract(uv.y * 16.0);\n    if (laneEdge < 0.02 || laneEdge > 0.98) {\n        laneSep = 0.2;\n    }\n\n    let prevBright = max(prev.r, max(prev.g, prev.b));\n    let brightness = max(prevBright, max(noteVal, laneSep));\n    let col = lineColor * brightness;\n\n    return vec4<f32>(col, 1.0);\n}\n"
                       ]
                     ]
                   }

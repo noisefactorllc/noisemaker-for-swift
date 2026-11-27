@@ -6,7 +6,39 @@ import { mkdtempSync, readFileSync, writeFileSync, chmodSync, existsSync, rmSync
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { installAsyncInitTracker } from './batch-golden.mjs'
+import { feedMidiMessages, installAsyncInitTracker } from './batch-golden.mjs'
+
+test('source-authored MIDI messages use the source recorder timestamp and restore the clock', () => {
+  const result = vm.runInNewContext(`
+    const calls = [];
+    const original = () => 1234;
+    const Date = { now: original };
+    const window = { __noisemakerCanvasRenderer: { setMidiState() {
+      return { handleMessage(bytes) { calls.push({ bytes: Array.from(bytes), time: Date.now() }); } };
+    } } };
+    (${feedMidiMessages.toString()})({ messages: [[144, 40, 110], [159, 60, 75]], fixedTime: true });
+    JSON.stringify({ calls, restored: Date.now === original });
+  `)
+  assert.deepEqual(JSON.parse(result), { calls: [
+    { bytes: [144, 40, 110], time: 0 }, { bytes: [159, 60, 75], time: 0 }
+  ], restored: true })
+})
+
+test('MIDI input restores the clock when the host rejects a message', () => {
+  const result = vm.runInNewContext(`
+    const original = () => 1234;
+    const Date = { now: original };
+    let observed;
+    const window = { __noisemakerCanvasRenderer: { setMidiState() {
+      return { handleMessage() { observed = Date.now(); throw new Error('rejected'); } };
+    } } };
+    let failure;
+    try { (${feedMidiMessages.toString()})({ messages: [[144, 40, 110]], fixedTime: true }); }
+    catch (error) { failure = error.message; }
+    JSON.stringify({ observed, failure, restored: Date.now === original });
+  `)
+  assert.deepEqual(JSON.parse(result), { observed: 0, failure: 'rejected', restored: true })
+})
 
 test('async init tracker waits for a delayed source pipeline before wrapping its prototype', { timeout: 5000 }, async () => {
   const window = { __noisemakerRenderingPipeline: null }

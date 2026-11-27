@@ -55,6 +55,124 @@ struct RuntimeGPUTests {
         return (0..<4).map { c in Float(Float16(bitPattern: words[y * rowBytes / 2 + x * 4 + c])) }
     }
 
+    @Test func triangleScreenCountUsesMeshDimensionsAndRetainsExplicitOverride() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
+        let queue = try requireValue(device.makeCommandQueue())
+        let shader = """
+            struct VertexOutput {
+                @builtin(position) position: vec4<f32>,
+                @location(0) color: vec4<f32>,
+            }
+            @vertex fn vertexMain(@builtin(vertex_index) index: u32) -> VertexOutput {
+                let vertices = array<vec2<f32>, 3>(vec2<f32>(-1.0, -1.0),
+                    vec2<f32>(-1.0, 3.0), vec2<f32>(3.0, -1.0));
+                var output: VertexOutput;
+                output.position = vec4<f32>(vertices[index % 3u], select(0.5, 0.25, index >= 3u), 1.0);
+                output.color = select(vec4<f32>(1.0, 0.0, 0.0, 1.0),
+                    vec4<f32>(0.0, 1.0, 0.0, 1.0), index >= 3u);
+                return output;
+            }
+            @fragment fn main(input: VertexOutput) -> @location(0) vec4<f32> { return input.color; }
+            """
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm,
+            width: 6, height: 1, mipmapped: false)
+        descriptor.usage = .shaderRead
+        descriptor.storageMode = .shared
+        let mesh = try requireValue(device.makeTexture(descriptor: descriptor))
+        let bytes = [UInt8](repeating: 0, count: 24)
+        bytes.withUnsafeBytes {
+            mesh.replace(region: MTLRegionMake2D(0, 0, 6, 1), mipmapLevel: 0,
+                withBytes: $0.baseAddress!, bytesPerRow: 24)
+        }
+        for count in ["auto", "input", "screen"] {
+            for (hasMesh, override) in [(true, 0), (true, 3), (false, 0)] {
+                var registry = try EffectRegistry.bundled()
+                let pass: [String: Any] = ["program": "probe", "drawMode": "triangles",
+                    "count": count, "countUniform": "vertexCount", "uniforms": ["vertexCount": override],
+                    "inputs": hasMesh ? ["meshPositions": "meshPositions"] : [:],
+                    "outputs": ["color": "outputTex"]]
+                let definition: [String: Any] = ["namespace": "user", "func": "triangleCountProbe",
+                    "starter": true, "externalTexture": "meshPositions", "passes": [pass]]
+                try registry.registerPortable(definitionJSON: JSONSerialization.data(withJSONObject: definition),
+                    shaderSources: ["probe": shader])
+                let graph = try NoisemakerCompiler(registry: registry).compile(source:
+                    "search user\ntriangleCountProbe().write(o0)\nrender(o0)\n")
+                let renderer = try NoisemakerRenderer(device: device, graph: graph,
+                    size: RenderSize(width: 8, height: 8),
+                    defaultVertexWGSL: try requireValue(registry.defaultVertex.field("wgsl")?.stringValue),
+                    registry: registry)
+                let inputs = hasMesh ? Dictionary(uniqueKeysWithValues:
+                    graph.externalTextureNames.map { ($0, mesh) }) : [:]
+                let command = try requireValue(queue.makeCommandBuffer())
+                let output = try renderer.encode(into: command, externalTextures: inputs)
+                let (buffer, stride) = try readback(output, into: command, device: device)
+                command.commit(); command.waitUntilCompleted()
+                expectEqual(command.status, .completed, "\(String(describing: command.error))")
+                if let error = command.error { throw error }
+                let expected: [Float] = hasMesh && override == 0 ? [0, 1, 0, 1] : [1, 0, 0, 1]
+                expectEqual(pixel(buffer, rowBytes: stride, x: 4, y: 4), expected)
+            }
+        }
+    }
+
+    @Test func colorBlendFactorsMatchSourceAndDestinationContributions() throws {
+        let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
+        let queue = try requireValue(device.makeCommandQueue())
+        let cases: [([String], [Float])] = [
+            (["ONE", "ZERO"], [0.5, 0.5, 0.5, 0.5]),
+            (["ZERO", "ONE"], [0.25, 0.5, 1, 1]),
+            (["SRC_COLOR", "ZERO"], [0.25, 0.25, 0.25, 0.25]),
+            (["DST_COLOR", "ZERO"], [0.125, 0.25, 0.5, 0.5]),
+            (["ONE_MINUS_SRC_COLOR", "ZERO"], [0.25, 0.25, 0.25, 0.25]),
+            (["ONE_MINUS_DST_COLOR", "ZERO"], [0.375, 0.25, 0, 0]),
+            (["SRC_ALPHA", "ONE_MINUS_SRC_ALPHA"], [0.375, 0.5, 0.75, 0.75])
+        ]
+        let backdrop = "@fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(0.25, 0.5, 1.0, 1.0); }"
+        let source = "@fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(0.5); }"
+        let copy = """
+            @group(0) @binding(0) var workTex: texture_2d<f32>;
+            @fragment fn main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {
+                return textureLoad(workTex, vec2<i32>(pos.xy), 0);
+            }
+            """
+        for (factors, expected) in cases {
+            var spellings = [factors, factors.map { $0.lowercased() }]
+            if factors.contains(where: { $0.contains("_COLOR") }) {
+                spellings.append(factors.map { $0.lowercased().replacingOccurrences(of: "_", with: "-") })
+            }
+            for blend in spellings {
+                var registry = try EffectRegistry.bundled()
+                let definition: [String: Any] = ["namespace": "user", "func": "factorProbe", "starter": true,
+                    "textures": ["work": ["width": 8, "height": 8, "format": "rgba16f"]],
+                    "passes": [
+                        ["program": "backdrop", "outputs": ["color": "work"]],
+                        ["program": "source", "blend": blend, "outputs": ["color": "work"]],
+                        ["program": "copy", "inputs": ["workTex": "work"], "outputs": ["color": "outputTex"]]
+                    ]]
+                try registry.registerPortable(definitionJSON: JSONSerialization.data(withJSONObject: definition),
+                    shaderSources: ["backdrop": backdrop, "source": source, "copy": copy])
+                let graph = try NoisemakerCompiler(registry: registry).compile(source:
+                    "search user\nfactorProbe().write(o0)\nrender(o0)\n")
+                let renderer = try NoisemakerRenderer(device: device, graph: graph,
+                    size: RenderSize(width: 8, height: 8),
+                    defaultVertexWGSL: try requireValue(registry.defaultVertex.field("wgsl")?.stringValue),
+                    registry: registry)
+                let command = try requireValue(queue.makeCommandBuffer())
+                let output = try renderer.encode(into: command)
+                let (buffer, stride) = try readback(output, into: command, device: device)
+                command.commit(); command.waitUntilCompleted()
+                expectEqual(command.status, .completed, "\(String(describing: command.error))")
+                if let error = command.error { throw error }
+                for y in 0..<8 {
+                    for x in 0..<8 {
+                        expectEqual(pixel(buffer, rowBytes: stride, x: x, y: y), expected,
+                                    "blend \(blend), pixel \(x),\(y)")
+                    }
+                }
+            }
+        }
+    }
+
     @Test func testSolidGraphEncodesUpstreamPassesAndKeepsDistinctOutputs() throws {
         let device = try requireValue(MTLCreateSystemDefaultDevice(), "Native Metal host required")
         let renderer = try renderer("solid", device: device)

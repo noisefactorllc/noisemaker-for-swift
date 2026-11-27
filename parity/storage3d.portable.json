@@ -17,7 +17,7 @@
       "type": "compute",
       "program": "fill",
       "workgroups": [2, 2, 2],
-      "storageTextures": { "volumeOut": "node_0_volume" }
+      "storageTextures": { "volumeOut": "volume" }
     },
     {
       "name": "show",

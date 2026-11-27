@@ -377,10 +377,10 @@ enum ShaderCompiler {
         switch value.uppercased() {
         case "ZERO": return .zero
         case "ONE": return .one
-        case "SRC_COLOR": return .sourceColor
-        case "ONE_MINUS_SRC_COLOR": return .oneMinusSourceColor
-        case "DST_COLOR": return .destinationColor
-        case "ONE_MINUS_DST_COLOR": return .oneMinusDestinationColor
+        case "SRC_COLOR", "SRC-COLOR": return .sourceColor
+        case "ONE_MINUS_SRC_COLOR", "ONE-MINUS-SRC-COLOR": return .oneMinusSourceColor
+        case "DST_COLOR", "DST-COLOR": return .destinationColor
+        case "ONE_MINUS_DST_COLOR", "ONE-MINUS-DST-COLOR": return .oneMinusDestinationColor
         case "SRC_ALPHA": return .sourceAlpha
         case "ONE_MINUS_SRC_ALPHA": return .oneMinusSourceAlpha
         case "DST_ALPHA": return .destinationAlpha

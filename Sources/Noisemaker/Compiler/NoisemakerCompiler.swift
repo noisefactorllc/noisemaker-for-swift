@@ -85,7 +85,8 @@ public struct NoisemakerCompiler {
             spec["width"] = truthy(raw.field("width")) ? raw.field("width") : .string("screen")
             spec["height"] = truthy(raw.field("height")) ? raw.field("height") : .string("screen")
             spec["format"] = truthy(raw.field("format")) ? raw.field("format") : .string("rgba16f")
-            spec["usage"] = .array(["render", "sample", "copySrc", "copyDst"].map { .string($0) })
+            spec["usage"] = truthy(raw.field("usage")) ? raw.field("usage")
+                : .array(["render", "sample", "copySrc", "copyDst"].map { .string($0) })
             if raw.field("is3D")?.boolValue == true {
                 spec["depth"] = truthy(raw.field("depth")) ? raw.field("depth")
                     : (truthy(raw.field("width")) ? raw.field("width") : .number(64))
@@ -110,6 +111,34 @@ public struct NoisemakerCompiler {
                 spec["height"] = .string("screen")
                 spec["format"] = .string("rgba16f")
                 spec["usage"] = .array(["render", "sample", "copySrc", "copyDst"].map { .string($0) })
+                textures.append(GraphMapEntry(key: .string(name), value: spec.value))
+            }
+        }
+        for pass in passes {
+            for binding in pass.field("storageTextures")?.objectFields ?? [] {
+                guard let name = binding.value.stringValue, !name.hasPrefix("global_") else { continue }
+                if let index = textures.firstIndex(where: { $0.key.stringValue == name }) {
+                    var spec = OrderedObject(textures[index].value)
+                    var usage: [GraphValue]
+                    if let array = spec["usage"]?.arrayValue {
+                        if array.contains(where: { $0.stringValue == "storage" }) { continue }
+                        usage = array
+                    } else if let string = spec["usage"]?.stringValue {
+                        if string.contains("storage") { continue }
+                        usage = string.unicodeScalars.map { .string(String($0)) }
+                    } else {
+                        throw CompilerIncomplete(stage: "graph", detail: "storage texture usage is not iterable")
+                    }
+                    usage.append(.string("storage"))
+                    spec["usage"] = .array(usage)
+                    textures[index] = GraphMapEntry(key: .string(name), value: spec.value)
+                    continue
+                }
+                var spec = OrderedObject()
+                spec["width"] = .string("screen")
+                spec["height"] = .string("screen")
+                spec["format"] = .string("rgba16f")
+                spec["usage"] = .array(["render", "sample", "storage", "copySrc", "copyDst"].map(GraphValue.string))
                 textures.append(GraphMapEntry(key: .string(name), value: spec.value))
             }
         }

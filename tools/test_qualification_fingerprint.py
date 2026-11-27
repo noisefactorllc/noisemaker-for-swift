@@ -78,12 +78,39 @@ class QualificationFingerprintTests(unittest.TestCase):
                         'files': [{'path': name, 'sha256': source_sha}]}
             manifest_path = root / '.build/reference/source-manifest.json'
             manifest_path.write_text(json.dumps(manifest))
-            (reference / 'package-lock.json').write_text('browser lock')
+            browser_packages = ('@playwright/test', 'playwright', 'playwright-core')
+            dependency_lock = {'lockfileVersion': 3, 'packages': {}}
+            for package in browser_packages:
+                relative = f'node_modules/{package}'
+                directory = reference / relative
+                directory.mkdir(parents=True, exist_ok=True)
+                (directory / 'package.json').write_text(json.dumps({'name': package, 'version': '1.65.1'}))
+                dependency_lock['packages'][relative] = {'version': '1.65.1'}
+            package_lock_path = reference / 'package-lock.json'
+            package_lock_path.write_text(json.dumps(dependency_lock))
             dependency = reference / 'node_modules/playwright/index.js'
             dependency.write_text('browser code')
             browser = {'executableSha256': 'a' * 64, 'bundleSha256': 'b' * 64}
             baseline = fingerprint.authority_inputs(root, reference, browser)
             self.assertEqual(baseline, fingerprint.authority_inputs(root, reference, browser))
+            for package in browser_packages:
+                with self.subTest(stale_browser_package=package):
+                    package_path = reference / f'node_modules/{package}/package.json'
+                    original = package_path.read_text()
+                    package_path.write_text(json.dumps({'name': package, 'version': '1.63.0'}))
+                    with self.assertRaisesRegex(ValueError, 'browser dependency differs from lock'):
+                        fingerprint.authority_inputs(root, reference, browser)
+                    package_path.write_text(original)
+                    package_path.unlink()
+                    with self.assertRaisesRegex(ValueError, 'browser dependency is missing'):
+                        fingerprint.authority_inputs(root, reference, browser)
+                    package_path.write_text(original)
+            del dependency_lock['packages']['node_modules/playwright-core']
+            package_lock_path.write_text(json.dumps(dependency_lock))
+            with self.assertRaisesRegex(ValueError, 'browser dependency is not locked'):
+                fingerprint.authority_inputs(root, reference, browser)
+            dependency_lock['packages']['node_modules/playwright-core'] = {'version': '1.65.1'}
+            package_lock_path.write_text(json.dumps(dependency_lock))
             harness.write_text('export const version = 2\n')
             with self.assertRaisesRegex(ValueError, 'reference source differs'):
                 fingerprint.authority_inputs(root, reference, browser)
@@ -96,7 +123,8 @@ class QualificationFingerprintTests(unittest.TestCase):
             self.assertNotEqual(baseline['sourceManifestFileSha256'],
                                 fingerprint.authority_inputs(root, reference, browser)['sourceManifestFileSha256'])
             manifest_path.write_text(json.dumps(manifest))
-            (reference / 'package-lock.json').write_text('altered browser lock')
+            dependency_lock['name'] = 'changed lock metadata'
+            package_lock_path.write_text(json.dumps(dependency_lock))
             self.assertNotEqual(baseline['packageLockSha256'],
                                 fingerprint.authority_inputs(root, reference, browser)['packageLockSha256'])
 

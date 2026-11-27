@@ -181,6 +181,7 @@ public enum NoisemakerExpander {
                                               scopedParams: scopedParams,
                                               isLastStep: stepIndex == steps.count - 1,
                                               isLastPass: passIndex == effectPasses.count - 1,
+                                              nextStep: stepIndex + 1 < steps.count ? steps[stepIndex + 1] : nil,
                                               writeName: writeName, writeKind: writeKind,
                                               effectName: op)
                     passes.append(pass)
@@ -529,6 +530,7 @@ public enum NoisemakerExpander {
                                          context: ScopeContext, defineSuffix: String,
                                          scopedParams: OrderedObject,
                                          isLastStep: Bool, isLastPass: Bool,
+                                         nextStep: GraphValue?,
                                          writeName: String?, writeKind: String?,
                                          effectName: String) throws -> GraphValue {
             guard let baseProgram = passDefinition.field("program")?.stringValue else {
@@ -561,7 +563,9 @@ public enum NoisemakerExpander {
                 GraphField(name: "program", value: .string(program))
             ]
             for key in controlKeys {
-                fields.append(GraphField(name: key, value: passDefinition.field(key) ?? .undefined))
+                let value = passDefinition.field(key)
+                fields.append(GraphField(name: key, value:
+                    key == "storageTextures" && !truthyInherit(value) ? .undefined : value ?? .undefined))
             }
             var uniforms = pipelineUniforms
             let globals = effect.definition.field("globals")?.objectFields ?? []
@@ -634,6 +638,15 @@ public enum NoisemakerExpander {
                                        context: context, writeName: writeName,
                                        writeKind: writeKind, stepIndex: temp,
                                        effectName: effectName)
+            let hasStorage = truthyInherit(passDefinition.field("storageTextures"))
+            if hasStorage {
+                let storage = try mapStorageTextures(passDefinition.field("storageTextures"),
+                    nodeID: nodeID, context: context, lastStep: isLastStep,
+                    lastPass: isLastPass, nextStep: nextStep, writeName: writeName, writeKind: writeKind)
+                if let index = fields.firstIndex(where: { $0.name == "storageTextures" }) {
+                    fields[index] = GraphField(name: "storageTextures", value: storage)
+                }
+            }
             let outputs = try mapOutputs(passDefinition.field("outputs"), nodeID: nodeID,
                                          context: context,
                                          lastStep: isLastStep,
@@ -645,9 +658,11 @@ public enum NoisemakerExpander {
                     pipelineUniforms[destination] = value
                 }
             }
-            fields += [GraphField(name: "inputs", value: inputs),
-                       GraphField(name: "outputs", value: outputs),
-                       GraphField(name: "uniforms", value: uniforms.value),
+            fields.append(GraphField(name: "inputs", value: inputs))
+            if !hasStorage || truthyInherit(passDefinition.field("outputs")) {
+                fields.append(GraphField(name: "outputs", value: outputs))
+            }
+            fields += [GraphField(name: "uniforms", value: uniforms.value),
                        GraphField(name: "effectKey", value: .string("\(effect.namespace).\(effect.function)")),
                        GraphField(name: "effectFunc", value: .string(effect.function)),
                        GraphField(name: "effectNamespace", value: .string(effect.namespace)),
@@ -732,6 +747,59 @@ public enum NoisemakerExpander {
                 inputs[input.name] = .string(value)
             }
             return inputs.value
+        }
+
+        private mutating func mapStorageTextures(_ storage: GraphValue?, nodeID: String,
+                                                context: ScopeContext, lastStep: Bool,
+                                                lastPass: Bool, nextStep: GraphValue?,
+                                                writeName: String?, writeKind: String?) throws -> GraphValue {
+            var mapped = OrderedObject()
+            for binding in storage?.objectFields ?? [] {
+                guard let reference = binding.value.stringValue else {
+                    throw CompilerIncomplete(stage: "expander", detail: "non-string storage texture reference")
+                }
+                let target: String
+                if reference == "outputTex" {
+                    let inlineWrite = lastPass && nextStep?.field("builtin")?.boolValue == true &&
+                        nextStep?.field("op")?.stringValue == "_write"
+                        ? nextStep?.field("args")?.field("tex") : nil
+                    if let name = inlineWrite?.field("name")?.stringValue, name != "none" {
+                        let prefix = inlineWrite?.field("kind")?.stringValue == "feedback" ? "feedback" : "global"
+                        target = "\(prefix)_\(name)"
+                        lastWrittenSurface = name
+                    } else if lastStep && lastPass, let writeName {
+                        target = "\(writeKind == "feedback" ? "feedback" : "global")_\(writeName)"
+                        lastWrittenSurface = writeName
+                    } else {
+                        target = "\(nodeID)_out"
+                    }
+                    textureMap["\(nodeID)_out"] = target
+                } else if reference.hasPrefix("global_") {
+                    target = scopeTexture(reference, context: context)
+                } else {
+                    target = "\(nodeID)_\(reference)"
+                    if let raw = textureSpecs[target] {
+                        var spec = OrderedObject(raw)
+                        let usage = truthyInherit(spec["usage"]) ? spec["usage"]
+                            : .array(["render", "sample", "copySrc", "copyDst"].map(GraphValue.string))
+                        let values: [GraphValue]
+                        if let array = usage?.arrayValue { values = array }
+                        else if let string = usage?.stringValue {
+                            values = string.unicodeScalars.map { .string(String($0)) }
+                        } else {
+                            throw CompilerIncomplete(stage: "expander", detail: "storage texture usage is not iterable")
+                        }
+                        var unique: [GraphValue] = []
+                        for value in values + [.string("storage")] {
+                            if !unique.contains(where: { $0.sameOrderedValue(as: value) }) { unique.append(value) }
+                        }
+                        spec["usage"] = .array(unique)
+                        textureSpecs[target] = spec.value
+                    }
+                }
+                mapped[binding.name] = .string(target)
+            }
+            return mapped.value
         }
 
         private mutating func mapOutputs(_ outputSpec: GraphValue?, nodeID: String,

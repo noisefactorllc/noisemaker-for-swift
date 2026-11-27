@@ -282,8 +282,7 @@ public struct RenderGraph {
             if let count = value.field("count"), !count.isUndefined {
                 let numeric = count.numberValue.map { $0.isFinite && $0 >= 0 &&
                     $0.rounded(.towardZero) == $0 && $0 <= 16_000_000 } ?? false
-                let names = drawMode?.stringValue == "triangles"
-                    ? ["auto", "input"] : ["auto", "screen", "input"]
+                let names = ["auto", "screen", "input"]
                 guard drawMode?.stringValue != nil,
                       numeric || names.contains(count.stringValue ?? "") else {
                     throw GraphDiagnostic.unsupported("pass \(id) draw count")
@@ -296,7 +295,8 @@ public struct RenderGraph {
                 }
             }
             let inputs = try Self.namedObject(value.field("inputs"), "pass \(id) inputs")
-            let outputs = try Self.namedObject(value.field("outputs"), "pass \(id) outputs")
+            let outputs = hasStorage && value.field("outputs") == nil ? []
+                : try Self.namedObject(value.field("outputs"), "pass \(id) outputs")
             guard (hasStorage ? outputs.isEmpty : (1...8).contains(outputs.count)),
                   inputs.count <= 16 else {
                 throw GraphDiagnostic.unsupported("pass \(id) attachment or input count exceeds task-3 subset")

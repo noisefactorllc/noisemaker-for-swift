@@ -151,6 +151,17 @@ export async function installAsyncInitTracker(page) {
   })
 }
 
+export function feedMidiMessages({ messages, fixedTime }) {
+  const now = Date.now
+  if (fixedTime) Date.now = () => 0
+  try {
+    const state = window.__noisemakerCanvasRenderer.setMidiState()
+    for (const message of messages) state.handleMessage(new Uint8Array(message))
+  } finally {
+    Date.now = now
+  }
+}
+
 function midiMessages(item) {
   const asset = item.assets.find(asset => asset.path.endsWith('.midi.json'))
   if (!asset) return null
@@ -278,10 +289,8 @@ async function readyHostInputs(page, referenceRoot, item) {
     if (results.some(result => !result?.success)) throw new Error(`mesh load failed: ${JSON.stringify(results)}`)
   }
   const midi = midiMessages(item)
-  if (midi) await page.evaluate(messages => {
-    const state = window.__noisemakerCanvasRenderer.setMidiState()
-    for (const message of messages) state.handleMessage(new Uint8Array(message))
-  }, midi)
+  if (midi) await page.evaluate(feedMidiMessages,
+    { messages: midi, fixedTime: !!item.upstreamCase?.midiInputs })
   const externalIds = [...new Set(graph.passes.flatMap(pass => Object.values(pass.inputs || {}).filter(id =>
     typeof id === 'string' && EXTERNAL_TEXTURE_ID.test(id))))]
   await page.waitForFunction(ids => {

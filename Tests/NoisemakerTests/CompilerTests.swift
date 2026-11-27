@@ -3,6 +3,144 @@ import Testing
 @testable import Noisemaker
 
 @Suite(.serialized) struct CompilerTests {
+    @Test func portableForwardedOutputsRequireJavaScriptNonemptyNames() throws {
+        let shader = ["probe": "@fragment fn main() {}"]
+        let rejected: [Any] = [NSNull(), 7, false, "", " \t\n", "\u{FEFF}"]
+        for field in ["outputTex", "outputXyz", "outputVel", "outputRgba"] {
+            for value in rejected {
+                var registry = try EffectRegistry.bundled()
+                let definition: [String: Any] = ["namespace": "user", "func": "outputNameProbe",
+                    "passes": [["program": "probe"]], field: value]
+                let data = try JSONSerialization.data(withJSONObject: definition)
+                expectThrows(try registry.registerPortable(definitionJSON: data, shaderSources: shader)) {
+                    #expect($0 is CatalogError)
+                }
+                #expect(registry.effect(key: "user.outputNameProbe") == nil)
+                #expect(registry.validatorOp("user.outputNameProbe") == nil)
+            }
+            for value in ["output", " inputTex ", "\u{0085}", "\u{200B}"] {
+                var registry = try EffectRegistry.bundled()
+                let definition: [String: Any] = ["namespace": "user", "func": "outputNameProbe",
+                    "passes": [["program": "probe"]], field: value]
+                try registry.registerPortable(definitionJSON:
+                    JSONSerialization.data(withJSONObject: definition), shaderSources: shader)
+                #expect(registry.effect(key: "user.outputNameProbe")?.definition.field(field)?.stringValue == value)
+            }
+        }
+    }
+
+    @Test func portableStorageTargetsScopeNamesAndPreserveAuthoredUsage() throws {
+        var registry = try EffectRegistry.bundled()
+        let definition = #"{"namespace":"user","func":"storageScopeProbe","starter":true,"textures":{"cache":{"width":8,"height":8,"usage":["sample"]}},"passes":[{"program":"fill","storageTextures":{"destination":"cache"},"workgroups":[1,1,1]},{"program":"show","inputs":{"source":"cache"},"outputs":{"color":"outputTex"}}]}"#
+        try registry.registerPortable(definitionJSON: Data(definition.utf8), orderedShaderSources: [
+            ("fill", "@compute @workgroup_size(1) fn main() {}"),
+            ("show", "@fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(1.0); }")
+        ])
+        let stages = try NoisemakerCompiler(registry: registry).compileStages(source:
+            "search user\nstorageScopeProbe().write(o0)\nrender(o0)\n")
+        let fill = try #require(stages.expanded.field("passes")?.arrayValue?.first)
+        #expect(fill.field("storageTextures")?.field("destination")?.stringValue == "node_0_cache")
+        #expect(fill.field("outputs") == nil)
+        let texture = try #require(stages.graph.field("textures")?.mapEntries?.first {
+            $0.key.stringValue == "node_0_cache"
+        })
+        #expect(texture.value.field("usage")?.arrayValue?.compactMap(\.stringValue) == ["sample", "storage"])
+    }
+
+    @Test func triangleScreenCountIsAcceptedForMeshDimensionResolution() throws {
+        var registry = try EffectRegistry.bundled()
+        let definition = #"{"namespace":"user","func":"triangleScreenProbe","starter":true,"passes":[{"program":"probe","drawMode":"triangles","count":"screen","outputs":{"color":"outputTex"}}]}"#
+        let shader = """
+            @vertex fn vertexMain(@builtin(vertex_index) index: u32) -> @builtin(position) vec4<f32> {
+                return vec4<f32>(0.0, 0.0, 0.0, 1.0);
+            }
+            @fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(1.0); }
+            """
+        try registry.registerPortable(definitionJSON: Data(definition.utf8), shaderSources: ["probe": shader])
+        let graph = try NoisemakerCompiler(registry: registry).compile(source:
+            "search user\ntriangleScreenProbe().write(o0)\nrender(o0)\n")
+        #expect(graph.passes.first?.raw.field("count")?.stringValue == "screen")
+    }
+
+    @Test func portableStorageOutputRoutesInlineAndChainedWrites() throws {
+        let fill = "@compute @workgroup_size(1) fn main() {}"
+        let copy = "@fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(1.0); }"
+        for explicitOutputs in [false, true] {
+            var registry = try EffectRegistry.bundled()
+            let outputs = explicitOutputs ? #", "outputs":{}"# : ""
+            let producer = #"{"namespace":"user","func":"storageOutputProbe","starter":true,"passes":[{"program":"fill","workgroups":[1,1,1],"storageTextures":{"destination":"outputTex"}\#(outputs)}]}"#
+            let consumer = #"{"namespace":"user","func":"storageCopyProbe","passes":[{"program":"copy","inputs":{"source":"inputTex"},"outputs":{"color":"outputTex"}}]}"#
+            try registry.registerPortable(definitionJSON: Data(producer.utf8), shaderSources: ["fill": fill])
+            try registry.registerPortable(definitionJSON: Data(consumer.utf8), shaderSources: ["copy": copy])
+            for (chain, target) in [("storageOutputProbe()", "global_o0"),
+                                    ("storageOutputProbe().storageCopyProbe()", "node_0_out")] {
+                let stages = try NoisemakerCompiler(registry: registry).compileStages(source:
+                    "search user\n\(chain).write(o0)\nrender(o0)\n")
+                let passes = try #require(stages.expanded.field("passes")?.arrayValue)
+                #expect(passes[0].field("storageTextures")?.field("destination")?.stringValue == target)
+                #expect(stages.expanded.field("renderSurface")?.stringValue == "o0")
+                #expect((passes[0].field("outputs") != nil) == explicitOutputs)
+                if target == "node_0_out" {
+                    #expect(passes[1].field("inputs")?.field("source")?.stringValue == target)
+                    let texture = try #require(stages.graph.field("textures")?.mapEntries?.first {
+                        $0.key.stringValue == target
+                    })
+                    #expect(texture.value.field("usage")?.arrayValue?.compactMap(\.stringValue) ==
+                        ["render", "sample", "storage", "copySrc", "copyDst"])
+                }
+            }
+        }
+    }
+
+    @Test func portableStorageMainOutputPreservesSourceStringUsage() throws {
+        for usage in ["sample", "storage", "🟧"] {
+            var registry = try EffectRegistry.bundled()
+            let producer = #"{"namespace":"user","func":"storageOutputProbe","starter":true,"textures":{"out":{"width":8,"height":8,"usage":"\#(usage)"}},"passes":[{"program":"fill","workgroups":[1,1,1],"storageTextures":{"destination":"outputTex"}}]}"#
+            let consumer = #"{"namespace":"user","func":"storageCopyProbe","passes":[{"program":"copy","inputs":{"source":"inputTex"},"outputs":{"color":"outputTex"}}]}"#
+            try registry.registerPortable(definitionJSON: Data(producer.utf8),
+                shaderSources: ["fill": "@compute @workgroup_size(1) fn main() {}"])
+            try registry.registerPortable(definitionJSON: Data(consumer.utf8), shaderSources: [
+                "copy": "@fragment fn main() -> @location(0) vec4<f32> { return vec4<f32>(1.0); }"
+            ])
+            let stages = try NoisemakerCompiler(registry: registry).compileStages(source:
+                "search user\nstorageOutputProbe().storageCopyProbe().write(o0)\nrender(o0)\n")
+            let actual = try #require(stages.graph.field("textures")?.mapEntries?.first {
+                $0.key.stringValue == "node_0_out"
+            }?.value.field("usage"))
+            let expected: GraphValue = usage == "storage" ? .string(usage)
+                : .array((usage.unicodeScalars.map { String($0) } + ["storage"]).map(GraphValue.string))
+            #expect(actual.sameOrderedValue(as: expected))
+        }
+    }
+
+    @Test func portableStorageVolumeCompilesWithoutRenderOutputs() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("parity")
+        let original = try #require(JSONSerialization.jsonObject(with:
+            Data(contentsOf: root.appendingPathComponent("storage3d.portable.json"))) as? [String: Any])
+        for usage in [nil, "sample", "storage"] as [String?] {
+            var definition = original
+            if let usage {
+                var volumes = try #require(definition["textures3d"] as? [String: [String: Any]])
+                volumes["volume"]?["usage"] = usage
+                definition["textures3d"] = volumes
+            }
+            var registry = try EffectRegistry.bundled()
+            try registry.registerPortable(definitionJSON:
+                JSONSerialization.data(withJSONObject: definition), orderedShaderSources: [
+                    ("fill", try String(contentsOf: root.appendingPathComponent("storage3d.fill.wgsl"), encoding: .utf8)),
+                    ("show", try String(contentsOf: root.appendingPathComponent("storage3d.show.wgsl"), encoding: .utf8))
+                ])
+            let graph = try NoisemakerCompiler(registry: registry).compile(source:
+                String(contentsOf: root.appendingPathComponent("storage3d.dsl"), encoding: .utf8))
+            let fill = try #require(graph.passes.first)
+            #expect(fill.outputs.isEmpty)
+            #expect(fill.raw.field("outputs") == nil)
+            #expect(fill.raw.field("storageTextures")?.field("volumeOut")?.stringValue == "node_0_volume")
+            #expect(graph.persistentTextureNames.contains("node_0_volume"))
+        }
+    }
+
     @Test func bundledCatalogCopiesIsolatePortableRegistration() throws {
         var first = try EffectRegistry.bundled()
         let second = try EffectRegistry.bundled()
