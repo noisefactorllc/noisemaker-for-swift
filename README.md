@@ -49,9 +49,10 @@ It is self-contained: the package runs with no Node.js, Rust, sibling checkout, 
   deployment floor.
 - **Swift 6** or later.
 - **A native Metal device** to render. The compiler and the CPU test suite need no GPU.
-- The current full-catalog pass was on Apple M4, macOS 26.5 and Swift 6.3.2. Earlier authority
-  locks passed on Apple M4, macOS 26.6.2 and on Apple M2, macOS 14.8.3 (see
-  [What works and what does not](#what-works-and-what-does-not)).
+- The most recent recorded full-catalog pass (at an earlier authority lock) was on Apple M4,
+  macOS 26.5 and Swift 6.3.2. Earlier authority locks also passed on Apple M4, macOS 26.6.2 and on
+  Apple M2, macOS 14.8.3 (see [What works and what does not](#what-works-and-what-does-not)). No
+  full catalog gate at the authority now pinned in `parity/reference.json` is recorded here.
 
 ## Install
 
