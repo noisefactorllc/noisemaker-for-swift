@@ -502,4 +502,30 @@ import Testing
         expectTrue(graph.textures.map(\.key).contains("global_rd_state_chain_0"))
         expectEqual(graph.dimensionParameters["zoom_chain_0"], 8)
     }
+
+    @Test func prototypePropertyNamesBindAsEffectArguments() throws {
+        let compiler = try NoisemakerCompiler()
+        for name in ["toString", "valueOf", "constructor", "hasOwnProperty", "__proto__"] {
+            let stages = try compiler.compileStages(source:
+                "search synth\nlet \(name) = 2\nnoise(scaleX: \(name)).write(o0)\nrender(o0)\n")
+            expectTrue((stages.validated.field("diagnostics")?.elements ?? []).isEmpty, name)
+            let scaleX = try #require(stages.validated.field("plans")?.elements?.first?
+                .field("chain")?.elements?.first?.field("args")?.field("scaleX"))
+            expectEqual(scaleX.field("_varRef")?.string, name, name)
+            expectEqual(scaleX.field("value")?.number, 2, name)
+        }
+    }
+
+    @Test func unknownPrototypePropertyMemberReachesConditionValidation() throws {
+        let compiler = try NoisemakerCompiler()
+        expectThrows(try compiler.compileStages(source:
+            "search synth\nnoise().write(o0)\nif (oscKind.toString) { noise().write(o1) }\nrender(o0)\n")) { error in
+            guard let diagnostic = (error as? CompilationError)?.diagnostics.first, error is CompilationError else {
+                recordFailure("unexpected error \(error)")
+                return
+            }
+            expectEqual(diagnostic.code, "S001")
+            expectEqual(diagnostic.message, "Unknown enum path: 'oscKind.toString'")
+        }
+    }
 }

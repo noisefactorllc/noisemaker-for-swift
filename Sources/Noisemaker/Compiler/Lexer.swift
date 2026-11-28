@@ -48,13 +48,13 @@ public enum NoisemakerLexer {
         }
 
         private mutating func add(_ type: String, _ lexeme: String, _ startLine: Int, _ startCol: Int,
-                                  _ end: Int, jsTypeKind: String? = nil) {
+                                  _ end: Int) {
             advanceSource(anchor, index)
             let position = SourcePosition(line: sourceLine, column: sourceCol, start: index, end: end)
             advanceSource(index, end)
             anchor = end
             tokens.append(LexerToken(type: type, lexeme: lexeme, line: startLine, col: startCol,
-                                     position: position, jsTypeKind: jsTypeKind))
+                                     position: position))
         }
 
         private func fail(_ code: String, _ message: String, _ start: Int, _ end: Int,
@@ -78,22 +78,6 @@ public enum NoisemakerLexer {
             "break": "BREAK", "continue": "CONTINUE", "return": "RETURN", "search": "SEARCH",
             "subchain": "SUBCHAIN"
         ]
-
-        // RESERVED_KEYWORDS is a plain JavaScript object. These names resolve
-        // through Object.prototype rather than becoming IDENT. Swift cannot
-        // store a function/object as a token type, so retain its kind and the
-        // exact JS string coercion used in parser error messages.
-        private static func inheritedKeyword(_ lexeme: String) -> (String, String)? {
-            if lexeme == "__proto__" { return ("[object Object]", "object") }
-            let names: Set<String> = [
-                "constructor", "__defineGetter__", "__defineSetter__", "hasOwnProperty",
-                "__lookupGetter__", "__lookupSetter__", "isPrototypeOf",
-                "propertyIsEnumerable", "toString", "valueOf", "toLocaleString"
-            ]
-            guard names.contains(lexeme) else { return nil }
-            let displayName = lexeme == "constructor" ? "Object" : lexeme
-            return ("function \(displayName)() { [native code] }", "function")
-        }
 
         private func isJSTrimSpace(_ value: UInt16) -> Bool {
             switch value {
@@ -266,11 +250,7 @@ public enum NoisemakerLexer {
                     var end = index
                     while end < count && (isLetter(unit(end)) || isDigit(unit(end)) || unit(end) == 95) { end += 1 }
                     let lexeme = slice(index, end)
-                    if let inherited = Self.inheritedKeyword(lexeme) {
-                        add(inherited.0, lexeme, startLine, startCol, end, jsTypeKind: inherited.1)
-                    } else {
-                        add(Self.keywords[lexeme] ?? "IDENT", lexeme, startLine, startCol, end)
-                    }
+                    add(Self.keywords[lexeme] ?? "IDENT", lexeme, startLine, startCol, end)
                     col += end - index; index = end; continue
                 }
 

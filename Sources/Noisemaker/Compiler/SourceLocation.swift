@@ -62,17 +62,13 @@ public struct LexerToken: Codable, Equatable, Sendable {
     public let line: Int
     public let col: Int
     public let position: SourcePosition?
-    /// Set when the upstream keyword lookup returns an inherited non-string JS value.
-    /// `type` then holds that value's string coercion for parser diagnostics.
-    public let jsTypeKind: String?
 
     public init(type: String, lexeme: String, line: Int, col: Int,
-                position: SourcePosition? = nil, jsTypeKind: String? = nil) {
+                position: SourcePosition? = nil) {
         self.type = type
         self.lexeme = lexeme
         self.line = line
         self.col = col
         self.position = position
-        self.jsTypeKind = jsTypeKind
     }
 }

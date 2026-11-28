@@ -82,6 +82,24 @@ struct LexerTests {
         expectAtLeast(compared, 10)
     }
 
+    @Test func identifierNamesInheritedByTheKeywordTableLexAsIdentifiers() throws {
+        for name in ["toString", "valueOf", "constructor", "hasOwnProperty", "__proto__"] {
+            expectEqual(try NoisemakerLexer.lex(name).first?.type, "IDENT", name)
+        }
+    }
+
+    @Test func prototypePropertyNameLexesAsAMemberSegment() throws {
+        expectEqual(try NoisemakerLexer.lex("oscKind.toString").map(\.type),
+            ["IDENT", "DOT", "IDENT", "EOF"])
+    }
+
+    @Test func reservedWordsStillLexAsKeywords() throws {
+        let source = "let render write write3d true false if elif else break continue return search subchain"
+        expectEqual(try NoisemakerLexer.lex(source).map(\.type),
+            ["LET", "RENDER", "WRITE", "WRITE3D", "TRUE", "FALSE", "IF", "ELIF",
+             "ELSE", "BREAK", "CONTINUE", "RETURN", "SEARCH", "SUBCHAIN", "EOF"])
+    }
+
     @Test func testSigned32Base36SourceHashesMatchLockedUpstream() throws {
         let corpus = try corpus()
         expectAtLeast(corpus.cases.count, 20)
@@ -90,3 +108,4 @@ struct LexerTests {
         }
     }
 }
+
