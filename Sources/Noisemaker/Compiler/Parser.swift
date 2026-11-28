@@ -539,9 +539,6 @@ public enum NoisemakerParser {
                             if strictSubchainArguments { throw error("P009", message, keyToken) }
                             warnings.append(error("P009", message, keyToken, severity: "warning").diagnostic)
                         }
-                        // Upstream stores kwargs with plain assignment, so a
-                        // __proto__ key resolves through the prototype and
-                        // never becomes an own property.
                         if keyToken.lexeme != "__proto__" {
                             let entry: ParserValue = .object([("type", .string("String")), ("value", .string(value))])
                             if let existing = kwargs.firstIndex(where: { $0.0 == keyToken.lexeme }) { kwargs[existing].1 = entry }
@@ -622,9 +619,6 @@ public enum NoisemakerParser {
                             throw error("P001", "Expected expression after '=' at line \(token.line) col \(token.col)", token)
                         }
                         let value = try parseAdditive()
-                        // Upstream stores kwargs with plain assignment, so a
-                        // __proto__ key resolves through the prototype and
-                        // never becomes an own property.
                         if key != "__proto__" {
                             if let existing = kwargs.firstIndex(where: { $0.0 == key }) { kwargs[existing].1 = value }
                             else { kwargs.append((key, value)) }

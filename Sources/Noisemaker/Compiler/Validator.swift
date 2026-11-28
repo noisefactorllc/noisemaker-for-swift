@@ -690,7 +690,6 @@ public enum NoisemakerValidator {
             if value != originalValue {
                 report("S002", node, "Argument out of range for '\(key)' in \(callName)() (got \(jsNumber(originalValue)), clamped to \(jsNumber(value)))")
             }
-            // Preserve variable reference marker for unparser round-trip.
             if let variable = node.field("_varRef") {
                 return .object([("_varRef", variable), ("value", .number(value))])
             }
